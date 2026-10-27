@@ -5322,73 +5322,98 @@ body {
         border-radius: 14px !important;
     }
 }
-/* ========================================== */
-/* SECTION 1: HERO VIEWPORT FIX (MOBILE ONLY) */
-/* ========================================== */
+/* ========================================================================== */
+/* SECTION 1: HERO SPLIT LUXURY VIEW (LEFT TEXT + RIGHT SHOWCASE IMAGE)       */
+/* ========================================================================== */
 @media screen and (max-width: 768px) {
-    /* டாப் பேனர் டெக்ஸ்ட் */
-    .top-ticker-bar, .top-announcement {
-        font-size: 0.65rem !important;
-        padding: 4px 0 !important;
-    }
-
-    /* பிராண்ட் லோகோ & நேவிகேஷன் */
-    .header .logo {
-        font-size: 1.25rem !important;
-        letter-spacing: 1px !important;
-    }
-
-    /* ஹீரோ மெயின் கண்டெய்னர் */
-    .hero-section, .hero-banner {
-        padding: 2.2rem 1.2rem 1.8rem !important;
-        min-height: auto !important;
-        text-align: center !important;
-    }
-
-    /* சிறிய பேட்ஜ் */
-    .hero-eyebrow, .sub-badge {
-        font-size: 0.68rem !important;
-        letter-spacing: 1.2px !important;
-        padding: 4px 10px !important;
-        margin-bottom: 0.8rem !important;
-    }
-
-    /* பிரதான தலைப்பு எழுத்து அளவு */
-    .hero-title, h1.main-heading {
-        font-size: 1.65rem !important;
-        line-height: 1.25 !important;
-        letter-spacing: 0.8px !important;
-        margin-bottom: 0.8rem !important;
-    }
-
-    /* ஹீரோ விளக்க உரை */
-    .hero-desc, .hero-section p {
-        font-size: 0.82rem !important;
-        line-height: 1.45 !important;
-        max-width: 90% !important;
-        margin: 0 auto 1.4rem auto !important;
-        opacity: 0.88 !important;
-    }
-
-    /* இரண்டு பட்டன்களையும் பக்கவாட்டில் சரிசமமாக வைப்பது */
-    .hero-btn-group, .hero-actions {
+    /* 1. ஹீரோ மெயின் கண்டெய்னரை இரண்டு பக்கவாட்டுப் பிரிவுகளாக மாற்றுதல் */
+    .hero-section .section-container,
+    .hero-banner .section-container,
+    .hero-content-wrap {
         display: flex !important;
         flex-direction: row !important;
-        justify-content: center !important;
         align-items: center !important;
-        gap: 10px !important;
-        width: 100% !important;
+        justify-content: space-between !important;
+        gap: 12px !important;
+        padding: 1.5rem 12px !important;
+        text-align: left !important;
     }
 
-    .hero-btn-group a, .hero-btn-group button {
-        flex: 1 !important;
-        max-width: 160px !important;
-        padding: 10px 12px !important;
-        font-size: 0.78rem !important;
-        white-space: nowrap !important;
+    /* 2. இடதுபுற பகுதி (Text & Buttons) */
+    .hero-text-col,
+    .hero-content-wrap > div:first-child {
+        flex: 1.2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important; /* லெஃப்ட் அலைன் */
+        text-align: left !important;
+    }
+
+    /* பேட்ஜ் */
+    .sub-badge, .hero-eyebrow {
+        font-size: 0.6rem !important;
+        padding: 3px 8px !important;
+        margin-bottom: 0.5rem !important;
+        display: inline-block !important;
+    }
+
+    /* பிரதான தலைப்பு */
+    .hero-title, h1 {
+        font-size: 1.25rem !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.5px !important;
+        margin-bottom: 0.5rem !important;
+        text-align: left !important;
+    }
+
+    /* விளக்கம் */
+    .hero-desc, .hero-text-col p {
+        font-size: 0.72rem !important;
+        line-height: 1.35 !important;
+        margin-bottom: 0.9rem !important;
+        text-align: left !important;
+        opacity: 0.85 !important;
+    }
+
+    /* இரண்டு பட்டன்கள் (Explore Store & Our Craft) */
+    .hero-btn-group, .hero-actions {
+        display: flex !important;
+        flex-direction: column !important; /* மொபைலில் இடதுபுறம் ஒன்றன் கீழ் ஒன்றாக நேர்த்தியாக நிற்க */
+        gap: 7px !important;
+        width: 100% !important;
+        max-width: 150px !important;
+    }
+
+    .hero-btn-group a, 
+    .hero-btn-group button,
+    [class*="btn-"] {
+        width: 100% !important;
+        padding: 7px 12px !important;
+        font-size: 0.72rem !important;
+        justify-content: center !important;
+        border-radius: 20px !important;
+    }
+
+    /* 3. வலதுபுற பகுதி (Signature Edition Showcase Image) */
+    .hero-visual-col,
+    .hero-banner-image,
+    .hero-image-wrap {
+        flex: 0.9 !important;
+        max-width: 44% !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        border-radius: 25px !important;
+    }
+
+    /* சிக்னேச்சர் இமேஜ் கார்டு ஃபிரேம் */
+    .hero-visual-col img,
+    .hero-image-wrap img,
+    .signature-card img {
+        width: 100% !important;
+        height: 190px !important;
+        object-fit: cover !important;
+        border-radius: 14px !important;
+        border: 1px solid rgba(245, 196, 67, 0.3) !important;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
     }
 }
