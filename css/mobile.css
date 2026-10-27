@@ -270,35 +270,57 @@ html, body {
     padding-top: 1.2rem !important;
 }
 /* ========================================================================== */
-/* HIDE SIGNATURE SHOWCASE CARD IN MOBILE VIEW (CLEAN HERO FLOW)             */
+/* ABSOLUTE FORCE-HIDE FOR HERO SHOWCASE IMAGE CARD (MOBILE ONLY)             */
 /* ========================================================================== */
 
-/* நடுவில் இருக்கும் சிக்னேச்சர் எடிஷன் இமேஜ் கார்டை முழுமையாக நீக்குதல் */
+/* 1. அந்த குறிப்பிட்ட Unsplash ஷூ இமேஜை நேரடியாக மறைத்தல் */
+img[src*="1543163521-1bf539c55dd2"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0px !important;
+    width: 0px !important;
+    position: absolute !important;
+    pointer-events: none !important;
+}
+
+/* 2. அந்த இமேஜைச் சுற்றியுள்ள மொத்த கார்டு & ரேப்பரை மறைத்தல் */
 .hero-right-box,
 .hero-product-showcase,
 .hero-visual-col,
 .hero-banner-image,
 .signature-card,
-[class*="showcase-pill"],
-[class*="showcase-bottom-tag"] {
+.showcase-pill,
+.showcase-bottom-tag,
+div:has(> img[src*="1543163521-1bf539c55dd2"]),
+a:has(> img[src*="1543163521-1bf539c55dd2"]) {
     display: none !important;
     visibility: hidden !important;
+    opacity: 0 !important;
     height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: -9999px !important;
 }
 
-/* ஹீரோ லெஃப்ட் பாக்ஸை முழு அகலத்திற்கு (Full Width Centered) மாற்றுதல் */
+/* 3. ஹீரோ பகுதியை சென்டரில் அழகாக அலைன் செய்தல் */
+.hero-section,
+.hero-split-container,
 .hero-left-box,
-.hero-text-col,
-.hero-split-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 1 1 100% !important;
+.hero-text-col {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
 }
 
 .hero-left-box .hero-title,
