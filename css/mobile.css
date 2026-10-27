@@ -426,3 +426,93 @@ span:has(i.fa-gem) {
     font-size: 0.85rem !important;
     border-radius: 25px !important;
 }
+/* ========================================================================== */
+/* OVERALL VERTICAL SPACING & COMPACT SECTION FLOW ENGINE (MOBILE ONLY)       */
+/* ========================================================================== */
+
+/* 1. ஹீரோ பகுதி & பட்டன்களின் கீழ் இடைவெளியை சுருக்குதல் */
+.hero-section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.hero-btn-group, 
+.hero-actions, 
+.hero-btn-row {
+    margin-top: 0px !important;
+    margin-bottom: 0.4rem !important; /* பட்டனுக்கு கீழே மிகக் குறைந்த ஸ்பேஸ் */
+}
+
+/* 2. STATS BAR (100% / 500+ / 4.9★) பட்டனுடன் நெருங்கி வருதல் */
+.stats-row, 
+.metrics-counter-wrap,
+[class*="stats-"] {
+    margin-top: 0px !important;
+    margin-bottom: 0.6rem !important; /* போர்ட்ஃபோலியோவிற்கு மேல் உள்ள ஸ்பேஸ் குறைப்பு */
+    padding: 0.4rem 8px !important;
+}
+
+/* 3. THE ROYAL PORTFOLIO செக்ஷனின் மேல் & கீழ் இடைவெளிகளை இறுக்குதல் */
+#portfolio,
+.portfolio-showcase-section {
+    padding-top: 0.6rem !important;   /* Stats பாருக்கும் போர்ட்ஃபோலியோவுக்கும் நடுவே குறைவான கேப் */
+    padding-bottom: 0.8rem !important; /* கீழே Spirit of Blue Skin உடன் நெருங்க */
+    margin: 0px !important;
+}
+
+#portfolio .section-header-center,
+.portfolio-showcase-section .section-header-center {
+    margin-bottom: 0.6rem !important;
+}
+
+#portfolio .portfolio-grid,
+.portfolio-showcase-section .portfolio-grid {
+    padding-bottom: 0.6rem !important;
+    margin-bottom: 0px !important;
+}
+
+/* 4. THE SPIRIT OF BLUE SKIN (ABOUT US) இடைவெளிகளை அட்ஜஸ்ட் செய்தல் */
+#about,
+.about-section {
+    padding-top: 0.8rem !important;   /* போர்ட்ஃபோலியோவிலிருந்து மிகக் குறைந்த இடைவெளியில் தொடங்குதல் */
+    padding-bottom: 1rem !important;
+    margin: 0px !important;
+}
+
+#about .about-grid,
+.about-section .about-grid {
+    padding-top: 0px !important;
+    padding-bottom: 0.4rem !important;
+}
+
+#about .section-title {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.4rem !important;
+}
+
+#about .about-lead {
+    margin-bottom: 0.5rem !important;
+    font-size: 0.82rem !important;
+    line-height: 1.4 !important;
+}
+
+#about .about-text {
+    margin-bottom: 0.8rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+}
+
+#about .about-features-list {
+    margin-bottom: 0.8rem !important;
+}
+
+#about .feature-item {
+    margin-bottom: 0.6rem !important;
+}
+
+#about .about-btn-wrap,
+.about-section .about-btn-wrap {
+    margin-top: 0.8rem !important;
+    margin-bottom: 0px !important;
+}
