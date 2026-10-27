@@ -270,20 +270,10 @@ html, body {
     padding-top: 1.2rem !important;
 }
 /* ========================================================================== */
-/* ABSOLUTE FORCE-HIDE FOR HERO SHOWCASE IMAGE CARD (MOBILE ONLY)             */
+/* COMPLETE ANNIHILATION OF SAPPHIRE ROYALE SHOWCASE CARD & ITS CONTAINER     */
 /* ========================================================================== */
 
-/* 1. அந்த குறிப்பிட்ட Unsplash ஷூ இமேஜை நேரடியாக மறைத்தல் */
-img[src*="1543163521-1bf539c55dd2"] {
-    display: none !important;
-    visibility: hidden !important;
-    height: 0px !important;
-    width: 0px !important;
-    position: absolute !important;
-    pointer-events: none !important;
-}
-
-/* 2. அந்த இமேஜைச் சுற்றியுள்ள மொத்த கார்டு & ரேப்பரை மறைத்தல் */
+/* 1. அந்த முழு கார்டு, பிரேம், பட்டன்கள், மற்றும் டெக்ஸ்ட்டை அடியோடு மறைத்தல் */
 .hero-right-box,
 .hero-product-showcase,
 .hero-visual-col,
@@ -291,28 +281,47 @@ img[src*="1543163521-1bf539c55dd2"] {
 .signature-card,
 .showcase-pill,
 .showcase-bottom-tag,
+[class*="showcase"],
+[class*="signature"],
 div:has(> img[src*="1543163521-1bf539c55dd2"]),
-a:has(> img[src*="1543163521-1bf539c55dd2"]) {
+div:has(strong:contains("The Sapphire Royale")),
+div:has(small:contains("MASTER CRAFTED")) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    height: 0px !important;
+    max-height: 0px !important;
+    min-height: 0px !important;
+    width: 0px !important;
+    margin: 0px !important;
+    padding: 0px !important;
     border: none !important;
+    outline: none !important;
     box-shadow: none !important;
+    pointer-events: none !important;
     position: absolute !important;
     left: -9999px !important;
     top: -9999px !important;
 }
 
-/* 3. ஹீரோ பகுதியை சென்டரில் அழகாக அலைன் செய்தல் */
+/* 2. கார்டின் உள்ளே இருக்கும் எழுத்துக்கள் மற்றும் ஐகான்களை நேரடியாக டார்கெட் செய்து தூக்குதல் */
+.showcase-bottom-tag,
+.showcase-bottom-tag strong,
+.showcase-bottom-tag small,
+.showcase-pill,
+.hero-right-box a,
+.hero-right-box button,
+.hero-right-box i,
+.hero-right-box svg {
+    display: none !important;
+    visibility: hidden !important;
+    font-size: 0px !important;
+    height: 0px !important;
+}
+
+/* 3. காலியான இடத்தை சரிசெய்து ஹீரோ செக்ஷனை மையத்தில் கச்சிதமாக உட்கார வைத்தல் */
 .hero-section,
-.hero-split-container,
-.hero-left-box,
-.hero-text-col {
+.hero-split-container {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -320,7 +329,22 @@ a:has(> img[src*="1543163521-1bf539c55dd2"]) {
     text-align: center !important;
     width: 100% !important;
     max-width: 100% !important;
+    padding: 2.2rem 16px 1.5rem !important;
     margin: 0 auto !important;
+    gap: 0px !important;
+}
+
+.hero-left-box,
+.hero-text-col {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .hero-left-box .hero-title,
@@ -335,4 +359,5 @@ a:has(> img[src*="1543163521-1bf539c55dd2"]) {
     justify-content: center !important;
     gap: 12px !important;
     width: 100% !important;
+    margin-top: 0.5rem !important;
 }
