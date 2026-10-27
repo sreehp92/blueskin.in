@@ -1,0 +1,2516 @@
+<!DOCTYPE html>
+<html lang="ta" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blue Skin Enterprise — Master Admin Console</title>
+    
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=JetBrains+Mono:wght@600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- External Master CSS Reference -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+    <!-- ======================================================================= -->
+    <!-- [SECTION 1] PIN AUTHENTICATION GATEWAY — START                         -->
+    <!-- Purpose: Master Key 9658 Direct Auto-Verify Login Screen                -->
+    <!-- ======================================================================= -->
+    <div class="login-portal-backdrop" id="loginScreen">
+        <div class="login-card-box">
+            
+            <div class="login-brand-mast">
+                <h2>BLUE SKIN</h2>
+                <p>Enterprise Console Security</p>
+            </div>
+            
+            <div class="login-form-area">
+                <div class="pin-input-container">
+                    <input 
+                        type="password" 
+                        id="adminPinInput" 
+                        maxlength="4" 
+                        placeholder="••••" 
+                        autocomplete="off" 
+                        autofocus 
+                        oninput="handlePinAuto(this)"
+                    >
+                </div>
+                
+                <div class="login-alert-strip" id="loginAlert">Master PIN Protected</div>
+            </div>
+
+        </div>
+    </div>
+    <!-- ======================================================================= -->
+    <!-- [SECTION 1] PIN AUTHENTICATION GATEWAY — END                           -->
+    <!-- ======================================================================= -->
+
+
+    <!-- ======================================================================= -->
+    <!-- [SECTION 2] MASTER CONSOLE SHELL (MAIN WORKSPACE) — START              -->
+    <!-- ======================================================================= -->
+    <div class="admin-app-container" id="dashboardScreen" style="display: none;">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="console-sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-text">
+                    <h3>BLUE SKIN</h3>
+                    <small>Enterprise Analytics</small>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav-menu">
+                <button type="button" class="menu-item-btn active" id="navBtnOverview" onclick="switchNavPane('pane-overview', this)">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Overview & Stats</span>
+                </button>
+                <button type="button" class="menu-item-btn" id="navBtnOrders" onclick="switchNavPane('pane-orders', this)">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Orders & Verify</span>
+                    <span class="menu-alert-pill" id="badgePendingCount" style="display: none;">0</span>
+                </button>
+
+<!-- MODULE 3: WAREHOUSE STOCK SIDEBAR BUTTON (CLEAN - NO BADGE) -->
+<button type="button" class="menu-item-btn" id="btnNavInventory" onclick="switchNavPane('pane-inventory', this)">
+    <i class="fa-solid fa-boxes-stacked"></i>
+    <span>Warehouse Stock</span>
+</button>
+
+<!-- MODULE 4: PORTFOLIO & FRONT PAGE CMS BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavPortfolio" onclick="switchNavPane('pane-portfolio', this)">
+    <i class="fa-solid fa-globe"></i>
+    <span>Portfolio CMS</span>
+</button>
+
+<!-- MODULE 5: PRODUCT MANAGER BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavProducts" onclick="switchNavPane('pane-products', this)">
+    <i class="fa-solid fa-wand-magic-sparkles"></i>
+    <span>Product Manager</span>
+</button>
+
+<!-- MODULE 6: PROMOTIONS, COUPONS & 3-2-1 FLASH POPUP BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavMarketing" onclick="switchNavPane('pane-marketing', this)">
+    <i class="fa-solid fa-tags"></i>
+    <span>Marketing & Coupons</span>
+</button>
+
+<!-- MODULE 7: VIP CLIENT CRM BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavClients" onclick="switchNavPane('pane-clients', this)">
+    <i class="fa-solid fa-users-viewfinder"></i>
+    <span>Client Directory</span>
+</button>
+
+<!-- MODULE 8: SYSTEM SETTINGS & GATEWAY BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavSettings" onclick="switchNavPane('pane-settings', this)">
+    <i class="fa-solid fa-gears"></i>
+    <span>System Settings</span>
+</button>
+
+<!-- MODULE 9: SUPABASE CLOUD & SUPER CONNECTIONS BUTTON -->
+<button type="button" class="menu-item-btn" id="btnNavConnections" onclick="switchNavPane('pane-connections', this)">
+    <i class="fa-solid fa-bolt-lightning"></i>
+    <span>Super Connections</span>
+</button>
+</nav>
+        </aside>
+
+        <!-- =================================================================== -->
+        <!-- [SUB-SECTION 2.2] MAIN VIEWPORT CANVAS — START                      -->
+        <!-- =================================================================== -->
+        <main class="console-main-canvas">
+            
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 1] PANE 1: OVERVIEW & STATS — START                     -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-overview">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>LIVE INTELLIGENCE & PERFORMANCE DESK</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Telemetry & Settlement Engine</small>
+                    </div>
+
+                    <!-- MODERN RECTANGULAR PILL CONTROLS -->
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" id="btnThemeToggle" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span id="themePillLabel">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5 COMPACT KPI METRIC CARDS -->
+                <div class="stats-metrics-grid">
+                    
+                    <!-- 1. TODAY ORDERS -->
+                    <div class="metric-card">
+                        <div class="metric-top-bar">
+                            <span class="metric-lbl">TODAY ORDERS</span>
+                            <i class="fa-solid fa-boxes-packing metric-icon-tag text-amber"></i>
+                        </div>
+                        <div class="metric-val" id="metricTodayOrders">14 Orders</div>
+                        <small class="metric-sub text-green"><i class="fa-solid fa-arrow-trend-up"></i> +8.5% Today Run</small>
+                    </div>
+
+                    <!-- 2. TOTAL REVENUE (1D / 1W TOGGLE) -->
+                    <div class="metric-card metric-card-revenue">
+                        <div class="metric-top-bar">
+                            <span class="metric-lbl">TOTAL REVENUE</span>
+                            <div class="mini-toggle-pill">
+                                <button type="button" class="btn-rev-toggle active" id="btnRevDay" onclick="toggleRevenueMode('day')">1D</button>
+                                <button type="button" class="btn-rev-toggle" id="btnRevWeek" onclick="toggleRevenueMode('week')">1W</button>
+                            </div>
+                        </div>
+                        <div class="metric-val text-gold-glow" id="metricTurnoverVal">₹ 58,450.00</div>
+                        <small class="metric-sub text-gold" id="metricTurnoverSub"><i class="fa-solid fa-bolt"></i> Realtime Verified Invoiced</small>
+                    </div>
+
+                    <!-- 3. TOTAL CONCESSION -->
+                    <div class="metric-card">
+                        <div class="metric-top-bar">
+                            <span class="metric-lbl">TOTAL CONCESSION</span>
+                            <i class="fa-solid fa-tags metric-icon-tag text-blue"></i>
+                        </div>
+                        <div class="metric-val" id="metricConcession">₹ 4,820.00</div>
+                        <small class="metric-sub text-dim"><i class="fa-solid fa-shield-check"></i> Promotional & Coupons</small>
+                    </div>
+
+                    <!-- 4. PENDING ORDERS -->
+                    <div class="metric-card">
+                        <div class="metric-top-bar">
+                            <span class="metric-lbl">PENDING ORDERS</span>
+                            <i class="fa-solid fa-clock-rotate-left metric-icon-tag text-red"></i>
+                        </div>
+                        <div class="metric-val text-red" id="metricPendingOrders">2 Orders</div>
+                        <small class="metric-sub text-amber"><i class="fa-solid fa-circle-exclamation"></i> Immediate Dispatch Queue</small>
+                    </div>
+
+                    <!-- 5. SALES LEDGER REPORT HUB -->
+                    <div class="metric-card metric-export-hub">
+                        <div class="metric-top-bar">
+                            <span class="metric-lbl text-green"><i class="fa-solid fa-file-excel"></i> SALES LEDGER</span>
+                            <span class="pro-badge">PRO</span>
+                        </div>
+                        <div class="export-pill-strip">
+                            <button type="button" class="btn-range-pill" onclick="triggerQuickExport('1', this)">1D</button>
+                            <button type="button" class="btn-range-pill active" onclick="triggerQuickExport('7', this)">7D</button>
+                            <button type="button" class="btn-range-pill" onclick="triggerQuickExport('30', this)">30D</button>
+                            <button type="button" class="btn-range-pill" onclick="openDateModal(this)" title="Pick Custom Dates">Range</button>
+                        </div>
+                        <button type="button" class="btn-export-quick" onclick="downloadSalesLedgerExcel()">
+                            <i class="fa-solid fa-cloud-arrow-down"></i> Download Excel
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- EXPANDED HIGH-DEFINITION CANVAS VELOCITY MATRIX -->
+                <div class="overview-chart-card" id="analyticsChartMaster">
+                    <div class="card-header-flex">
+                        <div>
+                            <h4>
+                                <i class="fa-solid fa-chart-column text-gold"></i> Live Sales Velocity & Volume Matrix
+                            </h4>
+                            <p>Daily Financial Peak, Volume Density & Order Stream (Touch or Hover for Details)</p>
+                        </div>
+                        <div class="chart-header-actions">
+                            <button type="button" class="btn-chart-action" onclick="toggleExpandGraph()" id="btnExpandGraph" title="Expand View">
+                                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                                <span>Expand View</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="canvas-chart-wrapper">
+                        <canvas id="velocityLiveCanvas"></canvas>
+                        
+                        <!-- Floating Glass Interactive Popup Tooltip -->
+                        <div class="canvas-floating-popup" id="canvasPopTooltip" style="display: none;">
+                            <div class="pop-header" id="popDateTitle">Mon, Oct 20</div>
+                            <div class="pop-row"><span class="pop-label">Revenue:</span> <span class="pop-val text-gold" id="popRevVal">₹ 38,400</span></div>
+                            <div class="pop-row"><span class="pop-label">Orders:</span> <span class="pop-val" id="popOrdVal">9</span></div>
+                            <div class="pop-row"><span class="pop-label">Units:</span> <span class="pop-val" id="popUnitsVal">14 Pcs</span></div>
+                            <div class="pop-row"><span class="pop-label">Peak Velocity:</span> <span class="pop-val text-green" id="popPeakVal">03:15 PM</span></div>
+                            <i class="fa-solid fa-caret-down pop-arrow-indicator"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 1] PANE 1: OVERVIEW & STATS — END                       -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 2] PANE 2: ORDERS & VERIFY DESK — START                 -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-orders" style="display: none;">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>LIVE ORDERS & DISPATCH OPERATIONS DESK</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Order Sync & Instant WhatsApp Fulfillment Gateway</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. ORDERS TOP MINI KPI METRICS STRIP -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">TOTAL ACTIVE ORDERS</span>
+                        <div class="orders-kpi-val" id="kpiTotalOrders">4</div>
+                    </div>
+                    <div class="orders-kpi-card border-amber anim-pop pending-glow-card">
+                        <span class="orders-kpi-lbl">WAITING PAYMENT VERIFY</span>
+                        <div class="orders-kpi-val text-amber" id="kpiNeedVerify">2</div>
+                    </div>
+                    <div class="orders-kpi-card border-blue anim-pop">
+                        <span class="orders-kpi-lbl">IN PROCESS & PACKING</span>
+                        <div class="orders-kpi-val text-blue" id="kpiPackedReady">1</div>
+                    </div>
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">OUT FOR DELIVERY</span>
+                        <div class="orders-kpi-val text-purple" id="kpiDispatchedToday">1</div>
+                    </div>
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">DELIVERED SUCCESS</span>
+                        <div class="orders-kpi-val text-green" id="kpiDeliveredTotal">0</div>
+                    </div>
+                </div>
+
+                <!-- 2. SEARCH & WORKFLOW FILTER STRIP -->
+                <div class="orders-cockpit-banner anim-slide-down">
+                    <div class="orders-workflow-filter-strip">
+                        <button type="button" class="btn-filter-pill active" onclick="filterByStatus('ALL', this)">All (<span id="countAll">4</span>)</button>
+                        <button type="button" class="btn-filter-pill pill-alert-pending" onclick="filterByStatus('PENDING', this)">Pending (<span id="countPending">2</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('PAYMENT_RECEIVED', this)">Payment Received (<span id="countPayment">0</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('PROCESSING', this)">Processing (<span id="countProcessing">1</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('PACKED', this)">Packed (<span id="countPacked">0</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('DISPATCHED', this)">Dispatched (<span id="countDispatched">1</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('DELIVERED', this)">Delivered (<span id="countDelivered">0</span>)</button>
+                    </div>
+
+                    <div class="cockpit-search-input-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="orderSearchInput" placeholder="Search Order ID, Client Name..." oninput="filterOrdersTable()">
+                        <button type="button" class="btn-clear-search" onclick="clearOrderSearch()">&times;</button>
+                    </div>
+                </div>
+
+                <!-- 3. ZERO-SCROLL ORDERS TABLE -->
+                <div class="orders-table-card anim-fade-up">
+                    <table class="enterprise-orders-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 14%;">DATE / TIME</th>
+                                <th style="width: 15%;">ORDER ID</th>
+                                <th style="width: 25%;">CLIENT NAME</th>
+                                <th style="width: 14%;">NET (₹)</th>
+                                <th style="width: 18%;">STATUS</th>
+                                <th style="width: 14%; text-align: right;">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 2] PANE 2: ORDERS & VERIFY DESK — END                   -->
+            <!-- --------------------------------------------------------------- -->
+
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 3] PANE 3: WAREHOUSE & STOCK INVENTORY DESK — START     -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-inventory" style="display: none;">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>LIVE WAREHOUSE STOCK & INVENTORY DESK</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Warehouse Stock Telemetry & Inward Logistics Suite</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. 5-COMPACT KPI INVENTORY METRICS BELT -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop inv-kpi-interactive active" id="cardKpiAll" onclick="filterByStockState('ALL')" title="Click to view all products">
+                        <span class="orders-kpi-lbl">TOTAL PRODUCTS</span>
+                        <div class="orders-kpi-val" id="kpiInvTotalItems">5 Products</div>
+                        <small class="kpi-click-hint">Click to View All (5)</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop inv-kpi-interactive" id="cardKpiInStock" onclick="filterByStockState('IN_STOCK')" title="Click to filter In-Stock">
+                        <span class="orders-kpi-lbl">IN-STOCK READY</span>
+                        <div class="orders-kpi-val text-green" id="kpiInvInStock">3 Products</div>
+                        <small class="kpi-click-hint">Click to Filter (Safe: 3)</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop pending-glow-card inv-kpi-interactive" id="cardKpiLowStock" onclick="filterByStockState('LOW_STOCK')" title="Click to view Low Stock">
+                        <span class="orders-kpi-lbl">LOW STOCK ALERT</span>
+                        <div class="orders-kpi-val text-amber" id="kpiInvLowStock">1 Product</div>
+                        <small class="kpi-click-hint">⚠️ Click to Inspect (1)</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop inv-kpi-interactive" id="cardKpiOutStock" onclick="filterByStockState('OUT_OF_STOCK')" title="Click to view Out of Stock">
+                        <span class="orders-kpi-lbl">OUT OF STOCK / ZERO</span>
+                        <div class="orders-kpi-val text-purple" id="kpiInvOutStock">1 Product</div>
+                        <small class="kpi-click-hint">🚫 Click to Refill (1)</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">TOTAL STOCK ASSET VALUE</span>
+                        <div class="orders-kpi-val text-gold" id="kpiInvTotalAssetVal">₹ 94,650.00</div>
+                        <small class="kpi-click-hint">Verified Warehouse Net</small>
+                    </div>
+                </div>
+
+                <!-- 2. SEARCH & DYNAMIC CATEGORY FILTER STRIP -->
+                <div class="orders-cockpit-banner anim-slide-down">
+                    <div class="orders-workflow-filter-strip" id="invCategoryFilterStrip">
+                        <!-- Dynamic Category Filter Pills Injected by JS -->
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <div class="cockpit-search-input-box" style="width: 210px;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="invSearchInput" placeholder="Search Product, SKU, Weight..." oninput="filterInventoryTable()">
+                            <button type="button" class="btn-clear-search" onclick="clearInvSearch()">&times;</button>
+                        </div>
+
+                        <!-- EXCEL BULK TOOLS BUTTONS -->
+                        <button type="button" class="btn-excel-tool btn-excel-download" onclick="downloadInventoryExcelTemplate()" title="Download Blank Excel Template">
+                            <i class="fa-solid fa-file-excel"></i> Template
+                        </button>
+
+                        <button type="button" class="btn-excel-tool btn-excel-upload" onclick="triggerExcelFileInput()" title="Upload Completed Excel File">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Bulk Upload
+                        </button>
+                        
+                        <input type="file" id="invExcelFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleInventoryExcelUpload(event)">
+
+                        <button type="button" class="btn-cal-apply" onclick="openStockInwardModal()" style="padding: 0.45rem 0.85rem; font-size: 0.74rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
+                            <i class="fa-solid fa-plus"></i> Inward / Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. ZERO-SCROLL SINGLE-LINE INVENTORY TABLE -->
+                <div class="orders-table-card anim-fade-up">
+                    <table class="enterprise-orders-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 24%;">PRODUCT NAME & DETAILS</th>
+                                <th style="width: 10%;">WEIGHT / NET</th>
+                                <th style="width: 11%;">CATEGORY</th>
+                                <th style="width: 13%;">CURRENT STOCK</th>
+                                <th style="width: 10%;">MIN ALERT</th>
+                                <th style="width: 10%;">UNIT COST (₹)</th>
+                                <th style="width: 10%;">TOTAL VAL (₹)</th>
+                                <th style="width: 12%; text-align: right;">QUICK ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 4. REDESIGNED LUXURY WAREHOUSE STOCK LEVEL TELEMETRY -->
+                <div class="orders-table-card anim-fade-up telemetry-luxury-card">
+                    <div class="telemetry-head-bar">
+                        <div class="telemetry-info">
+                            <h4><i class="fa-solid fa-chart-column text-gold"></i> Live Warehouse Stock Level Telemetry</h4>
+                            <p>Realtime visual distribution of units, safety thresholds, and warehouse buffer capacity</p>
+                        </div>
+                        <div class="telemetry-legend-wrap">
+                            <span class="legend-badge leg-safe"><i class="fa-solid fa-shield-halved"></i> Optimal Reserve (>10)</span>
+                            <span class="legend-badge leg-low"><i class="fa-solid fa-triangle-exclamation"></i> Low Alert Threshold</span>
+                            <span class="legend-badge leg-out"><i class="fa-solid fa-ban"></i> Zero Stock Depleted</span>
+                            <span class="telemetry-sync-clock" id="invLastSyncTimestamp"><i class="fa-regular fa-clock"></i> Sync: Just now</span>
+                        </div>
+                    </div>
+                    <canvas id="invCanvasBarChart" height="75"></canvas>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 3] PANE 3: WAREHOUSE & STOCK INVENTORY DESK — END       -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 4] PANE 4: PORTFOLIO / FRONT PAGE MASTER CMS — START    -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-portfolio" style="display: none;">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>PORTFOLIO & FRONT PAGE VISUAL CMS SUITE</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Landing Page Typography, Asset Controls & Live Content Synchronization</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. 5-COMPACT KPI FRONT PAGE AUDIT STRIP -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">EDITABLE SECTIONS</span>
+                        <div class="orders-kpi-val">9 Blocks</div>
+                        <small class="kpi-click-hint">Navbar to Footer</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">BRAND ASSETS & LOGOS</span>
+                        <div class="orders-kpi-val text-green">5 Assets</div>
+                        <small class="kpi-click-hint">Logos, Media & Icons</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop">
+                        <span class="orders-kpi-lbl">VERIFIED REVIEWS</span>
+                        <div class="orders-kpi-val text-amber">3 Accolades</div>
+                        <small class="kpi-click-hint">Google 4.9★ Synced</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">LIVE PUBLISH STATE</span>
+                        <div class="orders-kpi-val text-purple" id="cmsPublishStateBadge">🟢 Active</div>
+                        <small class="kpi-click-hint">Production Synced</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">LAST PUBLISHED</span>
+                        <div class="orders-kpi-val text-gold" style="font-size: 0.88rem;" id="cmsLastPublishedTime">Just now</div>
+                        <small class="kpi-click-hint">Live Deployment</small>
+                    </div>
+                </div>
+
+                <!-- 2. 9-TABBED MASTER SECTION SWITCHER STRIP -->
+                <div class="orders-cockpit-banner anim-slide-down" style="padding: 0.6rem 0.8rem;">
+                    <div class="orders-workflow-filter-strip" id="portfolioTabsStrip" style="overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px;">
+                        <button type="button" class="btn-filter-pill active" onclick="switchPortfolioTab('tab-ticker', this)">1. Ticker</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-navbar', this)">2. Navbar</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-hero', this)">3. Hero & Stats</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-gallery', this)">4. Gallery Header</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-reviews', this)">5. Google Reviews</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-heritage', this)">6. Heritage</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-studio', this)">7. Studio Hub</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-assurance', this)">8. Assurance Terms</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchPortfolioTab('tab-footer', this)">9. Footer & Legal</button>
+                    </div>
+                </div>
+
+                <!-- 3. GRANULAR CMS TAB CONTENT CONTAINERS -->
+                <div class="orders-table-card anim-fade-up" style="padding: 1.5rem;">
+
+                    <!-- TAB 1: TOP RUNNING ANNOUNCEMENT TICKER -->
+                    <div class="portfolio-cms-tab-pane" id="tab-ticker">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-bullhorn"></i> Top Running Announcement Ticker
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Ticker Message 1:</label>
+                            <input type="text" id="cmsTicker1" value="BLUE SKIN LUXURY COSMETICS & ARTISAN BOTANICALS">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Ticker Message 2:</label>
+                            <input type="text" id="cmsTicker2" value="100% DERMATOLOGICALLY CRAFTED LUXURY FORMULATIONS">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Ticker Message 3:</label>
+                            <input type="text" id="cmsTicker3" value="COMPLIMENTARY INSURED PRIORITY DISPATCH ON ALL PREPAID CONSIGNMENTS">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Marquee Scroll Speed:</label>
+                                <select id="cmsTickerSpeed">
+                                    <option value="25s">25s (Ultra Smooth Luxury Pace)</option>
+                                    <option value="20s">20s (Medium Pace)</option>
+                                    <option value="15s">15s (Brisk Pace)</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Separator Symbol:</label>
+                                <input type="text" id="cmsTickerSeparator" value="•">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: BRAND IDENTITY & NAVBAR CONTROLS -->
+                    <div class="portfolio-cms-tab-pane" id="tab-navbar" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-crown"></i> Brand Identity & Navigation Bar Controls
+                        </h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Brand Word 1 (Primary):</label>
+                                <input type="text" id="cmsBrandWord1" value="BLUE">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Brand Word 2 (Accent):</label>
+                                <input type="text" id="cmsBrandWord2" value="SKIN">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Brand Logo Icon (FontAwesome):</label>
+                                <select id="cmsBrandLogoIcon">
+                                    <option value="fa-crown">Crown Icon (fa-crown)</option>
+                                    <option value="fa-gem">Gem / Diamond Icon (fa-gem)</option>
+                                    <option value="fa-sparkles">Sparkles Icon (fa-sparkles)</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Custom Logo Image URL (Optional):</label>
+                                <input type="text" id="cmsBrandLogoImg" placeholder="https://blueskin.com/logo.png">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem;">
+                            <div class="date-pick-field">
+                                <label>Nav Link 1:</label>
+                                <input type="text" id="cmsNavLink1" value="Masterpieces">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Nav Link 2:</label>
+                                <input type="text" id="cmsNavLink2" value="Heritage">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Nav Link 3:</label>
+                                <input type="text" id="cmsNavLink3" value="Artistry">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Nav Link 4:</label>
+                                <input type="text" id="cmsNavLink4" value="Concierge">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Primary Action Button Label:</label>
+                                <input type="text" id="cmsNavActionBtnText" value="Shop Creations">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Action Button Destination URL:</label>
+                                <input type="text" id="cmsNavActionBtnUrl" value="shop.html">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: HERO MAIN STAGE, BANNER & 3 KEY STAT BADGES -->
+                    <div class="portfolio-cms-tab-pane" id="tab-hero" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Hero Main Stage, Banner Media & 3 Key Stat Badges
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Hero Eyebrow Tag:</label>
+                            <input type="text" id="cmsHeroEyebrow" value="BESPOKE ARTISAN BEAUTY">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Hero Main Title:</label>
+                            <input type="text" id="cmsHeroTitle" value="The Pinnacle of Pure Botanical Radiance">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Hero Sub-Heading Tagline:</label>
+                            <textarea id="cmsHeroSubtitle" rows="2" style="width: 100%; background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Handcrafted luxury beauty essentials infused with rare botanical extracts for flawless wear.</textarea>
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Hero Banner Media Asset URL:</label>
+                            <input type="text" id="cmsHeroBannerMedia" value="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>CTA Button 1 Label:</label>
+                                <input type="text" id="cmsHeroCta1Text" value="Explore Collection">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>CTA Button 1 Target URL:</label>
+                                <input type="text" id="cmsHeroCta1Url" value="shop.html">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>CTA Button 2 Label:</label>
+                                <input type="text" id="cmsHeroCta2Text" value="WhatsApp Concierge">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>CTA Button 2 Target URL:</label>
+                                <input type="text" id="cmsHeroCta2Url" value="#contact">
+                            </div>
+                        </div>
+                        
+                        <!-- 3 FLOATING STAT BADGES -->
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--input-surface); border-radius: 6px; border: 1px solid var(--card-border);">
+                            <label style="font-weight: 800; color: var(--text-pure); margin-bottom: 0.6rem; display: block;">3 Key Floating Stat Badges:</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem;">
+                                <div>
+                                    <input type="text" id="cmsStat1Val" value="100%" placeholder="Value (e.g. 100%)" style="margin-bottom: 0.3rem;">
+                                    <input type="text" id="cmsStat1Lbl" value="Authentic Quality" placeholder="Label">
+                                </div>
+                                <div>
+                                    <input type="text" id="cmsStat2Val" value="500+" placeholder="Value (e.g. 500+)" style="margin-bottom: 0.3rem;">
+                                    <input type="text" id="cmsStat2Lbl" value="Curated Designs" placeholder="Label">
+                                </div>
+                                <div>
+                                    <input type="text" id="cmsStat3Val" value="4.9★" placeholder="Value (e.g. 4.9★)" style="margin-bottom: 0.3rem;">
+                                    <input type="text" id="cmsStat3Lbl" value="Client Rating" placeholder="Label">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: CURATED GALLERY SHOWCASE HEADER -->
+                    <div class="portfolio-cms-tab-pane" id="tab-gallery" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-images"></i> Curated Gallery Showcase Header
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Gallery Eyebrow Badge:</label>
+                            <input type="text" id="cmsGalleryEyebrow" value="Curated Gallery">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Gallery Main Heading:</label>
+                            <input type="text" id="cmsGalleryTitle" value="The Royal Portfolio">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Gallery Sub-Heading Description:</label>
+                            <textarea id="cmsGallerySubtitle" rows="2" style="width: 100%; background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Explore our signature catalog of bespoke textures, elite finishes, and master-crafted designs.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- TAB 5: HALL OF PRESTIGE & GOOGLE REVIEWS MANAGER (WITH STARS) -->
+                    <div class="portfolio-cms-tab-pane" id="tab-reviews" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-star"></i> Hall of Prestige & Google Reviews Manager (with Stars)
+                        </h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Section Badge Label:</label>
+                                <input type="text" id="cmsReviewsBadge" value="Hall of Prestige">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Section Heading:</label>
+                                <input type="text" id="cmsReviewsTitle" value="Client Accolades">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Sub-Heading Description:</label>
+                                <input type="text" id="cmsReviewsSubtitle" value="Real stories of craftsmanship experienced by connoisseurs across India.">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Average Google Rating Score:</label>
+                                <input type="text" id="cmsReviewsScore" value="4.9">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Rating Badge Text:</label>
+                                <input type="text" id="cmsReviewsBadgeText" value="Verified Google Reviews">
+                            </div>
+                        </div>
+
+                        <!-- REVIEW 1 -->
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: var(--gold); font-size: 0.8rem; display: block; margin-bottom: 0.6rem;">Reviewer 1</strong>
+                            <div style="display: grid; grid-template-columns: 1fr 2fr 2fr 1.5fr; gap: 0.8rem;">
+                                <input type="text" id="cmsRev1Initial" value="V" placeholder="Avatar Initial">
+                                <input type="text" id="cmsRev1Author" value="Vikram Anand" placeholder="Author Name">
+                                <input type="text" id="cmsRev1Location" value="Chennai • Verified" placeholder="Location / Tag">
+                                <select id="cmsRev1Stars">
+                                    <option value="5" selected>★★★★★ (5.0 Stars)</option>
+                                    <option value="4.5">★★★★½ (4.5 Stars)</option>
+                                    <option value="4">★★★★☆ (4.0 Stars)</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Associated Product:</label>
+                                <input type="text" id="cmsRev1Product" value="Azure Bifold Wallet">
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Client Review Feedback:</label>
+                                <textarea id="cmsRev1Feedback" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.5rem; color: var(--text-pure); font-size: 0.78rem;">The sapphire tone on the leather is breathtaking. In person, it looks even more royal than the pictures. Impeccable packaging and fast delivery.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- REVIEW 2 -->
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: var(--gold); font-size: 0.8rem; display: block; margin-bottom: 0.6rem;">Reviewer 2</strong>
+                            <div style="display: grid; grid-template-columns: 1fr 2fr 2fr 1.5fr; gap: 0.8rem;">
+                                <input type="text" id="cmsRev2Initial" value="R" placeholder="Avatar Initial">
+                                <input type="text" id="cmsRev2Author" value="Rajesh Kumar" placeholder="Author Name">
+                                <input type="text" id="cmsRev2Location" value="Coimbatore • Verified" placeholder="Location / Tag">
+                                <select id="cmsRev2Stars">
+                                    <option value="5" selected>★★★★★ (5.0 Stars)</option>
+                                    <option value="4.5">★★★★½ (4.5 Stars)</option>
+                                    <option value="4">★★★★☆ (4.0 Stars)</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Associated Product:</label>
+                                <input type="text" id="cmsRev2Product" value="Sapphire Travel Duffle">
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Client Review Feedback:</label>
+                                <textarea id="cmsRev2Feedback" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.5rem; color: var(--text-pure); font-size: 0.78rem;">Solid gold hardware and deep texture. The WhatsApp concierge helped me personalize the order within minutes. A true homegrown luxury benchmark.</textarea>
+                            </div>
+                        </div>
+
+                        <!-- REVIEW 3 -->
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 1rem;">
+                            <strong style="color: var(--gold); font-size: 0.8rem; display: block; margin-bottom: 0.6rem;">Reviewer 3</strong>
+                            <div style="display: grid; grid-template-columns: 1fr 2fr 2fr 1.5fr; gap: 0.8rem;">
+                                <input type="text" id="cmsRev3Initial" value="A" placeholder="Avatar Initial">
+                                <input type="text" id="cmsRev3Author" value="Arun Prasad" placeholder="Author Name">
+                                <input type="text" id="cmsRev3Location" value="Bangalore • Verified" placeholder="Location / Tag">
+                                <select id="cmsRev3Stars">
+                                    <option value="5" selected>★★★★★ (5.0 Stars)</option>
+                                    <option value="4.5">★★★★½ (4.5 Stars)</option>
+                                    <option value="4">★★★★☆ (4.0 Stars)</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Associated Product:</label>
+                                <input type="text" id="cmsRev3Product" value="Azure Bifold Wallet">
+                            </div>
+                            <div class="date-pick-field" style="margin-top: 0.5rem;">
+                                <label>Client Review Feedback:</label>
+                                <textarea id="cmsRev3Feedback" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.5rem; color: var(--text-pure); font-size: 0.78rem;">Unboxing experience is 10/10. The craftsmanship and leather aroma speak volumes about its authenticity. You have a customer for life.</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 6: HERITAGE, STORY & CRAFTSMANSHIP PILLARS -->
+                    <div class="portfolio-cms-tab-pane" id="tab-heritage" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-scroll"></i> Heritage, Story & Craftsmanship Pillars
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Heritage Section Title:</label>
+                            <input type="text" id="cmsHeritageTitle" value="A Legacy Forged in Pure Aesthetic Distinction">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Story Narrative Paragraph 1:</label>
+                            <textarea id="cmsHeritagePara1" rows="2" style="width: 100%; background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Each formulation is blended in limited small batches to ensure absolute active potency and sensory perfection.</textarea>
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Story Narrative Paragraph 2:</label>
+                            <textarea id="cmsHeritagePara2" rows="2" style="width: 100%; background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Rooted in Coimbatore, our botanical cleanroom facility combines heritage alchemy with modern dermatological science.</textarea>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.8rem;">
+                            <div class="date-pick-field">
+                                <label>Pillar 1 Heading:</label>
+                                <input type="text" id="cmsPillar1Heading" value="Precision Engineered">
+                                <label style="margin-top: 0.4rem;">Pillar 1 Description:</label>
+                                <input type="text" id="cmsPillar1Desc" value="Flawless edges and durable luxury composition.">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Pillar 2 Heading:</label>
+                                <input type="text" id="cmsPillar2Heading" value="Bespoke Individuality">
+                                <label style="margin-top: 0.4rem;">Pillar 2 Description:</label>
+                                <input type="text" id="cmsPillar2Desc" value="Unique textures tailored to stand apart.">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.8rem;">
+                            <div class="date-pick-field">
+                                <label>Store Button Label:</label>
+                                <input type="text" id="cmsHeritageBtnText" value="Visit The Store">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Store Button Destination URL:</label>
+                                <input type="text" id="cmsHeritageBtnUrl" value="shop.html">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 7: FLAGSHIP STUDIO & CLIENT CONCIERGE HUB -->
+                    <div class="portfolio-cms-tab-pane" id="tab-studio" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-location-dot"></i> Flagship Studio & Client Concierge Hub
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Flagship Studio Physical Address:</label>
+                            <input type="text" id="cmsStudioAddress" value="Luxury Avenue, High-Street Quarter, Tamil Nadu, India">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Client Concierge Hotline:</label>
+                                <input type="text" id="cmsStudioPhone" value="+91 96583 99991">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Direct Inquiries Email:</label>
+                                <input type="text" id="cmsStudioEmail" value="contact@blueskin.luxury">
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>WhatsApp Chat Button Label:</label>
+                                <input type="text" id="cmsStudioWaBtnText" value="Chat via WhatsApp">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>WhatsApp Target Number:</label>
+                                <input type="text" id="cmsStudioWaPhone" value="+919658399991">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 8: BLUE SKIN ASSURANCE, GUARANTEE & TERMS -->
+                    <div class="portfolio-cms-tab-pane" id="tab-assurance" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-shield-halved"></i> Blue Skin Assurance, Guarantee & Terms
+                        </h4>
+                        <div class="date-pick-field">
+                            <label>Section Title:</label>
+                            <input type="text" id="cmsAssuranceSectionTitle" value="Blue Skin Assurance & Terms">
+                        </div>
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 0.8rem;">
+                            <label style="color: var(--gold); font-weight: 800;">Assurance Pillar 1</label>
+                            <div class="date-pick-field">
+                                <label>Title:</label>
+                                <input type="text" id="cmsAssurance1Title" value="Authenticity Guaranteed">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Description:</label>
+                                <input type="text" id="cmsAssurance1Desc" value="All showcase pieces are 100% original, crafted strictly according to verified quality benchmarks.">
+                            </div>
+                        </div>
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 0.8rem;">
+                            <label style="color: var(--gold); font-weight: 800;">Assurance Pillar 2</label>
+                            <div class="date-pick-field">
+                                <label>Title:</label>
+                                <input type="text" id="cmsAssurance2Title" value="Secure Orders">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Description:</label>
+                                <input type="text" id="cmsAssurance2Desc" value="Direct verification and bespoke order placement confirmed straight via official WhatsApp concierge.">
+                            </div>
+                        </div>
+                        <div style="background: var(--input-surface); border: 1px solid var(--card-border); border-radius: 6px; padding: 1rem; margin-top: 0.8rem;">
+                            <label style="color: var(--gold); font-weight: 800;">Assurance Pillar 3</label>
+                            <div class="date-pick-field">
+                                <label>Title:</label>
+                                <input type="text" id="cmsAssurance3Title" value="Express Handling">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Description:</label>
+                                <input type="text" id="cmsAssurance3Desc" value="Insured priority packaging ensuring your premium selections arrive in pristine condition.">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 9: FOOTER, BRANDING & LEGAL REPOSITORY -->
+                    <div class="portfolio-cms-tab-pane" id="tab-footer" style="display: none;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-feather-pointed"></i> Footer, Branding & Legal Repository
+                        </h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Footer Brand Word 1:</label>
+                                <input type="text" id="cmsFooterBrand1" value="BLUE">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Footer Brand Word 2 (Accent):</label>
+                                <input type="text" id="cmsFooterBrand2" value="SKIN">
+                            </div>
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Brand Tagline:</label>
+                            <input type="text" id="cmsFooterTagline" value="Artisan Aesthetics & Bespoke Luxury Collections.">
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Boutique Physical Location:</label>
+                            <input type="text" id="cmsFooterAddress" value="23/43 FCI Road, BPC Colony, Ganapathy, Coimbatore - 641006.">
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="date-pick-field">
+                                <label>Concierge Hotline:</label>
+                                <input type="text" id="cmsFooterPhone" value="+91 96583 99991">
+                            </div>
+                            <div class="date-pick-field">
+                                <label>Inquiry Email:</label>
+                                <input type="text" id="cmsFooterEmail" value="concierge@blueskin.com">
+                            </div>
+                        </div>
+                        <div class="date-pick-field">
+                            <label>Copyright Legal Notice:</label>
+                            <input type="text" id="cmsFooterCopyright" value="© 2026 Blue Skin Luxury Enterprise. All Rights Reserved. Crafted with Distinction.">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4. MASTER SAVE & INSTANT PUBLISH ENGINE BAR -->
+                <div class="orders-table-card anim-fade-up" style="margin-top: 1rem; padding: 1rem 1.4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+                    <div>
+                        <button type="button" class="btn-cal-cancel" onclick="resetPortfolioCmsDefaults()" style="height: 38px; padding: 0 1rem;">
+                            <i class="fa-solid fa-rotate-left"></i> Reset to Defaults
+                        </button>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem;">
+                        <a href="index.html" target="_blank" class="btn-excel-tool" style="text-decoration: none; height: 38px; display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-eye"></i> Live Preview Front Page
+                        </a>
+                        <button type="button" class="btn-cal-apply" onclick="publishPortfolioCmsChanges()" style="height: 38px; padding: 0 1.4rem; font-size: 0.78rem; font-weight: 800;">
+                            <i class="fa-solid fa-rocket"></i> Publish All Changes to Front Page
+                        </button>
+                    </div>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 4] PANE 4: PORTFOLIO / FRONT PAGE MASTER CMS — END      -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 5] PANE 5: PRODUCT MANAGER & SHOP ACTIVITY — START      -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-products" style="display: none;">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>LIVE PRODUCT MANAGER & SHOP ACTIVITY STUDIO</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Store Catalog Sync, Warehouse Stock Integration & Category Control</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. 5-COMPACT KPI PRODUCT CATALOG METRICS BELT -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">TOTAL PRODUCTS</span>
+                        <div class="orders-kpi-val" id="kpiProdTotalCount">5 Items</div>
+                        <small class="kpi-click-hint">Catalog Collections</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">SHOP ACTIVITY (LIVE)</span>
+                        <div class="orders-kpi-val text-green" id="kpiProdLiveCount">5 Active</div>
+                        <small class="kpi-click-hint">Visible on Storefront</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop">
+                        <span class="orders-kpi-lbl">SPECIAL OFFERS ACTIVE</span>
+                        <div class="orders-kpi-val text-amber" id="kpiProdOfferCount">4 Offers</div>
+                        <small class="kpi-click-hint">Promotional Discounts</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">WAREHOUSE STOCK SYNC</span>
+                        <div class="orders-kpi-val text-purple" id="kpiProdStockUnits">118 Units</div>
+                        <small class="kpi-click-hint" id="kpiProdWhseItemsDesc">5 Warehouse Products Linked</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">TOTAL CATALOG VALUE</span>
+                        <div class="orders-kpi-val text-gold" id="kpiProdTotalVal">₹ 1,48,200.00</div>
+                        <small class="kpi-click-hint">Live Inventory Worth</small>
+                    </div>
+                </div>
+
+                <!-- 2. SEARCH & ACTION FILTER STRIP WITH CATEGORY ADD BUTTON -->
+                <div class="orders-cockpit-banner anim-slide-down">
+                    <div class="orders-workflow-filter-strip" id="productCategoryFilterStrip">
+                        <!-- Dynamic Category Filter Pills -->
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <div class="cockpit-search-input-box" style="width: 220px;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="prodSearchInput" placeholder="Search Product, Shade..." oninput="filterProductMasterTable()">
+                            <button type="button" class="btn-clear-search" onclick="clearProdSearch()">&times;</button>
+                        </div>
+
+                        <!-- QUICK CATEGORY ADD BUTTON -->
+                        <button type="button" class="btn-excel-tool" onclick="openQuickCategoryModal()" title="Add New Category with Image" style="border-color: var(--gold); color: var(--gold);">
+                            <i class="fa-solid fa-folder-plus"></i> + Category
+                        </button>
+
+                        <!-- PRODUCT BULK EXCEL TOOLS -->
+                        <button type="button" class="btn-excel-tool btn-excel-download" onclick="downloadProductExcelTemplate()" title="Download Complete Products Excel/CSV Template">
+                            <i class="fa-solid fa-file-excel"></i> Template
+                        </button>
+
+                        <button type="button" class="btn-excel-tool btn-excel-upload" onclick="triggerProductExcelFileInput()" title="Upload Products in Bulk">
+                            <i class="fa-solid fa-cloud-arrow-up"></i> Bulk Upload
+                        </button>
+
+                        <!-- HIDDEN FILE INPUT FOR PRODUCT EXCEL -->
+                        <input type="file" id="prodExcelFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleProductExcelUpload(event)">
+
+                        <button type="button" class="btn-cal-apply" onclick="openProductStudioModal()" style="padding: 0.45rem 0.95rem; font-size: 0.76rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
+                            <i class="fa-solid fa-plus"></i> Add Product
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. ZERO-SCROLL SINGLE-LINE PRODUCT MASTER TABLE -->
+                <div class="orders-table-card anim-fade-up">
+                    <table class="enterprise-orders-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 24%;">PRODUCT & SHADE SPECS</th>
+                                <th style="width: 12%;">REVIEWS & WT</th>
+                                <th style="width: 10%;">MRP (₹)</th>
+                                <th style="width: 10%;">DISC (%)</th>
+                                <th style="width: 11%;">SPECIAL (₹)</th>
+                                <th style="width: 11%;">SAVINGS (₹)</th>
+                                <th style="width: 10%;">SHOP STATE</th>
+                                <th style="width: 12%; text-align: right;">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productMasterTableBody">
+                            <!-- Injected dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 5] PANE 5: PRODUCT MANAGER & SHOP ACTIVITY — END        -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 6] PANE 6: PROMOTIONS, COUPONS & FLASH DESK — START     -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-marketing" style="display: none;">
+                
+                <!-- INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>PROMOTIONS, COUPONS & VIP LOYALTY STUDIO</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime Campaign Engine, 3-2-1 Interactive Flash Modal & VIP Rules</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 1. 5-COMPACT KPI MARKETING INTELLIGENCE BELT -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">ACTIVE CAMPAIGNS</span>
+                        <div class="orders-kpi-val" id="kpiMktActivePromos">5 Active</div>
+                        <small class="kpi-click-hint">2 Flash, 3 Coupons</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">REDEEMED ORDERS</span>
+                        <div class="orders-kpi-val text-green" id="kpiMktRedeemedCount">142 Uses</div>
+                        <small class="kpi-click-hint">18.4% Checkout Conv</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop">
+                        <span class="orders-kpi-lbl">TOTAL DISCOUNT GIVEN</span>
+                        <div class="orders-kpi-val text-amber" id="kpiMktTotalDiscountVal">₹ 42,650.00</div>
+                        <small class="kpi-click-hint">Sponsored Savings</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">CAMPAIGN REVENUE LIFT</span>
+                        <div class="orders-kpi-val text-purple" id="kpiMktRevenueLift">₹ 2,86,400.00</div>
+                        <small class="kpi-click-hint">ROI: 6.7x Multiplier</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">VIP CLUB MEMBERS</span>
+                        <div class="orders-kpi-val text-gold" id="kpiMktVipMembers">84 Clients</div>
+                        <small class="kpi-click-hint">Gold & Platinum</small>
+                    </div>
+                </div>
+
+                <!-- 2. 4-TAB MARKETING CONTROL STRIP -->
+                <div class="orders-cockpit-banner anim-slide-down" style="padding: 0.6rem 0.8rem;">
+                    <div class="orders-workflow-filter-strip" id="marketingTabStrip" style="overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px;">
+                        <button type="button" class="btn-filter-pill active" onclick="switchMarketingTab('tab-coupons', this)">🏷️ 1. Coupon Codes (5)</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchMarketingTab('tab-flash-sale', this)">⚡ 2. 3-2-1 Flash Pop-Up & Ticker</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchMarketingTab('tab-vip-tiers', this)">👑 3. VIP Loyalty Tiers</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchMarketingTab('tab-broadcasts', this)">📱 4. WhatsApp Broadcasts</button>
+                    </div>
+                </div>
+
+                <!-- 3. TAB 1: COUPON CODES TABLE & SEARCH -->
+                <div class="marketing-tab-content anim-fade-up" id="tab-coupons">
+                    <div class="orders-cockpit-banner anim-slide-down" style="margin-top: 0.5rem; margin-bottom: 0.8rem;">
+                        <div class="orders-workflow-filter-strip">
+                            <button type="button" class="btn-filter-pill active" onclick="filterCouponsByState('ALL', this)">All Promos (<span id="countCouponAll">5</span>)</button>
+                            <button type="button" class="btn-filter-pill" onclick="filterCouponsByState('ACTIVE', this)">Active (<span id="countCouponActive">4</span>)</button>
+                            <button type="button" class="btn-filter-pill" onclick="filterCouponsByState('EXPIRED', this)">Expired / Paused (<span id="countCouponExpired">1</span>)</button>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                            <div class="cockpit-search-input-box" style="width: 220px;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="couponSearchInput" placeholder="Search Code, Target..." oninput="filterCouponsTable()">
+                                <button type="button" class="btn-clear-search" onclick="clearCouponSearch()">&times;</button>
+                            </div>
+                            <button type="button" class="btn-cal-apply" onclick="openCouponStudioModal()" style="padding: 0.45rem 0.95rem; font-size: 0.76rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
+                                <i class="fa-solid fa-plus"></i> Create New Coupon Code
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="orders-table-card anim-fade-up">
+                        <table class="enterprise-orders-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%;">COUPON CODE</th>
+                                    <th style="width: 13%;">DISCOUNT TYPE</th>
+                                    <th style="width: 10%;">MIN SPEND</th>
+                                    <th style="width: 10%;">MAX CAP</th>
+                                    <th style="width: 14%;">USAGE QUOTA</th>
+                                    <th style="width: 12%;">EXPIRY DATE</th>
+                                    <th style="width: 12%;">TARGET SCOPE</th>
+                                    <th style="width: 10%;">STATUS</th>
+                                    <th style="width: 14%; text-align: right;">QUICK ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsTableBody">
+                                <!-- Injected dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 4. TAB 2: 3-2-1 FLASH POP-UP & TOP STORE TICKER MANAGER -->
+                <div class="marketing-tab-content anim-fade-up" id="tab-flash-sale" style="display: none;">
+                    <div class="orders-table-card" style="padding: 1.4rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--card-border); padding-bottom: 0.8rem; margin-bottom: 1.2rem;">
+                            <div>
+                                <h3 style="margin: 0; font-size: 1rem; color: var(--gold); display: flex; align-items: center; gap: 0.5rem;">
+                                    <i class="fa-solid fa-bolt-lightning"></i> 3-2-1 Cinematic Countdown & Center Flash Pop-Up Controller
+                                </h3>
+                                <small style="color: var(--text-dim); font-size: 0.72rem;">Runs a 3... 2... 1... countdown on store launch and displays a high-converting luxury promotional window</small>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <label style="font-size: 0.74rem; font-weight: 800; color: var(--text-pure);">Flash Modal Status:</label>
+                                <select id="flashModalStateSelect" style="width: 110px;">
+                                    <option value="ACTIVE" selected>🟢 Active</option>
+                                    <option value="PAUSED">🔴 Paused</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="inward-two-col-layout">
+                            <div class="inward-pane-card">
+                                <div class="inward-card-title"><i class="fa-solid fa-stopwatch text-gold"></i> Animation Timing & Eyebrow Tag</div>
+                                
+                                <div class="date-pick-field">
+                                    <label>Trigger Delay (Seconds after store load):</label>
+                                    <select id="flashTriggerDelay">
+                                        <option value="1000">1 Second (Rapid Trigger)</option>
+                                        <option value="2000" selected>2 Seconds (Optimal Luxury Experience)</option>
+                                        <option value="3000">3 Seconds (Relaxed Entrance)</option>
+                                    </select>
+                                </div>
+
+                                <div class="date-pick-field">
+                                    <label>Flash Eyebrow Tagline:</label>
+                                    <input type="text" id="flashEyebrowTag" value="ROYAL PRIVILEGE ACCESS EXCLUSIVE">
+                                </div>
+
+                                <div class="date-pick-field">
+                                    <label>Main Headline Text:</label>
+                                    <input type="text" id="flashMainHeadline" value="FESTIVE LUXURY OFFER: FLAT 20% OFF ON ORDERS ABOVE ₹3,999">
+                                </div>
+
+                                <div class="date-pick-field">
+                                    <label>Offer Tagline / Explanatory Description:</label>
+                                    <textarea id="flashTaglineDesc" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Handcrafted luxury formulations. Claim with exclusive code below or proceed to checkout directly.</textarea>
+                                </div>
+                            </div>
+
+                            <div class="inward-pane-card">
+                                <div class="inward-card-title"><i class="fa-solid fa-gift text-gold"></i> Coupon Link, Buttons & Countdown Limit</div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                                    <div class="date-pick-field">
+                                        <label>Highlighted Promo Code:</label>
+                                        <input type="text" id="flashPromoCode" value="ROYAL20">
+                                    </div>
+                                    <div class="date-pick-field">
+                                        <label>Countdown End Date & Time:</label>
+                                        <input type="text" id="flashCountdownDateTime" value="2026-11-05 23:59:59">
+                                    </div>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                                    <div class="date-pick-field">
+                                        <label>Action Button Label:</label>
+                                        <input type="text" id="flashActionBtnText" value="Claim Royal Privilege Now">
+                                    </div>
+                                    <div class="date-pick-field">
+                                        <label>Target Destination URL:</label>
+                                        <input type="text" id="flashActionBtnUrl" value="shop.html">
+                                    </div>
+                                </div>
+
+                                <div style="background: rgba(245, 196, 67, 0.08); border: 1.2px dashed rgba(245, 196, 67, 0.45); border-radius: 8px; padding: 0.95rem; margin-top: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <strong style="color: var(--gold); font-size: 0.8rem; display: block;">Interactive Preview</strong>
+                                        <small style="color: var(--text-dim); font-size: 0.68rem;">Test the real 3... 2... 1... countdown sound & visual appearance</small>
+                                    </div>
+                                    <button type="button" class="btn-cal-apply" onclick="simulateLiveFlashModalPreview()" style="height: 34px; padding: 0 1rem; font-size: 0.72rem;">
+                                        <i class="fa-solid fa-play"></i> Run Simulation
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1.2rem; padding-top: 0.8rem; border-top: 1px solid var(--card-border);">
+                            <button type="button" class="btn-cal-apply" onclick="saveFlashModalSettings()" style="height: 38px; padding: 0 1.5rem; font-size: 0.78rem; font-weight: 800;">
+                                <i class="fa-solid fa-floppy-disk"></i> Save & Launch 3-2-1 Pop-Up to Storefront
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. TAB 3: VIP LOYALTY TIERS AUTOMATION -->
+                <div class="marketing-tab-content anim-fade-up" id="tab-vip-tiers" style="display: none;">
+                    <div class="orders-table-card" style="padding: 1.4rem;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-crown"></i> 3-Tier VIP Loyalty Club Automation (Auto-Applied via Mobile Number)
+                        </h4>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.2rem;">
+                            <!-- Silver -->
+                            <div class="inward-pane-card" style="border-color: rgba(148, 163, 184, 0.4);">
+                                <div class="inward-card-title"><i class="fa-solid fa-medal text-silver"></i> 🥈 Silver Privilege</div>
+                                <div class="date-pick-field">
+                                    <label>Minimum Lifetime Spend (₹):</label>
+                                    <input type="number" id="vipSilverSpend" value="5000">
+                                </div>
+                                <div class="date-pick-field">
+                                    <label>Automatic Benefit:</label>
+                                    <input type="text" id="vipSilverBenefit" value="Auto 5% OFF Every Order">
+                                </div>
+                                <small style="color: var(--text-dim); font-size: 0.7rem;">Currently 52 Enrolled Clients</small>
+                            </div>
+
+                            <!-- Gold -->
+                            <div class="inward-pane-card" style="border-color: rgba(245, 196, 67, 0.5);">
+                                <div class="inward-card-title"><i class="fa-solid fa-crown text-gold"></i> 🥇 Gold Connoisseur</div>
+                                <div class="date-pick-field">
+                                    <label>Minimum Lifetime Spend (₹):</label>
+                                    <input type="number" id="vipGoldSpend" value="15000">
+                                </div>
+                                <div class="date-pick-field">
+                                    <label>Automatic Benefit:</label>
+                                    <input type="text" id="vipGoldBenefit" value="Auto 10% OFF + Velvet Pouch">
+                                </div>
+                                <small style="color: var(--gold); font-size: 0.7rem;">Currently 24 Enrolled Clients</small>
+                            </div>
+
+                            <!-- Platinum -->
+                            <div class="inward-pane-card" style="border-color: rgba(168, 85, 247, 0.5);">
+                                <div class="inward-card-title"><i class="fa-solid fa-gem text-purple"></i> 💎 Platinum Royal Ambassador</div>
+                                <div class="date-pick-field">
+                                    <label>Minimum Lifetime Spend (₹):</label>
+                                    <input type="number" id="vipPlatinumSpend" value="35000">
+                                </div>
+                                <div class="date-pick-field">
+                                    <label>Automatic Benefit:</label>
+                                    <input type="text" id="vipPlatinumBenefit" value="Auto 15% OFF + Secret Drops + Hamper">
+                                </div>
+                                <small style="color: #a855f7; font-size: 0.7rem;">Currently 8 Enrolled Clients</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; margin-top: 1.2rem;">
+                            <button type="button" class="btn-cal-apply" onclick="saveVipTiersSettings()" style="height: 38px; padding: 0 1.5rem; font-size: 0.78rem; font-weight: 800;">
+                                <i class="fa-solid fa-floppy-disk"></i> Update VIP Loyalty Program
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. TAB 4: WHATSAPP CAMPAIGN BROADCASTS -->
+                <div class="marketing-tab-content anim-fade-up" id="tab-broadcasts" style="display: none;">
+                    <div class="orders-table-card" style="padding: 1.4rem;">
+                        <h4 style="font-size: 0.9rem; font-weight: 800; color: var(--gold); margin-bottom: 1rem; border-bottom: 1px solid var(--card-border); padding-bottom: 0.5rem;">
+                            <i class="fa-brands fa-whatsapp text-green"></i> WhatsApp Campaign Broadcast Generator
+                        </h4>
+                        
+                        <div class="inward-two-col-layout">
+                            <div class="inward-pane-card">
+                                <div class="date-pick-field">
+                                    <label>Select Campaign Template:</label>
+                                    <select id="waBroadcastTemplate" onchange="updateBroadcastMessagePreview()">
+                                        <option value="FESTIVE_DROP">Festive Drop & 20% Privilege Code</option>
+                                        <option value="CART_RECOVERY">Unfinished Bag Concierge Assistance</option>
+                                        <option value="VIP_EXCLUSIVE">Exclusive New Collection Early Access</option>
+                                    </select>
+                                </div>
+                                <div class="date-pick-field">
+                                    <label>Broadcast Message Body:</label>
+                                    <textarea id="waBroadcastText" rows="6" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Namaste [Client_Name], Blue Skin invites you to experience our Festive Royal Palette drop. Use code ROYAL20 for 20% privilege savings. Tap here: https://blueskin.luxury</textarea>
+                                </div>
+                            </div>
+
+                            <div class="inward-pane-card">
+                                <div class="inward-card-title"><i class="fa-solid fa-paper-plane text-green"></i> Trigger Direct Broadcast</div>
+                                <p style="font-size: 0.74rem; color: var(--text-dim); line-height: 1.5;">This copies your broadcast payload and prepares the concierge dispatcher for sending directly to your opted-in luxury clients list.</p>
+                                
+                                <button type="button" class="btn-cal-apply" onclick="copyAndTriggerWaBroadcast()" style="margin-top: 1.5rem; height: 42px; font-weight: 800; background: #22c55e; border-color: #22c55e; color: #ffffff;">
+                                    <i class="fa-brands fa-whatsapp"></i> Copy Message & Launch WhatsApp Web
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 6] PANE 6: PROMOTIONS, COUPONS & FLASH DESK — END       -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+<!-- [MODULE 7] PANE 7: VIP CLIENT CRM & DIRECTORY — START           -->
+<!-- --------------------------------------------------------------- -->
+<section class="workspace-pane" id="pane-clients" style="display: none;">
+
+    <div class="deck-integrated-header">
+        <div class="deck-title-meta">
+            <h2>VIP CLIENT INTELLIGENCE & CONCIERGE DIRECTORY</h2>
+            <small><span class="live-pulse-dot"></span> Realtime Client Lifetime Value (LTV), Purchase Telemetry & Direct WhatsApp Concierge</small>
+        </div>
+        <div class="deck-action-pills">
+            <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                <i class="fa-solid fa-circle-half-stroke"></i>
+                <span class="theme-pill-label">THEME</span>
+            </button>
+            <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                <i class="fa-solid fa-lock"></i>
+                <span>LOCK</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 1. 5-COMPACT KPI CLIENT METRICS BELT -->
+    <div class="orders-mini-kpi-grid">
+        <div class="orders-kpi-card anim-pop">
+            <span class="orders-kpi-lbl">TOTAL REGISTERED</span>
+            <div class="orders-kpi-val" id="kpiClientTotalCount">84 Profiles</div>
+            <small class="kpi-click-hint">Active Database</small>
+        </div>
+        <div class="orders-kpi-card border-green anim-pop">
+            <span class="orders-kpi-lbl">VIP CONNOISSEURS</span>
+            <div class="orders-kpi-val text-green" id="kpiClientVipCount">32 Elite</div>
+            <small class="kpi-click-hint">Gold & Platinum</small>
+        </div>
+        <div class="orders-kpi-card border-amber anim-pop">
+            <span class="orders-kpi-lbl">AVERAGE ORDER VALUE</span>
+            <div class="orders-kpi-val text-amber">₹ 4,250.00</div>
+            <small class="kpi-click-hint">Per Transaction</small>
+        </div>
+        <div class="orders-kpi-card border-purple anim-pop">
+            <span class="orders-kpi-lbl">TOP SPENDING CLIENT</span>
+            <div class="orders-kpi-val text-purple" style="font-size: 0.88rem;">₹ 38,400.00</div>
+            <small class="kpi-click-hint">Vikram Anand</small>
+        </div>
+        <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+            <span class="orders-kpi-lbl">REPEAT RATE</span>
+            <div class="orders-kpi-val text-gold">64.2%</div>
+            <small class="kpi-click-hint">Loyalty Retention</small>
+        </div>
+    </div>
+
+    <!-- 2. FILTER & SEARCH BAR -->
+    <div class="orders-cockpit-banner anim-slide-down">
+        <div class="orders-workflow-filter-strip">
+            <button type="button" class="btn-filter-pill active" onclick="filterClientsByTier('ALL', this)">All Profiles (84)</button>
+            <button type="button" class="btn-filter-pill" onclick="filterClientsByTier('PLATINUM', this)">💎 Platinum (8)</button>
+            <button type="button" class="btn-filter-pill" onclick="filterClientsByTier('GOLD', this)">🥇 Gold (24)</button>
+            <button type="button" class="btn-filter-pill" onclick="filterClientsByTier('SILVER', this)">🥈 Silver (52)</button>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <div class="cockpit-search-input-box" style="width: 250px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="clientSearchInput" placeholder="Search Client, Phone, City..." oninput="filterClientsTable()">
+                <button type="button" class="btn-clear-search" onclick="clearClientSearch()">&times;</button>
+            </div>
+            <button type="button" class="btn-cal-apply" onclick="openClientDossierModal()" style="padding: 0.45rem 0.95rem; font-size: 0.76rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
+                <i class="fa-solid fa-user-plus"></i> Add VIP Client
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. ZERO-SCROLL TABLE -->
+    <div class="orders-table-card anim-fade-up">
+        <table class="enterprise-orders-table">
+            <thead>
+                <tr>
+                    <th style="width: 8%;">TIER</th>
+                    <th style="width: 24%;">CLIENT IDENTITY & CONTACT</th>
+                    <th style="width: 14%;">LOCATION</th>
+                    <th style="width: 12%;">ORDERS</th>
+                    <th style="width: 13%;">LIFETIME SPEND</th>
+                    <th style="width: 13%;">LAST ORDER</th>
+                    <th style="width: 16%; text-align: right;">QUICK ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody id="clientsTableBody">
+                <!-- Injected dynamically by JS -->
+            </tbody>
+        </table>
+    </div>
+
+</section>
+<!-- --------------------------------------------------------------- -->
+<!-- [MODULE 7] PANE 7: VIP CLIENT CRM & DIRECTORY — END             -->
+<!-- --------------------------------------------------------------- -->
+
+<!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 8] PANE 8: SYSTEM SETTINGS, ENTERPRISE SECURITY & GATEWAY START -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-settings" style="display: none;">
+                
+                <!-- 1. INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>SYSTEM SETTINGS, ENTERPRISE SECURITY & MASTER GATEWAY</h2>
+                        <small><span class="live-pulse-dot"></span> Global Store Operations, Master GST Telemetry, 5-Stage WhatsApp Dispatch Hub & Data Vault</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. 5-COMPACT KPI SYSTEM HEALTH BELT -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">WHATSAPP GATEWAY</span>
+                        <div class="orders-kpi-val text-green" id="kpiSettingsWaDisplay">● Live</div>
+                        <small class="kpi-click-hint" id="kpiSettingsWaPhone">+91 96583 99991</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">GST COMPLIANCE</span>
+                        <div class="orders-kpi-val text-gold" style="font-size: 0.82rem;" id="kpiSettingsGstDisplay">33AAECB9821L1Z4</div>
+                        <small class="kpi-click-hint">18% Tax Split: 9+9</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop">
+                        <span class="orders-kpi-lbl">DISPATCH HUB STATUS</span>
+                        <div class="orders-kpi-val text-amber">Ganapathy Hub</div>
+                        <small class="kpi-click-hint">Coimbatore - 641006</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">CONSOLE SECURITY</span>
+                        <div class="orders-kpi-val text-purple">PIN Active</div>
+                        <small class="kpi-click-hint">Auto-Lock 30 Mins</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">VAULT BACKUP HEALTH</span>
+                        <div class="orders-kpi-val text-green">100% Synced</div>
+                        <small class="kpi-click-hint">Zero-Loss Local Vault</small>
+                    </div>
+                </div>
+
+                <!-- 3. DETAILED 2-COLUMN ENTERPRISE SYSTEM DESK -->
+                <div class="inward-two-col-layout anim-fade-up">
+                    
+                    <!-- COLUMN 1: Identity, GST & Logistics Defaults -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-solid fa-building text-gold"></i> 1. Boutique Enterprise Identity & Legal GST</div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-crown text-gold"></i> Enterprise Legal Name:</label>
+                            <input type="text" id="setBrandName" value="Blue Skin Luxury Cosmetics LLP">
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-feather-pointed text-gold"></i> Official Brand Tagline:</label>
+                            <input type="text" id="setBrandTagline" value="Artisan Aesthetics & Bespoke Luxury Collections">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-certificate text-gold"></i> Master Enterprise GSTIN:</label>
+                                <input type="text" id="setGstinNumber" value="33AAECB9821L1Z4" style="text-transform: uppercase;">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-barcode text-gold"></i> Harmonized HSN Code:</label>
+                                <input type="text" id="setHsnCode" value="330499">
+                            </div>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-location-dot text-gold"></i> Registered Studio & Cleanroom HQ Address:</label>
+                            <input type="text" id="setStudioAddress" value="23/43 FCI Road, BPC Colony, Ganapathy, Coimbatore - 641006.">
+                        </div>
+
+                        <div class="inward-card-title" style="margin-top: 1.2rem;"><i class="fa-solid fa-credit-card text-gold"></i> 2. Payments & Logistics Rules</div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-qrcode text-green"></i> Official Merchant UPI VPA:</label>
+                                <input type="text" id="setMerchantUpi" value="blueskin@icici">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-receipt text-gold"></i> Invoice Sequential Prefix:</label>
+                                <input type="text" id="setInvoicePrefix" value="#BS-">
+                            </div>
+                        </div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-truck-fast text-gold"></i> Free Shipping Threshold (₹):</label>
+                                <input type="number" id="setFreeShippingLimit" value="999">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-box text-gold"></i> Default Shipping Fee (₹):</label>
+                                <input type="number" id="setDefaultShippingFee" value="150">
+                            </div>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-shield-halved text-gold"></i> Return & Quality Guarantee Policy Tag:</label>
+                            <input type="text" id="setReturnPolicy" value="Unopened intact security seals only within 7 days.">
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 2: WhatsApp Gateway, 5 Stages & Vault Security -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-brands fa-whatsapp text-green"></i> 3. Concierge WhatsApp Gateway & Notifications</div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-phone text-green"></i> Primary Dispatch Mobile:</label>
+                                <input type="text" id="setWaPhone" value="+91 96583 99991">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-envelope text-gold"></i> Concierge Inquiry Email:</label>
+                                <input type="email" id="setConciergeEmail" value="contact@blueskin.luxury">
+                            </div>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-comment-dots text-green"></i> Default WhatsApp Greeting Message:</label>
+                            <input type="text" id="setWaGreeting" value="Namaste! Welcome to Blue Skin Private Concierge.">
+                        </div>
+
+                        <!-- 5-STAGE NOTIFICATION CHECKLIST -->
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--card-border); border-radius: 6px; padding: 0.85rem; margin-top: 0.4rem;">
+                            <strong style="color: var(--gold); font-size: 0.74rem; display: block; margin-bottom: 0.45rem;">
+                                <i class="fa-solid fa-list-check"></i> 5-Stage Live Message Automation Triggers:
+                            </strong>
+                            <div style="display: grid; grid-template-columns: 1fr; gap: 0.35rem; font-size: 0.72rem; color: var(--text-pure);">
+                                <label style="display: flex; align-items: center; gap: 0.45rem;"><input type="checkbox" id="chkStage1" checked> <span>Stage 1: Payment Received & Clearance Receipt</span></label>
+                                <label style="display: flex; align-items: center; gap: 0.45rem;"><input type="checkbox" id="chkStage2" checked> <span>Stage 2: Cleanroom Quality Check & Batch Preparation</span></label>
+                                <label style="display: flex; align-items: center; gap: 0.45rem;"><input type="checkbox" id="chkStage3" checked> <span>Stage 3: Velvet Seal Protective Luxury Packaging Done</span></label>
+                                <label style="display: flex; align-items: center; gap: 0.45rem;"><input type="checkbox" id="chkStage4" checked> <span>Stage 4: Courier Dispatch with AWB & Tracking Link</span></label>
+                                <label style="display: flex; align-items: center; gap: 0.45rem;"><input type="checkbox" id="chkStage5" checked> <span>Stage 5: Delivered Gratitude & Luxury Client Follow-up</span></label>
+                            </div>
+                        </div>
+
+                        <div class="inward-card-title" style="margin-top: 1.2rem;"><i class="fa-solid fa-lock text-gold"></i> 4. Console Security & Data Vault</div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-key text-gold"></i> Master Lock PIN (4-Digits):</label>
+                                <input type="password" id="setLockPin" value="1234" maxlength="6">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-clock text-gold"></i> Auto-Lock Timeout:</label>
+                                <select id="setAutoTimeout">
+                                    <option value="15">15 Minutes Inactivity</option>
+                                    <option value="30" selected>30 Minutes Inactivity</option>
+                                    <option value="60">60 Minutes Inactivity</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- BACKUP & RESTORE VAULT -->
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--card-border); border-radius: 6px; padding: 0.85rem; margin-top: 0.6rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                            <div>
+                                <strong style="color: var(--gold); font-size: 0.76rem; display: block;"><i class="fa-solid fa-database"></i> Database Vault Backup & Restore</strong>
+                                <small style="color: var(--text-dim); font-size: 0.66rem;">Export or restore JSON package of products, orders, clients & coupons</small>
+                            </div>
+                            <div style="display: flex; gap: 0.4rem;">
+                                <button type="button" class="btn-excel-tool btn-excel-download" onclick="exportFullEnterpriseBackup()" style="height: 32px; font-size: 0.72rem;">
+                                    <i class="fa-solid fa-download"></i> Backup JSON
+                                </button>
+                                <button type="button" class="btn-excel-tool btn-excel-upload" onclick="triggerRestoreVaultFile()" style="height: 32px; font-size: 0.72rem;">
+                                    <i class="fa-solid fa-upload"></i> Restore JSON
+                                </button>
+                                <input type="file" id="vaultRestoreFileInput" accept=".json" style="display: none;" onchange="handleRestoreVaultJson(event)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. GLOBAL ACTION BAR -->
+                <div class="orders-cockpit-banner anim-slide-down" style="margin-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.2rem;">
+                    <button type="button" class="btn-cal-cancel" onclick="loadGlobalSystemSettings()" style="height: 40px; padding: 0 1.4rem;">
+                        <i class="fa-solid fa-rotate-left"></i> Discard Changes
+                    </button>
+                    <button type="button" class="btn-cal-apply" onclick="saveGlobalSystemSettings()" style="height: 40px; padding: 0 1.8rem; font-weight: 800; font-size: 0.82rem;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save & Synchronize Global Configuration
+                    </button>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 8] PANE 8: SYSTEM SETTINGS, SECURITY & GATEWAY — END    -->
+            <!-- --------------------------------------------------------------- -->
+
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 9] PANE 9: SUPABASE & SUPER CONNECTIONS VAULT — START   -->
+            <!-- --------------------------------------------------------------- -->
+            <section class="workspace-pane" id="pane-connections" style="display: none;">
+                
+                <!-- 1. INTEGRATED TITLE & CONTROL BAR -->
+                <div class="deck-integrated-header">
+                    <div class="deck-title-meta">
+                        <h2>SUPER CONNECTIONS, SUPABASE CLOUD & LIVE GATEWAYS</h2>
+                        <small><span class="live-pulse-dot"></span> Realtime PostgreSQL Telemetry, Supabase Edge Functions, Storage Buckets & Meta WhatsApp API</small>
+                    </div>
+
+                    <div class="deck-action-pills">
+                        <button type="button" class="btn-rect-pill" onclick="toggleTheme()" title="Change Visual Mode">
+                            <i class="fa-solid fa-circle-half-stroke"></i>
+                            <span class="theme-pill-label">THEME</span>
+                        </button>
+                        <button type="button" class="btn-rect-pill pill-lock" onclick="lockConsole()" title="Lock Enterprise Console">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>LOCK</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. 5-COMPACT KPI CONNECTION TELEMETRY BELT -->
+                <div class="orders-mini-kpi-grid">
+                    <div class="orders-kpi-card anim-pop">
+                        <span class="orders-kpi-lbl">SUPABASE POSTGRES</span>
+                        <div class="orders-kpi-val text-green" id="kpiSupaStatus">● 14ms Ping</div>
+                        <small class="kpi-click-hint" id="kpiSupaHost">db.xyz.supabase.co</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-green anim-pop">
+                        <span class="orders-kpi-lbl">REALTIME LISTENER</span>
+                        <div class="orders-kpi-val text-green" id="kpiSupaRealtime">● WSS Active</div>
+                        <small class="kpi-click-hint">Orders & Stock Synced</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-amber anim-pop">
+                        <span class="orders-kpi-lbl">STORAGE BUCKET CDN</span>
+                        <div class="orders-kpi-val text-gold" id="kpiSupaBuckets">2 Buckets</div>
+                        <small class="kpi-click-hint">Products & Invoices</small>
+                    </div>
+
+                    <div class="orders-kpi-card border-purple anim-pop">
+                        <span class="orders-kpi-lbl">WHATSAPP CLOUD API</span>
+                        <div class="orders-kpi-val text-purple" id="kpiSupaWa">Meta Graph v19</div>
+                        <small class="kpi-click-hint">Webhook Handshake OK</small>
+                    </div>
+
+                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl">VAULT ENCRYPTION</span>
+                        <div class="orders-kpi-val text-gold">AES-256 GCM</div>
+                        <small class="kpi-click-hint">Master Secure Folder</small>
+                    </div>
+                </div>
+
+                <!-- 3. 4-TAB CLOUD INFRASTRUCTURE CONTROLLER -->
+                <div class="orders-cockpit-banner anim-slide-down" style="padding: 0.6rem 0.8rem;">
+                    <div class="orders-workflow-filter-strip" id="connectionsTabStrip" style="overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px;">
+                        <button type="button" class="btn-filter-pill active" onclick="switchConnectionsTab('tab-supa-core', this)">⚡ 1. Supabase Master Config</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchConnectionsTab('tab-supa-storage', this)">📦 2. Storage Buckets CDN</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchConnectionsTab('tab-supa-whatsapp', this)">📱 3. WhatsApp Cloud API</button>
+                        <button type="button" class="btn-filter-pill" onclick="switchConnectionsTab('tab-supa-payments', this)">💳 4. Payments & Webhooks</button>
+                    </div>
+                </div>
+
+                <!-- 4.1 TAB 1: SUPABASE MASTER CONFIG -->
+                <div class="connections-tab-content anim-fade-up" id="tab-supa-core">
+                    <div class="inward-two-col-layout">
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-database text-gold"></i> Supabase Database & Realtime API</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-link text-gold"></i> Supabase Project URL:</label>
+                                <input type="text" id="supaProjectUrl" value="https://abcdefghijklm.supabase.co" placeholder="https://your-project.supabase.co">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-key text-gold"></i> Supabase Anon Public Key (Storefront Access):</label>
+                                <textarea id="supaAnonKey" rows="2" style="width: 100%; font-family: monospace; font-size: 0.72rem;">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.anon_key_demo_public_storefront_access_token_blueskin_luxury</textarea>
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-shield-halved text-amber"></i> Supabase Service Role Secret (Admin Master Full Access):</label>
+                                <input type="password" id="supaServiceKey" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.service_role_secret_master_god_mode_token_2026">
+                            </div>
+                        </div>
+
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-server text-gold"></i> PostgreSQL Direct URI & Realtime Channels</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-network-wired text-gold"></i> Direct PostgreSQL Connection URI (Pooling Port 6543 / 5432):</label>
+                                <input type="text" id="supaPostgresUri" value="postgresql://postgres.abcdef:[YOUR-PASSWORD]@aws-0-ap-south-1.pooler.supabase.com:6543/postgres">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-bolt text-green"></i> Realtime Sync Mode:</label>
+                                <select id="supaRealtimeMode">
+                                    <option value="FULL_REPLICATION" selected>🟢 Full Replication (Broadcast, Presence, Postgres Changes)</option>
+                                    <option value="ORDERS_ONLY">🟡 Orders & Inventory Only</option>
+                                    <option value="POLLING_ONLY">🔴 Manual Polling (Disable WebSocket)</option>
+                                </select>
+                            </div>
+
+                            <div style="background: rgba(245, 196, 67, 0.08); border: 1.2px dashed rgba(245, 196, 67, 0.45); border-radius: 8px; padding: 0.95rem; margin-top: 0.8rem; display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong style="color: var(--gold); font-size: 0.78rem; display: block;">Realtime Handshake Test</strong>
+                                    <small style="color: var(--text-dim); font-size: 0.68rem;">Test WebSocket & PostgreSQL round-trip latency</small>
+                                </div>
+                                <button type="button" class="btn-cal-apply" onclick="testSupabaseConnectionHandshake()" style="height: 34px; padding: 0 1rem; font-size: 0.72rem;">
+                                    <i class="fa-solid fa-play"></i> Ping Supabase
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.2 TAB 2: STORAGE BUCKETS CDN -->
+                <div class="connections-tab-content anim-fade-up" id="tab-supa-storage" style="display: none;">
+                    <div class="inward-two-col-layout">
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-folder-open text-gold"></i> Supabase Storage Buckets</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-image text-gold"></i> Products Media Bucket (Public Read):</label>
+                                <input type="text" id="supaBucketProducts" value="blueskin-products">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-file-invoice text-gold"></i> Invoices & Dossiers Bucket (Private Signed URLs):</label>
+                                <input type="text" id="supaBucketInvoices" value="blueskin-secure-vault">
+                            </div>
+                        </div>
+
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-globe text-gold"></i> CDN Delivery & Edge Functions</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-route text-gold"></i> Custom Storage CDN URL:</label>
+                                <input type="text" id="supaCdnUrl" value="https://cdn.blueskin.luxury">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-code text-gold"></i> WhatsApp Auto-Trigger Edge Function URL:</label>
+                                <input type="text" id="supaEdgeWaNotify" value="https://abcdefghijklm.supabase.co/functions/v1/dispatch-wa-notify">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.3 TAB 3: WHATSAPP CLOUD API -->
+                <div class="connections-tab-content anim-fade-up" id="tab-supa-whatsapp" style="display: none;">
+                    <div class="inward-two-col-layout">
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-brands fa-whatsapp text-green"></i> Meta Cloud API Enterprise Handshake</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-id-card text-gold"></i> WhatsApp Business Account ID (WABA ID):</label>
+                                <input type="text" id="supaWabaId" value="109842100849201">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-phone text-green"></i> WhatsApp Phone Number ID:</label>
+                                <input type="text" id="supaWaPhoneId" value="984210084920155">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-key text-gold"></i> Permanent System User Access Token (Bearer):</label>
+                                <input type="password" id="supaWaAccessToken" value="EAAG_DEMO_PERMANENT_SYSTEM_USER_ACCESS_TOKEN_FOR_WHATSAPP_GRAPH_API">
+                            </div>
+                        </div>
+
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-tower-broadcast text-gold"></i> Webhooks & Inbound Routing</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-link text-gold"></i> Webhook Callback URL:</label>
+                                <input type="text" id="supaWaCallbackUrl" value="https://blueskin.luxury/api/webhook/whatsapp">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-shield-check text-green"></i> Webhook Verify Token:</label>
+                                <input type="text" id="supaWaVerifyToken" value="BLUESKIN_SUPABASE_SECURE_VERIFY_TOKEN_2026">
+                            </div>
+
+                            <button type="button" class="btn-cal-apply" onclick="testWhatsAppApiPing()" style="margin-top: 1.2rem; height: 38px; width: 100%; font-size: 0.74rem;">
+                                <i class="fa-brands fa-whatsapp"></i> Send Test WhatsApp Handshake Ping
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4.4 TAB 4: PAYMENTS & WEBHOOKS -->
+                <div class="connections-tab-content anim-fade-up" id="tab-supa-payments" style="display: none;">
+                    <div class="inward-two-col-layout">
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-credit-card text-gold"></i> Razorpay & Payment Gateway Vault</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-building-columns text-gold"></i> Live Key ID (Public Client Key):</label>
+                                <input type="text" id="supaPaymentKeyId" value="rzp_live_94821098421084">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-key text-amber"></i> Live Key Secret (Private Encrypted Token):</label>
+                                <input type="password" id="supaPaymentKeySecret" value="rzp_sec_live_984210984210849201">
+                            </div>
+                        </div>
+
+                        <div class="inward-pane-card">
+                            <div class="inward-card-title"><i class="fa-solid fa-folder-closed text-gold"></i> Secure Vault Credentials Folder</div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-folder text-gold"></i> Local Vault Folder Path:</label>
+                                <input type="text" id="supaVaultFolderPath" value="/config/super-connections-vault/credentials.json" readonly style="opacity: 0.85;">
+                            </div>
+
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-lock text-gold"></i> Master Vault File Export (Encrypted JSON):</label>
+                                <button type="button" class="btn-excel-tool btn-excel-download" onclick="exportSuperConnectionsVault()" style="height: 38px; width: 100%; font-size: 0.74rem; margin-top: 0.2rem;">
+                                    <i class="fa-solid fa-download"></i> Export Super Connections Vault (.json)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. GLOBAL SAVE ACTION BAR -->
+                <div class="orders-cockpit-banner anim-slide-down" style="margin-top: 1.2rem; display: flex; justify-content: space-between; align-items: center; padding: 0.85rem 1.2rem;">
+                    <button type="button" class="btn-cal-cancel" onclick="loadSuperConnectionsConfig()" style="height: 40px; padding: 0 1.4rem;">
+                        <i class="fa-solid fa-rotate-left"></i> Discard Changes
+                    </button>
+                    <button type="button" class="btn-cal-apply" onclick="saveSuperConnectionsConfig()" style="height: 40px; padding: 0 1.8rem; font-weight: 800; font-size: 0.82rem;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save & Encrypt Super Connections Vault
+                    </button>
+                </div>
+
+            </section>
+            <!-- --------------------------------------------------------------- -->
+            <!-- [MODULE 9] PANE 9: SUPABASE & SUPER CONNECTIONS VAULT — END     -->
+            <!-- --------------------------------------------------------------- -->
+
+        </main>
+    </div>
+    <!-- [SECTION 2] MASTER CONSOLE SHELL — END -->
+
+
+    <!-- ======================================================================= -->
+    <!-- [MODALS ENGINE] BLUE SKIN DISPATCH, INVOICE & LABELS                    -->
+    <!-- ======================================================================= -->
+
+    <!-- DISPATCH COURIER DETAILS POPUP MODAL -->
+    <div class="calendar-modal-backdrop" id="dispatchModal" style="display: none;">
+        <div class="calendar-modal-box">
+            <div class="modal-head">
+                <h4><i class="fa-solid fa-truck-fast text-gold"></i> Dispatch Logistics & AWB Entry</h4>
+                <button type="button" class="btn-modal-close" onclick="closeDispatchModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dispatchActiveOrderId">
+                <div class="date-pick-field">
+                    <label>Logistics Carrier:</label>
+                    <select id="dispatchCarrierSelect">
+                        <option value="The Professional Couriers (TPC)">The Professional Couriers (TPC)</option>
+                        <option value="DTDC Express Courier">DTDC Express Courier</option>
+                        <option value="Blue Dart Express">Blue Dart Express</option>
+                        <option value="Delhivery Surface">Delhivery Surface</option>
+                        <option value="India Post Speed Post">India Post Speed Post</option>
+                    </select>
+                </div>
+                <div class="date-pick-field">
+                    <label>Consignment / AWB Tracking Number:</label>
+                    <input type="text" id="dispatchAwbInput" placeholder="e.g. PC-CBE-984210084">
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-cal-cancel" onclick="closeDispatchModal()">Cancel</button>
+                <button type="button" class="btn-cal-apply" onclick="confirmDispatchWithAwb()">Confirm & Notify WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================================================================= -->
+    <!-- [MODULE 5] FULL-SCREEN PRODUCT CREATOR & SHOWCASE STUDIO MODAL          -->
+    <!-- ======================================================================= -->
+    <div class="calendar-modal-backdrop" id="productStudioModal" style="display: none;">
+        <div class="calendar-modal-box inward-fullscreen-window anim-pop" style="max-width: 1240px !important;">
+            
+            <div class="inward-modal-head-strip">
+                <div class="inward-brand-tag">
+                    <div class="inward-icon-frame"><i class="fa-solid fa-wand-magic-sparkles text-gold"></i></div>
+                    <div>
+                        <h3 id="prodModalHeaderTitle">Product Master Creator & Boutique Showcase Studio</h3>
+                        <p>Configure Complete Product Display, Realtime Special Pricing, Trust Highlights & Accordions</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-modal-close" onclick="closeProductStudioModal()">&times;</button>
+            </div>
+
+            <div class="inward-modal-body-scroll">
+                <input type="hidden" id="prodEditId">
+
+                <div class="inward-two-col-layout">
+                    
+                    <!-- LEFT COLUMN: Identity & Product Details -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-solid fa-palette text-gold"></i> 1. Product Identity & Specifications</div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-tag text-gold"></i> Product Full Title:</label>
+                            <input type="text" id="prodInputTitle" placeholder="e.g. Sapphire Midnight Palette">
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-wand-magic-sparkles text-gold"></i> Shades & Texture Subtitle:</label>
+                            <input type="text" id="prodInputSubtitle" placeholder="e.g. 12 Couture Pigmented Shades">
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-weight-scale text-gold"></i> Net Weight / Unit Measure:</label>
+                                <input type="text" id="prodInputWeight" placeholder="e.g. Net Weight : 1 Pcs">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-star text-gold"></i> Client Reviews Text:</label>
+                                <input type="text" id="prodInputReviews" placeholder="e.g. 2 Verified Reviews">
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-layer-group text-gold"></i> Catalog Category:</label>
+                                <select id="prodInputCategory">
+                                    <option value="Eye Artistry">Eye Artistry</option>
+                                    <option value="Face Products">Face Products</option>
+                                    <option value="Lip Products">Lip Products</option>
+                                    <option value="Artisan Tools">Artisan Tools</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-eye text-gold"></i> Boutique Visibility:</label>
+                                <select id="prodInputVisibility">
+                                    <option value="LIVE">Live in Boutique</option>
+                                    <option value="DRAFT">Draft (Hidden)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 4 GALLERY ASSET URLS -->
+                        <div class="date-pick-field" style="margin-top: 0.4rem;">
+                            <label><i class="fa-solid fa-image text-gold"></i> Primary Display Bottle / Pan Image URL:</label>
+                            <input type="text" id="prodInputImg1" placeholder="https://images.unsplash.com/photo-...">
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: Dynamic Offer Pricing & Action Buttons -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-solid fa-calculator text-green"></i> 2. Dynamic Pricing, Discounts & Actions</div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-indian-rupee-sign text-gold"></i> Original MRP (₹):</label>
+                                <input type="number" id="prodInputMrp" placeholder="e.g. 4499" min="0" oninput="calculateProductOfferPricing()">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-percent text-gold"></i> Discount Cut (%):</label>
+                                <input type="number" id="prodInputDiscount" placeholder="e.g. 22" min="0" max="100" oninput="calculateProductOfferPricing()">
+                            </div>
+                        </div>
+
+                        <!-- AUTO-CALCULATED SPECIAL PRICE CARD -->
+                        <div class="inward-live-lot-summary" style="margin-top: 0.2rem;">
+                            <div class="summary-top-row">
+                                <strong style="color: var(--gold); font-size: 0.86rem;" id="prodOfferPriceDisplay">Special Offer Price: ₹ 3,509.00</strong>
+                                <span class="badge-status-pill" id="prodDiscountBadgeDisplay">22% OFF</span>
+                            </div>
+                            <div class="summary-metrics-val" id="prodSavingsDisplay" style="color: #22c55e;">You Save: ₹ 990.00 (Inclusive of all taxes)</div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-top: 0.6rem;">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-bag-shopping text-gold"></i> Primary Action Button Label:</label>
+                                <input type="text" id="prodInputBagBtn" value="Add to Bag">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-heart text-gold"></i> Wishlist Button Label:</label>
+                                <input type="text" id="prodInputWishlistBtn" value="Add To Wishlist">
+                            </div>
+                        </div>
+
+                        <!-- TRUST & SHIPPING POLICY HIGHLIGHTS -->
+                        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--card-border); border-radius: 6px; padding: 0.85rem; margin-top: 0.6rem;">
+                            <strong style="font-size: 0.74rem; color: var(--gold); display: block; margin-bottom: 0.45rem;">
+                                <i class="fa-solid fa-shield-halved"></i> Store Trust & Shipping Policy Highlights:
+                            </strong>
+                            <div class="date-pick-field" style="margin-bottom: 0.4rem;">
+                                <input type="text" id="prodInputTrust1" value="Free shipping above ₹999">
+                            </div>
+                            <div class="date-pick-field" style="margin-bottom: 0.4rem;">
+                                <input type="text" id="prodInputTrust2" value="Orders ship the next business day">
+                            </div>
+                            <div class="date-pick-field">
+                                <input type="text" id="prodInputTrust3" value="Easy shipping and return policy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM FULL-WIDTH: ACCORDION CONTENT -->
+                <div class="inward-pane-card" style="margin-top: 1.2rem;">
+                    <div class="inward-card-title"><i class="fa-solid fa-list-check text-gold"></i> 3. Granular Specification Accordions</div>
+
+                    <div class="date-pick-field">
+                        <label>📁 Accordion 1: Product Description:</label>
+                        <textarea id="prodInputDesc" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">High-impact couture pigmented palette featuring 12 velvet-touch multidimensional shades with seamless blendability.</textarea>
+                    </div>
+
+                    <div class="date-pick-field">
+                        <label>📁 Accordion 2: How to Use:</label>
+                        <textarea id="prodInputHowToUse" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">Apply shimmer shades across inner eyelids. Layer deep sapphire tones across the outer crease with a precision buffing brush.</textarea>
+                    </div>
+
+                    <div class="date-pick-field">
+                        <label>📁 Accordion 3: Additional Information:</label>
+                        <textarea id="prodInputAddInfo" rows="2" style="width: 100%; background: var(--bg-surface); border: 1px solid var(--card-border); border-radius: 4px; padding: 0.6rem; color: var(--text-pure); font-size: 0.78rem;">100% Dermatologically Tested • Cruelty-Free Botanical Binder • Net WT 1 Pcs • Batch Origin: Coimbatore Cleanroom Facility.</textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="inward-modal-footer-strip">
+                <button type="button" class="btn-cal-cancel" onclick="closeProductStudioModal()">Cancel / Discard</button>
+                <button type="button" class="btn-cal-apply" onclick="saveProductStudioEntry()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Product & Sync to Boutique Catalog
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- ======================================================================= -->
+
+    <!-- ======================================================================= -->
+    <!-- QUICK CATEGORY CREATOR MODAL (NAME + IMAGE URL)                         -->
+    <!-- ======================================================================= -->
+    <div class="calendar-modal-backdrop" id="quickCategoryModal" style="display: none;">
+        <div class="calendar-modal-box" style="max-width: 480px;">
+            <div class="modal-head">
+                <h4><i class="fa-solid fa-folder-plus text-gold"></i> Add New Product Category</h4>
+                <button type="button" class="btn-modal-close" onclick="closeQuickCategoryModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="date-pick-field">
+                    <label><i class="fa-solid fa-tag text-gold"></i> Category Name:</label>
+                    <input type="text" id="quickCatName" placeholder="e.g. Skin Care Essentials">
+                </div>
+                <div class="date-pick-field">
+                    <label><i class="fa-solid fa-image text-gold"></i> Category Thumbnail Image URL:</label>
+                    <input type="text" id="quickCatImg" placeholder="https://images.unsplash.com/photo-...">
+                </div>
+                <div style="font-size: 0.72rem; color: var(--text-dim); margin-top: 0.4rem;">
+                    💡 இந்த வகை உடனடியாக Product Manager மற்றும் Dropdown-ல் இணைக்கப்படும்.
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-cal-cancel" onclick="closeQuickCategoryModal()">Cancel</button>
+                <button type="button" class="btn-cal-apply" onclick="saveQuickCategoryEntry()">
+                    <i class="fa-solid fa-check"></i> Save Category
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- [MODULE 6] FULL-SCREEN ADVANCED PROMOTION & COUPON CREATOR MODAL        -->
+    <!-- ======================================================================= -->
+    <div class="calendar-modal-backdrop" id="couponStudioModal" style="display: none;">
+        <div class="calendar-modal-box inward-fullscreen-window anim-pop" style="max-width: 1200px !important;">
+            
+            <div class="inward-modal-head-strip">
+                <div class="inward-brand-tag">
+                    <div class="inward-icon-frame"><i class="fa-solid fa-tags text-gold"></i></div>
+                    <div>
+                        <h3 id="couponModalHeaderTitle">Advanced Promo Code & Campaign Studio</h3>
+                        <p>Configure Granular Discount Rules, Redemptions Quota, Category Limits & Checkout Appearance</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-modal-close" onclick="closeCouponStudioModal()">&times;</button>
+            </div>
+
+            <div class="inward-modal-body-scroll">
+                <input type="hidden" id="couponEditId">
+
+                <div class="inward-two-col-layout">
+                    <!-- Column 1: Promo Code & Discount Rules -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-solid fa-percent text-gold"></i> 1. Promo Code & Discount Strategy</div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-ticket text-gold"></i> Coupon Promo Code (Uppercase):</label>
+                            <input type="text" id="couponInputCode" placeholder="e.g. ROYAL15" style="text-transform: uppercase;">
+                        </div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-sliders text-gold"></i> Discount Strategy:</label>
+                                <select id="couponInputType">
+                                    <option value="PERCENTAGE">Percentage Cut (% OFF)</option>
+                                    <option value="FLAT">Flat Cash Discount (₹ OFF)</option>
+                                    <option value="FREE_SHIPPING">Free Priority Shipping</option>
+                                </select>
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-calculator text-gold"></i> Discount Value:</label>
+                                <input type="number" id="couponInputValue" placeholder="e.g. 15" min="1">
+                            </div>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-layer-group text-gold"></i> Target Category Scope:</label>
+                            <select id="couponInputCategory">
+                                <option value="ALL">All Catalog Creations (Site-wide)</option>
+                                <option value="Eye Artistry">Eye Artistry Only</option>
+                                <option value="Face Products">Face Products Only</option>
+                                <option value="Lip Products">Lip Products Only</option>
+                            </select>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-comment-dots text-gold"></i> Storefront Checkout Tagline:</label>
+                            <input type="text" id="couponInputTagline" placeholder="e.g. Special 15% Royal Privilege Savings on your Selection">
+                        </div>
+                    </div>
+
+                    <!-- Column 2: Usage Restrictions & Validity -->
+                    <div class="inward-pane-card">
+                        <div class="inward-card-title"><i class="fa-solid fa-shield-check text-green"></i> 2. Usage Restrictions & Validity</div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-indian-rupee-sign text-gold"></i> Minimum Cart Spend (₹):</label>
+                                <input type="number" id="couponInputMinSpend" placeholder="e.g. 2999" min="0">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-circle-pause text-amber"></i> Max Discount Cap (₹) [0 for none]:</label>
+                                <input type="number" id="couponInputMaxCap" placeholder="e.g. 1500" min="0">
+                            </div>
+                        </div>
+
+                        <div class="inward-sub-grid">
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-users text-gold"></i> Total Max Quota Uses:</label>
+                                <input type="number" id="couponInputQuota" placeholder="e.g. 100" min="1">
+                            </div>
+                            <div class="date-pick-field">
+                                <label><i class="fa-solid fa-calendar-xmark text-gold"></i> Expiry Date & Time:</label>
+                                <input type="date" id="couponInputExpiry">
+                            </div>
+                        </div>
+
+                        <div class="date-pick-field">
+                            <label><i class="fa-solid fa-toggle-on text-gold"></i> Campaign Status:</label>
+                            <select id="couponInputStatus">
+                                <option value="ACTIVE">🟢 Active Live in Checkout</option>
+                                <option value="PAUSED">🔴 Paused / Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="inward-modal-footer-strip">
+                <button type="button" class="btn-cal-cancel" onclick="closeCouponStudioModal()">Cancel / Discard</button>
+                <button type="button" class="btn-cal-apply" onclick="saveCouponStudioEntry()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save & Launch Campaign to Storefront Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+    <!-- STOCK INWARD & ITEM ENTRY MODAL -->
+    <div class="calendar-modal-backdrop" id="stockInwardModal" style="display: none;">
+        <div class="calendar-modal-box" style="max-width: 540px;">
+            <div class="modal-head">
+                <h4 id="inwardModalHeaderTitle"><i class="fa-solid fa-box-archive text-gold"></i> Stock Inward & Inventory Entry Desk</h4>
+                <button type="button" class="btn-modal-close" onclick="closeStockInwardModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="inwardItemId">
+                
+                <div class="date-pick-field">
+                    <label>Product Name & Specification:</label>
+                    <input type="text" id="inwardItemName" placeholder="e.g. Luminous Velvet Foundation">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="date-pick-field">
+                        <label>Weight / Net Measure:</label>
+                        <input type="text" id="inwardItemWeight" placeholder="e.g. 30ml / 12g / 0.5ml">
+                    </div>
+                    <div class="date-pick-field">
+                        <label>Existing Category:</label>
+                        <select id="inwardCategorySelect" onchange="toggleInlineCategoryInput()">
+                            <option value="Face Products">Face Products</option>
+                            <option value="Eye Artistry">Eye Artistry</option>
+                            <option value="Lip Products">Lip Products</option>
+                            <option value="Artisan Tools">Artisan Tools</option>
+                            <option value="__NEW__">+ Create New Category</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- INLINE NEW CATEGORY INPUT -->
+                <div class="date-pick-field" id="newCategoryInlineWrap" style="display: none;">
+                    <label>Type New Category Name:</label>
+                    <input type="text" id="inwardNewCategoryName" placeholder="e.g. Skin Care">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="date-pick-field">
+                        <label id="inwardUnitsLabel">Units To Add (+):</label>
+                        <input type="number" id="inwardUnitsCount" placeholder="e.g. 25" min="0" oninput="calculateInwardLiveSummary()">
+                    </div>
+                    <div class="date-pick-field">
+                        <label>Min Alert Threshold:</label>
+                        <input type="number" id="inwardThresholdCount" placeholder="e.g. 10" min="1">
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                    <div class="date-pick-field">
+                        <label>Unit Cost Value (₹):</label>
+                        <input type="number" id="inwardUnitCost" placeholder="e.g. 1200" min="0" oninput="calculateInwardLiveSummary()">
+                    </div>
+                    <div class="date-pick-field">
+                        <label>Supplier / Batch Ref:</label>
+                        <input type="text" id="inwardBatchRef" placeholder="e.g. Batch-261026-FND">
+                    </div>
+                </div>
+
+                <!-- LIVE INWARD SUMMARY CARD -->
+                <div style="background: rgba(245, 196, 67, 0.06); border: 1px dashed rgba(245, 196, 67, 0.35); border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.74rem; color: var(--text-pure); margin-top: 0.5rem;">
+                    <span id="inwardLiveCalcText">ℹ️ Current Available Stock: 0 Units ──(+) Inward: 0 Units ──(=) Updated Total: 0 Units</span>
+                </div>
+                <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: 0.4rem; text-align: right;" id="inwardLastUpdatedDateInfo">
+                    Last Updated: Never
+                </div>
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-cal-cancel" onclick="closeStockInwardModal()">Cancel / Close</button>
+                <button type="button" class="btn-cal-apply" onclick="saveStockInwardEntry()">
+                    <i class="fa-solid fa-floppy-disk"></i> Update Inventory & Log Stock
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ORDER DOSSIER FULL VIEW MODAL -->
+    <div class="calendar-modal-backdrop" id="orderInspectModal" style="display: none;">
+        <div class="calendar-modal-box order-modal-expand">
+            <div class="modal-head">
+                <h4><i class="fa-solid fa-receipt text-gold"></i> Order Dossier & Fulfillment</h4>
+                <button type="button" class="btn-modal-close" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="orderInspectBody"></div>
+            <div class="modal-foot">
+                <button type="button" class="btn-cal-cancel" onclick="closeOrderModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+        </main>
+        <!-- =================================================================== -->
+        <!-- [SUB-SECTION 2.2] MAIN VIEWPORT CANVAS — END                        -->
+        <!-- =================================================================== -->
+
+        <!-- MODAL: DATE RANGE PICKER CALENDAR -->
+        <div class="calendar-modal-backdrop" id="dateRangeModal" style="display: none;">
+            <div class="calendar-modal-box">
+                <div class="modal-head">
+                    <h4><i class="fa-regular fa-calendar-days text-gold"></i> Select Ledger Date Range</h4>
+                    <button type="button" class="btn-modal-close" onclick="closeDateModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="date-pick-field">
+                        <label>From Date:</label>
+                        <input type="date" id="ledgerStartDate">
+                    </div>
+                    <div class="date-pick-field">
+                        <label>To Date:</label>
+                        <input type="date" id="ledgerEndDate">
+                    </div>
+                </div>
+                <div class="modal-foot">
+                    <button type="button" class="btn-cal-cancel" onclick="closeDateModal()">Cancel</button>
+                    <button type="button" class="btn-cal-apply" onclick="applyCustomDateRange()">Apply & Download</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======================================================================= -->
+    <!-- [MODAL] ORDER FULL DETAIL INSPECT MODAL                                 -->
+    <!-- ======================================================================= -->
+    <div class="calendar-modal-backdrop" id="orderInspectModal" style="display: none;">
+        <div class="calendar-modal-box order-modal-expand">
+            <div class="modal-head">
+                <h4><i class="fa-solid fa-receipt text-gold"></i> Order Dossier & Fulfillment</h4>
+                <button type="button" class="btn-modal-close" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="orderInspectBody">
+                <!-- Dynamically populated via JS -->
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="btn-cal-cancel" onclick="closeOrderModal()">Close</button>
+                <button type="button" class="btn-cal-apply" id="btnModalPrintAction" onclick="printShippingLabel()">Print Dispatch Label</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- 3... 2... 1... CINEMATIC COUNTDOWN & CENTER SCREEN FLASH OFFER MODAL     -->
+    <!-- ======================================================================= -->
+    <div class="calendar-modal-backdrop" id="simLiveFlashModal" style="display: none; align-items: center; justify-content: center; z-index: 99999;">
+        
+        <!-- 3-2-1 COUNTDOWN CIRCLE OVERLAY -->
+        <div id="simCountdownRingWrap" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <div class="sim-countdown-number" id="simCountdownNumber">3</div>
+            <div style="color: var(--gold); font-size: 0.85rem; font-weight: 800; letter-spacing: 2px; margin-top: 1rem;">UNVEILING ROYAL PRIVILEGE...</div>
+        </div>
+
+        <!-- CENTER SCREEN FLASH OFFER CARD (APPEARS AFTER 1) -->
+        <div class="calendar-modal-box flash-offer-luxury-box anim-pop" id="simFlashCardWrap" style="display: none; max-width: 520px; text-align: center; border: 2px solid var(--gold); box-shadow: 0 0 35px var(--gold-glow);">
+            <div style="position: absolute; top: 12px; right: 16px;">
+                <button type="button" class="btn-modal-close" onclick="closeSimFlashModal()">&times;</button>
+            </div>
+            
+            <div style="width: 52px; height: 52px; border-radius: 50%; background: rgba(245, 196, 67, 0.15); border: 1.5px solid var(--gold); display: flex; align-items: center; justify-content: center; margin: 0.5rem auto 1rem auto; font-size: 1.4rem; color: var(--gold);">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+
+            <span style="display: inline-block; background: rgba(245, 196, 67, 0.15); color: var(--gold); font-size: 0.68rem; font-weight: 800; padding: 0.2rem 0.6rem; border-radius: 20px; letter-spacing: 1px;" id="simFlashEyebrow">
+                ROYAL PRIVILEGE ACCESS EXCLUSIVE
+            </span>
+
+            <h3 style="margin: 0.8rem 0 0.4rem 0; font-size: 1.2rem; font-weight: 800; color: #ffffff;" id="simFlashHeadline">
+                FESTIVE LUXURY OFFER: FLAT 20% OFF ON ORDERS ABOVE ₹3,999
+            </h3>
+
+            <p style="font-size: 0.76rem; color: var(--text-dim); margin-bottom: 1.2rem; line-height: 1.5;" id="simFlashDesc">
+                Handcrafted luxury formulations. Claim with exclusive code below or proceed to checkout directly.
+            </p>
+
+            <div style="background: rgba(0,0,0,0.4); border: 1.5px dashed var(--gold); border-radius: 8px; padding: 0.85rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+                <div style="text-align: left;">
+                    <small style="color: var(--text-dim); font-size: 0.62rem; display: block;">PROMO PRIVILEGE CODE</small>
+                    <strong style="color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; letter-spacing: 1.5px;" id="simFlashCode">ROYAL20</strong>
+                </div>
+                <button type="button" class="btn-inv-action" onclick="copySimFlashCouponCode()" style="padding: 0.4rem 0.8rem; font-size: 0.72rem;">
+                    <i class="fa-solid fa-copy"></i> Copy Code
+                </button>
+            </div>
+
+            <button type="button" class="btn-cal-apply" onclick="closeSimFlashModal()" style="width: 100%; height: 42px; font-weight: 800; font-size: 0.82rem;">
+                <span id="simFlashBtnText">Claim Royal Privilege Now</span> &rarr;
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ####################################################################### -->
+    <!-- ####################################################################### -->
+    <!-- ###                                                                 ### -->
+    <!-- ###  [LOCKED ZONE] SCRIPT ENGINE REFERENCE — DO NOT TOUCH!          ### -->
+    <!-- ###  கீழே உள்ள ஸ்கிரிப்ட் லைனை எந்தக் காரணத்திற்காகவும் மாற்றக்கூடாது!       ### -->
+    <!-- ###  அனைத்து புதிய HTML தொகுதிகளும் இந்த பாக்ஸுக்கு மேலேதான் சேர்க்கப்பட வேண்டும்.   ### -->
+    <!-- ###                                                                 ### -->
+    <!-- ####################################################################### -->
+    <!-- ####################################################################### -->
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>
