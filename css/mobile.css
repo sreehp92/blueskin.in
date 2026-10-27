@@ -122,12 +122,49 @@
     visibility: visible !important;
 }
 /* ========================================================================== */
-/* THE ROYAL PORTFOLIO: HIDE SUBTITLE & CONVERT TO 1x4 COMPACT SCROLL         */
+/* COMPACT HERO, TIGHT STATS & EDGE-TO-EDGE FULL-WIDTH PORTFOLIO (MOBILE)     */
 /* ========================================================================== */
 
-/* 1. அந்த நீண்ட விளக்க உரையை மொபைலில் மட்டும் அடியோடு நீக்குதல் */
-#portfolio .section-desc,
-.portfolio-showcase-section .section-desc {
+/* 1. ஹீரோ செக்ஷன் மற்றும் பட்டன்களின் இடைவெளியைக் குறைத்தல் */
+.hero-section {
+    padding-top: 1.2rem !important;
+    padding-bottom: 0.4rem !important;
+    margin-bottom: 0 !important;
+}
+
+.hero-title, .hero-section h1 {
+    font-size: 1.5rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.4rem !important;
+}
+
+.hero-desc, .hero-section p {
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 0.8rem !important;
+}
+
+.hero-btn-group, .hero-actions, .hero-btn-row {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    gap: 8px !important;
+}
+
+/* 2. STATS BAR (100% / 500+ / 4.9★) ஒட்டி வருதல் & கேப் நீக்கம் */
+.stats-row, 
+.metrics-counter-wrap {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0.6rem 8px !important;
+    border-top: 1px solid rgba(245, 196, 67, 0.15) !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
+}
+
+/* 3. 'CURATED GALLERY' பேட்ஜ் & டைமண்ட் ஐகானை முழுமையாக நீக்குதல் */
+#portfolio .sub-badge,
+.portfolio-showcase-section .sub-badge,
+span:has(i.fa-gem),
+.portfolio-header .sub-badge {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
@@ -135,98 +172,74 @@
     padding: 0 !important;
 }
 
-/* தலைப்பு மற்றும் பேட்ஜை மட்டும் சென்டரில் அழகாக வைத்தல் */
-#portfolio .section-header-center,
-.portfolio-showcase-section .section-header-center {
-    margin-bottom: 1.2rem !important;
-    text-align: center !important;
-}
-
-#portfolio .section-title,
-.portfolio-showcase-section .section-title {
-    font-size: 1.45rem !important;
-    margin-bottom: 0.4rem !important;
-}
-
-#portfolio .header-divider,
-.portfolio-showcase-section .header-divider {
-    margin: 0 auto 0.8rem auto !important;
-}
-
-/* 2. கார்டுகளை 1x4 ஸ்மால் சைஸ் ஹரிசாண்டல் ஸ்க்ரோலாக மாற்றுதல் */
-#portfolio .portfolio-grid,
-.portfolio-showcase-section .portfolio-grid {
-    display: flex !important;
-    flex-direction: row !important; /* பக்கவாட்டு வரிசை */
-    overflow-x: auto !important;    /* ஸ்வைப் ஸ்க்ரோல் */
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 12px !important;
-    padding: 6px 14px 18px 14px !important;
+/* 4. 'THE ROYAL PORTFOLIO' தலைப்பை ஒட்டி அமைத்தல் */
+#portfolio,
+.portfolio-showcase-section {
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
     width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* ஸ்க்ரோல்பாரை நேர்த்தியாக்குதல் */
-#portfolio .portfolio-grid::-webkit-scrollbar,
-.portfolio-showcase-section .portfolio-grid::-webkit-scrollbar {
-    height: 4px !important;
-}
-#portfolio .portfolio-grid::-webkit-scrollbar-thumb,
-.portfolio-showcase-section .portfolio-grid::-webkit-scrollbar-thumb {
-    background: rgba(245, 196, 67, 0.4) !important;
-    border-radius: 4px !important;
-}
-
-/* 3. கார்டுகளின் அளவை (Small Size) கச்சிதமாக்குதல் */
-#portfolio .portfolio-card,
-.portfolio-showcase-section .portfolio-card {
-    flex: 0 0 72% !important; /* திரையில் முக்கால் பங்கு தெரியும், அடுத்த கார்டு லேசாக எட்டிப் பார்க்கும் */
-    max-width: 72% !important;
-    scroll-snap-align: center !important;
-    padding: 10px !important;
-    border-radius: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* போர்ட்ஃபோலியோ படத்தின் உயரத்தைச் சுருக்குதல் */
-#portfolio .portfolio-image-wrapper,
-.portfolio-showcase-section .portfolio-image-wrapper {
-    width: 100% !important;
-    height: 155px !important; /* சிறிய, நேர்த்தியான உயரம் */
-    border-radius: 10px !important;
     overflow: hidden !important;
 }
 
-#portfolio .portfolio-image-wrapper img,
-.portfolio-showcase-section .portfolio-image-wrapper img {
+#portfolio .section-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+#portfolio .section-header-center {
+    margin-bottom: 0.8rem !important;
+    padding: 0 14px !important;
+}
+
+#portfolio .section-title {
+    font-size: 1.4rem !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.3rem !important;
+}
+
+#portfolio .header-divider {
+    margin-bottom: 0.6rem !important;
+}
+
+/* 5. EDGE-TO-EDGE FULL-WIDTH CAROUSEL (சைடு கேப் இன்றி முழு திரையில் ஸ்வைப்) */
+#portfolio .portfolio-grid,
+.portfolio-showcase-section .portfolio-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 16px 14px 16px !important; /* இடது/வலது ஓரங்களில் இருந்து நேர்த்தியாக ஸ்வைப் ஆக */
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* கார்டுகள் திரையின் 86% அகலத்தை எடுத்துக்கொண்டு முழுமையாகத் தெரிதல் */
+#portfolio .portfolio-card,
+.portfolio-showcase-section .portfolio-card {
+    flex: 0 0 86% !important;
+    max-width: 86% !important;
+    scroll-snap-align: center !important;
+    padding: 12px !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+}
+
+/* படங்களை முழு அகலத்திற்கு செட் செய்தல் */
+#portfolio .portfolio-image-wrapper {
+    width: 100% !important;
+    height: 195px !important;
+    border-radius: 12px !important;
+}
+
+#portfolio .portfolio-image-wrapper img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
-}
-
-/* கார்டின் தகவல்கள் & பட்டன் அளவு */
-#portfolio .portfolio-info,
-.portfolio-showcase-section .portfolio-info {
-    padding: 8px 4px 2px !important;
-}
-
-#portfolio .portfolio-info h3,
-.portfolio-showcase-section .portfolio-info h3 {
-    font-size: 0.98rem !important;
-    margin: 4px 0 !important;
-}
-
-#portfolio .portfolio-info p,
-.portfolio-showcase-section .portfolio-info p {
-    font-size: 0.74rem !important;
-    line-height: 1.3 !important;
-    margin-bottom: 6px !important;
-    opacity: 0.8 !important;
-}
-
-#portfolio .portfolio-link-btn,
-.portfolio-showcase-section .portfolio-link-btn {
-    font-size: 0.72rem !important;
-    padding: 4px 0 !important;
 }
