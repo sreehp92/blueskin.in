@@ -269,3 +269,48 @@ html, body {
     font-size: 0.75rem !important;
     padding-top: 1.2rem !important;
 }
+/* ========================================================================== */
+/* HIDE SIGNATURE SHOWCASE CARD IN MOBILE VIEW (CLEAN HERO FLOW)             */
+/* ========================================================================== */
+
+/* நடுவில் இருக்கும் சிக்னேச்சர் எடிஷன் இமேஜ் கார்டை முழுமையாக நீக்குதல் */
+.hero-right-box,
+.hero-product-showcase,
+.hero-visual-col,
+.hero-banner-image,
+.signature-card,
+[class*="showcase-pill"],
+[class*="showcase-bottom-tag"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ஹீரோ லெஃப்ட் பாக்ஸை முழு அகலத்திற்கு (Full Width Centered) மாற்றுதல் */
+.hero-left-box,
+.hero-text-col,
+.hero-split-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.hero-left-box .hero-title,
+.hero-left-box .hero-desc {
+    text-align: center !important;
+}
+
+.hero-btn-row,
+.hero-btn-group {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
