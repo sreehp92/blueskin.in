@@ -5322,3 +5322,73 @@ body {
         border-radius: 14px !important;
     }
 }
+/* ========================================== */
+/* SECTION 1: HERO VIEWPORT FIX (MOBILE ONLY) */
+/* ========================================== */
+@media screen and (max-width: 768px) {
+    /* டாப் பேனர் டெக்ஸ்ட் */
+    .top-ticker-bar, .top-announcement {
+        font-size: 0.65rem !important;
+        padding: 4px 0 !important;
+    }
+
+    /* பிராண்ட் லோகோ & நேவிகேஷன் */
+    .header .logo {
+        font-size: 1.25rem !important;
+        letter-spacing: 1px !important;
+    }
+
+    /* ஹீரோ மெயின் கண்டெய்னர் */
+    .hero-section, .hero-banner {
+        padding: 2.2rem 1.2rem 1.8rem !important;
+        min-height: auto !important;
+        text-align: center !important;
+    }
+
+    /* சிறிய பேட்ஜ் */
+    .hero-eyebrow, .sub-badge {
+        font-size: 0.68rem !important;
+        letter-spacing: 1.2px !important;
+        padding: 4px 10px !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    /* பிரதான தலைப்பு எழுத்து அளவு */
+    .hero-title, h1.main-heading {
+        font-size: 1.65rem !important;
+        line-height: 1.25 !important;
+        letter-spacing: 0.8px !important;
+        margin-bottom: 0.8rem !important;
+    }
+
+    /* ஹீரோ விளக்க உரை */
+    .hero-desc, .hero-section p {
+        font-size: 0.82rem !important;
+        line-height: 1.45 !important;
+        max-width: 90% !important;
+        margin: 0 auto 1.4rem auto !important;
+        opacity: 0.88 !important;
+    }
+
+    /* இரண்டு பட்டன்களையும் பக்கவாட்டில் சரிசமமாக வைப்பது */
+    .hero-btn-group, .hero-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+
+    .hero-btn-group a, .hero-btn-group button {
+        flex: 1 !important;
+        max-width: 160px !important;
+        padding: 10px 12px !important;
+        font-size: 0.78rem !important;
+        white-space: nowrap !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        border-radius: 25px !important;
+    }
+}
