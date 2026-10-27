@@ -438,3 +438,46 @@ img[src*="1543163521"] {
 .metrics-counter-wrap {
     margin-top: 1rem !important;
 }
+/* ========================================================================== */
+/* EXACT TARGET: HIDE SAPPHIRE ROYALE CARD & DETAILS IN MOBILE                */
+/* ========================================================================== */
+
+/* 1. அந்த பேட்ஜ், விவரங்கள், பட்டன், மற்றும் முழு கார்டை மறைத்தல் */
+.card-floating-badge,
+.card-details,
+.card-meta,
+.card-action-btn,
+.hero-visual,
+.hero-card,
+.showcase-card,
+.hero-showcase-wrap {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 2. அந்த கார்டைத் தாங்கி நிற்கும் வெளிப் பிரேம் காலியாகி சுருங்குதல் */
+.card-details:parent,
+div:has(> .card-details),
+div:has(> .card-floating-badge) {
+    display: none !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 3. ஹீரோ செக்ஷனில் உள்ள டெக்ஸ்ட் & பட்டன்களை மட்டும் மையத்தில் வைத்தல் */
+.hero-section {
+    padding-bottom: 1.5rem !important;
+}
+
+.hero-btn-group,
+.hero-actions {
+    margin-bottom: 0 !important;
+}
