@@ -1,483 +1,123 @@
 /* ========================================================================== */
-/* BLUE SKIN ARCHITECTURAL FRONT-END MOBILE ENGINE (FULL PAGE OVERRIDE)       */
+/* 1. HERO SHOWCASE CARD ONLY HIDE (HERO SECTION ONLY)                        */
 /* ========================================================================== */
 
-/* 1. GLOBAL & CONTAINER RESETS */
-html, body {
-    overflow-x: hidden !important;
-    width: 100% !important;
+/* போர்ட்ஃபோலியோவை தொடாமல், ஹீரோ செக்ஷனுக்குள் இருக்கும் அந்த கார்டை மட்டும் மறைத்தல் */
+.hero-section .card-floating-badge,
+.hero-section .card-details,
+.hero-section .card-action-btn,
+.hero-section .hero-visual,
+.hero-section .hero-card,
+.hero-section .showcase-card,
+.hero-section .hero-right-box,
+.hero-section .hero-visual-col,
+.hero-section div[class*="showcase"],
+.hero-section div[class*="signature"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: absolute !important;
+    left: -9999px !important;
 }
 
-.section-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 14px !important;
-    padding-right: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. HEADER & TICKER */
-.top-ticker-bar {
-    font-size: 0.65rem !important;
-    padding: 6px 0 !important;
-}
-
-.header .nav-container {
-    padding: 0.8rem 1rem !important;
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-}
-
-.nav-links {
-    display: none !important;
-}
-
-.logo {
-    font-size: 1.25rem !important;
-}
-
-/* 3. HERO SECTION */
+/* ஹீரோ செக்ஷன் ஃபிரேம் காலியாகி சுருங்குதல் */
 .hero-section {
-    padding: 2.2rem 14px 1.8rem !important;
+    padding: 2.2rem 16px 1.5rem !important;
     text-align: center !important;
-    min-height: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
 }
 
-.hero-section .sub-badge {
-    font-size: 0.65rem !important;
-    padding: 4px 10px !important;
-    margin-bottom: 0.6rem !important;
+.hero-section h1, 
+.hero-section p {
+    text-align: center !important;
 }
 
-.hero-title, .hero-section h1 {
-    font-size: 1.65rem !important;
-    line-height: 1.25 !important;
-    letter-spacing: 0.5px !important;
-    margin-bottom: 0.8rem !important;
-}
-
-.hero-desc, .hero-section p {
-    font-size: 0.82rem !important;
-    line-height: 1.45 !important;
-    max-width: 95% !important;
-    margin: 0 auto 1.4rem auto !important;
-    opacity: 0.85 !important;
-}
-
-.hero-btn-group, .hero-actions {
+.hero-btn-group, .hero-btn-row {
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important;
-    gap: 10px !important;
+    gap: 12px !important;
     width: 100% !important;
 }
 
-.hero-btn-group a, [class*="btn-hero-"] {
-    flex: 1 !important;
-    max-width: 150px !important;
-    padding: 9px 12px !important;
-    font-size: 0.78rem !important;
-    border-radius: 20px !important;
-    text-align: center !important;
+/* ========================================================================== */
+/* 2. RESTORE & ENFORCE PORTFOLIO GALLERY IMAGES (கட்டாயமாகத் தெரிய வைக்க)  */
+/* ========================================================================== */
+
+/* ராயல் போர்ட்ஃபோலியோ முழுமையாகத் தெரிவதை உறுதி செய்தல் */
+#portfolio,
+.portfolio-showcase-section {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    padding: 2.5rem 12px !important;
 }
 
-/* 4. STATS COUNTER STRIP */
-.stats-row, .metrics-counter-wrap {
-    display: flex !important;
-    justify-content: space-around !important;
-    padding: 1.2rem 8px !important;
-    gap: 6px !important;
-}
-
-.stat-number, .metric-count {
-    font-size: 1.35rem !important;
-}
-
-.stat-label {
-    font-size: 0.62rem !important;
-}
-
-/* 5. THE ROYAL PORTFOLIO CARDS */
 .portfolio-grid {
     display: flex !important;
     flex-direction: column !important;
     gap: 16px !important;
-    padding: 0 !important;
+    visibility: visible !important;
 }
 
 .portfolio-card {
+    display: flex !important;
+    flex-direction: column !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
     width: 100% !important;
     padding: 12px !important;
     border-radius: 14px !important;
     box-sizing: border-box !important;
 }
 
+/* போர்ட்ஃபோலியோ படங்கள் மொபைல் திரைக்கு ஏற்ற உயரத்தில் தெளிவாகத் தெரிதல் */
 .portfolio-image-wrapper {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     width: 100% !important;
-    height: 210px !important;
-    border-radius: 10px !important;
+    height: 220px !important;
+    border-radius: 12px !important;
     overflow: hidden !important;
 }
 
 .portfolio-image-wrapper img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
-/* 6. OUR NEW PRODUCTS (2x2 GRID) */
-.new-products-grid, .compact-products-row, .products-track {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 0 !important;
-    width: 100% !important;
-}
-
-.new-prod-card, .compact-prod-card {
-    padding: 8px !important;
-    border-radius: 12px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.new-prod-img, .compact-img-wrap {
-    width: 100% !important;
-    height: 125px !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
-}
-
-.new-prod-img img, .compact-img-wrap img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
-/* 7. GOOGLE REVIEWS (SWIPE CAROUSEL / 1x4 SCROLL) */
-.reviews-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 12px !important;
-    padding: 10px 4px 16px !important;
-}
-
-.review-card {
-    flex: 0 0 85% !important;
-    max-width: 85% !important;
-    scroll-snap-align: center !important;
-    padding: 16px !important;
-    border-radius: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* 8. CONNECT WITH BLUE SKIN (1:2 / 2:2 CARDS) */
-.contact-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 1.5rem !important;
-}
-
-.contact-info-wrap {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
-}
-
-.contact-card {
-    padding: 1rem !important;
-    border-radius: 12px !important;
-}
-
-/* 9. MESSAGE FORM (YOUR NAME / SEND MESSAGE) */
-.contact-form-card {
-    padding: 1.4rem !important;
-    border-radius: 16px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.form-group input, 
-.form-group textarea {
-    font-size: 16px !important;
-    padding: 0.75rem !important;
-}
-
-.form-submit-btn {
-    width: 100% !important;
-    padding: 12px !important;
-    font-size: 0.9rem !important;
-    border-radius: 25px !important;
-}
-
-/* 10. TERMS & CONDITIONS (1:1 RECTANGULAR BOXES) */
-.terms-card {
-    padding: 1.2rem !important;
-    border-radius: 14px !important;
-    margin-bottom: 2rem !important;
-}
-
-.terms-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 10px !important;
-}
-
-.term-box {
-    background: rgba(11, 26, 48, 0.6) !important;
-    padding: 12px !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(245, 196, 67, 0.2) !important;
-}
-
-/* 11. FOOTER BRANDING (CENTER ALIGNED) */
-.footer-bottom {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 1.2rem !important;
-}
-
-.footer-brand {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-}
-
-.footer-brand p {
-    text-align: center !important;
-    font-size: 0.82rem !important;
-    margin-top: 6px !important;
-}
-
-.footer-socials {
-    display: flex !important;
-    justify-content: center !important;
-    gap: 14px !important;
-}
-
-.copyright-bar {
-    text-align: center !important;
-    font-size: 0.75rem !important;
-    padding-top: 1.2rem !important;
-}
-/* ========================================================================== */
-/* PURE BULLETPROOF HIDE FOR HERO SHOWCASE (MOBILE ONLY)                     */
-/* ========================================================================== */
-
-/* 1. அந்த நீல நிற ஷூ இமேஜை முழுமையாக நீக்குதல் */
-img[src*="1543163521"] {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-}
-
-/* 2. அந்த இமேஜ் இருக்கும் வலதுபுற பிரேம், பாக்ஸ், பட்டன் மற்றும் அனைத்து லெட்டர்ஸ்களையும் நீக்குதல் */
-.hero-right-box,
-.hero-product-showcase,
-.hero-visual-col,
-.hero-banner-image,
-.signature-card,
-.showcase-pill,
-.showcase-bottom-tag,
-.hero-product-showcase *,
-.hero-right-box * {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    max-height: 0 !important;
-    min-height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* 3. அந்த முழுப் பெட்டியும் இடத்தை அடைக்காமல் திரையை விட்டு வெளியேற்றுதல் */
-.hero-right-box,
-.hero-product-showcase {
-    position: absolute !important;
-    left: -99999px !important;
-    top: -99999px !important;
-    pointer-events: none !important;
-}
-
-/* 4. ஹீரோ செக்ஷனை மையத்தில் (Center Align) அழகாக அமர்த்துதல் */
-.hero-section,
-.hero-split-container {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    width: 100% !important;
-    padding: 2.2rem 16px 1.5rem !important;
-    box-sizing: border-box !important;
-    gap: 0 !important;
-}
-
-.hero-left-box,
-.hero-text-col {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.hero-left-box h1,
-.hero-left-box p {
-    text-align: center !important;
-}
-
-.hero-btn-row,
-.hero-btn-group {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    width: 100% !important;
-    margin-top: 0.6rem !important;
-}
-/* ========================================================================== */
-/* TOTAL ZERO-COLLAPSE FOR SAPPHIRE SHOWCASE & ITS GHOST FRAME (MOBILE ONLY)  */
-/* ========================================================================== */
-
-/* 1. அந்த பிரேம், பின்னணி பாக்ஸ், அவுட்டர் பார்டர் அனைத்தையும் 0px ஆக்குதல் */
-.hero-right-box,
-.hero-product-showcase,
-.hero-visual-col,
-.hero-banner-image,
-.signature-card,
-[class*="showcase"],
-[class*="signature"],
-.hero-product-showcase *,
-.hero-right-box * {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    width: 0 !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    position: absolute !important;
-    top: -9999px !important;
-    left: -9999px !important;
-    pointer-events: none !important;
-}
-
-/* 2. ஹீரோ செக்ஷனின் ஃபிக்ஸட் உயரத்தை உடைத்து உள்ளடக்கத்திற்கு ஏற்ப மாற்றுதல் */
-.hero-section,
-.hero-banner,
-.hero-split-container {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
     display: block !important;
-    padding: 2.2rem 16px 1.5rem !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-}
-
-/* 3. இடதுபுற டெக்ஸ்ட் மற்றும் பட்டன்களை 100% முழு திரைக்கு கொண்டு வருதல் */
-.hero-left-box,
-.hero-text-col,
-.hero-content-wrap {
+    visibility: visible !important;
+    opacity: 1 !important;
     width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
+    height: 100% !important;
+    object-fit: cover !important;
 }
 
-.hero-left-box h1,
-.hero-left-box p,
-.hero-title,
-.hero-desc {
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+.portfolio-info {
+    display: block !important;
+    visibility: visible !important;
+    padding: 10px 4px 4px !important;
 }
 
-.hero-btn-row,
-.hero-btn-group {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    width: 100% !important;
-    margin-top: 0.8rem !important;
-    margin-bottom: 0 !important;
+.portfolio-info h3 {
+    font-size: 1.15rem !important;
+    color: #ffffff !important;
+    margin: 6px 0 !important;
 }
 
-/* 4. அடுத்து வரும் 100% Authentic Quality பாரை நேரடியாக ஒட்டி வரவழைத்தல் */
-.stats-row,
-.metrics-counter-wrap {
-    margin-top: 1rem !important;
-}
-/* ========================================================================== */
-/* EXACT TARGET: HIDE SAPPHIRE ROYALE CARD & DETAILS IN MOBILE                */
-/* ========================================================================== */
-
-/* 1. அந்த பேட்ஜ், விவரங்கள், பட்டன், மற்றும் முழு கார்டை மறைத்தல் */
-.card-floating-badge,
-.card-details,
-.card-meta,
-.card-action-btn,
-.hero-visual,
-.hero-card,
-.showcase-card,
-.hero-showcase-wrap {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
+.portfolio-info p {
+    font-size: 0.82rem !important;
+    opacity: 0.85 !important;
 }
 
-/* 2. அந்த கார்டைத் தாங்கி நிற்கும் வெளிப் பிரேம் காலியாகி சுருங்குதல் */
-.card-details:parent,
-div:has(> .card-details),
-div:has(> .card-floating-badge) {
-    display: none !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* 3. ஹீரோ செக்ஷனில் உள்ள டெக்ஸ்ட் & பட்டன்களை மட்டும் மையத்தில் வைத்தல் */
-.hero-section {
-    padding-bottom: 1.5rem !important;
-}
-
-.hero-btn-group,
-.hero-actions {
-    margin-bottom: 0 !important;
+.portfolio-link-btn {
+    display: inline-flex !important;
+    visibility: visible !important;
 }
