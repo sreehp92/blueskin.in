@@ -244,61 +244,46 @@ span:has(i.fa-gem),
     object-fit: cover !important;
 }
 /* ========================================================================== */
-/* EXACT TUNING: HERO PADDING, 3-LINE TEXT, 2-LINE STATS & SPACED PORTFOLIO   */
+/* HERO 4-LINE TYPOGRAPHY, STACKED STATS BAR & PURE ROYAL PORTFOLIO (MOBILE)  */
 /* ========================================================================== */
 
-/* 1. ஹெடருக்கு கீழே பேட்ஜை கொஞ்சம் இடைவெளி விட்டு கீழே இறக்குதல் */
-.hero-section {
-    padding-top: 2.4rem !important; /* பேட்ஜ் மேல ஒட்டாமல் கீழே இறங்க */
-    padding-bottom: 0.2rem !important;
-    text-align: center !important;
-}
-
-.hero-section .sub-badge,
-.hero-eyebrow {
-    margin-top: 0.6rem !important;
-    margin-bottom: 0.8rem !important;
-    font-size: 0.65rem !important;
-    padding: 5px 12px !important;
-    display: inline-block !important;
-}
-
-/* 2. அந்த விளக்கம் - சரியாக 3 வரிகளில் (Strict 3 Lines) அமைய */
+/* 1. ஹீரோ விளக்கம் - சரியாக 4 வரிகளில் அழகாக அமைய */
 .hero-desc, 
 .hero-section p {
-    font-size: 0.82rem !important;
-    line-height: 1.4 !important;
-    max-width: 345px !important; /* 3 வரிகளில் சரியாக உடைய அகலம் */
-    margin: 0 auto 1.2rem auto !important;
+    font-size: 0.84rem !important;
+    line-height: 1.42 !important;
+    max-width: 320px !important;
+    margin: 0 auto 1.1rem auto !important;
     text-align: center !important;
-    opacity: 0.9 !important;
+    display: block !important;
+    opacity: 0.88 !important;
 }
 
-/* பட்டன்களை கவுண்டர் பார்க்கு அருகில் கொண்டு செல்லுதல் */
+/* ஹீரோ பட்டன்களின் கீழ் இடைவெளியைச் சுருக்குதல் */
+.hero-section {
+    padding-top: 1.2rem !important;
+    padding-bottom: 0.2rem !important;
+    margin-bottom: 0 !important;
+}
+
 .hero-btn-group, 
 .hero-actions, 
 .hero-btn-row {
-    margin-top: 0 !important;
-    margin-bottom: 0.8rem !important;
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 10px !important;
+    margin-bottom: 0.4rem !important;
 }
 
-/* 3. STATS BAR (100% / 500+ / 4.9★) - பட்டன் பக்கத்தில் மேல ஏறி, சரியாக 2 வரிகளில் நிற்க */
+/* 2. STATS BAR (100% / 500+ / 4.9★) இன்னும் மேலே ஒட்டி வந்து செங்குத்தாக (Stacked) மாறுதல் */
 .stats-row, 
 .metrics-counter-wrap {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-around !important;
     align-items: center !important;
-    margin-top: 0.2rem !important; /* பட்டனுக்கு மிக அருகில் */
-    margin-bottom: 1.4rem !important; /* போர்ட்ஃபோலியோவை விட்டு தள்ள */
-    padding: 0.6rem 4px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 0.5rem 6px !important;
     border-top: 1px solid rgba(245, 196, 67, 0.15) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
-    width: 100% !important;
 }
 
 .stat-item, 
@@ -309,142 +294,44 @@ span:has(i.fa-gem),
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    flex: 1 !important;
-    padding: 0 2px !important;
+    gap: 2px !important;
 }
 
-/* லைன் 1: நம்பர் */
+/* நம்பர் அளவு */
 .stat-number, 
 .metric-count,
 .stats-row h3,
 .stats-row strong {
     font-size: 1.25rem !important;
     line-height: 1.1 !important;
-    margin: 0 0 3px 0 !important;
+    margin: 0 !important;
     display: block !important;
 }
 
-/* லைன் 2: எழுத்துக்கள் (ஒரே வரியில் - No Extra Line Breaks) */
+/* கீழே வரும் உரை (Stacked Format) */
 .stat-label, 
 .metric-lbl,
 .stats-row span,
 .stats-row p {
-    font-size: 0.62rem !important;
-    line-height: 1.1 !important;
-    white-space: nowrap !important; /* 3வது லைனுக்கு உடையாமல் 2வது லைனிலேயே நிற்க */
-    letter-spacing: 0.4px !important;
+    font-size: 0.58rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0.6px !important;
     text-transform: uppercase !important;
-    margin: 0 !important;
-    display: block !important;
-    opacity: 0.85 !important;
-}
-
-/* 4. THE ROYAL PORTFOLIO - 4.9★ பாரில் இருந்து கொஞ்சம் கீழே இறக்குதல் */
-#portfolio,
-.portfolio-showcase-section {
-    padding-top: 2rem !important; /* 4.9 பாரை விட்டு கீழே தள்ளுதல் */
-    padding-bottom: 1.5rem !important;
-}
-
-#portfolio .section-header-center,
-.portfolio-showcase-section .section-header-center {
-    margin-bottom: 1.2rem !important;
     text-align: center !important;
-}
-
-#portfolio .section-title,
-.portfolio-showcase-section .section-title {
-    font-size: 1.45rem !important;
-    margin-bottom: 0.5rem !important;
-}
-/* ========================================================================== */
-/* EXACT 2-LINE STATS BAR & PERMANENT REMOVAL OF PORTFOLIO SUBTITLE           */
-/* ========================================================================== */
-
-/* 1. எக்ஸ்ப்ளோர் பட்டன் & ஹீரோ அடிப்பகுதி இடைவெளியைக் குறைத்து மேலே ஏற்றுதல் */
-.hero-section {
-    padding-bottom: 0px !important;
-    margin-bottom: 0px !important;
-}
-
-.hero-btn-group, 
-.hero-actions, 
-.hero-btn-row {
-    margin-top: 0px !important;
-    margin-bottom: 0.35rem !important; /* பட்டனுக்கு கீழே மிகக் குறைந்த இடைவெளி */
-}
-
-/* 2. STATS BAR (பட்டனுக்கு மிக அருகில் மேலே ஏறி, மெல்லிய கோடுகளுடன் அமைதல்) */
-.stats-row, 
-.metrics-counter-wrap,
-[class*="stats-"] {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    margin-top: 0px !important;
-    margin-bottom: 1rem !important;
-    padding: 0.35rem 6px !important; /* உயரத்தை மிகக் குறைத்தல் */
-    border-top: 0.5px solid rgba(245, 196, 67, 0.25) !important;
-    border-bottom: 0.5px solid rgba(245, 196, 67, 0.25) !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.stat-item, 
-.metric-counter-col,
-.stats-row > div {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    flex: 1 1 33.33% !important;
-    min-width: 0 !important;
-    padding: 0 !important;
     margin: 0 !important;
-}
-
-/* முதல் வரி: எண் (100% / 500+ / 4.9★) */
-.stat-number, 
-.metric-count,
-.stats-row h3,
-.stats-row strong {
-    font-size: 1.15rem !important;
-    line-height: 1.1 !important;
-    margin: 0 0 2px 0 !important;
+    max-width: 80px !important;
     display: block !important;
-    white-space: nowrap !important;
+    opacity: 0.8 !important;
 }
 
-/* இரண்டாவது வரி: உரை (சரியாக ஒரே வரியில் நிற்க - NO WRAPPING) */
-.stat-label, 
-.metric-lbl,
-.stats-row span,
-.stats-row p {
-    font-size: 0.52rem !important; /* மொபைலில் உடையாமல் ஒரே லைனில் நிற்க துல்லியமான அளவு */
-    line-height: 1 !important;
-    white-space: nowrap !important; /* கட்டாயமாக உடையாது */
-    text-wrap: nowrap !important;
-    letter-spacing: 0.2px !important;
-    text-transform: uppercase !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-    opacity: 0.85 !important;
-    width: auto !important;
-    max-width: none !important;
-}
-
-/* 3. THE ROYAL PORTFOLIO: அந்த வாசகமும் அதன் கீழ்க்கோடும் அடியோடு நீக்குதல் */
-#portfolio p,
+/* 3. THE ROYAL PORTFOLIO: விளக்க உரை மற்றும் மஞ்சள் கோட்டை (Line) அடியோடு நீக்குதல் */
 #portfolio .section-desc,
-.portfolio-showcase-section p,
 .portfolio-showcase-section .section-desc,
 #portfolio .header-divider,
 .portfolio-showcase-section .header-divider,
 #portfolio .sub-badge,
-.portfolio-showcase-section .sub-badge {
+.portfolio-showcase-section .sub-badge,
+span:has(i.fa-gem) {
     display: none !important;
     visibility: hidden !important;
     height: 0 !important;
@@ -453,22 +340,30 @@ span:has(i.fa-gem),
     border: none !important;
 }
 
-/* ராயல் போர்ட்ஃபோலியோ தலைப்பு & கேலரி இடைவெளி */
+/* போர்ட்ஃபோலியோ தலைப்பை ஒட்டி அமைத்தல் */
 #portfolio,
 .portfolio-showcase-section {
-    padding-top: 1.2rem !important;
-    padding-bottom: 1.2rem !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 1rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
-#portfolio .section-header-center,
-.portfolio-showcase-section .section-header-center {
-    margin-bottom: 0.8rem !important;
+#portfolio .section-header-center {
+    margin-bottom: 0.6rem !important;
+    padding: 0 14px !important;
     text-align: center !important;
 }
 
-#portfolio .section-title,
-.portfolio-showcase-section .section-title {
-    font-size: 1.4rem !important;
+#portfolio .section-title {
+    font-size: 1.35rem !important;
     margin: 0 !important;
     line-height: 1.2 !important;
+}
+
+/* 4. எட்ஜ்-டு-எட்ஜ் ஸ்வைப் கார்டுகள் தலைப்பை ஒட்டி உடனடியாகத் தொடங்குதல் */
+#portfolio .portfolio-grid,
+.portfolio-showcase-section .portfolio-grid {
+    margin-top: 0.4rem !important;
+    padding-top: 0 !important;
 }
