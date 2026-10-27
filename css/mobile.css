@@ -367,3 +367,62 @@ span:has(i.fa-gem) {
     margin-top: 0.4rem !important;
     padding-top: 0 !important;
 }
+/* ========================================================================== */
+/* ABOUT US (THE SPIRIT OF BLUE SKIN): HIDE IMAGE & CENTER ACTION BUTTON      */
+/* ========================================================================== */
+
+/* 1. அந்த படம், பார்டர் ஃபிரேம் மற்றும் 10+ Years பேட்ஜை அடியோடு நீக்குதல் */
+#about .about-visual,
+.about-section .about-visual,
+.about-frame-border,
+.about-image-card,
+.about-stat-tag {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0px !important;
+    min-height: 0px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    border: none !important;
+}
+
+/* 2. உள்ளடக்கப் பகுதியை முழு அகலத்திற்கு (Full Width) மாற்றுதல் */
+#about .about-grid,
+.about-section .about-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0px !important;
+    padding: 1.5rem 14px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#about .about-content,
+.about-section .about-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
+/* 3. 'Visit The Store' பட்டனை மையத்திற்கு (Center Align) கொண்டு வருதல் */
+#about .about-btn-wrap,
+.about-section .about-btn-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-top: 1.5rem !important;
+    text-align: center !important;
+}
+
+#about .about-btn-wrap a,
+.about-section .about-btn-wrap a {
+    margin: 0 auto !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 10px 24px !important;
+    font-size: 0.85rem !important;
+    border-radius: 25px !important;
+}
