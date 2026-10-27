@@ -1,0 +1,132 @@
+/* ========================================================================== */
+/* BLUE SKIN DEDICATED MOBILE-ONLY OVERRIDE (DESKTOP CANNOT ACCESS THIS)      */
+/* ========================================================================== */
+
+/* 1. பொதுவான மொபைல் அமைப்பு (திரை வெட்டாமல் இருக்க) */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+}
+
+/* 2. ஹீரோ செக்ஷன் - டெக்ஸ்ட் மற்றும் பட்டன்கள் */
+.hero-section {
+    padding: 2rem 14px 1.5rem !important;
+    min-height: auto !important;
+    text-align: center !important;
+}
+
+.hero-section .sub-badge {
+    font-size: 0.65rem !important;
+    padding: 4px 10px !important;
+}
+
+.hero-section h1, 
+.hero-title {
+    font-size: 1.65rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.8rem !important;
+}
+
+.hero-section p, 
+.hero-desc {
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 1.2rem !important;
+}
+
+/* ஹீரோ பட்டன்கள் மொபைலில் கச்சிதமாக அமைய */
+.hero-btn-group, 
+.hero-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+}
+
+.hero-btn-group a, 
+.hero-actions a {
+    flex: 1 !important;
+    max-width: 150px !important;
+    padding: 9px 12px !important;
+    font-size: 0.78rem !important;
+    text-align: center !important;
+    border-radius: 20px !important;
+}
+
+/* 3. கவுண்டர்கள் (100% Authentic, 500+ Curated, 4.9 Rating) */
+.stats-row, 
+.metrics-counter-wrap {
+    padding: 1.2rem 10px !important;
+    gap: 8px !important;
+}
+
+.stat-number, 
+.metric-count {
+    font-size: 1.35rem !important;
+}
+
+.stat-label {
+    font-size: 0.62rem !important;
+}
+
+/* 4. 'Our New Products' - 2x2 கிரிட் (Stripe வராமல் இருக்க) */
+.new-products-grid, 
+.compact-products-row, 
+.products-track {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 10px !important;
+}
+
+.new-prod-card, 
+.compact-prod-card {
+    padding: 8px !important;
+    border-radius: 12px !important;
+}
+
+.new-prod-img, 
+.compact-img-wrap {
+    height: 125px !important;
+    border-radius: 8px !important;
+}
+
+/* 5. 'The Royal Portfolio' - முழு ஸ்கிரீனை அடைக்காமல் அழகான கார்டு அளவு */
+.portfolio-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    padding: 0 12px !important;
+}
+
+.portfolio-card {
+    padding: 10px !important;
+    border-radius: 14px !important;
+}
+
+.portfolio-image-wrapper {
+    height: 200px !important;
+    border-radius: 10px !important;
+}
+
+.portfolio-info h3 {
+    font-size: 1.1rem !important;
+}
+
+.portfolio-info p {
+    font-size: 0.8rem !important;
+}
+
+/* 6. About Us மற்றும் ரிவியூ கார்டுகள் */
+.about-image-card {
+    height: 220px !important;
+    border-radius: 12px !important;
+}
+
+.reviews-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 0 12px !important;
+}
