@@ -1,42 +1,73 @@
 /* ========================================================================== */
-/* BLUE SKIN DEDICATED MOBILE-ONLY OVERRIDE (DESKTOP CANNOT ACCESS THIS)      */
+/* BLUE SKIN ARCHITECTURAL FRONT-END MOBILE ENGINE (FULL PAGE OVERRIDE)       */
 /* ========================================================================== */
 
-/* 1. பொதுவான மொபைல் அமைப்பு (திரை வெட்டாமல் இருக்க) */
+/* 1. GLOBAL & CONTAINER RESETS */
 html, body {
     overflow-x: hidden !important;
     width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* 2. ஹீரோ செக்ஷன் - டெக்ஸ்ட் மற்றும் பட்டன்கள் */
+.section-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. HEADER & TICKER */
+.top-ticker-bar {
+    font-size: 0.65rem !important;
+    padding: 6px 0 !important;
+}
+
+.header .nav-container {
+    padding: 0.8rem 1rem !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.nav-links {
+    display: none !important;
+}
+
+.logo {
+    font-size: 1.25rem !important;
+}
+
+/* 3. HERO SECTION */
 .hero-section {
-    padding: 2rem 14px 1.5rem !important;
-    min-height: auto !important;
+    padding: 2.2rem 14px 1.8rem !important;
     text-align: center !important;
+    min-height: auto !important;
 }
 
 .hero-section .sub-badge {
     font-size: 0.65rem !important;
     padding: 4px 10px !important;
+    margin-bottom: 0.6rem !important;
 }
 
-.hero-section h1, 
-.hero-title {
+.hero-title, .hero-section h1 {
     font-size: 1.65rem !important;
     line-height: 1.25 !important;
+    letter-spacing: 0.5px !important;
     margin-bottom: 0.8rem !important;
 }
 
-.hero-section p, 
-.hero-desc {
+.hero-desc, .hero-section p {
     font-size: 0.82rem !important;
     line-height: 1.45 !important;
-    margin-bottom: 1.2rem !important;
+    max-width: 95% !important;
+    margin: 0 auto 1.4rem auto !important;
+    opacity: 0.85 !important;
 }
 
-/* ஹீரோ பட்டன்கள் மொபைலில் கச்சிதமாக அமைய */
-.hero-btn-group, 
-.hero-actions {
+.hero-btn-group, .hero-actions {
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important;
@@ -44,25 +75,24 @@ html, body {
     width: 100% !important;
 }
 
-.hero-btn-group a, 
-.hero-actions a {
+.hero-btn-group a, [class*="btn-hero-"] {
     flex: 1 !important;
     max-width: 150px !important;
     padding: 9px 12px !important;
     font-size: 0.78rem !important;
-    text-align: center !important;
     border-radius: 20px !important;
+    text-align: center !important;
 }
 
-/* 3. கவுண்டர்கள் (100% Authentic, 500+ Curated, 4.9 Rating) */
-.stats-row, 
-.metrics-counter-wrap {
-    padding: 1.2rem 10px !important;
-    gap: 8px !important;
+/* 4. STATS COUNTER STRIP */
+.stats-row, .metrics-counter-wrap {
+    display: flex !important;
+    justify-content: space-around !important;
+    padding: 1.2rem 8px !important;
+    gap: 6px !important;
 }
 
-.stat-number, 
-.metric-count {
+.stat-number, .metric-count {
     font-size: 1.35rem !important;
 }
 
@@ -70,63 +100,172 @@ html, body {
     font-size: 0.62rem !important;
 }
 
-/* 4. 'Our New Products' - 2x2 கிரிட் (Stripe வராமல் இருக்க) */
-.new-products-grid, 
-.compact-products-row, 
-.products-track {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 0 10px !important;
-}
-
-.new-prod-card, 
-.compact-prod-card {
-    padding: 8px !important;
-    border-radius: 12px !important;
-}
-
-.new-prod-img, 
-.compact-img-wrap {
-    height: 125px !important;
-    border-radius: 8px !important;
-}
-
-/* 5. 'The Royal Portfolio' - முழு ஸ்கிரீனை அடைக்காமல் அழகான கார்டு அளவு */
+/* 5. THE ROYAL PORTFOLIO CARDS */
 .portfolio-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 14px !important;
-    padding: 0 12px !important;
+    gap: 16px !important;
+    padding: 0 !important;
 }
 
 .portfolio-card {
-    padding: 10px !important;
+    width: 100% !important;
+    padding: 12px !important;
     border-radius: 14px !important;
+    box-sizing: border-box !important;
 }
 
 .portfolio-image-wrapper {
-    height: 200px !important;
+    width: 100% !important;
+    height: 210px !important;
     border-radius: 10px !important;
+    overflow: hidden !important;
 }
 
-.portfolio-info h3 {
-    font-size: 1.1rem !important;
+.portfolio-image-wrapper img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
 }
 
-.portfolio-info p {
-    font-size: 0.8rem !important;
+/* 6. OUR NEW PRODUCTS (2x2 GRID) */
+.new-products-grid, .compact-products-row, .products-track {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    width: 100% !important;
 }
 
-/* 6. About Us மற்றும் ரிவியூ கார்டுகள் */
-.about-image-card {
-    height: 220px !important;
+.new-prod-card, .compact-prod-card {
+    padding: 8px !important;
+    border-radius: 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.new-prod-img, .compact-img-wrap {
+    width: 100% !important;
+    height: 125px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.new-prod-img img, .compact-img-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* 7. GOOGLE REVIEWS (SWIPE CAROUSEL / 1x4 SCROLL) */
+.reviews-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 10px 4px 16px !important;
+}
+
+.review-card {
+    flex: 0 0 85% !important;
+    max-width: 85% !important;
+    scroll-snap-align: center !important;
+    padding: 16px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+}
+
+/* 8. CONNECT WITH BLUE SKIN (1:2 / 2:2 CARDS) */
+.contact-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+}
+
+.contact-info-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+}
+
+.contact-card {
+    padding: 1rem !important;
     border-radius: 12px !important;
 }
 
-.reviews-grid {
+/* 9. MESSAGE FORM (YOUR NAME / SEND MESSAGE) */
+.contact-form-card {
+    padding: 1.4rem !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.form-group input, 
+.form-group textarea {
+    font-size: 16px !important;
+    padding: 0.75rem !important;
+}
+
+.form-submit-btn {
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 0.9rem !important;
+    border-radius: 25px !important;
+}
+
+/* 10. TERMS & CONDITIONS (1:1 RECTANGULAR BOXES) */
+.terms-card {
+    padding: 1.2rem !important;
+    border-radius: 14px !important;
+    margin-bottom: 2rem !important;
+}
+
+.terms-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+}
+
+.term-box {
+    background: rgba(11, 26, 48, 0.6) !important;
+    padding: 12px !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(245, 196, 67, 0.2) !important;
+}
+
+/* 11. FOOTER BRANDING (CENTER ALIGNED) */
+.footer-bottom {
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
-    padding: 0 12px !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1.2rem !important;
+}
+
+.footer-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.footer-brand p {
+    text-align: center !important;
+    font-size: 0.82rem !important;
+    margin-top: 6px !important;
+}
+
+.footer-socials {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 14px !important;
+}
+
+.copyright-bar {
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    padding-top: 1.2rem !important;
 }
