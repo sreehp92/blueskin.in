@@ -352,3 +352,89 @@ img[src*="1543163521"] {
     width: 100% !important;
     margin-top: 0.6rem !important;
 }
+/* ========================================================================== */
+/* TOTAL ZERO-COLLAPSE FOR SAPPHIRE SHOWCASE & ITS GHOST FRAME (MOBILE ONLY)  */
+/* ========================================================================== */
+
+/* 1. அந்த பிரேம், பின்னணி பாக்ஸ், அவுட்டர் பார்டர் அனைத்தையும் 0px ஆக்குதல் */
+.hero-right-box,
+.hero-product-showcase,
+.hero-visual-col,
+.hero-banner-image,
+.signature-card,
+[class*="showcase"],
+[class*="signature"],
+.hero-product-showcase *,
+.hero-right-box * {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    position: absolute !important;
+    top: -9999px !important;
+    left: -9999px !important;
+    pointer-events: none !important;
+}
+
+/* 2. ஹீரோ செக்ஷனின் ஃபிக்ஸட் உயரத்தை உடைத்து உள்ளடக்கத்திற்கு ஏற்ப மாற்றுதல் */
+.hero-section,
+.hero-banner,
+.hero-split-container {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    display: block !important;
+    padding: 2.2rem 16px 1.5rem !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+}
+
+/* 3. இடதுபுற டெக்ஸ்ட் மற்றும் பட்டன்களை 100% முழு திரைக்கு கொண்டு வருதல் */
+.hero-left-box,
+.hero-text-col,
+.hero-content-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+}
+
+.hero-left-box h1,
+.hero-left-box p,
+.hero-title,
+.hero-desc {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.hero-btn-row,
+.hero-btn-group {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-top: 0.8rem !important;
+    margin-bottom: 0 !important;
+}
+
+/* 4. அடுத்து வரும் 100% Authentic Quality பாரை நேரடியாக ஒட்டி வரவழைத்தல் */
+.stats-row,
+.metrics-counter-wrap {
+    margin-top: 1rem !important;
+}
