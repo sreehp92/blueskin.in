@@ -1,21 +1,22 @@
 /* ========================================================================== */
-/* === BLUE SKIN: 100% MOBILE-ONLY LUXURY CART DRAWER (NO DESKTOP IMPACT) === */
+/* === BLUE SKIN: 100% ZERO-BLUR MOBILE LUXURY CART (FULL REPLACEMENT) ===== */
 /* ========================================================================== */
 
 @media screen and (max-width: 768px) {
 
     /* ---------------------------------------------------------------------- */
-    /* 1. PINNADI MATTUM IRUKKUM BLUR OVERLAY (DRAWER-KKU KEEL LOCK)          */
+    /* 1. DARK OVERLAY (ZERO BLUR - 100% CLEAR HARDWARE LAYER)                */
     /* ---------------------------------------------------------------------- */
     .cart-overlay {
         position: fixed !important;
         inset: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        background: rgba(3, 10, 20, 0.72) !important;
-        backdrop-filter: blur(5px) !important;
-        -webkit-backdrop-filter: blur(5px) !important;
-        z-index: 9990 !important;              /* Drawer-kku PINNADI mattum nikkum */
+        background: rgba(3, 9, 18, 0.82) !important; /* Pure dim dark - zero blur glitch */
+        backdrop-filter: none !important;             /* Blur mothama remove panniyachu */
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        z-index: 9998 !important;                     /* Drawer-kku pinnadi mattum nikkum */
         opacity: 0 !important;
         visibility: hidden !important;
         pointer-events: none !important;
@@ -29,7 +30,7 @@
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 2. CRYSTAL CLEAR CART DRAWER (OVERLAY-KKU MELA 100% CLEAR-A VARUM)    */
+    /* 2. CRYSTAL CLEAR CART DRAWER (SOLID OPAQUE LUXURY NAVY)                */
     /* ---------------------------------------------------------------------- */
     .cart-drawer {
         position: fixed !important;
@@ -37,17 +38,22 @@
         right: -100% !important;
         width: 100% !important;
         max-width: 100vw !important;
+        height: 100% !important;
         height: 100dvh !important;
-        background: #08162d !important;        /* Solid opaque navy - blur mela vizhadhu */
+        background: #07172e !important;               /* Solid deep luxury navy - zero transparency */
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
         border-left: 1px solid rgba(245, 196, 67, 0.35) !important;
-        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85) !important;
-        z-index: 99999 !important;             /* Overlay matrum Header-kku MELA crystal clear */
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.9) !important;
+        z-index: 99999 !important;                    /* All elements-kku mela crystal clear */
         display: flex !important;
         flex-direction: column !important;
         box-sizing: border-box !important;
         transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
         overflow: hidden !important;
-        transform: translateZ(0) !important;   /* Hardware layer fix - zero blur glitch */
+        transform: translateZ(0) !important;
+        -webkit-transform: translateZ(0) !important;
     }
 
     .cart-drawer.active {
@@ -55,12 +61,12 @@
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 3. கார்ட் ஹெடர் (BRANDED HEADER & CLOSE BUTTON)                        */
+    /* 3. CART HEADER & CLOSE BUTTON                                          */
     /* ---------------------------------------------------------------------- */
     .cart-drawer-header {
         padding: 1rem 14px !important;
-        background: rgba(6, 18, 36, 0.96) !important;
-        border-bottom: 1px solid rgba(245, 196, 67, 0.22) !important;
+        background: #0a1f3d !important;
+        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
         display: flex !important;
         align-items: center !important;
         justify-content: space-between !important;
@@ -88,7 +94,6 @@
         letter-spacing: 0.8px !important;
     }
 
-    /* கார்ட்டில் உள்ள பொருட்களின் எண்ணிக்கை பேட்ஜ் */
     .cart-items-count,
     #drawerItemCount {
         font-family: 'Poppins', sans-serif !important;
@@ -101,7 +106,6 @@
         letter-spacing: 0.3px !important;
     }
 
-    /* மூடும் (X) வட்ட பட்டன் */
     .cart-close-btn {
         width: 34px !important;
         height: 34px !important;
@@ -127,7 +131,7 @@
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 4. கார்ட் பொருட்கள் பட்டியல் (PRODUCTS LIST CONTAINER)                  */
+    /* 4. CART PRODUCTS LIST BODY                                             */
     /* ---------------------------------------------------------------------- */
     .cart-drawer-body {
         flex: 1 1 auto !important;
@@ -138,9 +142,9 @@
         gap: 10px !important;
         box-sizing: border-box !important;
         -webkit-overflow-scrolling: touch !important;
+        background: #07172e !important;
     }
 
-    /* கார்ட் காலியாக உள்ள நிலை */
     .empty-cart-state {
         margin: auto !important;
         text-align: center !important;
@@ -171,11 +175,11 @@
         color: #94a3b8 !important;
     }
 
-    /* கார்ட் ஐட்டம் கார்டு */
+    /* Product card inside cart */
     .cart-item-card,
     .cart-item {
-        background: linear-gradient(165deg, rgba(16, 38, 70, 0.75) 0%, rgba(8, 20, 38, 0.92) 100%) !important;
-        border: 1px solid rgba(245, 196, 67, 0.22) !important;
+        background: #0c213f !important;               /* Solid card background */
+        border: 1px solid rgba(245, 196, 67, 0.28) !important;
         border-radius: 12px !important;
         padding: 9px !important;
         display: flex !important;
@@ -186,7 +190,6 @@
         position: relative !important;
     }
 
-    /* கார்ட் பொருள் படம் */
     .cart-item-thumb {
         width: 62px !important;
         height: 62px !important;
@@ -232,11 +235,10 @@
         margin: 0 0 4px 0 !important;
     }
 
-    /* கார்ட்டிற்குள் உள்ள [- 1 +] குவாண்டிட்டி பாக்ஸ் */
     .cart-item-qty-row {
         display: inline-flex !important;
         align-items: center !important;
-        background: rgba(6, 16, 32, 0.88) !important;
+        background: #051020 !important;
         border: 1px solid rgba(245, 196, 67, 0.3) !important;
         border-radius: 14px !important;
         padding: 2px 8px !important;
@@ -264,7 +266,6 @@
         text-align: center !important;
     }
 
-    /* டெலீட் (Trash) பட்டன் */
     .btn-remove-cart-item {
         background: transparent !important;
         border: none !important;
@@ -280,12 +281,12 @@
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 5. செக்-அவுட் & வாட்ஸ்அப் பார் (CHECKOUT & WHATSAPP)                     */
+    /* 5. CHECKOUT FORM & WHATSAPP BUTTON FOOTER                              */
     /* ---------------------------------------------------------------------- */
     .cart-drawer-footer {
         flex-shrink: 0 !important;
-        background: rgba(5, 15, 30, 0.98) !important;
-        border-top: 1px solid rgba(245, 196, 67, 0.28) !important;
+        background: #06152b !important;
+        border-top: 1px solid rgba(245, 196, 67, 0.3) !important;
         box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.55) !important;
         padding: 12px 14px 16px 14px !important;
         display: flex !important;
@@ -294,7 +295,6 @@
         box-sizing: border-box !important;
     }
 
-    /* மொத்தத் தொகை வரிசை */
     .cart-subtotal-row {
         display: flex !important;
         justify-content: space-between !important;
@@ -319,7 +319,6 @@
         text-shadow: 0 0 10px rgba(245, 196, 67, 0.35) !important;
     }
 
-    /* தகவல்களை நிரப்பும் இன்புட் பாக்ஸ்கள் */
     .checkout-input-group {
         display: flex !important;
         flex-direction: column !important;
@@ -339,7 +338,7 @@
     .checkout-input-group input,
     .checkout-input-group textarea {
         width: 100% !important;
-        background: rgba(12, 28, 52, 0.8) !important;
+        background: #0a1b33 !important;
         border: 1px solid rgba(245, 196, 67, 0.3) !important;
         border-radius: 8px !important;
         padding: 8px 10px !important;
@@ -353,11 +352,10 @@
     .checkout-input-group input:focus,
     .checkout-input-group textarea:focus {
         border-color: #f5c443 !important;
-        background: rgba(16, 38, 70, 0.98) !important;
+        background: #0f2747 !important;
         box-shadow: 0 0 8px rgba(245, 196, 67, 0.3) !important;
     }
 
-    /* வாட்ஸ்அப் செக்-அவுட் பட்டன் */
     .btn-whatsapp-checkout {
         width: 100% !important;
         height: 42px !important;
