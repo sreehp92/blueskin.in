@@ -92,25 +92,24 @@
                 </a>
             </div>
 
-          <!-- Portfolio text இல்லாமல் முந்தைய பக்கத்திற்குச் செல்லும் Back Button -->
-                <a href="index.html" class="btn-back-portfolio" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Go Back">
+          <!-- Right: Portfolio Link + Wishlist Button + Cart Button -->
+            <div class="nav-actions-right" style="display: flex !important; flex-direction: row !important; justify-content: flex-end !important; align-items: center !important; gap: 6px !important; width: auto !important; margin-left: auto !important; padding: 0 !important;">
+                <a href="index.html" class="btn-back-portfolio" style="margin: 0 !important;" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Go Back">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
 
                 <!-- Wishlist Toggle Button -->
-                <button class="luxury-round-btn wishlist-nav-btn" id="openWishlistBtn" aria-label="Open Wishlist">
+                <button class="luxury-round-btn wishlist-nav-btn" id="openWishlistBtn" style="margin: 0 !important;" aria-label="Open Wishlist">
                     <i class="fa-regular fa-heart" id="headerWishlistIcon"></i>
                     <span class="action-badge wishlist-badge" id="wishlistCount">0</span>
                 </button>
 
                 <!-- Cart Button -->
-                <button class="luxury-round-btn luxury-cart-btn" id="openCartBtn" aria-label="Open Shopping Bag">
+                <button class="luxury-round-btn luxury-cart-btn" id="openCartBtn" style="margin: 0 !important;" aria-label="Open Shopping Bag">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span class="action-badge cart-badge" id="cartCount">0</span>
                 </button>
             </div>
-        </nav>
-    </header>
 
     <!-- VIEW 1: MAIN SHOP CATALOG VIEW -->
     <main id="shopMainCatalogView">
