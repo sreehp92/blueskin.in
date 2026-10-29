@@ -1129,46 +1129,190 @@ section#portfolio:not(.hero-section) {
 }
 /* === END: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ====================== */
 /* ========================================================================== */
-/* === START: 11. ASSURANCE TERMS & CENTERED FOOTER ======================== */
+/* === START: 11. ASSURANCE TERMS & ROYAL CREST FOOTER (NEW LUXURY MODEL) === */
 /* ========================================================================== */
+
+.footer-section,
+#terms {
+    background: radial-gradient(circle at 50% 0%, rgba(13, 34, 68, 0.95) 0%, rgba(5, 12, 24, 0.98) 100%) !important;
+    border-top: 1px solid rgba(245, 196, 67, 0.25) !important;
+    padding: 1.8rem 12px 1.2rem 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: hidden !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 1. BLUE SKIN ASSURANCE CARD (SHIELD & 3 ACCENTED VALUE CARDS)              */
+/* -------------------------------------------------------------------------- */
 .terms-card {
-    padding: 0.9rem !important;
-    border-radius: 12px !important;
-    margin-bottom: 1.2rem !important;
+    background: linear-gradient(165deg, rgba(16, 42, 78, 0.7) 0%, rgba(8, 22, 45, 0.92) 100%) !important;
+    border: 1px solid rgba(245, 196, 67, 0.3) !important;
+    border-radius: 16px !important;
+    padding: 14px 12px !important;
+    margin-bottom: 1.6rem !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(12px) !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-.terms-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
+/* அஷ்யூரன்ஸ் தலைப்பு */
+.terms-header {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
     gap: 8px !important;
-}
-
-.footer-section {
-    padding: 1.5rem 12px 1rem 12px !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.2) !important;
     text-align: center !important;
 }
 
+.terms-header i {
+    font-size: 1.15rem !important;
+    color: #f5c443 !important;
+    text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
+}
+
+.terms-header h3 {
+    font-family: 'Cinzel', serif !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    color: #ffffff !important;
+    margin: 0 !important;
+    text-transform: uppercase !important;
+}
+
+/* 3 விதிமுறை பெட்டிகள் - செங்குத்தான நவீன மைக்ரோ கார்டுகள் */
+.terms-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+.term-box {
+    background: rgba(8, 22, 45, 0.8) !important;
+    border: 1px solid rgba(245, 196, 67, 0.15) !important;
+    border-left: 3px solid #f5c443 !important; /* பொன்னிற அடையாளக் கோடு */
+    border-radius: 8px !important;
+    padding: 8px 10px !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+}
+
+.term-box h4 {
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    color: #f5c443 !important;
+    margin: 0 0 3px 0 !important;
+    letter-spacing: 0.3px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+.term-box p {
+    font-size: 0.64rem !important;
+    line-height: 1.35 !important;
+    color: #cbd5e1 !important;
+    opacity: 0.88 !important;
+    margin: 0 !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. MAIN FOOTER BRANDING & SOCIAL PILLS                                     */
+/* -------------------------------------------------------------------------- */
 .footer-bottom {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
-    gap: 0.8rem !important;
+    gap: 1rem !important;
+    padding-bottom: 1.2rem !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
+    width: 100% !important;
 }
 
 .footer-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
     text-align: center !important;
+    width: 100% !important;
 }
 
+.footer-brand .logo {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 2px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    margin-bottom: 4px !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8) !important;
+}
+
+.footer-brand .logo .gold-text {
+    color: #f5c443 !important;
+    text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
+}
+
+.footer-brand p {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.68rem !important;
+    font-weight: 400 !important;
+    color: #94a3b8 !important;
+    letter-spacing: 0.4px !important;
+    margin: 0 !important;
+    max-width: 280px !important;
+    line-height: 1.3 !important;
+}
+
+/* சமூக வலைத்தள ஐகான்கள் (LUXURY GOLDEN CIRCLES) */
 .footer-socials {
     display: flex !important;
+    flex-direction: row !important;
     justify-content: center !important;
-    gap: 12px !important;
+    align-items: center !important;
+    gap: 14px !important;
+    margin: 0 !important;
 }
 
+.footer-socials a {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: rgba(16, 42, 78, 0.8) !important;
+    border: 1px solid rgba(245, 196, 67, 0.4) !important;
+    color: #f5c443 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.88rem !important;
+    text-decoration: none !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. COPYRIGHT BAR (உறுதியாக மாற்றமின்றி அப்படியே வைக்கப்பட்டுள்ளது)          */
+/* -------------------------------------------------------------------------- */
 .copyright-bar {
     text-align: center !important;
-    font-size: 0.72rem !important;
-    padding-top: 0.8rem !important;
+    font-size: 0.68rem !important;
+    color: #64748b !important;
+    padding-top: 1rem !important;
+    margin: 0 !important;
+    letter-spacing: 0.3px !important;
+}
+
+.copyright-bar p {
+    margin: 0 !important;
 }
 /* === END: 11. ASSURANCE TERMS & CENTERED FOOTER ========================== */
