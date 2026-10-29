@@ -69,7 +69,7 @@
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.6rem 12px !important;
+    padding: 0.8rem 12px !important;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
