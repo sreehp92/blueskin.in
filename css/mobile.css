@@ -61,16 +61,17 @@ nav ul {
 
 
 /* ========================================================================== */
-/* === START: 3. HERO STAGE (PRECISE VERTICAL HEIGHT & SPACING ALLOCATION) == */
+/* === START: 3. HERO STAGE (STRICT 68vh BALANCED VERTICAL ALLOCATION) ====== */
 /* ========================================================================== */
 .hero-section {
     position: relative !important;
     background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.82) 0%, rgba(5, 12, 24, 0.96) 100%),
                 url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
     
-    /* மொபைல் திரைக்கு ஏற்ற சமச்சீரான மொத்த உயரம் */
-    min-height: 70vh !important;
-    height: auto !important;
+    /* Correct 68vh mukka page height */
+    height: 68vh !important;
+    min-height: 68vh !important;
+    max-height: 70vh !important;
     
     display: flex !important;
     flex-direction: column !important;
@@ -84,28 +85,39 @@ nav ul {
     text-align: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
 }
 
-.hero-container,
+.hero-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+}
+
 .hero-content {
     width: 100% !important;
     max-width: 100% !important;
+    height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
+    justify-content: space-between !important; /* Top nundi bottom varaku equal ga spread avtundi */
     align-items: center !important;
-    justify-content: space-between !important;
     text-align: center !important;
     margin: 0 !important;
     padding: 0 !important;
+    flex: 1 1 auto !important;
 }
 
-/* 1. பேட்ஜ் (Handcrafted Elegance - தொடாமல் அப்படியே வைக்கப்பட்டுள்ளது) */
+/* 1. TOP: Handcrafted Elegance Badge */
 .hero-badge {
     font-size: 0.62rem !important;
     letter-spacing: 1.4px !important;
     text-transform: uppercase !important;
     padding: 5px 15px !important;
-    margin: 0 !important; /* பேட்ஜ் இருக்கும் இடத்திலேயே நிலையாக நிற்க */
+    margin: 0.2rem auto 0.4rem auto !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
@@ -117,22 +129,18 @@ nav ul {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* 2. 'DISCOVER YOUR GLOW' தலைப்பு - பேட்ஜிலிருந்து கீழே இறக்குதல் */
+/* 2. CENTER: Title (Discover Your Glow / Embrace Your Beauty / Be Uniquely You.) */
 .hero-title,
 .hero-section h1 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.5rem !important;
-    line-height: 1.30 !important;
+    font-size: 1.52rem !important;
+    line-height: 1.32 !important;
     font-weight: 700 !important;
-    letter-spacing: 0.9px !important;
+    letter-spacing: 0.8px !important;
     color: #ffffff !important;
-    
-    /* பேட்ஜில் இருந்து தலைப்பை இன்னும் கொஞ்சம் கீழே இறக்கும் இடைவெளி */
-    margin-top: 1.9rem !important;
-    margin-bottom: 1.6rem !important;
-    
+    margin: 0 auto !important;
     text-align: center !important;
-    max-width: 315px !important;
+    max-width: 320px !important;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95) !important;
     word-break: keep-all !important;
 }
@@ -146,7 +154,12 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* 3. பட்டன்கள்: தலைப்புக்குக் கீழே நேர்த்தியான இடைவெளியில் அமைதல் */
+.hero-subtitle,
+.hero-desc {
+    display: none !important; /* Duplicate subtext hide cheyadaniki */
+}
+
+/* 3. BUTTONS: Symmetrical Action Buttons */
 .hero-cta-group,
 .hero-btn-row {
     display: flex !important;
@@ -155,19 +168,18 @@ nav ul {
     align-items: center !important;
     gap: 12px !important;
     width: 100% !important;
-    margin-top: 0 !important;
-    margin-bottom: 2.5rem !important; /* Stats-க்கு மேலே உள்ள இடைவெளி */
+    margin: 0.6rem auto !important;
 }
 
 .hero-cta-group a,
 .btn-primary-gold,
 .btn-secondary-outline {
-    width: 138px !important;
-    height: 60px !important;
+    width: 140px !important;
+    height: 40px !important;
     padding: 0 10px !important;
     font-size: 0.72rem !important;
-    font-weight: 650 !important;
-    border-radius: 30px !important;
+    font-weight: 600 !important;
+    border-radius: 25px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -193,7 +205,7 @@ nav ul {
 
 
 /* ========================================================================== */
-/* === START: 4. STATS COUNTER STRIP (ALIGNED & CENTERED LABELS) ============ */
+/* === START: 4. STATS COUNTER STRIP (PINNED TO BOTTOM OF 68vh) ============= */
 /* ========================================================================== */
 .hero-section .hero-metrics,
 .hero-metrics {
@@ -202,8 +214,8 @@ nav ul {
     justify-content: space-between !important;
     align-items: flex-start !important;
     width: 100% !important;
-    max-width: 350px !important;
-    margin: 0 auto 0.2rem auto !important; /* கீழ் விளிம்பில் நேர்த்தியாக அமர */
+    max-width: 355px !important;
+    margin: 0 auto 0.2rem auto !important; /* Bottom ki correct ga fix avtundi */
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
@@ -222,10 +234,10 @@ nav ul {
     padding: 0 4px !important;
 }
 
-/* எண்கள் (100% / 500+ / 4.9★) */
+/* Numbers (100% / 500+ / 4.9★) */
 .hero-metrics .metric-item h3 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.2rem !important;
+    font-size: 1.22rem !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
@@ -237,7 +249,7 @@ nav ul {
     text-shadow: 0 2px 10px rgba(245, 196, 67, 0.45) !important;
 }
 
-/* கீழேயுள்ள வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
+/* Labels: AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING */
 #portfolio .hero-metrics .metric-item p,
 .hero-section .hero-metrics .metric-item p,
 .hero-metrics .metric-item p {
@@ -246,7 +258,7 @@ nav ul {
     opacity: 1 !important;
     height: auto !important;
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important;
+    font-size: 0.53rem !important;
     font-weight: 600 !important;
     line-height: 1.2 !important;
     letter-spacing: 0.4px !important;
@@ -264,7 +276,6 @@ nav ul {
     display: none !important;
 }
 /* === END: 4. STATS COUNTER STRIP ========================================= */
-
 /* ========================================================================== */
 /* === START: 6. THE ROYAL PORTFOLIO (SAFE OVERRIDE - NO ACCIDENTAL HIDING) = */
 /* ========================================================================== */
