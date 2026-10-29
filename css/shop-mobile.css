@@ -36,10 +36,10 @@
 
 
 /* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (PERFECT CIRCLES & TIGHT SPACING) ====== */
+/* === START: 2. HEADER & NAVIGATION (TIGHTEST ICON GAP & PERFECT CIRCLES) == */
 /* ========================================================================== */
 
-/* 1. Header Bar Background & Height */
+/* 1. ஹெடர் பார் பின்னணி மற்றும் எல்லை */
 .header {
     position: sticky !important;
     top: 0 !important;
@@ -54,7 +54,7 @@
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.5rem 10px !important;            /* Extra space reduce panniyachu */
+    padding: 0.5rem 10px !important;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -63,10 +63,10 @@
     box-sizing: border-box !important;
 }
 
-/* 2. Left: Brand Logo (Crown removed, clean BLUE SKIN) */
+/* 2. இடதுபுறம்: பிராண்ட் லோகோ (கிரீடம் நீக்கம், BLUE SKIN மட்டும்) */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
-    display: none !important;                  /* Kreedam complete remove */
+    display: none !important;
 }
 
 .nav-left-brand .logo,
@@ -91,19 +91,26 @@
     text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* 3. Right: Action Buttons Group (Tight space) */
+/* 3. வலதுபுறம்: மூன்று ஐகான்களையும் நெருக்கமாக இணைக்கும் பகுதி */
 .nav-actions-right {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 6px !important;                       /* Spacing romba pakkathula set panniyachu */
+    gap: 4px !important;                       /* இடைவெளி 4px ஆகக் குறைக்கப்பட்டுள்ளது */
+    width: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     flex-shrink: 0 !important;
 }
 
-/* 4. Common Circular Rule (Oval aagatha strict circle shape) */
+/* மூன்று ஐகான்களுக்கும் இடையில் இருக்கும் மறைமுக மார்ஜினை நீக்குதல் */
+.nav-actions-right > * {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 4. வட்ட வடிவ ஐகான்கள் (100% Perfect Round Circle) */
 .btn-back-portfolio,
 .luxury-round-btn,
 .wishlist-nav-btn,
@@ -114,10 +121,8 @@
     max-width: 34px !important;
     min-height: 34px !important;
     max-height: 34px !important;
-    aspect-ratio: 1 / 1 !important;            /* Oval aagave aagathu */
-    border-radius: 50% !important;             /* 100% Perfect round */
-    padding: 0 !important;                     /* Padding zero panni oval deformation fix */
-    margin: 0 !important;
+    aspect-ratio: 1 / 1 !important;            /* வட்டம் மட்டுமே வர கட்டுப்பாடு */
+    border-radius: 50% !important;
     background: rgba(16, 42, 78, 0.85) !important;
     border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
     display: inline-flex !important;
@@ -131,7 +136,7 @@
     cursor: pointer !important;
 }
 
-/* Back Arrow Button specific */
+/* பேக் அம்பு பட்டன் */
 .btn-back-portfolio span {
     display: none !important;
 }
@@ -141,10 +146,9 @@
     color: #f5c443 !important;
     line-height: 1 !important;
     margin: 0 !important;
-    padding: 0 !important;
 }
 
-/* Wishlist & Cart Icons */
+/* விஷ்லிஸ்ட் (Heart) & கார்ட் (Cart) ஐகான்கள் */
 .luxury-round-btn i,
 .wishlist-nav-btn i,
 .luxury-cart-btn i {
@@ -152,10 +156,9 @@
     color: #ffffff !important;
     line-height: 1 !important;
     margin: 0 !important;
-    padding: 0 !important;
 }
 
-/* 5. Count Badge (Corner-la correct round dot) */
+/* 5. கவுண்ட் பேட்ஜ் (சிவப்பு/தங்க நிற கவுண்டர் வட்டம்) */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
@@ -164,8 +167,6 @@
     height: 15px !important;
     min-width: 15px !important;
     max-width: 15px !important;
-    min-height: 15px !important;
-    max-height: 15px !important;
     aspect-ratio: 1 / 1 !important;
     border-radius: 50% !important;
     background: #f5c443 !important;
