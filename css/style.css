@@ -5178,3 +5178,66 @@ body {
         font-size: 0.65rem !important;
     }
 }
+/* ========================================================================== */
+/* === DESKTOP LUXURY "VIEW MORE CREATIONS" BUTTON (ROYAL FRAME & GLOW) ===== */
+/* ========================================================================== */
+
+/* பட்டனை மையப்படுத்தும் பகுதி */
+.view-more-container {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 3.5rem auto 2.5rem auto !important;
+    padding: 0 !important;
+    text-align: center !important;
+    clear: both !important;
+}
+
+/* டெஸ்க்டாப் பிரீமியம் கோல்டன் ஃப்ரேம் பட்டன் */
+.btn-view-more-catalog {
+    background: linear-gradient(135deg, rgba(16, 42, 78, 0.92) 0%, rgba(9, 23, 44, 0.98) 100%) !important;
+    border: 1.5px solid #f5c443 !important;      /* ஆடம்பர தங்க ஃப்ரேம் பார்டர் */
+    color: #f5c443 !important;                  /* தங்க நிற எழுத்து */
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    padding: 14px 44px !important;              /* டெஸ்க்டாப்பிற்கான விசாலமான பேடிங் */
+    height: 52px !important;                   /* சரியான டெஸ்க்டாப் உயரம் */
+    border-radius: 35px !important;             /* நேர்த்தியான பில் (Pill) வடிவம் */
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    cursor: pointer !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(245, 196, 67, 0.2) !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+/* டெஸ்க்டாப்பில் மவுஸ் வைக்கும் போது (Hover & Glow Effect) */
+.btn-view-more-catalog:hover {
+    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+    color: #08162d !important;                  /* எழுத்து நேவி நிறமாக மாறும் */
+    border-color: #ffd768 !important;
+    transform: translateY(-3px) scale(1.02) !important; /* லேசாக மேலெழும்பி ஒளிரும் */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(245, 196, 67, 0.6) !important;
+}
+
+/* அம்பு குறிக்கான (Chevron Icon) அனிமேஷன் */
+.btn-view-more-catalog i {
+    font-size: 0.88rem !important;
+    transition: transform 0.3s ease !important;
+}
+
+.btn-view-more-catalog:hover i {
+    transform: translateY(3px) !important;     /* மவுஸ் வைக்கும் போது அம்பு லேசாக கீழ்நோக்கி நகரும் */
+    color: #08162d !important;
+}
+
+.btn-view-more-catalog:active {
+    transform: translateY(0) scale(0.98) !important;
+}
