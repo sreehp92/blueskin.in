@@ -83,7 +83,9 @@
         </nav>
     </header>
 
-    <!-- Hero Showcase Section -->
+    <!-- =======================================================
+         HERO SHOWCASE SECTION (GUARANTEED DESKTOP + MOBILE FIX)
+         ======================================================= -->
     <section class="hero-section" id="portfolio">
         <div class="hero-container">
             <!-- Left Side: Content & Call to Actions -->
@@ -95,8 +97,12 @@
                     Timeless Style, <br>
                     Crafted for the <span class="gold-gradient-text">Extraordinary</span>.
                 </h1>
+                
+                <!-- Your Custom 3-Line Subtext -->
                 <p class="hero-subtitle">
-                    Experience the pinnacle of luxury craftsmanship with Blue Skin. From bespoke textures to iconic collections, every piece embodies prestige and perfection.
+                    Your beauty deserves something extraordinary.<br>
+                    Carefully created to bring out your natural glow.<br>
+                    Feel confident &nbsp;&nbsp; Feel radiant &nbsp;&nbsp; Feel beautiful
                 </p>
 
                 <!-- Hero Action Buttons -->
@@ -111,26 +117,26 @@
                     </a>
                 </div>
 
-                <!-- Trust Metrics / Stats -->
+                <!-- 100% Guaranteed Visible Stats (Desktop Safe / Mobile Centered) -->
                 <div class="hero-metrics">
                     <div class="metric-item">
                         <h3>100%</h3>
-                        <p>Authentic Quality</p>
+                        <p style="display:block !important; visibility:visible !important; opacity:1 !important; color:#ffffff !important; font-size:10px !important; text-transform:uppercase; margin:0 !important;">Authentic Quality</p>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
                         <h3>500+</h3>
-                        <p>Curated Designs</p>
+                        <p style="display:block !important; visibility:visible !important; opacity:1 !important; color:#ffffff !important; font-size:10px !important; text-transform:uppercase; margin:0 !important;">Curated Designs</p>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="metric-item">
                         <h3>4.9★</h3>
-                        <p>Client Rating</p>
+                        <p style="display:block !important; visibility:visible !important; opacity:1 !important; color:#ffffff !important; font-size:10px !important; text-transform:uppercase; margin:0 !important;">Client Rating</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Side: Signature Showcase Image -->
+            <!-- Right Side: Signature Showcase Image (Desktop Restored) -->
             <div class="hero-visual">
                 <div class="hero-product-showcase">
                     <span class="showcase-pill"><i class="fa-solid fa-crown"></i> Signature Edition</span>
@@ -143,16 +149,109 @@
             </div>
         </div>
     </section>
-    <!-- Navigation Active Switch Script -->
-    <script>
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            item.addEventListener('click', function() {
-                navItems.forEach(link => link.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
+
+    <!-- DIRECT INLINE MOBILE FIX (No mobile.css Dependency) -->
+    <style>
+        @media screen and (max-width: 768px) {
+            /* 1. மொபைலில் வலதுபுற படத்தை மறைத்து, ஹீரோவை மையப்படுத்துதல் */
+            .hero-visual { display: none !important; }
+            .hero-container, .hero-content {
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center !important;
+            }
+            .hero-section {
+                padding: 1.6rem 12px 1rem !important;
+                text-align: center !important;
+                background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.85) 0%, rgba(5, 12, 24, 0.95) 100%),
+                            url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
+            }
+            .hero-title {
+                font-size: 1.55rem !important;
+                line-height: 1.35 !important;
+                text-align: center !important;
+                margin: 0 auto 0.8rem auto !important;
+                max-width: 320px !important;
+            }
+            .hero-subtitle {
+                font-size: 0.74rem !important;
+                line-height: 1.55 !important;
+                color: #cbd5e1 !important;
+                max-width: 330px !important;
+                margin: 0 auto 1.1rem auto !important;
+                text-align: center !important;
+                display: block !important;
+            }
+            .hero-cta-group {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: center !important;
+                gap: 10px !important;
+                margin-bottom: 1.2rem !important;
+                width: 100% !important;
+            }
+            .hero-cta-group a {
+                width: 135px !important;
+                height: 38px !important;
+                font-size: 0.72rem !important;
+                border-radius: 20px !important;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                white-space: nowrap !important;
+            }
+
+            /* 2. STATS STRIP: பாக்ஸை நீக்கி 3 காலம்களையும் மையப்படுத்துதல் */
+            .hero-metrics {
+                display: flex !important;
+                flex-direction: row !important;
+                justify-content: space-between !important;
+                align-items: flex-start !important;
+                width: 100% !important;
+                max-width: 350px !important;
+                margin: 0.4rem auto 0 auto !important;
+                padding: 0 !important;
+                background: transparent !important; /* பாக்ஸ் நீக்கம் */
+                border: none !important;            /* பார்டர் நீக்கம் */
+                box-shadow: none !important;
+            }
+            .hero-metrics .metric-item {
+                flex: 1 1 33.33% !important;
+                width: 33.33% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                margin: 0 !important;
+                padding: 0 2px !important;
+            }
+            .hero-metrics .metric-item h3 {
+                font-size: 1.18rem !important;
+                color: #f5c443 !important;
+                margin: 0 0 4px 0 !important;
+                text-align: center !important;
+                display: block !important;
+            }
+            .hero-metrics .metric-item p {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                color: #ffffff !important;
+                font-size: 9px !important;
+                letter-spacing: 0.3px !important;
+                text-align: center !important;
+                white-space: nowrap !important;
+                text-transform: uppercase !important;
+                margin: 0 !important;
+            }
+            .hero-metrics .metric-divider {
+                display: none !important; /* நடுவில் உள்ள கோடுகள் நீக்கம் */
+            }
+        }
+    </style>
 </body>
 </html>
 <!-- =========================================
