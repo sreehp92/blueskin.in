@@ -133,9 +133,9 @@ header .nav-actions-right,
 /* 4. பேக் பட்டன் (Arrow): முதல் பக்கத்தைப் போல உள்ளே முழு மஞ்சள் நிறம் (Solid Yellow) */
 .btn-back-portfolio {
     width: 35px !important;
-    height: 35px !important;
-    min-width: 35px !important;
-    max-width: 35px !important;
+    height: 60px !important;
+    min-width: 60px !important;
+    max-width: 60px !important;
     min-height: 35px !important;
     max-height: 35px !important;
     aspect-ratio: 1 / 1 !important;            /* 100% வட்டம் மட்டுமே வர கட்டுப்பாடு */
