@@ -689,4 +689,21 @@
             <div class="copyright-bar">
                 <p>&copy; 2026 Blue Skin Luxury. All Rights Reserved. Crafted with Distinction by <a href="https://corepulse.in" target="_blank" class="dev-brand-link">CorePulse</a>.</p>
             </div>
-            
+        </div>
+    </footer>
+
+    <!-- மெயின் ஜாவாஸ்கிரிப்ட் கோப்பு (இருந்தால்) -->
+    <script src="js/script.js"></script>
+
+    <!-- 👇 PWA ஆப் இன்ஸ்டால் செய்வதற்கான Service Worker கோட் 👇 -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('PWA Service Worker Registered!'))
+            .catch(err => console.log('Service Worker Failed:', err));
+        });
+      }
+    </script>
+</body>
+</html>
