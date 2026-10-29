@@ -1038,3 +1038,87 @@ div:has(> img[src*="1543163521"]) {
     background: rgba(245, 196, 67, 0.3) !important;
     margin: 0 2px !important;
 }
+/* ========================================================================== */
+/* STATS STRIP: REMOVE BOX/CONTAINER & FREELY ALIGN 3 EQUAL STATS (MOBILE)    */
+/* ========================================================================== */
+
+/* 1. செவ்வக பாக்ஸ், பார்டர், பேக்ரவுண்ட் அனைத்தையும் மொபைலில் நீக்குதல் */
+.hero-section .hero-metrics,
+.hero-metrics {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0.8rem auto 0 auto !important;
+    padding: 0 4px !important;
+    background: transparent !important;   /* பாக்ஸ் பின்னணி நீக்கம் */
+    border: none !important;              /* பாக்ஸ் பார்டர் நீக்கம் */
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. ஒவ்வொரு ஸ்டேட்ஸ் காலமும் சமமான 33% அகலத்தில் நடுநாயகமாக நிற்க */
+.hero-section .hero-metrics .metric-item,
+.hero-metrics .metric-item {
+    flex: 1 1 33.33% !important;
+    width: 33.33% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+}
+
+/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
+.hero-section .hero-metrics .metric-item h3,
+.hero-metrics .metric-item h3 {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.18rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: #f5c443 !important;
+    margin: 0 0 4px 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    display: block !important;
+    white-space: nowrap !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* 4. வரி 2: விடுபட்ட எழுத்துக்கள் பிரகாசமாக கீழே தோன்றுதல் */
+.hero-section .hero-metrics .metric-item p,
+.hero-metrics .metric-item p {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.54rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.4px !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;           /* தூய பிரகாசமான வெள்ளை நிறம் */
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    text-wrap: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+}
+
+/* 5. நடுவில் உள்ள கோடுகளையும் முழுமையாக நீக்குதல் (Clean Open Layout) */
+.hero-section .hero-metrics .metric-divider,
+.hero-metrics .metric-divider {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+}
