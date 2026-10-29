@@ -51,7 +51,7 @@ nav ul {
 .hero-section {
     position: relative !important;
     background: linear-gradient(180deg, rgba(8, 22, 48, 0.82) 0%, rgba(5, 12, 24, 0.92) 100%),
-                url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center 25% / cover no-repeat !important;
+                url('https://ibb.co/FLRB1Z2Q') center 25% / cover no-repeat !important;
     padding-top: 1.3rem !important;
     padding-bottom: 0px !important;
     margin-bottom: 0px !important;
@@ -86,14 +86,14 @@ nav ul {
 /* தலைப்பு சரியாக 3 வரிகளில் அமைய */
 .hero-title,
 .hero-section h1 {
-    font-size: 1.45rem !important;
-    line-height: 1.25 !important;
+    font-size: 2.00rem !important;
+    line-height: 1.60 !important;
     margin: 0 auto 0.45rem auto !important;
-    max-width: 250px !important;
+    max-width: 300px !important;
     text-align: center !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px !important;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.8px !important;
+    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.85) !important;
 }
 
 .hero-title .gold-gradient-text,
