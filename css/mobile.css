@@ -952,3 +952,89 @@ div:has(> img[src*="1543163521"]) {
     margin: 0 !important;
     padding: 0 !important;
 }
+
+/* ========================================================================== */
+/* ABSOLUTE FORCE: 3-COLUMNS CENTERED & GUARANTEED 2-LINE LABELS              */
+/* ========================================================================== */
+
+/* 1. மெயின் பாக்ஸ் - 3 காலம்களும் சமமாக அமையும் கிரிட் */
+.hero-section .hero-metrics,
+.hero-metrics {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-evenly !important;
+    align-items: center !important;
+    width: 92% !important;
+    max-width: 350px !important;
+    margin: 0 auto 0.8rem auto !important;
+    padding: 8px 4px !important;
+    background: rgba(8, 22, 45, 0.9) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. ஒவ்வொரு பாக்ஸும் 33% எடுத்து மையத்தில் நிற்க (Center Alignment) */
+.hero-section .hero-metrics .metric-item,
+.hero-metrics .metric-item {
+    flex: 1 1 33.33% !important;
+    width: 33.33% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
+.hero-section .hero-metrics .metric-item h3,
+.hero-metrics .metric-item h3 {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    color: #f5c443 !important;
+    margin: 0 0 2px 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    display: block !important;
+    white-space: nowrap !important;
+    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
+}
+
+/* 4. வரி 2: விடுபட்ட வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
+.hero-section .hero-metrics .metric-item p,
+.hero-section .hero-metrics .metric-item span,
+.hero-metrics .metric-item p,
+.hero-metrics .metric-item span {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.52rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.2px !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;           /* பிரகாசமான வெள்ளை நிறம் */
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    white-space: nowrap !important;       /* ஒரே வரியில் அமைய */
+    text-wrap: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+}
+
+/* 5. பிரிப்புக் கோடுகள் (Dividers) */
+.hero-section .hero-metrics .metric-divider,
+.hero-metrics .metric-divider {
+    flex: 0 0 1px !important;
+    width: 1px !important;
+    height: 22px !important;
+    background: rgba(245, 196, 67, 0.3) !important;
+    margin: 0 2px !important;
+}
