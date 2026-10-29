@@ -28,7 +28,7 @@ html, body {
 /* -------------------------------------------------------------------------- */
 .header .nav-container,
 .nav-container {
-    padding: 0.6rem 12px !important;
+    padding: 0.9 rem 15px !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -41,7 +41,7 @@ nav ul {
 }
 
 .logo {
-    font-size: 1.30rem !important;
+    font-size: 1.75rem !important;
     letter-spacing: 1px !important;
 }
 
