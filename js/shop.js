@@ -184,7 +184,7 @@ function createProductCardElement(prod) {
         </div>
     ` : `
         <button class="btn-card-add" onclick="updateInCardQty(${prod.id}, 1)">
-            <i class="fa-solid fa-bag-shopping"></i> Add
+            <i class="fa-solid fa-bag-shopping"></i> Add to Cart
         </button>
     `;
 
