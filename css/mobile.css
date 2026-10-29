@@ -23,6 +23,18 @@ html, body {
     padding-left: 12px !important;
     padding-right: 12px !important;
 }
+
+/* முதல் பக்கத்தின் அசல் ராயல் ப்ளூ கிரேடியன்ட் பின்னணி & பார்டர் */ COPY FROM 2ND PAGE
+.top-ticker-bar {
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
 /* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
 
 
