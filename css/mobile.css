@@ -45,22 +45,25 @@ nav ul {
     letter-spacing: 1px !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. HERO SECTION: HD SKINCARE CREAM BACKGROUND & 3-LINE TITLE               */
-/* -------------------------------------------------------------------------- */
+/* ========================================================================== */
+/* 3. HERO SECTION: ULTRA-LUXURY REDESIGNED HERO WITH FLAWLESS GEOMETRY       */
+/* ========================================================================== */
 .hero-section {
     position: relative !important;
-    background: linear-gradient(180deg, rgba(8, 22, 48, 0.82) 0%, rgba(5, 12, 24, 0.92) 100%),
-                url('https://ibb.co/FLRB1Z2Q') center 25% / cover no-repeat !important;
-    padding-top: 1.3rem !important;
-    padding-bottom: 0px !important;
-    margin-bottom: 0px !important;
-    border-bottom: 1.5px solid rgba(245, 196, 67, 0.3) !important;
-    box-shadow: inset 0 -20px 35px rgba(0, 0, 0, 0.7) !important;
+    /* பிரீமியம் அல்ட்ரா HD க்ரீம் டெக்ஸ்சர் & சினிமாட்டிக் லக்ஸுரி ஓவர்லே */
+    background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.72) 0%, rgba(5, 12, 24, 0.96) 100%),
+                url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
+    padding: 1.6rem 14px 1rem 14px !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    box-shadow: inset 0 -25px 40px rgba(0, 0, 0, 0.75) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
-    height: auto !important;
-    min-height: 0 !important;
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .hero-left-box {
@@ -69,93 +72,124 @@ nav ul {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
+/* பேட்ஜ்: மென்மையான கோல்டன் கிளாஸ் எஃபெக்ட் */
 .hero-eyebrow,
 .hero-section .sub-badge {
-    font-size: 0.6rem !important;
-    padding: 3px 11px !important;
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.45rem !important;
-    display: inline-block !important;
-    border: 1px solid rgba(245, 196, 67, 0.4) !important;
-    background: rgba(6, 17, 36, 0.7) !important;
-    backdrop-filter: blur(6px) !important;
+    font-size: 0.62rem !important;
+    font-weight: 500 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    padding: 4px 14px !important;
+    margin-bottom: 0.8rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    border: 1px solid rgba(245, 196, 67, 0.45) !important;
+    background: rgba(8, 22, 45, 0.75) !important;
+    border-radius: 30px !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* தலைப்பு சரியாக 3 வரிகளில் அமைய */
+/* தலைப்பு: 3 வரிகளில் கச்சிதமாக உடைந்து சமச்சீராய் நிற்கும் டைப்போகிராபி */
 .hero-title,
 .hero-section h1 {
-    font-size: 2.00rem !important;
-    line-height: 1.60 !important;
-    margin: 0 auto 0.45rem auto !important;
-    max-width: 300px !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.65rem !important;
+    line-height: 1.35 !important;
+    margin: 0 auto 0.75rem auto !important;
+    width: 100% !important;
+    max-width: 320px !important;
     text-align: center !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.8px !important;
-    text-shadow: 0 5px 15px rgba(0, 0, 0, 0.85) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    color: #ffffff !important;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
+    word-break: keep-all !important;
 }
 
 .hero-title .gold-gradient-text,
 .hero-section h1 span {
     display: block !important;
+    color: #f5c443 !important;
+    background: linear-gradient(135deg, #ffd768 0%, #f5c443 50%, #e0ab26 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
 }
 
-/* 3-வரி விளக்கம் */
+/* 3-வரி விளக்கம்: வாசிப்பதற்கு மிக எளிதான பிரீமியம் இடைவெளி */
 .hero-desc,
+.hero-section p.hero-desc,
 .hero-section p {
-    font-size: 0.74rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.76rem !important;
+    line-height: 1.55 !important;
     max-width: 330px !important;
-    margin: 0 auto 0 auto !important;
+    margin: 0 auto 1.1rem auto !important;
     text-align: center !important;
-    opacity: 0.92 !important;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.85) !important;
+    color: #e2e8f0 !important;
+    opacity: 0.95 !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
     display: block !important;
 }
 
-/* பட்டன்கள் மட்டும் சரியாக 3mm (11.5px) கீழே இறங்குதல் */
+/* பட்டன்கள்: சரியான மைய அமைப்பு மற்றும் 3mm நேர்த்தி */
 .hero-btn-row,
 .hero-btn-group,
 .hero-actions {
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important;
-    gap: 8px !important;
-    margin-top: 11.5px !important; /* 3mm கீழே இறக்கம் */
-    margin-bottom: 0.7rem !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-top: 4px !important;
+    margin-bottom: 1.3rem !important;
     width: 100% !important;
 }
 
 .hero-btn-row a,
 .hero-btn-group a,
-.hero-actions a {
-    flex: 0 1 130px !important;
-    padding: 7px 10px !important;
-    font-size: 0.72rem !important;
-    border-radius: 20px !important;
+.hero-actions a,
+.btn-hero-primary,
+.btn-hero-secondary {
+    flex: 0 1 138px !important;
+    padding: 8px 12px !important;
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    border-radius: 25px !important;
     text-align: center !important;
     white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.25s ease !important;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 4. STATS COUNTER STRIP (100% / 500+ / 4.9★ STRICT 2-LINES)                 */
+/* 4. STATS COUNTER STRIP: FLOATING GLASS CAPSULE WITH STRICT 2-LINES         */
 /* -------------------------------------------------------------------------- */
 .stats-row,
 .metrics-counter-wrap,
 [class*="stats-"] {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-around !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    margin: 0 auto 0.6rem auto !important;
-    padding: 0.35rem 8px !important;
-    width: 90% !important;
-    max-width: 340px !important;
-    background: rgba(6, 13, 25, 0.7) !important;
-    backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.25) !important;
-    border-radius: 12px !important;
+    margin: 0 auto 0.4rem auto !important;
+    padding: 0.55rem 12px !important;
+    width: 92% !important;
+    max-width: 350px !important;
+    background: rgba(9, 23, 46, 0.78) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(245, 196, 67, 0.3) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    box-sizing: border-box !important;
 }
 
 .stat-item,
@@ -170,31 +204,37 @@ nav ul {
     padding: 0 2px !important;
 }
 
+/* எண்: லைன் 1 */
 .stat-number,
 .metric-count,
 .stats-row h3,
 .stats-row strong {
-    font-size: 1.05rem !important;
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
-    margin: 0 0 1px 0 !important;
+    margin: 0 0 2px 0 !important;
     display: block !important;
     white-space: nowrap !important;
+    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.3) !important;
 }
 
+/* லேபிள்: லைன் 2 (Strict Single Line - No Wrapping) */
 .stat-label,
 .metric-lbl,
 .stats-row span,
 .stats-row p {
-    font-size: 0.5rem !important;
+    font-size: 0.54rem !important;
     line-height: 1 !important;
     white-space: nowrap !important;
     text-wrap: nowrap !important;
-    letter-spacing: 0.3px !important;
+    letter-spacing: 0.4px !important;
     text-transform: uppercase !important;
-    color: #ffffff !important;
+    color: #cbd5e1 !important;
     margin: 0 !important;
-    opacity: 0.85 !important;
+    opacity: 0.9 !important;
+    display: block !important;
 }
 
 /* -------------------------------------------------------------------------- */
