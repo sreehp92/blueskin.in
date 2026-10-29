@@ -203,66 +203,88 @@ nav ul {
 }
 
 /* ========================================================================== */
-/* 4. STATS COUNTER STRIP: COMPACT FLOATING GLASS CAPSULE (2-LINE DISPLAY)   */
+/* FIX MISSING LABELS: FORCE 100% AUTHENTIC QUALITY & STATS VISIBILITY        */
 /* ========================================================================== */
 
-/* -------------------------------------------------------------------------- */
-/* 4.1 METRICS CAPSULE WRAPPER                                                */
-/* -------------------------------------------------------------------------- */
-.hero-metrics {
+/* 1. கவுண்டர் பார் கொள்கலன் - சரியான உயரம் மற்றும் இடைவெளி */
+.hero-metrics,
+.stats-row,
+.metrics-counter-wrap {
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-around !important;
     align-items: center !important;
     width: 95% !important;
-    max-width: 350px !important;
-    margin: 0 auto !important;
-    padding: 0.6rem 8px !important;
-    background: rgba(8, 22, 45, 0.75) !important;
+    max-width: 355px !important;
+    margin: 0 auto 0.6rem auto !important;
+    padding: 8px 6px !important;
+    background: rgba(8, 22, 45, 0.85) !important;
     backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.25) !important;
+    border: 1px solid rgba(245, 196, 67, 0.3) !important;
     border-radius: 12px !important;
     box-sizing: border-box !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    overflow: visible !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 4.2 INDIVIDUAL METRIC DATA COLUMNS (STRICT 2-LINE STACK)                   */
-/* -------------------------------------------------------------------------- */
-.metric-item {
+/* 2. தனித்தனி உருப்படிகள் - செங்குத்து அமைப்பு */
+.metric-item,
+.stat-item {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    flex: 1 !important;
-    padding: 0 4px !important;
+    flex: 1 1 33.33% !important;
+    min-width: 0 !important;
+    padding: 0 2px !important;
+    margin: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
-/* Line 1: Numeric Figures */
-.metric-item h3 {
+/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
+.metric-item h3,
+.stat-number {
     font-family: 'Cinzel', serif !important;
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
-    margin: 0 0 2px 0 !important;
+    margin: 0 0 3px 0 !important;
+    padding: 0 !important;
     display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.3) !important;
+    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
 }
 
-/* Line 2: Label Text (Single-Line Locked) */
-.metric-item p {
+/* 4. வரி 2: விடுபட்ட எழுத்துக்களை (Authentic Quality) கட்டாயமாக வெளியில் கொண்டுவருதல் */
+.metric-item p,
+.stat-label {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     font-size: 0.52rem !important;
     line-height: 1.1 !important;
     letter-spacing: 0.3px !important;
     text-transform: uppercase !important;
     color: #e2e8f0 !important;
-    opacity: 0.9 !important;
-    white-space: nowrap !important;
+    white-space: nowrap !important; /* ஒரே வரியில் நிற்க */
+    text-wrap: nowrap !important;
     margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+/* 5. பிரிப்புக் கோடுகள் (Dividers) */
+.metric-divider {
+    width: 1px !important;
+    height: 22px !important;
+    background: rgba(245, 196, 67, 0.3) !important;
     display: block !important;
+    margin: 0 2px !important;
 }
 
 /* -------------------------------------------------------------------------- */
