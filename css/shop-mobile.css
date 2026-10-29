@@ -595,16 +595,6 @@ header .nav-actions-right,
     color: #0b1a30 !important;
 }
 
-/* புதிய 'ADD TO CART' உரை */
-.btn-card-add::after {
-    content: "ADD TO CART" !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px !important;
-    text-transform: uppercase !important;
-    color: #0b1a30 !important;
-}
 /* -------------------------------------------------------------------------- */
 /* --- 4.6: தயாரிப்பு தகவல் & விலை ---                                        */
 /* -------------------------------------------------------------------------- */
