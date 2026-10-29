@@ -555,34 +555,56 @@ header .nav-actions-right,
 /* -------------------------------------------------------------------------- */
 /* --- 4.5: மிதக்கும் 'VIEW' கிளாஸ் பேட்ஜ் (FLOATING QUICK VIEW) ---           */
 /* -------------------------------------------------------------------------- */
+/* 1. Details பட்டன் நிரந்தர நீக்கம் */
 .btn-card-view {
-    position: absolute !important;
-    top: 14px !important;
-    right: 14px !important;
-    z-index: 5 !important;
-    background: rgba(8, 22, 45, 0.88) !important;
-    backdrop-filter: blur(8px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.45) !important;
-    color: #ffffff !important;
-    padding: 3px 9px !important;
-    border-radius: 15px !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.60rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
-    text-transform: uppercase !important;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5) !important;
-    cursor: pointer !important;
+    display: none !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 2. பட்டனில் 'ADD TO CART' என மாற்றுதல் & முழு அகலம் */
+.btn-card-add {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+    border: none !important;
+    color: #0b1a30 !important;
+    border-radius: 20px !important;
+    font-size: 0 !important;                      /* பழைய 'Add' உரையை மறைக்கும் */
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 12px rgba(245, 196, 67, 0.35) !important;
+    transition: transform 0.2s ease !important;
 }
 
-.btn-card-view:active {
-    background: #f5c443 !important;
+.btn-card-add:active {
+    transform: scale(0.97) !important;
+}
+
+.btn-card-add i {
+    font-size: 0.75rem !important;
     color: #0b1a30 !important;
 }
 
+/* புதிய 'ADD TO CART' உரை */
+.btn-card-add::after {
+    content: "ADD TO CART" !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    color: #0b1a30 !important;
+}
 /* -------------------------------------------------------------------------- */
 /* --- 4.6: தயாரிப்பு தகவல் & விலை ---                                        */
 /* -------------------------------------------------------------------------- */
