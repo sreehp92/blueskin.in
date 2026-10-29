@@ -708,3 +708,104 @@ header .nav-actions-right,
     transform: scale(0.97) !important;
 }
 /* === END: 4. PRODUCTS GRID ================================================ */
+
+/* ========================================================================== */
+/* === 1. INLINE COUNTER FIX (ADD TO CART பட்டனின் அதே 38px & 100% வடிவம்) === */
+/* ========================================================================== */
+
+/* ஆட் டு கார்ட் பட்டனின் அதே முழு அகலம் (100%), 38px உயரம் மற்றும் பில் வடிவம் */
+.card-inline-counter {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important; /* அதே தங்க நிறம் */
+    border-radius: 20px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 8px !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 3px 12px rgba(245, 196, 67, 0.35) !important;
+    margin: 0 !important;
+}
+
+/* மைனஸ் (-) மற்றும் பிளஸ் (+) பட்டன்கள் */
+.card-inline-counter .inline-btn,
+.inline-btn {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    border-radius: 50% !important;
+    background: #0b1a30 !important;               /* அடர் நேவி வட்டம் */
+    color: #ffffff !important;
+    border: none !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    transition: transform 0.15s ease !important;
+}
+
+.card-inline-counter .inline-btn:active {
+    transform: scale(0.9) !important;
+}
+
+/* நடுவில் இருக்கும் கவுண்ட் எண் (1, 2, 3...) */
+.card-inline-counter .inline-val,
+.inline-val {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.90rem !important;
+    font-weight: 800 !important;
+    color: #0b1a30 !important;                     /* கறுப்பு/நேவி போல் பளிச்சென நிற்கும் */
+    min-width: 24px !important;
+    text-align: center !important;
+    line-height: 1 !important;
+}
+
+
+/* ========================================================================== */
+/* === 2. WISHLIST HEART POSITION (இமேஜின் இடது கீழ் மூலைக்கு மாற்றுதல்) ==== */
+/* ========================================================================== */
+
+/* விஷ்லிஸ்ட் ஹார்ட் ஐகான் டாப்-ல் இருந்து பாட்டம்-லெஃப்ட்டுக்கு நகர்த்தப்பட்டது */
+.card-wishlist-toggle,
+.shop-prod-card .card-wishlist-toggle,
+.shop-prod-img-box .card-wishlist-toggle {
+    position: absolute !important;
+    top: auto !important;                          /* டாப் ரத்து செய்யப்பட்டது */
+    bottom: 7px !important;                       /* படத்தின் கீழ் விளிம்பில் இருந்து 7px */
+    left: 7px !important;                         /* படத்தின் இடது விளிம்பில் இருந்து 7px */
+    right: auto !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    border-radius: 50% !important;
+    background: rgba(8, 22, 45, 0.85) !important;  /* கிளாஸ்மார்பிசம் நேவி வட்டம் */
+    backdrop-filter: blur(6px) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    color: #ffffff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.75rem !important;
+    z-index: 4 !important;
+    cursor: pointer !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* விஷ்லிஸ்ட் ஆக்டிவ் / கிளிக் செய்தவுடன் சிவப்பு நிறமாக மாற */
+.card-wishlist-toggle.active,
+.card-wishlist-toggle.active i {
+    background: #f43f5e !important;
+    color: #ffffff !important;
+    border-color: #f43f5e !important;
+}
