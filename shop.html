@@ -50,11 +50,9 @@
                 </a>
             </div>
 
-            <!-- Right: Portfolio Link + Wishlist Button + Cart Button -->
-            <div class="nav-actions-right">
-                <a href="index.html#portfolio" class="btn-back-portfolio">
-                    <i class="fa-solid fa-arrow-left-long"></i>
-                    <span>Portfolio</span>
+          <!-- Portfolio text இல்லாமல் முந்தைய பக்கத்திற்குச் செல்லும் Back Button -->
+                <a href="index.html" class="btn-back-portfolio" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Go Back">
+                    <i class="fa-solid fa-arrow-left"></i>
                 </a>
 
                 <!-- Wishlist Toggle Button -->
