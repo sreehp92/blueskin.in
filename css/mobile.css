@@ -877,22 +877,23 @@ section#portfolio:not(.hero-section) {
 /* === END: 9. CLIENT ACCOLADES / REVIEWS ================================== */
 
 /* ========================================================================== */
-/* === START: 10. CONNECT WITH BLUE SKIN (NEW CONCIERGE APP DESIGN MODEL) === */
+/* === START: 10. CONNECT WITH BLUE SKIN & FORM (EVEN 3-BOX + COMPACT WA) === */
 /* ========================================================================== */
 
 .contact-section,
 #contact {
-    padding-top: 1.4rem !important;
-    padding-bottom: 1.8rem !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.6rem !important;
     width: 100% !important;
     box-sizing: border-box !important;
+    overflow-x: hidden !important;
 }
 
-/* செக்ஷன் தலைப்பு மையம் */
+/* Header Center Alignment */
 .contact-section .section-header-center {
     text-align: center !important;
-    margin-bottom: 1.2rem !important;
-    padding: 0 14px !important;
+    margin-bottom: 1.1rem !important;
+    padding: 0 12px !important;
 }
 
 .contact-section .section-header-center .section-title {
@@ -909,46 +910,54 @@ section#portfolio:not(.hero-section) {
     margin: 0 auto !important;
 }
 
-/* பிரதான கண்டெய்னர் */
+/* Main Container Frame */
 .contact-grid {
     display: flex !important;
     flex-direction: column !important;
     gap: 12px !important;
     padding: 0 12px !important;
     width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
 /* -------------------------------------------------------------------------- */
-/* பகுதி 1: மேலே 3 மைக்ரோ கார்டுகள் (STUDIO / CALL / EMAIL TOP STRIP)         */
+/* 1. TOP 3 EVEN BOXES (STRICT EQUAL-WIDTH & HEIGHT)                          */
 /* -------------------------------------------------------------------------- */
 .contact-info-wrap {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* சமச்சீரான 3 பேட்ஜ்கள் */
-    gap: 6px !important;
+    /* minmax(0, 1fr) guarantees all 3 boxes share the exact same width */
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
     width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
+/* Individual Card: Identical Box Size */
 .contact-card {
     background: linear-gradient(160deg, rgba(16, 42, 78, 0.75) 0%, rgba(8, 22, 45, 0.9) 100%) !important;
     border: 1px solid rgba(245, 196, 67, 0.28) !important;
-    padding: 8px 4px !important;
+    padding: 10px 4px !important;
     border-radius: 12px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    margin: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;               /* Stops long text from pushing the 3rd box out */
+    height: 95px !important;              /* Uniform vertical height across all 3 */
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
     box-sizing: border-box !important;
+    overflow: hidden !important;
 }
 
-/* பொன்னிற வட்ட ஐகான்கள் */
+/* Icon Rings */
 .contact-icon {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
     border-radius: 50% !important;
     background: rgba(245, 196, 67, 0.12) !important;
     border: 1px solid rgba(245, 196, 67, 0.4) !important;
@@ -956,70 +965,100 @@ section#portfolio:not(.hero-section) {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    font-size: 0.75rem !important;
-    margin-bottom: 4px !important;
+    font-size: 0.72rem !important;
+    margin-bottom: 5px !important;
+    flex-shrink: 0 !important;
 }
 
 .contact-text {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    justify-content: center !important;
     width: 100% !important;
+    min-width: 0 !important;
 }
 
+/* Box Headings */
 .contact-text h4 {
-    font-size: 0.64rem !important;
+    font-size: 0.62rem !important;
     font-weight: 600 !important;
     color: #ffffff !important;
-    margin: 0 0 1px 0 !important;
-    white-space: nowrap !important;
+    margin: 0 0 2px 0 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 100% !important;
+    text-align: center !important;
 }
 
+/* Box Details */
 .contact-text p {
-    font-size: 0.52rem !important;
+    font-size: 0.50rem !important;
     color: #cbd5e1 !important;
-    line-height: 1.1 !important;
+    line-height: 1.15 !important;
     margin: 0 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    max-width: 100% !important;
+    width: 100% !important;
+    text-align: center !important;
     opacity: 0.85 !important;
 }
 
-/* வாட்ஸ்அப் பட்டன் (3 கார்டுகளுக்கும் கீழே முழு அகல கேப்ஸ்யூல்) */
+/* -------------------------------------------------------------------------- */
+/* 2. CHAT VIA WHATSAPP (FRAMED FULL WIDTH, CONTROLLED ICON SIZE)             */
+/* -------------------------------------------------------------------------- */
 .btn-whatsapp-direct {
-    grid-column: span 3 !important; /* 3 காலம்களுக்கும் கீழே முழு அகலம் */
+    grid-column: 1 / -1 !important;        /* Stretches evenly beneath the 3 cards */
+    width: 100% !important;
+    max-width: 100% !important;
     background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
     color: #ffffff !important;
     text-decoration: none !important;
-    padding: 8px 12px !important;
+    padding: 8px 14px !important;
     border-radius: 25px !important;
     font-weight: 600 !important;
     font-size: 0.72rem !important;
-    display: inline-flex !important;
+    display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
-    width: 100% !important;
+    gap: 7px !important;
     box-sizing: border-box !important;
-    margin-top: 3px !important;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3) !important;
+    margin: 4px 0 0 0 !important;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3) !important;
+    overflow: hidden !important;
+}
+
+/* Constrained Icon - Prevents overflow */
+.btn-whatsapp-direct i {
+    font-size: 0.88rem !important;
+    width: auto !important;
+    height: auto !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+}
+
+.btn-whatsapp-direct span {
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.3px !important;
 }
 
 /* -------------------------------------------------------------------------- */
-/* பகுதி 2: கீழே விசாலமான கிளாஸ்மார்பிசம் படிவம் (COMPACT LUXURY FORM CARD)    */
+/* 3. LUXURY MESSAGE FORM CARD                                                */
 /* -------------------------------------------------------------------------- */
 .contact-form-card {
     background: linear-gradient(160deg, rgba(16, 42, 78, 0.85) 0%, rgba(6, 17, 36, 0.95) 100%) !important;
     border: 1px solid rgba(245, 196, 67, 0.3) !important;
     border-radius: 16px !important;
-    padding: 12px 12px !important;
+    padding: 12px !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45) !important;
     backdrop-filter: blur(14px) !important;
     width: 100% !important;
+    max-width: 100% !important;
     box-sizing: border-box !important;
 }
 
@@ -1070,7 +1109,6 @@ section#portfolio:not(.hero-section) {
     resize: none !important;
 }
 
-/* சப்மிட் பட்டன் */
 .form-submit-btn {
     width: 100% !important;
     height: 36px !important;
@@ -1090,7 +1128,6 @@ section#portfolio:not(.hero-section) {
     cursor: pointer !important;
 }
 /* === END: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ====================== */
-
 /* ========================================================================== */
 /* === START: 11. ASSURANCE TERMS & CENTERED FOOTER ======================== */
 /* ========================================================================== */
