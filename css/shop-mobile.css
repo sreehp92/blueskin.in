@@ -230,15 +230,15 @@ header .nav-actions-right,
 
 
 /* ========================================================================== */
-/* === START: 3. SHOP BY CATEGORY SECTION (NEW LUXURY MOBILE REDESIGN) ====== */
+/* === START: 3. SHOP BY CATEGORY SECTION (ROUNDED SQUARES & BALANCED SPACE) = */
 /* ========================================================================== */
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.1: ஓவர் ஆல் செக்ஷன் கண்டெய்னர் & பேக்ரவுண்ட் ---                      */
+/* --- 3.1: OVERALL SECTION CONTAINER & VERTICAL RHYTHM ---                   */
 /* -------------------------------------------------------------------------- */
 .cosmetics-cat-section {
     width: 100% !important;
-    padding: 1.4rem 0 1rem 0 !important;
+    padding: 1.5rem 0 1.2rem 0 !important;
     background: transparent !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
@@ -251,13 +251,17 @@ header .nav-actions-right,
 }
 
 .cat-slider-header {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
-    margin-bottom: 1.1rem !important;
     padding: 0 16px !important;
+    margin-bottom: 1.1rem !important;          /* Title-kum slider-kum even gap */
 }
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.2: CURATED SELECTIONS சப்-பேட்ஜ் (SUB-BADGE) ---                      */
+/* --- 3.2: CURATED SELECTIONS SUB-BADGE (EVEN SPACING 1) ---                 */
 /* -------------------------------------------------------------------------- */
 .cat-slider-header .sub-badge {
     background: rgba(245, 196, 67, 0.12) !important;
@@ -268,12 +272,12 @@ header .nav-actions-right,
     font-weight: 600 !important;
     letter-spacing: 1.2px !important;
     text-transform: uppercase !important;
-    padding: 4px 12px !important;
+    padding: 5px 14px !important;
     border-radius: 20px !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
-    margin-bottom: 0.45rem !important;
+    margin: 0 0 0.75rem 0 !important;          /* Badge-kum Title-kum even gap */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
 }
 
@@ -283,7 +287,7 @@ header .nav-actions-right,
 }
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.3: 'SHOP BY CATEGORY' தலைப்பு & கோல்டன் கிரேடியன்ட் ---               */
+/* --- 3.3: 'SHOP BY CATEGORY' TITLE (EVEN SPACING 2) ---                     */
 /* -------------------------------------------------------------------------- */
 .cat-section-title {
     font-family: 'Cinzel', serif !important;
@@ -292,7 +296,7 @@ header .nav-actions-right,
     color: #ffffff !important;
     letter-spacing: 0.8px !important;
     margin: 0 !important;
-    line-height: 1.2 !important;
+    line-height: 1.25 !important;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6) !important;
 }
 
@@ -304,7 +308,7 @@ header .nav-actions-right,
 }
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.4: டச் ஸ்லைடர் கன்டெய்னர் & அம்பு பட்டன் நீக்கம் ---                  */
+/* --- 3.4: HORIZONTAL TOUCH SCROLL CAROUSEL ---                              */
 /* -------------------------------------------------------------------------- */
 .cat-carousel-container {
     width: 100% !important;
@@ -313,23 +317,23 @@ header .nav-actions-right,
     margin: 0 !important;
 }
 
-/* மொபைல் திரையில் தேவையற்ற பெரிய < > அம்பு பட்டன்களை நீக்கி ஸ்வைப் ஆக்குதல் */
+/* Arrow buttons hide panni smooth touch scroll aakkiduvom */
 .cat-arrow-btn {
     display: none !important;
 }
 
-/* விரலால் பக்கவாட்டில் தொட்டு நகர்த்தும் ஸ்வைப் டிராக் (Touch Scrolling) */
+/* Horizontal swipe track */
 .cat-track-scroll {
     display: flex !important;
     flex-direction: row !important;
     overflow-x: auto !important;
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
-    gap: 14px !important;
-    padding: 6px 16px 14px 16px !important;
+    gap: 12px !important;                      /* Squares-kku naduvula neat gap */
+    padding: 4px 16px 10px 16px !important;
     width: 100% !important;
     box-sizing: border-box !important;
-    scrollbar-width: none !important;          /* ஸ்க்ரோல்பார் மறைப்பு */
+    scrollbar-width: none !important;
 }
 
 .cat-track-scroll::-webkit-scrollbar {
@@ -337,32 +341,34 @@ header .nav-actions-right,
 }
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.5: வட்ட வடிவ கேட்டகரி கார்டுகள் (CIRCULAR THUMBNAILS) ---             */
+/* --- 3.5: ROUNDED SQUARES (CURVED CORNER CHINNA SQUARES) ---                */
 /* -------------------------------------------------------------------------- */
 .cat-item {
     flex: 0 0 auto !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 7px !important;
     cursor: pointer !important;
     scroll-snap-align: start !important;
     text-align: center !important;
-    width: 72px !important;
+    width: 68px !important;                    /* Balanced square card width */
     transition: transform 0.25s ease !important;
 }
 
+/* Square box with curved corners */
 .cat-thumb-circle {
     width: 66px !important;
     height: 66px !important;
     min-width: 66px !important;
     min-height: 66px !important;
-    border-radius: 50% !important;             /* 100% சரியான வட்டம் */
+    border-radius: 14px !important;            /* Circle illama neat curved square */
+    aspect-ratio: 1 / 1 !important;
     overflow: hidden !important;
     position: relative !important;
     background: #0d2244 !important;
-    border: 2px solid rgba(245, 196, 67, 0.3) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45) !important;
+    border: 1.5px solid rgba(245, 196, 67, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
     transition: all 0.3s ease !important;
 }
 
@@ -371,33 +377,35 @@ header .nav-actions-right,
     height: 100% !important;
     object-fit: cover !important;
     display: block !important;
+    border-radius: 12px !important;
 }
 
-/* தேர்வு செய்யப்பட்ட (Active) கேட்டகரிக்கு பொன்னிற வட்ட வெளிச்சம் */
+/* Active select aana square-kku golden border & glow */
 .cat-item.active .cat-thumb-circle {
     border-color: #f5c443 !important;
-    box-shadow: 0 0 16px rgba(245, 196, 67, 0.6) !important;
-    transform: scale(1.06) !important;
+    box-shadow: 0 0 14px rgba(245, 196, 67, 0.55) !important;
+    transform: scale(1.05) !important;
 }
 
-/* 'All Collections' ஐகான் லேயர் */
+/* 'All Collections' overlay */
 .cat-overlay-icon {
     position: absolute !important;
     inset: 0 !important;
-    background: rgba(8, 22, 45, 0.5) !important;
+    background: rgba(8, 22, 45, 0.45) !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     color: #ffffff !important;
     font-size: 0.95rem !important;
+    border-radius: 12px !important;
 }
 
 /* -------------------------------------------------------------------------- */
-/* --- 3.6: கேட்டகரி பெயர்கள் (CATEGORY NAMES / LABELS BELOW) ---              */
+/* --- 3.6: CATEGORY LABELS BELOW SQUARES ---                                 */
 /* -------------------------------------------------------------------------- */
 .cat-label {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.68rem !important;
+    font-size: 0.66rem !important;
     font-weight: 500 !important;
     color: #94a3b8 !important;
     white-space: nowrap !important;
@@ -406,12 +414,13 @@ header .nav-actions-right,
     transition: color 0.3s ease !important;
 }
 
-/* தேர்வு செய்யப்பட்ட கேட்டகரி பெயர் பொன்னிறத்தில் பிரகாசிக்க */
 .cat-item.active .cat-label {
     color: #f5c443 !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 8px rgba(245, 196, 67, 0.35) !important;
+    font-weight: 600 !important;
+    text-shadow: 0 0 8px rgba(245, 196, 67, 0.3) !important;
 }
 
+/* ========================================================================== */
+/* === END: 3. SHOP BY CATEGORY SECTION ===================================== */
 /* ========================================================================== */
 /* === END: 3. SHOP BY CATEGORY SECTION ===================================== */
