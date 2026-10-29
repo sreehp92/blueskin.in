@@ -4,28 +4,50 @@
 
 
 /* ========================================================================== */
-/* === START: 1. GLOBAL RESETS & CONTAINER CONTROL ========================= */
+/* === START: TOP SCROLLING TICKER BAR (EXACT FIRST PAGE CLONE) ============= */
 /* ========================================================================== */
-html, body {
-    overflow-x: hidden !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
 
-* {
+/* முதல் பக்கத்தின் அசல் ராயல் ப்ளூ கிரேடியன்ட் பின்னணி & பார்டர் */
+.top-ticker-bar {
+    width: 100% !important;
+    background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    padding: 5px 0 !important;
+    font-size: 2.0rem !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    display: flex !important;
+    align-items: center !important;
     box-sizing: border-box !important;
 }
 
-.section-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
+/* எழுத்துக்கள் மற்றும் இடைவெளி */
+.ticker-content span {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 1.2px !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
 }
-/* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
 
+/* பொன்னிற கிரீடம் மற்றும் ஐகான்கள் */
+.ticker-content span i {
+    color: #f5c443 !important;
+    font-size: 0.75rem !important;
+}
 
+/* பிரிப்பான் புள்ளி (Dot) */
+.ticker-dot {
+    margin: 0 10px !important;
+    color: #f5c443 !important;
+    font-size: 0.85rem !important;
+}
+
+/* === END: TOP SCROLLING TICKER BAR ======================================= */
 /* ========================================================================== */
 /* === START: 2. HEADER & NAVIGATION (EXACT 1ST PAGE CLONE & GOLD BUTTON) == */
 /* ========================================================================== */
