@@ -46,23 +46,23 @@ nav ul {
 }
 
 /* ========================================================================== */
-/* 3. HERO SECTION: ULTRA-LUXURY REDESIGNED HERO WITH FLAWLESS GEOMETRY       */
+/* MOBILE HERO & STATS: PURE CSS OVERRIDE (DESKTOP ZERO TOUCH / 100% SAFE)   */
 /* ========================================================================== */
 
-/* -------------------------------------------------------------------------- */
-/* 3.1 HERO MAIN CONTAINER & CINEMATIC COSMETIC BACKGROUND                   */
-/* -------------------------------------------------------------------------- */
+/* 1. மொபைலில் மட்டும் வலதுபுற ஷோகேஸ் படத்தை மறைத்தல் (டெஸ்க்டாப்பில் அப்படியே இருக்கும்) */
+.hero-visual,
+.hero-product-showcase {
+    display: none !important;
+}
+
+/* 2. மொபைல் ஹீரோ கொள்கலன் & HD பேக்ரவுண்ட் */
 .hero-section {
     position: relative !important;
-    background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.78) 0%, rgba(5, 12, 24, 0.95) 100%),
+    background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.82) 0%, rgba(5, 12, 24, 0.95) 100%),
                 url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
     padding: 1.6rem 14px 1.2rem 14px !important;
     margin: 0 !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-    box-shadow: inset 0 -20px 35px rgba(0, 0, 0, 0.7) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
     text-align: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -80,12 +80,9 @@ nav ul {
     padding: 0 !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3.2 FLOATING CROWN BADGE (HANDCRAFTED ELEGANCE)                            */
-/* -------------------------------------------------------------------------- */
+/* பேட்ஜ் */
 .hero-badge {
     font-size: 0.62rem !important;
-    font-weight: 500 !important;
     letter-spacing: 1.2px !important;
     text-transform: uppercase !important;
     padding: 5px 14px !important;
@@ -98,12 +95,9 @@ nav ul {
     border-radius: 20px !important;
     color: #e2e8f0 !important;
     backdrop-filter: blur(8px) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3.3 HERO MAIN TITLE (3-LINE BALANCED CINZEL TYPOGRAPHY)                    */
-/* -------------------------------------------------------------------------- */
+/* தலைப்பு: 3 வரிகளில் சமச்சீரான டைப்போகிராபி */
 .hero-title {
     font-family: 'Cinzel', serif !important;
     font-size: 1.55rem !important;
@@ -115,7 +109,6 @@ nav ul {
     text-align: center !important;
     max-width: 320px !important;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
-    word-break: keep-all !important;
 }
 
 .hero-title .gold-gradient-text {
@@ -126,25 +119,20 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* ========================================================================== */
-/* 3.4 FORCE NEW 3-LINE SUBTEXT VIA CSS ONLY (ZERO HTML TOUCH - DESKTOP SAFE) */
-/* ========================================================================== */
-
-/* HTML-ல் உள்ள பழைய டெக்ஸ்ட்டை மொபைலில் மட்டும் மறைத்தல் */
+/* 3. புதிய 3-வரிகள்: மொபைலில் பழைய எழுத்தை மறைத்து புதியதை வரவழைத்தல் */
 .hero-subtitle {
     font-size: 0px !important;
     line-height: 0 !important;
     color: transparent !important;
-    margin: 0 auto 1.2rem auto !important;
-    max-width: 335px !important;
+    margin: 0 auto 1.1rem auto !important;
+    max-width: 330px !important;
     text-align: center !important;
     display: block !important;
 }
 
-/* நீங்கள் கொடுத்த புதிய 3-வரிகளை மொபைலில் மட்டும் கொண்டு வருதல் */
 .hero-subtitle::before {
     content: "Your beauty deserves something extraordinary.\A Carefully created to bring out your natural glow.\A Feel confident    Feel radiant    Feel beautiful" !important;
-    white-space: pre-line !important; /* சரியாக 3 வரிகளாக உடைக்கும் */
+    white-space: pre-line !important;
     display: block !important;
     font-family: 'Poppins', sans-serif !important;
     font-size: 0.74rem !important;
@@ -155,9 +143,7 @@ nav ul {
     opacity: 0.95 !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3.5 SYMMETRIC ACTION BUTTONS (LOWERED BY 3MM & BALANCED PROPORTIONS)       */
-/* -------------------------------------------------------------------------- */
+/* 4. பட்டன்கள்: சமச்சீர் அளவு & 3mm கீழே இறக்கம் */
 .hero-cta-group {
     display: flex !important;
     flex-direction: row !important;
@@ -185,8 +171,6 @@ nav ul {
     text-decoration: none !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
-    transition: all 0.25s ease !important;
 }
 
 .btn-primary-gold {
@@ -202,49 +186,38 @@ nav ul {
     border: 1px solid rgba(255, 255, 255, 0.35) !important;
 }
 
-/* ========================================================================== */
-/* FIX MISSING LABELS: FORCE 100% AUTHENTIC QUALITY & STATS VISIBILITY        */
-/* ========================================================================== */
-
-/* 1. கவுண்டர் பார் கொள்கலன் - சரியான உயரம் மற்றும் இடைவெளி */
-.hero-metrics,
-.stats-row,
-.metrics-counter-wrap {
+/* 5. STATS: பாக்ஸ் இல்லாமல் 3 சம காலம்களில் எண்களும் வார்த்தைகளும் தெரிய */
+.hero-metrics {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-around !important;
+    justify-content: space-between !important;
     align-items: center !important;
-    width: 95% !important;
-    max-width: 355px !important;
-    margin: 0 auto 0.6rem auto !important;
-    padding: 8px 6px !important;
-    background: rgba(8, 22, 45, 0.85) !important;
-    backdrop-filter: blur(10px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.3) !important;
-    border-radius: 12px !important;
+    width: 100% !important;
+    max-width: 350px !important;
+    margin: 0 auto 0.4rem auto !important;
+    padding: 0 !important;
+    background: transparent !important;   /* ஃபிரேம் / பாக்ஸ் நீக்கம் */
+    border: none !important;              /* பார்டர் நீக்கம் */
+    box-shadow: none !important;
+    backdrop-filter: none !important;
     box-sizing: border-box !important;
-    overflow: visible !important;
 }
 
-/* 2. தனித்தனி உருப்படிகள் - செங்குத்து அமைப்பு */
-.metric-item,
-.stat-item {
+/* ஒவ்வொரு காலமும் சமமான 33.33% எடுத்து மையத்தில் நிற்க */
+.hero-metrics .metric-item {
+    flex: 1 1 33.33% !important;
+    width: 33.33% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    flex: 1 1 33.33% !important;
-    min-width: 0 !important;
-    padding: 0 2px !important;
     margin: 0 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    padding: 0 2px !important;
 }
 
-/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
-.metric-item h3,
-.stat-number {
+/* வரி 1: எண்கள் (100% / 500+ / 4.9★) */
+.hero-metrics .metric-item h3 {
     font-family: 'Cinzel', serif !important;
     font-size: 1.15rem !important;
     font-weight: 700 !important;
@@ -252,50 +225,37 @@ nav ul {
     color: #f5c443 !important;
     margin: 0 0 3px 0 !important;
     padding: 0 !important;
+    text-align: center !important;
     display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
     white-space: nowrap !important;
     text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
 }
 
-/* 4. வரி 2: விடுபட்ட எழுத்துக்களை (Authentic Quality) கட்டாயமாக வெளியில் கொண்டுவருதல் */
-.metric-item p,
-.stat-label {
+/* வரி 2: விடுபட்ட வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
+.hero-metrics .metric-item p {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    font-family: 'Poppins', sans-serif !important;
     font-size: 0.52rem !important;
+    font-weight: 600 !important;
     line-height: 1.1 !important;
     letter-spacing: 0.3px !important;
     text-transform: uppercase !important;
-    color: #e2e8f0 !important;
-    white-space: nowrap !important; /* ஒரே வரியில் நிற்க */
+    color: #ffffff !important;           /* தூய பிரகாசமான வெள்ளை */
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    white-space: nowrap !important;       /* ஒரே லைனில் நிற்க */
     text-wrap: nowrap !important;
     margin: 0 !important;
     padding: 0 !important;
     height: auto !important;
-    width: auto !important;
 }
 
-/* 5. பிரிப்புக் கோடுகள் (Dividers) */
-.metric-divider {
-    width: 1px !important;
-    height: 22px !important;
-    background: rgba(245, 196, 67, 0.3) !important;
-    display: block !important;
-    margin: 0 2px !important;
+/* நடுவில் உள்ள கோடுகள் நீக்கம் */
+.hero-metrics .metric-divider {
+    display: none !important;
 }
-
-/* -------------------------------------------------------------------------- */
-/* 4.3 VERTICAL METRIC DIVIDER ACCENTS                                        */
-/* -------------------------------------------------------------------------- */
-.metric-divider {
-    width: 1px !important;
-    height: 24px !important;
-    background: rgba(245, 196, 67, 0.25) !important;
-}
-
 /* -------------------------------------------------------------------------- */
 /* 5. HIDE THE SAPPHIRE ROYALE / LIMITED BATCH CARD FROM MOBILE               */
 /* -------------------------------------------------------------------------- */
