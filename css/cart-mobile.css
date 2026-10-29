@@ -5,52 +5,54 @@
 @media screen and (max-width: 768px) {
 
     /* ---------------------------------------------------------------------- */
-    /* 1. இருண்ட கிளாஸ் பிளர் பின்னணி (BACKDROP BLUR OVERLAY)                  */
+    /* 1. PINNADI MATTUM IRUKKUM BLUR OVERLAY (DRAWER-KKU KEEL LOCK)          */
     /* ---------------------------------------------------------------------- */
     .cart-overlay {
         position: fixed !important;
         inset: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        background: rgba(3, 10, 20, 0.78) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        z-index: 9998 !important;              /* ஹெடரை விட மேலே நிற்கும் */
+        background: rgba(3, 10, 20, 0.72) !important;
+        backdrop-filter: blur(5px) !important;
+        -webkit-backdrop-filter: blur(5px) !important;
+        z-index: 9990 !important;              /* Drawer-kku PINNADI mattum nikkum */
         opacity: 0 !important;
         visibility: hidden !important;
-        transition: opacity 0.35s ease, visibility 0.35s ease !important;
+        pointer-events: none !important;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
     }
 
     .cart-overlay.active {
         opacity: 1 !important;
         visibility: visible !important;
+        pointer-events: auto !important;
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 2. மொபைல் கார்ட் டிராயர் பாடி (FULL MOBILE DRAWER)                      */
+    /* 2. CRYSTAL CLEAR CART DRAWER (OVERLAY-KKU MELA 100% CLEAR-A VARUM)    */
     /* ---------------------------------------------------------------------- */
     .cart-drawer {
         position: fixed !important;
         top: 0 !important;
-        right: -100% !important;              /* வலதுபுறம் மறைந்திருக்கும் */
+        right: -100% !important;
         width: 100% !important;
         max-width: 100vw !important;
         height: 100dvh !important;
-        background: linear-gradient(180deg, #091d38 0%, #040d1a 100%) !important;
-        border-left: 1px solid rgba(245, 196, 67, 0.3) !important;
-        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.75) !important;
-        z-index: 9999 !important;              /* திரையில் மிக உச்சியில் தோன்றும் */
+        background: #08162d !important;        /* Solid opaque navy - blur mela vizhadhu */
+        border-left: 1px solid rgba(245, 196, 67, 0.35) !important;
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.85) !important;
+        z-index: 99999 !important;             /* Overlay matrum Header-kku MELA crystal clear */
         display: flex !important;
         flex-direction: column !important;
         box-sizing: border-box !important;
-        transition: right 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
         overflow: hidden !important;
+        transform: translateZ(0) !important;   /* Hardware layer fix - zero blur glitch */
     }
 
     .cart-drawer.active {
-        right: 0 !important;                   /* கார்ட் தொட்டதும் முழுமையாகத் திறக்கும் */
+        right: 0 !important;
     }
-
     /* ---------------------------------------------------------------------- */
     /* 3. கார்ட் ஹெடர் (BRANDED HEADER & CLOSE BUTTON)                        */
     /* ---------------------------------------------------------------------- */
