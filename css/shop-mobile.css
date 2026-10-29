@@ -36,10 +36,10 @@
 
 
 /* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (TIGHTEST ICON GAP & PERFECT CIRCLES) == */
+/* === START: 2. HEADER & NAVIGATION (LOCKED CIRCLES & ZERO DEAD-SPACE) ===== */
 /* ========================================================================== */
 
-/* 1. ஹெடர் பார் பின்னணி மற்றும் எல்லை */
+/* 1. ஹெடர் கண்டெய்னர் */
 .header {
     position: sticky !important;
     top: 0 !important;
@@ -54,7 +54,7 @@
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.5rem 10px !important;
+    padding: 8px 12px !important;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -63,10 +63,16 @@
     box-sizing: border-box !important;
 }
 
-/* 2. இடதுபுறம்: பிராண்ட் லோகோ (கிரீடம் நீக்கம், BLUE SKIN மட்டும்) */
+/* 2. இடதுபுறம்: BLUE SKIN லோகோ */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
     display: none !important;
+}
+
+.nav-left-brand {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .nav-left-brand .logo,
@@ -81,7 +87,7 @@
     display: inline-flex !important;
     align-items: center !important;
     white-space: nowrap !important;
-    flex-shrink: 0 !important;
+    margin: 0 !important;
 }
 
 .nav-left-brand .logo .gold-text,
@@ -91,38 +97,37 @@
     text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* 3. வலதுபுறம்: மூன்று ஐகான்களையும் நெருக்கமாக இணைக்கும் பகுதி */
+/* 3. வலதுபுறம்: 3 பட்டன்களும் வலது ஓரத்தில் ஒட்டி நிற்க */
 .nav-actions-right {
-    display: flex !important;
+    display: inline-flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 4px !important;                       /* இடைவெளி 4px ஆகக் குறைக்கப்பட்டுள்ளது */
+    gap: 5px !important;                       /* வெறும் 5px கேப் மட்டுமே */
     width: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-/* மூன்று ஐகான்களுக்கும் இடையில் இருக்கும் மறைமுக மார்ஜினை நீக்குதல் */
-.nav-actions-right > * {
+    flex: 0 0 auto !important;                 /* விரிவடைவதை முழுமையாகத் தடுக்கும் */
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* 4. வட்ட வடிவ ஐகான்கள் (100% Perfect Round Circle) */
+/* 4. மூன்று பட்டன்களையும் 100% வட்டமாக லாக் செய்தல் (LOCKED CIRCLE) */
+.nav-actions-right a,
+.nav-actions-right button,
 .btn-back-portfolio,
 .luxury-round-btn,
 .wishlist-nav-btn,
 .luxury-cart-btn {
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    min-height: 34px !important;
-    max-height: 34px !important;
-    aspect-ratio: 1 / 1 !important;            /* வட்டம் மட்டுமே வர கட்டுப்பாடு */
-    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+    max-width: 35px !important;
+    min-height: 35px !important;
+    max-height: 35px !important;
+    flex: 0 0 35px !important;                 /* ஸ்ட்ரெட்ச் ஆகி ஓவல் ஆவதை அடியோடு தடுக்கும் */
+    padding: 0 !important;                     /* பழைய பேடிங் முழுமையாக நீக்கம் */
+    margin: 0 !important;
+    border-radius: 50% !important;             /* 100% சரியான வட்டம் */
+    aspect-ratio: 1 / 1 !important;
     background: rgba(16, 42, 78, 0.85) !important;
     border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
     display: inline-flex !important;
@@ -130,13 +135,13 @@
     justify-content: center !important;
     box-sizing: border-box !important;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
-    flex-shrink: 0 !important;
     position: relative !important;
     text-decoration: none !important;
     cursor: pointer !important;
+    overflow: visible !important;
 }
 
-/* பேக் அம்பு பட்டன் */
+/* பேக் பட்டன் எழுத்து நீக்கம் & அம்பு ஐகான் */
 .btn-back-portfolio span {
     display: none !important;
 }
@@ -146,6 +151,7 @@
     color: #f5c443 !important;
     line-height: 1 !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* விஷ்லிஸ்ட் (Heart) & கார்ட் (Cart) ஐகான்கள் */
@@ -156,9 +162,10 @@
     color: #ffffff !important;
     line-height: 1 !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* 5. கவுண்ட் பேட்ஜ் (சிவப்பு/தங்க நிற கவுண்டர் வட்டம்) */
+/* 5. கவுண்ட் பேட்ஜ் (சிவப்பு/தங்க நிற கவுண்டர் புள்ளி) */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
@@ -167,8 +174,10 @@
     height: 15px !important;
     min-width: 15px !important;
     max-width: 15px !important;
-    aspect-ratio: 1 / 1 !important;
+    min-height: 15px !important;
+    max-height: 15px !important;
     border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
     background: #f5c443 !important;
     color: #0b1a30 !important;
     font-size: 0.50rem !important;
@@ -180,5 +189,6 @@
     padding: 0 !important;
     margin: 0 !important;
     box-sizing: border-box !important;
+    line-height: 1 !important;
 }
 /* === END: 2. HEADER & NAVIGATION ========================================= */
