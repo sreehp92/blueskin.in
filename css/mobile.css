@@ -61,15 +61,27 @@ nav ul {
 
 
 /* ========================================================================== */
-/* === START: 3. HERO STAGE & BACKGROUND (TIGHT SPACING) =================== */
+/* === START: 3. HERO STAGE (78vh MUKKA PAGE HEIGHT & GRAND LUXURY VIEW) ==== */
 /* ========================================================================== */
 .hero-section {
     position: relative !important;
-    background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.82) 0%, rgba(5, 12, 24, 0.95) 100%),
+    background: radial-gradient(circle at 50% 35%, rgba(13, 34, 68, 0.78) 0%, rgba(5, 12, 24, 0.96) 100%),
                 url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
-    padding: 1.2rem 12px 0.8rem 12px !important; /* தேவையற்ற காலி இடம் குறைப்பு */
+    
+    /* Mobile-la mukka page edukkum alavukku height increase */
+    min-height: 78vh !important;
+    height: auto !important;
+    
+    /* Content ellam grand-aa spread aagi nikka flex alignment */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    
+    padding: 2.2rem 14px 1.5rem 14px !important;
     margin: 0 !important;
-    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    border-bottom: 1.5px solid rgba(245, 196, 67, 0.3) !important;
+    box-shadow: inset 0 -25px 40px rgba(0, 0, 0, 0.8) !important;
     text-align: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -82,41 +94,43 @@ nav ul {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
+    justify-content: center !important;
     text-align: center !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* பேட்ஜ் */
+/* Badge: Nalla prominent luxury look */
 .hero-badge {
-    font-size: 0.6rem !important;
-    letter-spacing: 1.2px !important;
+    font-size: 0.65rem !important;
+    letter-spacing: 1.4px !important;
     text-transform: uppercase !important;
-    padding: 4px 12px !important;
-    margin-bottom: 0.5rem !important; /* இடைவெளி சுருக்கம் */
+    padding: 6px 16px !important;
+    margin-bottom: 1rem !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
-    border: 1px solid rgba(245, 196, 67, 0.45) !important;
-    background: rgba(8, 22, 45, 0.75) !important;
+    border: 1px solid rgba(245, 196, 67, 0.5) !important;
+    background: rgba(8, 22, 45, 0.8) !important;
     border-radius: 20px !important;
-    color: #e2e8f0 !important;
+    color: #f1f5f9 !important;
     backdrop-filter: blur(8px) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* தலைப்பு: 3 வரிகளில் சமச்சீராய் நிற்றல் */
+/* Titulo: Perusa, 3 line-la majestic Cinzel style */
 .hero-title,
 .hero-section h1 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.48rem !important;
-    line-height: 1.25 !important;
+    font-size: 1.68rem !important;
+    line-height: 1.35 !important;
     font-weight: 700 !important;
-    letter-spacing: 0.6px !important;
+    letter-spacing: 0.8px !important;
     color: #ffffff !important;
-    margin: 0 auto 0.5rem auto !important; /* தலைப்புக் கீழ் இடைவெளி சுருக்கம் */
+    margin: 0 auto 0.9rem auto !important;
     text-align: center !important;
-    max-width: 310px !important;
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
+    max-width: 325px !important;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.95) !important;
     word-break: keep-all !important;
 }
 
@@ -129,41 +143,41 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* 3-வரி விளக்கம் */
+/* Description / Subtitle */
 .hero-subtitle,
 .hero-desc {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.72rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.76rem !important;
+    line-height: 1.55 !important;
     color: #cbd5e1 !important;
-    max-width: 320px !important;
-    margin: 0 auto 0.8rem auto !important; /* பட்டனுக்கு முந்தைய இடைவெளி குறைப்பு */
+    max-width: 325px !important;
+    margin: 0 auto 1.4rem auto !important;
     text-align: center !important;
     opacity: 0.95 !important;
     display: block !important;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* பட்டன்கள்: சமச்சீர் அளவு & குறைந்த இடைவெளி */
+/* Action Buttons: Nalla thonura periya luxury buttons */
 .hero-cta-group,
 .hero-btn-row {
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 10px !important;
+    gap: 12px !important;
     width: 100% !important;
-    margin-top: 2px !important;
-    margin-bottom: 0.9rem !important; /* கவுண்டர் பார்க்கு முந்தைய இடைவெளி சுருக்கம் */
+    margin-top: 4px !important;
+    margin-bottom: 2rem !important; /* Stats-ku munnadi nalla spacious gap */
 }
 
 .hero-cta-group a,
 .btn-primary-gold,
 .btn-secondary-outline {
-    width: 135px !important;
-    height: 38px !important;
-    padding: 0 8px !important;
-    font-size: 0.72rem !important;
+    width: 142px !important;
+    height: 42px !important;
+    padding: 0 10px !important;
+    font-size: 0.74rem !important;
     font-weight: 600 !important;
     border-radius: 25px !important;
     display: inline-flex !important;
@@ -172,25 +186,25 @@ nav ul {
     white-space: nowrap !important;
     box-sizing: border-box !important;
     text-decoration: none !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
 }
 
 .btn-primary-gold {
     background: #f5c443 !important;
     color: #0b1a30 !important;
     border: none !important;
-    box-shadow: 0 4px 15px rgba(245, 196, 67, 0.35) !important;
 }
 
 .btn-secondary-outline {
-    background: rgba(11, 26, 48, 0.7) !important;
+    background: rgba(11, 26, 48, 0.75) !important;
     color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
 }
-/* === END: 3. HERO STAGE & BACKGROUND ===================================== */
+/* === END: 3. HERO STAGE ================================================== */
 
 
 /* ========================================================================== */
-/* === START: 4. STATS COUNTER STRIP (NO BOX / COMPACT & CENTERED) ========= */
+/* === START: 4. STATS COUNTER STRIP (CENTERED, BIG & PROMINENT) ============ */
 /* ========================================================================== */
 .hero-metrics {
     display: flex !important;
@@ -198,15 +212,15 @@ nav ul {
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
-    max-width: 350px !important;
-    margin: 0 auto 0.4rem auto !important; /* மேல்-கீழ் இடைவெளி கச்சிதமாகக் குறைப்பு */
+    max-width: 355px !important;
+    margin: 0 auto 0.6rem auto !important;
     padding: 0 !important;
-    background: transparent !important;   /* பாக்ஸ் பின்னணி நீக்கம் */
-    border: none !important;              /* பார்டர் நீக்கம் */
+    background: transparent !important;
+    border: none !important;
     box-shadow: none !important;
 }
 
-/* 3 காலம்களும் சமமாகப் பிரிந்து நிற்க */
+/* 3 columns samamaaga 33.33% eduthu center-la nikka */
 .hero-metrics .metric-item {
     flex: 1 1 33.33% !important;
     width: 33.33% !important;
@@ -216,33 +230,33 @@ nav ul {
     justify-content: center !important;
     text-align: center !important;
     margin: 0 !important;
-    padding: 0 2px !important;
+    padding: 0 4px !important;
 }
 
-/* லைன் 1: எண்கள் (100% / 500+ / 4.9★) */
+/* Numbers: 100% / 500+ / 4.9★ (Slightly larger & radiant) */
 .hero-metrics .metric-item h3 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.15rem !important;
+    font-size: 1.25rem !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
-    margin: 0 0 2px 0 !important;
+    margin: 0 0 4px 0 !important;
     padding: 0 !important;
     text-align: center !important;
     display: block !important;
     white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
+    text-shadow: 0 2px 10px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* லைன் 2: எழுத்துக்கள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
+/* Labels: AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING */
 .hero-metrics .metric-item p {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important;
+    font-size: 0.54rem !important;
     font-weight: 600 !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.3px !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0.4px !important;
     text-transform: uppercase !important;
-    color: #ffffff !important;           /* பிரகாசமான வெள்ளை நிறம் */
+    color: #ffffff !important;
     text-align: center !important;
     white-space: nowrap !important;
     text-wrap: nowrap !important;
@@ -251,37 +265,14 @@ nav ul {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
 }
 
-/* நடுவில் உள்ள கோடுகள் மறைப்பு */
+/* Divider line hidden for seamless open look */
 .hero-metrics .metric-divider {
     display: none !important;
 }
 /* === END: 4. STATS COUNTER STRIP ========================================= */
-
-
-/* ========================================================================== */
-/* === START: 5. HIDE DESKTOP SHOWCASE ON MOBILE =========================== */
-/* ========================================================================== */
-.hero-visual,
-.hero-product-showcase,
-.hero-right-box,
-.signature-card,
-div:has(> img[src*="1543163521"]) {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0px !important;
-    width: 0px !important;
-    margin: 0px !important;
-    padding: 0px !important;
-    border: none !important;
-    position: absolute !important;
-    left: -9999px !important;
-    pointer-events: none !important;
-}
-/* === END: 5. HIDE DESKTOP SHOWCASE ON MOBILE ============================= */
-
 
 /* ========================================================================== */
 /* === START: 6. THE ROYAL PORTFOLIO (1x4 HORIZONTAL SWIPE) ================ */
