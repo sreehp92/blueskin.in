@@ -27,12 +27,12 @@ html, body {
 
 
 /* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (MATCHING FRONT PAGE EXACTLY) ========== */
+/* === START: 2. HEADER & NAVIGATION (ROYAL SHOP HEADER WITH MATCHED CTA) === */
 /* ========================================================================== */
 
-/* 1. டாப் டிக்கர் பார் (Front Page அளவோடு பொருந்தும் விதம்) */
+/* 1. டாப் டிக்கர் பார் */
 .top-ticker-bar {
-    font-size: 0.62rem !important;
+    font-size: 0.60rem !important;
     padding: 5px 0 !important;
     height: auto !important;
     background: #060e1a !important;
@@ -48,7 +48,7 @@ html, body {
     color: #f5c443 !important;
 }
 
-/* 2. ஹெடர் கண்டெய்னர் & பேடிங் (Front Page-ல் உள்ள அதே 0.6rem 12px) */
+/* 2. ஹெடர் கண்டெய்னர் & இடைவெளி */
 .header {
     position: sticky !important;
     top: 0 !important;
@@ -62,7 +62,7 @@ html, body {
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.6rem 12px !important; /* Front page இடைவெளி */
+    padding: 0.65rem 12px !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -70,89 +70,102 @@ html, body {
     box-sizing: border-box !important;
 }
 
-/* 3. லெஃப்ட் சைடு: பிராண்ட் லோகோ (Front Page-ல் உள்ள அதே 1.25rem அளவு) */
+/* 3. லெஃப்ட் சைடு: லோகோவில் கிரீடத்தை நீக்கி வெறும் BLUE SKIN மட்டும் வைத்தல் */
+.brand-emblem,
+.nav-left-brand .brand-emblem {
+    display: none !important; /* கிரீட ஐகான் நீக்கம் */
+}
+
 .nav-left-brand .logo,
 .logo {
     font-family: 'Cinzel', serif !important;
     font-size: 1.25rem !important;
     font-weight: 700 !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 1.2px !important;
     color: #ffffff !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
     text-decoration: none !important;
     line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
 }
 
-.brand-emblem {
-    color: #f5c443 !important;
-    font-size: 1rem !important;
-}
-
+.nav-left-brand .logo .gold-text,
 .gold-text {
     color: #f5c443 !important;
+    margin-left: 4px !important;
 }
 
-/* 4. ரைட் சைடு: பட்டன்கள் அலைன்மென்ட் (Portfolio + Wishlist + Cart) */
+/* 4. ரைட் சைடு: பட்டன்கள் வரிசை */
 .nav-actions-right {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 7px !important;
 }
 
-/* Portfolio பட்டன் */
+/* போர்ட்ஃபோலியோ பட்டன்: FRONT PAGE "SHOP NOW" பட்டனின் அதே தங்கம் & வடிவம் */
 .btn-back-portfolio {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 5px !important;
-    padding: 6px 10px !important;
-    font-size: 0.65rem !important;
-    font-weight: 600 !important;
-    color: #f5c443 !important;
-    border: 1px solid rgba(245, 196, 67, 0.4) !important;
-    border-radius: 20px !important;
-    background: rgba(11, 26, 48, 0.8) !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: 35px !important;
+    padding: 0 12px !important;
+    background: #f5c443 !important;                /* அசல் தங்க நிறம் */
+    color: #0b1a30 !important;                     /* கறுப்பு நிற எழுத்து */
+    border: none !important;
+    border-radius: 20px !important;                /* வட்டமான பில் வடிவம் */
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.70rem !important;
+    font-weight: 700 !important;
     text-decoration: none !important;
     white-space: nowrap !important;
-    height: 32px !important;
+    box-shadow: 0 3px 12px rgba(245, 196, 67, 0.35) !important;
     box-sizing: border-box !important;
 }
 
 .btn-back-portfolio i {
-    font-size: 0.62rem !important;
+    font-size: 0.68rem !important;
+    color: #0b1a30 !important;
 }
 
-/* வட்ட வடிவ Wishlist & Cart பட்டன்கள் */
-.luxury-round-btn {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 50% !important;
-    background: rgba(16, 42, 78, 0.75) !important;
-    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+/* 5. விஷ்லிஸ்ட் (ஹார்ட்) & கார்ட் (பேக்) - சரியான வட்ட வடிவ பட்டன்கள் */
+.luxury-round-btn,
+.wishlist-nav-btn,
+.luxury-cart-btn {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+    border-radius: 50% !important;                 /* 100% வட்ட வடிவம் */
+    background: rgba(16, 42, 78, 0.8) !important;
+    border: 1px solid rgba(245, 196, 67, 0.4) !important;
     color: #f1f5f9 !important;
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     position: relative !important;
-    font-size: 0.82rem !important;
+    font-size: 0.85rem !important;
     cursor: pointer !important;
     padding: 0 !important;
-    flex-shrink: 0 !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35) !important;
 }
 
-/* கவுண்ட் பேட்ஜ் (Badge) */
+.luxury-round-btn i {
+    line-height: 1 !important;
+}
+
+/* கவுண்ட் பேட்ஜ்கள் (Count Badge) */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
     right: -3px !important;
-    width: 15px !important;
-    height: 15px !important;
+    width: 16px !important;
+    height: 16px !important;
     border-radius: 50% !important;
     background: #f5c443 !important;
     color: #0b1a30 !important;
-    font-size: 0.52rem !important;
+    font-size: 0.54rem !important;
     font-weight: 700 !important;
     display: flex !important;
     align-items: center !important;
