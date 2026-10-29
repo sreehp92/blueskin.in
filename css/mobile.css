@@ -30,7 +30,7 @@ html, body {
 /* === START: 2. HEADER & NAVIGATION (COMPACT HEIGHT) ====================== */
 /* ========================================================================== */
 .top-ticker-bar {
-    font-size: 0.62rem !important;
+    font-size: 2.0rem !important;
     padding: 5px 0 !important;
 }
 
@@ -61,27 +61,26 @@ nav ul {
 
 
 /* ========================================================================== */
-/* === START: 3. HERO STAGE (78vh MUKKA PAGE HEIGHT & GRAND LUXURY VIEW) ==== */
+/* === START: 3. HERO STAGE (68vh BALANCED HEIGHT & CUSTOM 3-LINE SUBTEXT) == */
 /* ========================================================================== */
 .hero-section {
     position: relative !important;
-    background: radial-gradient(circle at 50% 35%, rgba(13, 34, 68, 0.78) 0%, rgba(5, 12, 24, 0.96) 100%),
+    background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.82) 0%, rgba(5, 12, 24, 0.96) 100%),
                 url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
     
-    /* Mobile-la mukka page edukkum alavukku height increase */
-    min-height: 78vh !important;
+    /* சரியாக 68vh உயரம் */
+    min-height: 68vh !important;
     height: auto !important;
     
-    /* Content ellam grand-aa spread aagi nikka flex alignment */
     display: flex !important;
     flex-direction: column !important;
-    justify-content: space-around !important;
+    justify-content: space-between !important; /* Top-ல் பேட்ஜ், Bottom-ல் பட்டன்கள் & stats */
     align-items: center !important;
     
-    padding: 2.2rem 14px 1.5rem 14px !important;
+    padding: 1.5rem 14px 1.2rem 14px !important;
     margin: 0 !important;
-    border-bottom: 1.5px solid rgba(245, 196, 67, 0.3) !important;
-    box-shadow: inset 0 -25px 40px rgba(0, 0, 0, 0.8) !important;
+    border-bottom: 1.5px solid rgba(245, 196, 67, 0.28) !important;
+    box-shadow: inset 0 -20px 35px rgba(0, 0, 0, 0.8) !important;
     text-align: center !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -91,22 +90,24 @@ nav ul {
 .hero-content {
     width: 100% !important;
     max-width: 100% !important;
+    height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
+    justify-content: space-between !important;
     text-align: center !important;
     margin: 0 !important;
     padding: 0 !important;
 }
 
-/* Badge: Nalla prominent luxury look */
+/* 1. பேட்ஜ் (Handcrafted Elegance உச்சிக்கு - TOP-க்கு நகர்த்தல்) */
 .hero-badge {
-    font-size: 0.65rem !important;
+    font-size: 0.62rem !important;
     letter-spacing: 1.4px !important;
     text-transform: uppercase !important;
-    padding: 6px 16px !important;
-    margin-bottom: 1rem !important;
+    padding: 5px 15px !important;
+    margin-top: 0.2rem !important;          /* உச்சியில் அமர வைத்தல் */
+    margin-bottom: 0.8rem !important;
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
@@ -115,22 +116,22 @@ nav ul {
     border-radius: 20px !important;
     color: #f1f5f9 !important;
     backdrop-filter: blur(8px) !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* Titulo: Perusa, 3 line-la majestic Cinzel style */
+/* 2. தலைப்பு: 3 வரிகளில் சமச்சீராய் அமையும் வடிவம் */
 .hero-title,
 .hero-section h1 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.68rem !important;
-    line-height: 1.35 !important;
+    font-size: 1.58rem !important;
+    line-height: 1.3 !important;
     font-weight: 700 !important;
-    letter-spacing: 0.8px !important;
+    letter-spacing: 0.6px !important;
     color: #ffffff !important;
-    margin: 0 auto 0.9rem auto !important;
+    margin: 0 auto 0.7rem auto !important;
     text-align: center !important;
-    max-width: 325px !important;
-    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.95) !important;
+    max-width: 315px !important;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.95) !important;
     word-break: keep-all !important;
 }
 
@@ -143,22 +144,34 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* Description / Subtitle */
+/* 3. புதிய 3-வரி சப்-டெக்ஸ்ட் (Discover Your Glow / Embrace Your Beauty / Be Uniquely You.) */
 .hero-subtitle,
 .hero-desc {
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.76rem !important;
-    line-height: 1.55 !important;
-    color: #cbd5e1 !important;
-    max-width: 325px !important;
-    margin: 0 auto 1.4rem auto !important;
+    font-size: 0px !important;              /* பழைய எழுத்துக்களை மறைத்தல் */
+    line-height: 0 !important;
+    color: transparent !important;
+    margin: 0 auto 1.2rem auto !important;
+    max-width: 320px !important;
     text-align: center !important;
-    opacity: 0.95 !important;
     display: block !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Action Buttons: Nalla thonura periya luxury buttons */
+.hero-subtitle::before {
+    content: "Discover Your Glow\A Embrace Your Beauty\A Be Uniquely You." !important;
+    white-space: pre-line !important;       /* சரியாக 3 வரிகளாக மையத்தில் உடைக்கும் */
+    display: block !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.74rem !important;
+    font-weight: 500 !important;
+    line-height: 1.55 !important;
+    letter-spacing: 0.4px !important;
+    color: #cbd5e1 !important;
+    text-align: center !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+    opacity: 0.95 !important;
+}
+
+/* 4. பட்டன்கள்: கீழே இறக்குதல் (Pushed Down Towards Stats) */
 .hero-cta-group,
 .hero-btn-row {
     display: flex !important;
@@ -167,17 +180,17 @@ nav ul {
     align-items: center !important;
     gap: 12px !important;
     width: 100% !important;
-    margin-top: 4px !important;
-    margin-bottom: 2rem !important; /* Stats-ku munnadi nalla spacious gap */
+    margin-top: 0.4rem !important;
+    margin-bottom: 1.6rem !important;      /* பட்டனை கீழே இறக்கி வைக்கும் இடைவெளி */
 }
 
 .hero-cta-group a,
 .btn-primary-gold,
 .btn-secondary-outline {
-    width: 142px !important;
-    height: 42px !important;
+    width: 140px !important;
+    height: 40px !important;
     padding: 0 10px !important;
-    font-size: 0.74rem !important;
+    font-size: 0.72rem !important;
     font-weight: 600 !important;
     border-radius: 25px !important;
     display: inline-flex !important;
@@ -186,7 +199,7 @@ nav ul {
     white-space: nowrap !important;
     box-sizing: border-box !important;
     text-decoration: none !important;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45) !important;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
 }
 
 .btn-primary-gold {
@@ -198,13 +211,13 @@ nav ul {
 .btn-secondary-outline {
     background: rgba(11, 26, 48, 0.75) !important;
     color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.38) !important;
 }
 /* === END: 3. HERO STAGE ================================================== */
 
 
 /* ========================================================================== */
-/* === START: 4. STATS COUNTER STRIP (CENTERED, BIG & PROMINENT) ============ */
+/* === START: 4. STATS COUNTER STRIP (LOWERED TO BOTTOM & EQUAL 3-COLUMNS) == */
 /* ========================================================================== */
 .hero-metrics {
     display: flex !important;
@@ -212,15 +225,15 @@ nav ul {
     justify-content: space-between !important;
     align-items: center !important;
     width: 100% !important;
-    max-width: 355px !important;
-    margin: 0 auto 0.6rem auto !important;
+    max-width: 350px !important;
+    margin: 0 auto 0.4rem auto !important; /* மிகக் கீழே கொண்டு வருதல் */
     padding: 0 !important;
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
 
-/* 3 columns samamaaga 33.33% eduthu center-la nikka */
+/* 3 காலம்களும் சமமாகப் பிரிந்து மையத்தில் நிற்க */
 .hero-metrics .metric-item {
     flex: 1 1 33.33% !important;
     width: 33.33% !important;
@@ -233,30 +246,30 @@ nav ul {
     padding: 0 4px !important;
 }
 
-/* Numbers: 100% / 500+ / 4.9★ (Slightly larger & radiant) */
+/* வரி 1: எண்கள் (100% / 500+ / 4.9★) */
 .hero-metrics .metric-item h3 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.25rem !important;
+    font-size: 1.2rem !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
-    margin: 0 0 4px 0 !important;
+    margin: 0 0 3px 0 !important;
     padding: 0 !important;
     text-align: center !important;
     display: block !important;
     white-space: nowrap !important;
-    text-shadow: 0 2px 10px rgba(245, 196, 67, 0.4) !important;
+    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* Labels: AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING */
+/* வரி 2: வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
 .hero-metrics .metric-item p {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.54rem !important;
+    font-size: 0.52rem !important;
     font-weight: 600 !important;
     line-height: 1.15 !important;
     letter-spacing: 0.4px !important;
     text-transform: uppercase !important;
-    color: #ffffff !important;
+    color: #ffffff !important;           /* பிரகாசமான வெள்ளை நிறம் */
     text-align: center !important;
     white-space: nowrap !important;
     text-wrap: nowrap !important;
@@ -265,10 +278,9 @@ nav ul {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95) !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* Divider line hidden for seamless open look */
 .hero-metrics .metric-divider {
     display: none !important;
 }
