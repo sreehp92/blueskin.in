@@ -344,77 +344,237 @@ div:has(> img[src*="1543163521"]) {
     border-radius: 20px !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 8. OUR NEW PRODUCTS (LATEST ARRIVALS 2x2 GRID)                             */
-/* -------------------------------------------------------------------------- */
+/* ========================================================================== */
+/* 8. OUR NEW PRODUCTS (STRICT 2x2 LUXURY GRID ON MOBILE)                     */
+/* ========================================================================== */
 .new-products-section,
 #new-products {
     padding-top: 1rem !important;
-    padding-bottom: 1.2rem !important;
-}
-
-.new-products-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 10px !important;
-    padding: 0 !important;
+    padding-bottom: 1.5rem !important;
     width: 100% !important;
 }
 
-.new-prod-card {
+.new-products-section .section-header-center {
+    margin-bottom: 0.8rem !important;
+    text-align: center !important;
+}
+
+.new-products-section .section-title {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+/* 4 தயாரிப்புகளையும் துல்லியமான 2x2 கிரிட்டாக மாற்றுதல் */
+.new-products-grid,
+.compact-products-row {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2x2 Grid */
+    gap: 10px !important;
+    padding: 0 12px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.new-prod-card,
+.compact-prod-card {
+    display: flex !important;
+    flex-direction: column !important;
     padding: 8px !important;
     border-radius: 12px !important;
+    background: rgba(13, 34, 62, 0.7) !important;
+    border: 1px solid rgba(245, 196, 67, 0.2) !important;
+    box-sizing: border-box !important;
+    text-decoration: none !important;
 }
 
-.new-prod-img {
+/* தயாரிப்பு படங்களின் சதுர விகிதம் */
+.new-prod-img,
+.compact-img-wrap {
     width: 100% !important;
-    height: 130px !important;
+    height: 120px !important;
     border-radius: 8px !important;
     overflow: hidden !important;
 }
 
-.new-prod-img img {
+.new-prod-img img,
+.compact-img-wrap img {
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
 }
 
-.new-prod-name {
-    font-size: 0.75rem !important;
+.new-prod-name,
+.compact-prod-title {
+    font-size: 0.74rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
     margin-top: 6px !important;
     text-align: center !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 /* -------------------------------------------------------------------------- */
-/* 9. HALL OF PRESTIGE (CLIENT & GOOGLE REVIEWS HORIZONTAL SWIPE)              */
+/* 9. HALL OF PRESTIGE / CLIENT ACCOLADES (STRICT 2x2 COMPACT GRID ON MOBILE) */
 /* -------------------------------------------------------------------------- */
 .reviews-section,
 #reviews {
-    padding-top: 1rem !important;
-    padding-bottom: 1.2rem !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.5rem !important;
+    width: 100% !important;
+    overflow: hidden !important;
 }
 
+.reviews-header-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 0.8rem !important;
+    margin-bottom: 1.2rem !important;
+    padding: 0 12px !important;
+}
+
+.reviews-title-area {
+    text-align: center !important;
+}
+
+.reviews-title-area .section-title {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+.reviews-title-area .section-desc {
+    font-size: 0.74rem !important;
+    line-height: 1.35 !important;
+    opacity: 0.85 !important;
+    margin: 0 !important;
+}
+
+/* கூகுள் ரேட்டிங் கேப்சூல் மொபைல் வடிவம் */
+.google-capsule {
+    padding: 0.4rem 1rem !important;
+    border-radius: 25px !important;
+    gap: 0.6rem !important;
+}
+
+.google-g-wrap {
+    width: 28px !important;
+    height: 28px !important;
+}
+
+.google-g-wrap svg {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+.capsule-score {
+    font-size: 1.1rem !important;
+}
+
+.capsule-label {
+    font-size: 0.6rem !important;
+}
+
+/* விமர்சன கார்டுகளை 2x2 கிரிட்டாக மாற்றுதல் (ஸ்வைப் நீக்கம்) */
 .reviews-grid,
 .modern-reviews-grid {
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 12px !important;
-    padding: 4px 12px 14px 12px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* 2x2 Grid */
+    gap: 10px !important;
+    padding: 0 12px !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
 }
 
 .review-card,
 .modern-review-card {
-    flex: 0 0 85% !important;
-    max-width: 85% !important;
-    scroll-snap-align: center !important;
-    padding: 14px !important;
-    border-radius: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 10px 8px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(165deg, rgba(22, 57, 102, 0.7) 0%, rgba(11, 28, 51, 0.9) 100%) !important;
+    border: 1px solid rgba(245, 196, 67, 0.25) !important;
+    box-sizing: border-box !important;
+    min-height: 155px !important;
+    max-height: 175px !important;
+    overflow: hidden !important;
 }
 
+/* கார்டின் தலைப்பு பகுதி (Profile & Stars) */
+.review-card-header,
+.review-card-top {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+}
+
+.client-profile,
+.client-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.avatar-ring,
+.avatar-letter {
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 0.7rem !important;
+}
+
+.client-meta h4,
+.client-info h4 {
+    font-size: 0.72rem !important;
+    margin: 0 !important;
+    line-height: 1.1 !important;
+}
+
+.client-loc,
+.verified-tag {
+    font-size: 0.55rem !important;
+    line-height: 1 !important;
+}
+
+.card-stars-row,
+.card-stars {
+    font-size: 0.6rem !important;
+    gap: 1px !important;
+}
+
+/* கமெண்ட் உரை 2 வரிகளில் சுருங்கி கச்சிதமாக நிற்க */
+.review-text-quote,
+.review-comment {
+    font-size: 0.65rem !important;
+    line-height: 1.3 !important;
+    margin: 4px 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    opacity: 0.88 !important;
+}
+
+/* புராடக்ட் டேக் */
+.review-product-tag {
+    font-size: 0.58rem !important;
+    padding: 2px 6px !important;
+    margin-top: 2px !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+}
+
+.quote-watermark {
+    display: none !important; /* மொபைலில் எழுத்தை மறைக்காமல் இருக்க வாட்டர்மார்க் நீக்கம் */
+}
 /* -------------------------------------------------------------------------- */
 /* 10. CONNECT WITH BLUE SKIN & MESSAGE FORM                                  */
 /* -------------------------------------------------------------------------- */
