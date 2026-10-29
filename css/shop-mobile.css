@@ -57,7 +57,7 @@
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
-    background: rgba(8, 22, 45, 0.95) !important;
+    background: rgba(13, 34, 68, 0.82) !important;
     backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
