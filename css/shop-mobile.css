@@ -850,3 +850,147 @@ header .nav-actions-right,
     color: #ffffff !important;
     border-color: #f43f5e !important;
 }
+
+
+/* ========================================================================== */
+/* === 5. SPACE MANAGEMENT & LUXURY FOOTER REDESIGN ========================= */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* --- 5.1: VIEW MORE பட்டனுக்கு கீழே உள்ள அதிகப்படியான இடைவெளி குறைப்பு ---   */
+/* -------------------------------------------------------------------------- */
+.shop-products-section {
+    padding-bottom: 1rem !important;            /* 3.5rem-ல் இருந்து 1rem-ஆக குறைக்கப்பட்டது */
+    margin-bottom: 0 !important;
+}
+
+.view-more-container {
+    margin-top: 1.4rem !important;
+    margin-bottom: 0.8rem !important;           /* பட்டனுக்கு கீழே தேவையற்ற இடைவெளி நீக்கம் */
+}
+
+/* -------------------------------------------------------------------------- */
+/* --- 5.2: புதிய லக்சரி மொபைல் ஃபூட்டர் (FULL SPACE UTILIZATION) ---         */
+/* -------------------------------------------------------------------------- */
+.footer-section {
+    background: linear-gradient(180deg, rgba(8, 22, 45, 0.98) 0%, #040c18 100%) !important;
+    border-top: 1px solid rgba(245, 196, 67, 0.28) !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5) !important;
+    padding: 2.2rem 16px 1.8rem 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.footer-section .section-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1.4rem !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+}
+
+/* பிராண்ட் லோகோ & டேக்லைன் */
+.footer-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.footer-brand .logo {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    text-shadow: 0 0 15px rgba(245, 196, 67, 0.3) !important;
+}
+
+.footer-brand .gold-text {
+    color: #f5c443 !important;
+}
+
+.footer-brand p {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.72rem !important;
+    color: #94a3b8 !important;
+    letter-spacing: 0.5px !important;
+    margin: 0 !important;
+    max-width: 280px !important;
+    line-height: 1.4 !important;
+}
+
+/* சோஷியல் மீடியா & கன்சியர்ஜ் வட்ட பட்டன்கள் */
+.footer-socials {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin: 0.2rem 0 !important;
+}
+
+.footer-socials a {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 50% !important;
+    background: rgba(16, 42, 78, 0.7) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    color: #f5c443 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+    transition: transform 0.2s ease, background 0.2s ease !important;
+}
+
+.footer-socials a:active {
+    background: #f5c443 !important;
+    color: #0b1a30 !important;
+    transform: scale(0.92) !important;
+}
+
+/* மெல்லிய கோல்டன் டிவைடர் கோடு */
+.footer-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    gap: 1.2rem !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
+    padding-bottom: 1.4rem !important;
+}
+
+/* காப்பிரைட் & CorePulse பிராண்டிங் பட்டி */
+.copyright-bar {
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.copyright-bar p {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.68rem !important;
+    color: #64748b !important;
+    letter-spacing: 0.3px !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+}
+
+.dev-brand-link {
+    color: #f5c443 !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    letter-spacing: 0.5px !important;
+    display: inline-block !important;
+    text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
+}
