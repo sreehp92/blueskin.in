@@ -1,273 +1,162 @@
 /* ========================================================================== */
-/* BLUE SKIN LUXURY ENTERPRISE - SHOP MOBILE MASTER ENGINE                    */
+/* BLUE SKIN LUXURY ENTERPRISE - SHOP MOBILE ENGINE                           */
 /* ========================================================================== */
 
-@media screen and (max-width: 768px) {
 
-    /* ---------------------------------------------------------------------- */
-    /* 1. GLOBAL RESETS & HORIZONTAL OVERFLOW PREVENTION                      */
-    /* ---------------------------------------------------------------------- */
-    html, body {
-        overflow-x: hidden !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-
-    * {
-        box-sizing: border-box !important;
-    }
-
-    .section-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding-left: 12px !important;
-        padding-right: 12px !important;
-    }
-
-    /* ---------------------------------------------------------------------- */
-    /* 2. TOP ANNOUNCEMENT BAR                                                */
-    /* ---------------------------------------------------------------------- */
-    .top-ticker-bar {
-        font-size: 0.60rem !important;
-        padding: 6px 0 !important;
-        height: auto !important;
-        background: #060e1a !important;
-        border-bottom: 1px solid rgba(245, 196, 67, 0.2) !important;
-    }
-
-    .ticker-content span {
-        letter-spacing: 0.5px !important;
-    }
-
-    .ticker-dot {
-        margin: 0 8px !important;
-        color: #f5c443 !important;
-    }
-
-    /* ---------------------------------------------------------------------- */
-    /* 3. HEADER & COMPACT NAV BAR (BRAND LEFT | ACTIONS RIGHT)               */
-    /* ---------------------------------------------------------------------- */
-    .header {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 1000 !important;
-        background: rgba(8, 22, 45, 0.95) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-        padding: 0 !important;
-    }
-
-    .shop-nav-flex {
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        padding: 0.65rem 12px !important;
-        width: 100% !important;
-    }
-
-    /* பிராண்ட் லோகோ */
-    .nav-left-brand .logo {
-        font-family: 'Cinzel', serif !important;
-        font-size: 1.15rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 1px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 5px !important;
-        color: #ffffff !important;
-        text-decoration: none !important;
-    }
-
-    .brand-emblem {
-        color: #f5c443 !important;
-        font-size: 0.9rem !important;
-    }
-
-    /* வலதுபுற பட்டன்கள் வரிசை */
-    .nav-actions-right {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 8px !important;
-    }
-
-    /* போர்ட்ஃபோலியோ பேக் பட்டன் */
-    .btn-back-portfolio {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 5px !important;
-        padding: 6px 10px !important;
-        font-size: 0.65rem !important;
-        font-weight: 600 !important;
-        color: #f5c443 !important;
-        border: 1px solid rgba(245, 196, 67, 0.4) !important;
-        border-radius: 20px !important;
-        background: rgba(11, 26, 48, 0.8) !important;
-        text-decoration: none !important;
-        white-space: nowrap !important;
-    }
-
-    .btn-back-portfolio i {
-        font-size: 0.65rem !important;
-    }
-
-    /* விஷ்லிஸ்ட் & கார்ட் வட்ட பட்டன்கள் */
-    .luxury-round-btn {
-        width: 34px !important;
-        height: 34px !important;
-        border-radius: 50% !important;
-        background: rgba(16, 42, 78, 0.75) !important;
-        border: 1px solid rgba(245, 196, 67, 0.35) !important;
-        color: #f1f5f9 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        position: relative !important;
-        font-size: 0.85rem !important;
-        cursor: pointer !important;
-        padding: 0 !important;
-    }
-
-    /* கவுண்ட் பேட்ஜ் */
-    .action-badge {
-        position: absolute !important;
-        top: -3px !important;
-        right: -3px !important;
-        width: 16px !important;
-        height: 16px !important;
-        border-radius: 50% !important;
-        background: #f5c443 !important;
-        color: #0b1a30 !important;
-        font-size: 0.55rem !important;
-        font-weight: 700 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        border: 1.5px solid #08162d !important;
-    }
-
-    /* ---------------------------------------------------------------------- */
-    /* 4. SHOP BY CATEGORY SECTION (CIRCULAR TOUCH CAROUSEL)                  */
-    /* ---------------------------------------------------------------------- */
-    .cosmetics-cat-section {
-        padding: 1.2rem 0 0.8rem 0 !important;
-        background: transparent !important;
-        width: 100% !important;
-        overflow: hidden !important;
-    }
-
-    .cat-slider-header {
-        text-align: center !important;
-        margin-bottom: 1rem !important;
-        padding: 0 12px !important;
-    }
-
-    .cat-slider-header .sub-badge {
-        font-size: 0.58rem !important;
-        letter-spacing: 1px !important;
-        text-transform: uppercase !important;
-        padding: 3px 10px !important;
-        border-radius: 15px !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 5px !important;
-        margin-bottom: 0.4rem !important;
-    }
-
-    .cat-section-title {
-        font-family: 'Cinzel', serif !important;
-        font-size: 1.25rem !important;
-        font-weight: 700 !important;
-        color: #ffffff !important;
-        margin: 0 !important;
-    }
-
-    /* அம்பு பட்டன்களை மொபைலில் மறைத்தல் */
-    .cat-arrow-btn {
-        display: none !important;
-    }
-
-    .cat-carousel-container {
-        width: 100% !important;
-        position: relative !important;
-        padding: 0 !important;
-    }
-
-    /* ஹரிசாண்டல் டச்-ஸ்வைப் டிராக் */
-    .cat-track-scroll {
-        display: flex !important;
-        flex-direction: row !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory !important;
-        -webkit-overflow-scrolling: touch !important;
-        gap: 14px !important;
-        padding: 4px 14px 12px 14px !important;
-        width: 100% !important;
-        scrollbar-width: none !important;
-    }
-
-    .cat-track-scroll::-webkit-scrollbar {
-        display: none !important;
-    }
-
-    /* கேட்டகரி வட்டங்கள் */
-    .cat-item {
-        flex: 0 0 auto !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 6px !important;
-        cursor: pointer !important;
-        scroll-snap-align: start !important;
-        text-align: center !important;
-        width: 72px !important;
-    }
-
-    .cat-thumb-circle {
-        width: 64px !important;
-        height: 64px !important;
-        border-radius: 50% !important;
-        overflow: hidden !important;
-        position: relative !important;
-        border: 2px solid rgba(245, 196, 67, 0.3) !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
-    }
-
-    .cat-thumb-circle img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: cover !important;
-    }
-
-    .cat-item.active .cat-thumb-circle {
-        border-color: #f5c443 !important;
-        box-shadow: 0 0 12px rgba(245, 196, 67, 0.5) !important;
-    }
-
-    .cat-label {
-        font-family: 'Poppins', sans-serif !important;
-        font-size: 0.62rem !important;
-        font-weight: 500 !important;
-        color: #cbd5e1 !important;
-        white-space: nowrap !important;
-        letter-spacing: 0.2px !important;
-    }
-
-    .cat-item.active .cat-label {
-        color: #f5c443 !important;
-        font-weight: 600 !important;
-    }
-
-    .cat-overlay-icon {
-        position: absolute !important;
-        inset: 0 !important;
-        background: rgba(8, 22, 45, 0.4) !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        color: #ffffff !important;
-        font-size: 0.9rem !important;
-    }
+/* ========================================================================== */
+/* === START: 1. GLOBAL RESETS & CONTAINER CONTROL ========================= */
+/* ========================================================================== */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
+
+* {
+    box-sizing: border-box !important;
+}
+
+.section-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+/* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
+
+
+/* ========================================================================== */
+/* === START: 2. HEADER & NAVIGATION (MATCHING FRONT PAGE EXACTLY) ========== */
+/* ========================================================================== */
+
+/* 1. டாப் டிக்கர் பார் (Front Page அளவோடு பொருந்தும் விதம்) */
+.top-ticker-bar {
+    font-size: 0.62rem !important;
+    padding: 5px 0 !important;
+    height: auto !important;
+    background: #060e1a !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.2) !important;
+}
+
+.ticker-content span {
+    letter-spacing: 0.5px !important;
+}
+
+.ticker-dot {
+    margin: 0 6px !important;
+    color: #f5c443 !important;
+}
+
+/* 2. ஹெடர் கண்டெய்னர் & பேடிங் (Front Page-ல் உள்ள அதே 0.6rem 12px) */
+.header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    background: rgba(8, 22, 45, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    padding: 0 !important;
+}
+
+.header .nav-container,
+.nav-container,
+.shop-nav-flex {
+    padding: 0.6rem 12px !important; /* Front page இடைவெளி */
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 3. லெஃப்ட் சைடு: பிராண்ட் லோகோ (Front Page-ல் உள்ள அதே 1.25rem அளவு) */
+.nav-left-brand .logo,
+.logo {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    color: #ffffff !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+}
+
+.brand-emblem {
+    color: #f5c443 !important;
+    font-size: 1rem !important;
+}
+
+.gold-text {
+    color: #f5c443 !important;
+}
+
+/* 4. ரைட் சைடு: பட்டன்கள் அலைன்மென்ட் (Portfolio + Wishlist + Cart) */
+.nav-actions-right {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+/* Portfolio பட்டன் */
+.btn-back-portfolio {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 6px 10px !important;
+    font-size: 0.65rem !important;
+    font-weight: 600 !important;
+    color: #f5c443 !important;
+    border: 1px solid rgba(245, 196, 67, 0.4) !important;
+    border-radius: 20px !important;
+    background: rgba(11, 26, 48, 0.8) !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    height: 32px !important;
+    box-sizing: border-box !important;
+}
+
+.btn-back-portfolio i {
+    font-size: 0.62rem !important;
+}
+
+/* வட்ட வடிவ Wishlist & Cart பட்டன்கள் */
+.luxury-round-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: rgba(16, 42, 78, 0.75) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    color: #f1f5f9 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    font-size: 0.82rem !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* கவுண்ட் பேட்ஜ் (Badge) */
+.action-badge {
+    position: absolute !important;
+    top: -3px !important;
+    right: -3px !important;
+    width: 15px !important;
+    height: 15px !important;
+    border-radius: 50% !important;
+    background: #f5c443 !important;
+    color: #0b1a30 !important;
+    font-size: 0.52rem !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1.5px solid #08162d !important;
+}
+/* === END: 2. HEADER & NAVIGATION ========================================= */
