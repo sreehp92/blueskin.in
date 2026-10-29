@@ -1,36 +1,122 @@
 /* ========================================================================== */
-/* BLUE SKIN LUXURY - SHOP MASTER ENGINE (100% COLOR HARMONY WITH INDEX.HTML) */
+/* BLUE SKIN LUXURY ENTERPRISE - MASTER MOBILE ENGINE (SPACE MANAGED)          */
 /* ========================================================================== */
 
-/* -------------------------------------------------------------------------- */
-/* A. DESKTOP VIEW STYLES (MATCHING INDEX.HTML EXACT COLORS & STYLES)         */
-/* -------------------------------------------------------------------------- */
 
-/* 1. டாப் டிக்கர் பார்: INDEX.HTML-ல் உள்ள அதே அசல் கிரேடியன்ட் கலர் */
+/* ========================================================================== */
+/* === START: 1. GLOBAL RESETS & CONTAINER CONTROL ========================= */
+/* ========================================================================== */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+* {
+    box-sizing: border-box !important;
+}
+
+.section-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+}
+/* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
+
+
+/* ========================================================================== */
+/* === START: 2. HEADER & NAVIGATION (EXACT 1ST PAGE CLONE & GOLD BUTTON) == */
+/* ========================================================================== */
+
+/* 1. டாப் டிக்கர் பார்: முதல் பக்கத்தின் அதே கிரேடியன்ட் நிறம் & 5px பேடிங் */
 .top-ticker-bar {
     width: 100% !important;
     background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    padding: 5px 0 !important;
+    height: auto !important;
 }
 
-/* 2. ஹெடர் பார்: INDEX.HTML-ல் உள்ள அதே ராயல் நேவி & கிளாஸ் கலர் */
+.ticker-content span {
+    font-size: 0.68rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.8px !important;
+    color: #ffffff !important;
+}
+
+.ticker-content span i {
+    color: #f5c443 !important;
+}
+
+.ticker-dot {
+    margin: 0 8px !important;
+    color: #f5c443 !important;
+}
+
+/* 2. ஹெடர் பார்: முதல் பக்கத்தின் அதே கிளாஸ்மார்பிசம் ராயல் நேவி நிறம் */
 .header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
     background: rgba(8, 22, 45, 0.95) !important;
     backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    padding: 0 !important;
+    width: 100% !important;
 }
 
-/* 3. லோகோவில் கிரீட ஐகான் நீக்கம் (INDEX.HTML போலவே இருக்க) */
+/* கண்டெய்னர் பேடிங்: முதல் பக்கத்தின் அதே 0.6rem 12px */
+.header .nav-container,
+.nav-container,
+.shop-nav-flex {
+    padding: 0.6rem 12px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 3. லோகோ: முதல் பக்கத்தின் அதே 1.25rem அளவு, கிரீடம் இன்றி சுத்தமான BLUE SKIN */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
     display: none !important;
 }
 
-/* 4. டெஸ்க்டாப்பில் போர்ட்ஃபோலியோ பட்டன் (INDEX.HTML "SHOP NOW" பட்டனின் அசல் தங்கம்) */
+.nav-left-brand {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nav-left-brand .logo,
+.logo {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+}
+
+.nav-left-brand .logo .gold-text,
+.gold-text {
+    color: #f5c443 !important;
+    margin-left: 4px !important;
+}
+
+/* 4. டெஸ்க்டாப்பில் போர்ட்ஃபோலியோ பட்டன் (முதல் பக்க "Shop Now" பட்டனின் அதே முழு மஞ்சள்/தங்க நிறம்) */
 .btn-back-portfolio {
-    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
-    color: #0b1a30 !important;
+    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important; /* அசல் மஞ்சள் நிறம் */
+    color: #0b1a30 !important;                     /* கறுப்பு/நேவி எழுத்து */
     padding: 0.55rem 1.3rem !important;
     border-radius: 25px !important;
     font-family: 'Poppins', sans-serif !important;
@@ -41,16 +127,9 @@
     display: inline-flex !important;
     align-items: center !important;
     gap: 0.5rem !important;
-    box-shadow: 0 4px 15px rgba(245, 196, 67, 0.35) !important;
+    box-shadow: 0 4px 15px rgba(245, 196, 67, 0.4) !important;
     border: none !important;
     transition: all 0.3s ease !important;
-}
-
-.btn-back-portfolio:hover {
-    background: linear-gradient(135deg, #ffd768 0%, #f5c443 100%) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(245, 196, 67, 0.5) !important;
-    color: #0b1a30 !important;
 }
 
 .btn-back-portfolio i {
@@ -58,78 +137,26 @@
     font-size: 0.85rem !important;
 }
 
-/* 5. டெஸ்க்டாப்பில் வலதுபுற பட்டன்கள் சீரமைப்பு */
+/* டெஸ்க்டாப்பில் வலதுபுற பட்டன்கள் இடைவெளி */
 .nav-actions-right {
     display: flex !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
 }
 
-
 /* -------------------------------------------------------------------------- */
-/* B. MOBILE VIEW STYLES (SCREEN <= 768PX) - EXACT COLORS & COMPACT CIRCLES   */
+/* MOBILE VIEW STYLES (SCREEN <= 768PX)                                       */
 /* -------------------------------------------------------------------------- */
 @media screen and (max-width: 768px) {
 
-    html, body {
-        overflow-x: hidden !important;
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    /* டெஸ்க்டாப் மெனுவை மொபைலில் மறைத்தல் */
+    .nav-links,
+    .header ul,
+    nav ul {
+        display: none !important;
     }
 
-    * {
-        box-sizing: border-box !important;
-    }
-
-    /* டாப் டிக்கர் பார் மொபைல் அளவு (அதே ராயல் ப்ளூ கிரேடியன்ட் நிறத்தில்) */
-    .top-ticker-bar {
-        background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
-        font-size: 0.65rem !important;
-        padding: 6px 0 !important;
-        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-    }
-
-    /* ஹெடர் கண்டெய்னர் */
-    .header {
-        background: rgba(8, 22, 45, 0.95) !important;
-        backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-    }
-
-    .header .nav-container,
-    .nav-container,
-    .shop-nav-flex {
-        padding: 8px 12px !important;
-        display: flex !important;
-        flex-direction: row !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-    }
-
-    /* மொபைல் லோகோ அளவு */
-    .nav-left-brand .logo,
-    .logo {
-        font-family: 'Cinzel', serif !important;
-        font-size: 1.35rem !important;
-        font-weight: 700 !important;
-        letter-spacing: 1px !important;
-        color: #ffffff !important;
-        text-decoration: none !important;
-        line-height: 1 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        white-space: nowrap !important;
-    }
-
-    .nav-left-brand .logo .gold-text,
-    .gold-text {
-        color: #f5c443 !important;
-        margin-left: 4px !important;
-    }
-
-    /* மொபைலில் 3 பட்டன்களும் வலது ஓரத்தில் 5px இடைவெளியில் அமைய */
+    /* மொபைல் வலதுபுற பட்டன் கிளஸ்டர் - 5px நெருக்கமான இடைவெளி */
     .shop-nav-flex .nav-actions-right,
     .nav-actions-right {
         display: flex !important;
@@ -148,8 +175,40 @@
         flex: 0 0 35px !important;
     }
 
-    /* மூன்று பட்டன்களையும் 35px வட்டமாக லாக் செய்தல் */
-    .btn-back-portfolio,
+    /* 5. மொபைல் பேக் பட்டன்: உள்ளே முழுமையான மஞ்சள் நிறம் (Solid Yellow Filled Circle) */
+    .btn-back-portfolio {
+        width: 35px !important;
+        height: 35px !important;
+        min-width: 35px !important;
+        max-width: 35px !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 50% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important; /* உள்ளே முழு மஞ்சள் */
+        color: #0b1a30 !important;                     /* கறுப்பு அம்பு ஐகான் */
+        border: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        box-shadow: 0 0 12px rgba(245, 196, 67, 0.45) !important; /* கோல்டன் க்ளோ */
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+
+    .btn-back-portfolio span {
+        display: none !important;                      /* மொபைலில் எழுத்து மறைவு */
+    }
+
+    .btn-back-portfolio i {
+        font-size: 0.85rem !important;
+        color: #0b1a30 !important;                     /* அம்பு அடர் கறுப்பு நிறத்தில் பளிச்சென நிற்கும் */
+        line-height: 1 !important;
+        margin: 0 !important;
+    }
+
+    /* 6. விஷ்லிஸ்ட் & கார்ட் வட்ட பட்டன்கள் */
     #openWishlistBtn,
     #openCartBtn,
     .luxury-round-btn {
@@ -157,8 +216,6 @@
         height: 35px !important;
         min-width: 35px !important;
         max-width: 35px !important;
-        min-height: 35px !important;
-        max-height: 35px !important;
         aspect-ratio: 1 / 1 !important;
         border-radius: 50% !important;
         padding: 0 !important;
@@ -171,23 +228,10 @@
         box-sizing: border-box !important;
         box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
         position: relative !important;
-        text-decoration: none !important;
+        flex-shrink: 0 !important;
         cursor: pointer !important;
     }
 
-    /* மொபைலில் 'Portfolio' எழுத்தை மறைத்து Back Arrow-வாக மாற்றுதல் */
-    .btn-back-portfolio span {
-        display: none !important;
-    }
-
-    .btn-back-portfolio i {
-        font-size: 0.82rem !important;
-        color: #f5c443 !important;
-        line-height: 1 !important;
-        margin: 0 !important;
-    }
-
-    /* விஷ்லிஸ்ட் & கார்ட் ஐகான்கள் */
     .luxury-round-btn i,
     #headerWishlistIcon,
     #openCartBtn i {
@@ -205,6 +249,7 @@
         width: 15px !important;
         height: 15px !important;
         min-width: 15px !important;
+        max-width: 15px !important;
         border-radius: 50% !important;
         background: #f5c443 !important;
         color: #0b1a30 !important;
@@ -219,3 +264,4 @@
         box-sizing: border-box !important;
     }
 }
+/* === END: 2. HEADER & NAVIGATION ========================================= */
