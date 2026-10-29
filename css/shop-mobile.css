@@ -731,29 +731,70 @@ header .nav-actions-right,
     margin: 0 !important;
 }
 
-/* மைனஸ் (-) மற்றும் பிளஸ் (+) பட்டன்கள் */
+/* ========================================================================== */
+/* === 1. INLINE COUNTER FIX (CLEAN +/- ICONS WITHOUT BACKGROUND) =========== */
+/* ========================================================================== */
+
+/* ஆட் டு கார்ட் பட்டனின் அதே 38px உயரம் மற்றும் தங்க நிற பின்னணி */
+.card-inline-counter {
+    width: 100% !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 14px !important;                  /* பட்டன்களுக்கு வசதியான பக்கவாட்டு இடைவெளி */
+    box-sizing: border-box !important;
+    box-shadow: 0 3px 12px rgba(245, 196, 67, 0.35) !important;
+    margin: 0 !important;
+}
+
+/* பேக்ரவுண்ட் எதுவுமில்லாத தூய மைனஸ் (-) மற்றும் பிளஸ் (+) குறிகள் */
 .card-inline-counter .inline-btn,
 .inline-btn {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    max-width: 28px !important;
-    border-radius: 50% !important;
-    background: #0b1a30 !important;               /* அடர் நேவி வட்டம் */
-    color: #ffffff !important;
-    border: none !important;
-    font-size: 1rem !important;
+    background: transparent !important;         /* பேக்ரவுண்ட் வட்டம் முழுமையாக நீக்கம் */
+    border: none !important;                    /* பார்டர்கள் எதுவும் இல்லை */
+    outline: none !important;
+    box-shadow: none !important;
+    color: #0b1a30 !important;                  /* அடர் நேவி நிறத்தில் பளிச்சென நிற்கும் */
+    font-size: 1.35rem !important;              /* தொடுவதற்கு வசதியான பெரிய +/- அளவு */
     font-weight: 700 !important;
     line-height: 1 !important;
+    width: 32px !important;
+    height: 38px !important;
+    min-width: 32px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     cursor: pointer !important;
     padding: 0 !important;
     margin: 0 !important;
-    transition: transform 0.15s ease !important;
+    user-select: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    transition: transform 0.15s ease, opacity 0.15s ease !important;
 }
 
+.card-inline-counter .inline-btn:active {
+    transform: scale(0.85) !important;          /* தொடும் போது லேசாக அமுங்கும் எஃபெக்ட் */
+    opacity: 0.6 !important;
+}
+
+/* நடுவில் இருக்கும் எண்ணிக்கை (1, 2, 3...) */
+.card-inline-counter .inline-val,
+.inline-val {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.95rem !important;
+    font-weight: 800 !important;
+    color: #0b1a30 !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    line-height: 1 !important;
+    user-select: none !important;
+}
 .card-inline-counter .inline-btn:active {
     transform: scale(0.9) !important;
 }
