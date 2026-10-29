@@ -1,292 +1,132 @@
 /* ========================================================================== */
-/* 1. HERO SHOWCASE CARD ONLY HIDE (HERO SECTION ONLY)                        */
+/* BLUE SKIN LUXURY ENTERPRISE - MASTER MOBILE ENGINE (FULL FRONT-END)        */
 /* ========================================================================== */
 
-/* போர்ட்ஃபோலியோவை தொடாமல், ஹீரோ செக்ஷனுக்குள் இருக்கும் அந்த கார்டை மட்டும் மறைத்தல் */
-.hero-section .card-floating-badge,
-.hero-section .card-details,
-.hero-section .card-action-btn,
-.hero-section .hero-visual,
-.hero-section .hero-card,
-.hero-section .showcase-card,
-.hero-section .hero-right-box,
-.hero-section .hero-visual-col,
-.hero-section div[class*="showcase"],
-.hero-section div[class*="signature"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    height: 0 !important;
-    min-height: 0 !important;
-    max-height: 0 !important;
+/* -------------------------------------------------------------------------- */
+/* 1. GLOBAL RESETS & CONTAINER CONTROL                                       */
+/* -------------------------------------------------------------------------- */
+html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
-    position: absolute !important;
-    left: -9999px !important;
 }
 
-/* ஹீரோ செக்ஷன் ஃபிரேம் காலியாகி சுருங்குதல் */
-.hero-section {
-    padding: 2.2rem 16px 1.5rem !important;
-    text-align: center !important;
-    height: auto !important;
-    min-height: 0 !important;
-}
-
-.hero-section h1, 
-.hero-section p {
-    text-align: center !important;
-}
-
-.hero-btn-group, .hero-btn-row {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    gap: 12px !important;
-    width: 100% !important;
-}
-
-/* ========================================================================== */
-/* 2. RESTORE & ENFORCE PORTFOLIO GALLERY IMAGES (கட்டாயமாகத் தெரிய வைக்க)  */
-/* ========================================================================== */
-
-/* ராயல் போர்ட்ஃபோலியோ முழுமையாகத் தெரிவதை உறுதி செய்தல் */
-#portfolio,
-.portfolio-showcase-section {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    padding: 2.5rem 12px !important;
-}
-
-.portfolio-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    visibility: visible !important;
-}
-
-.portfolio-card {
-    display: flex !important;
-    flex-direction: column !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    height: auto !important;
-    width: 100% !important;
-    padding: 12px !important;
-    border-radius: 14px !important;
+* {
     box-sizing: border-box !important;
 }
 
-/* போர்ட்ஃபோலியோ படங்கள் மொபைல் திரைக்கு ஏற்ற உயரத்தில் தெளிவாகத் தெரிதல் */
-.portfolio-image-wrapper {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+.section-container {
     width: 100% !important;
-    height: 220px !important;
-    border-radius: 12px !important;
-    overflow: hidden !important;
-}
-
-.portfolio-image-wrapper img {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-
-.portfolio-info {
-    display: block !important;
-    visibility: visible !important;
-    padding: 10px 4px 4px !important;
-}
-
-.portfolio-info h3 {
-    font-size: 1.15rem !important;
-    color: #ffffff !important;
-    margin: 6px 0 !important;
-}
-
-.portfolio-info p {
-    font-size: 0.82rem !important;
-    opacity: 0.85 !important;
-}
-
-.portfolio-link-btn {
-    display: inline-flex !important;
-    visibility: visible !important;
-}
-/* ========================================================================== */
-/* COMPACT HERO, TIGHT STATS & EDGE-TO-EDGE FULL-WIDTH PORTFOLIO (MOBILE)     */
-/* ========================================================================== */
-
-/* 1. ஹீரோ செக்ஷன் மற்றும் பட்டன்களின் இடைவெளியைக் குறைத்தல் */
-.hero-section {
-    padding-top: 1.2rem !important;
-    padding-bottom: 0.4rem !important;
-    margin-bottom: 0 !important;
-}
-
-.hero-title, .hero-section h1 {
-    font-size: 1.5rem !important;
-    line-height: 1.2 !important;
-    margin-bottom: 0.4rem !important;
-}
-
-.hero-desc, .hero-section p {
-    font-size: 0.78rem !important;
-    line-height: 1.35 !important;
-    margin-bottom: 0.8rem !important;
-}
-
-.hero-btn-group, .hero-actions, .hero-btn-row {
-    margin-top: 0 !important;
-    margin-bottom: 0.5rem !important;
-    gap: 8px !important;
-}
-
-/* 2. STATS BAR (100% / 500+ / 4.9★) ஒட்டி வருதல் & கேப் நீக்கம் */
-.stats-row, 
-.metrics-counter-wrap {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding: 0.6rem 8px !important;
-    border-top: 1px solid rgba(245, 196, 67, 0.15) !important;
-    border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
-}
-
-/* 3. 'CURATED GALLERY' பேட்ஜ் & டைமண்ட் ஐகானை முழுமையாக நீக்குதல் */
-#portfolio .sub-badge,
-.portfolio-showcase-section .sub-badge,
-span:has(i.fa-gem),
-.portfolio-header .sub-badge {
-    display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* 4. 'THE ROYAL PORTFOLIO' தலைப்பை ஒட்டி அமைத்தல் */
-#portfolio,
-.portfolio-showcase-section {
-    padding-top: 1rem !important;
-    padding-bottom: 1.2rem !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    width: 100% !important;
-    overflow: hidden !important;
-}
-
-#portfolio .section-container {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
     max-width: 100% !important;
-    width: 100% !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
 }
 
-#portfolio .section-header-center {
-    margin-bottom: 0.8rem !important;
-    padding: 0 14px !important;
-}
-
-#portfolio .section-title {
-    font-size: 1.4rem !important;
-    margin-top: 0 !important;
-    margin-bottom: 0.3rem !important;
-}
-
-#portfolio .header-divider {
-    margin-bottom: 0.6rem !important;
-}
-
-/* 5. EDGE-TO-EDGE FULL-WIDTH CAROUSEL (சைடு கேப் இன்றி முழு திரையில் ஸ்வைப்) */
-#portfolio .portfolio-grid,
-.portfolio-showcase-section .portfolio-grid {
+/* -------------------------------------------------------------------------- */
+/* 2. HEADER & NAVIGATION                                                     */
+/* -------------------------------------------------------------------------- */
+.header .nav-container,
+.nav-container {
+    padding: 0.6rem 12px !important;
     display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    -webkit-overflow-scrolling: touch !important;
-    gap: 12px !important;
-    padding: 4px 16px 14px 16px !important; /* இடது/வலது ஓரங்களில் இருந்து நேர்த்தியாக ஸ்வைப் ஆக */
-    width: 100% !important;
-    box-sizing: border-box !important;
+    justify-content: space-between !important;
+    align-items: center !important;
 }
 
-/* கார்டுகள் திரையின் 86% அகலத்தை எடுத்துக்கொண்டு முழுமையாகத் தெரிதல் */
-#portfolio .portfolio-card,
-.portfolio-showcase-section .portfolio-card {
-    flex: 0 0 86% !important;
-    max-width: 86% !important;
-    scroll-snap-align: center !important;
-    padding: 12px !important;
-    border-radius: 16px !important;
-    box-sizing: border-box !important;
-    margin: 0 !important;
+/* டெஸ்க்டாப் மெனு லிங்க்களை மொபைலில் மறைத்தல் */
+.nav-links,
+.header ul,
+nav ul {
+    display: none !important;
 }
 
-/* படங்களை முழு அகலத்திற்கு செட் செய்தல் */
-#portfolio .portfolio-image-wrapper {
-    width: 100% !important;
-    height: 195px !important;
-    border-radius: 12px !important;
+.logo {
+    font-size: 1.15rem !important;
+    letter-spacing: 1px !important;
 }
 
-#portfolio .portfolio-image-wrapper img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-}
-/* ========================================================================== */
-/* HERO 4-LINE TYPOGRAPHY, STACKED STATS BAR & PURE ROYAL PORTFOLIO (MOBILE)  */
-/* ========================================================================== */
-
-/* 1. ஹீரோ விளக்கம் - சரியாக 4 வரிகளில் அழகாக அமைய */
-.hero-desc, 
-.hero-section p {
-    font-size: 0.84rem !important;
-    line-height: 1.42 !important;
-    max-width: 320px !important;
-    margin: 0 auto 1.1rem auto !important;
+/* -------------------------------------------------------------------------- */
+/* 3. HERO SECTION (TYPOGRAPHY & ACTIONS)                                     */
+/* -------------------------------------------------------------------------- */
+.hero-section {
+    padding-top: 1.5rem !important;
+    padding-bottom: 0px !important;
+    margin-bottom: 0px !important;
     text-align: center !important;
-    display: block !important;
+    height: auto !important;
+    min-height: 0 !important;
+}
+
+.hero-eyebrow,
+.hero-section .sub-badge {
+    font-size: 0.62rem !important;
+    padding: 4px 10px !important;
+    margin-bottom: 0.5rem !important;
+    display: inline-block !important;
+}
+
+.hero-title,
+.hero-section h1 {
+    font-size: 1.45rem !important;
+    line-height: 1.22 !important;
+    margin-bottom: 0.5rem !important;
+    text-align: center !important;
+}
+
+.hero-desc,
+.hero-section p {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+    max-width: 330px !important;
+    margin: 0 auto 0.9rem auto !important;
+    text-align: center !important;
     opacity: 0.88 !important;
 }
 
-/* ஹீரோ பட்டன்களின் கீழ் இடைவெளியைச் சுருக்குதல் */
-.hero-section {
-    padding-top: 1.2rem !important;
-    padding-bottom: 0.2rem !important;
-    margin-bottom: 0 !important;
-}
-
-.hero-btn-group, 
-.hero-actions, 
+.hero-btn-group,
+.hero-actions,
 .hero-btn-row {
-    margin-bottom: 0.4rem !important;
-}
-
-/* 2. STATS BAR (100% / 500+ / 4.9★) இன்னும் மேலே ஒட்டி வந்து செங்குத்தாக (Stacked) மாறுதல் */
-.stats-row, 
-.metrics-counter-wrap {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding: 0.5rem 6px !important;
-    border-top: 1px solid rgba(245, 196, 67, 0.15) !important;
-    border-bottom: 1px solid rgba(245, 196, 67, 0.15) !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0.4rem !important;
+    width: 100% !important;
 }
 
-.stat-item, 
+.hero-btn-group a,
+.hero-actions a,
+.hero-btn-row a {
+    flex: 1 !important;
+    max-width: 140px !important;
+    padding: 8px 10px !important;
+    font-size: 0.74rem !important;
+    border-radius: 20px !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. STATS COUNTER STRIP (100% / 500+ / 4.9★ STRICT 2-LINES)                 */
+/* -------------------------------------------------------------------------- */
+.stats-row,
+.metrics-counter-wrap,
+[class*="stats-"] {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-top: 0px !important;
+    margin-bottom: 0.8rem !important;
+    padding: 0.35rem 4px !important;
+    border-top: 0.5px solid rgba(245, 196, 67, 0.25) !important;
+    border-bottom: 0.5px solid rgba(245, 196, 67, 0.25) !important;
+    width: 100% !important;
+}
+
+.stat-item,
 .metric-counter-col,
 .stats-row > div {
     display: flex !important;
@@ -294,59 +134,81 @@ span:has(i.fa-gem),
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    gap: 2px !important;
+    flex: 1 1 33.33% !important;
+    min-width: 0 !important;
+    padding: 0 2px !important;
 }
 
-/* நம்பர் அளவு */
-.stat-number, 
+.stat-number,
 .metric-count,
 .stats-row h3,
 .stats-row strong {
-    font-size: 1.25rem !important;
+    font-size: 1.15rem !important;
     line-height: 1.1 !important;
-    margin: 0 !important;
+    margin: 0 0 2px 0 !important;
     display: block !important;
+    white-space: nowrap !important;
 }
 
-/* கீழே வரும் உரை (Stacked Format) */
-.stat-label, 
+.stat-label,
 .metric-lbl,
 .stats-row span,
 .stats-row p {
-    font-size: 0.58rem !important;
-    line-height: 1.15 !important;
-    letter-spacing: 0.6px !important;
+    font-size: 0.52rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    text-wrap: nowrap !important;
+    letter-spacing: 0.2px !important;
     text-transform: uppercase !important;
-    text-align: center !important;
     margin: 0 !important;
-    max-width: 80px !important;
     display: block !important;
-    opacity: 0.8 !important;
+    opacity: 0.85 !important;
 }
 
-/* 3. THE ROYAL PORTFOLIO: விளக்க உரை மற்றும் மஞ்சள் கோட்டை (Line) அடியோடு நீக்குதல் */
-#portfolio .section-desc,
-.portfolio-showcase-section .section-desc,
-#portfolio .header-divider,
-.portfolio-showcase-section .header-divider,
-#portfolio .sub-badge,
-.portfolio-showcase-section .sub-badge,
-span:has(i.fa-gem) {
+/* -------------------------------------------------------------------------- */
+/* 5. HIDE THE SAPPHIRE ROYALE / LIMITED BATCH CARD FROM MOBILE               */
+/* -------------------------------------------------------------------------- */
+.hero-right-box,
+.hero-product-showcase,
+.hero-visual,
+.hero-card,
+.signature-card,
+.card-floating-badge,
+.card-details,
+.card-meta,
+.card-action-btn,
+div:has(> .card-details),
+div:has(> .card-floating-badge),
+div:has(> img[src*="1543163521"]) {
     display: none !important;
     visibility: hidden !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    opacity: 0 !important;
+    height: 0px !important;
+    min-height: 0px !important;
+    margin: 0px !important;
+    padding: 0px !important;
     border: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+    pointer-events: none !important;
 }
 
-/* போர்ட்ஃபோலியோ தலைப்பை ஒட்டி அமைத்தல் */
+/* -------------------------------------------------------------------------- */
+/* 6. THE ROYAL PORTFOLIO (1x4 HORIZONTAL SWIPE CAROUSEL)                     */
+/* -------------------------------------------------------------------------- */
 #portfolio,
 .portfolio-showcase-section {
     padding-top: 0.6rem !important;
-    padding-bottom: 1rem !important;
+    padding-bottom: 0.8rem !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+#portfolio .section-container {
+    padding: 0 !important;
+    max-width: 100% !important;
 }
 
 #portfolio .section-header-center {
@@ -358,20 +220,77 @@ span:has(i.fa-gem) {
 #portfolio .section-title {
     font-size: 1.35rem !important;
     margin: 0 !important;
-    line-height: 1.2 !important;
 }
 
-/* 4. எட்ஜ்-டு-எட்ஜ் ஸ்வைப் கார்டுகள் தலைப்பை ஒட்டி உடனடியாகத் தொடங்குதல் */
+/* தேவையற்ற விளக்க உரை, பேட்ஜ், மற்றும் கோட்டை நீக்குதல் */
+#portfolio .section-desc,
+.portfolio-showcase-section .section-desc,
+#portfolio .header-divider,
+.portfolio-showcase-section .header-divider,
+#portfolio .sub-badge,
+.portfolio-showcase-section .sub-badge {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+}
+
+/* எட்ஜ்-டு-எட்ஜ் ஸ்வைப் டிராக் */
 #portfolio .portfolio-grid,
 .portfolio-showcase-section .portfolio-grid {
-    margin-top: 0.4rem !important;
-    padding-top: 0 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 14px 12px 14px !important;
+    width: 100% !important;
 }
-/* ========================================================================== */
-/* ABOUT US (THE SPIRIT OF BLUE SKIN): HIDE IMAGE & CENTER ACTION BUTTON      */
-/* ========================================================================== */
 
-/* 1. அந்த படம், பார்டர் ஃபிரேம் மற்றும் 10+ Years பேட்ஜை அடியோடு நீக்குதல் */
+#portfolio .portfolio-card,
+.portfolio-showcase-section .portfolio-card {
+    flex: 0 0 84% !important;
+    max-width: 84% !important;
+    scroll-snap-align: center !important;
+    padding: 10px !important;
+    border-radius: 14px !important;
+    box-sizing: border-box !important;
+}
+
+#portfolio .portfolio-image-wrapper {
+    width: 100% !important;
+    height: 185px !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+}
+
+#portfolio .portfolio-image-wrapper img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+#portfolio .portfolio-info h3 {
+    font-size: 1rem !important;
+    margin: 4px 0 !important;
+}
+
+#portfolio .portfolio-info p {
+    font-size: 0.74rem !important;
+    margin-bottom: 6px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 7. THE SPIRIT OF BLUE SKIN (HERITAGE / ABOUT US)                           */
+/* -------------------------------------------------------------------------- */
+#about,
+.about-section {
+    padding-top: 0.8rem !important;
+    padding-bottom: 1.2rem !important;
+}
+
+/* அந்த படம் மற்றும் 10+ Years பேட்ஜை அடியோடு நீக்குதல் */
 #about .about-visual,
 .about-section .about-visual,
 .about-frame-border,
@@ -380,139 +299,200 @@ span:has(i.fa-gem) {
     display: none !important;
     visibility: hidden !important;
     height: 0px !important;
-    min-height: 0px !important;
     margin: 0px !important;
     padding: 0px !important;
-    border: none !important;
 }
 
-/* 2. உள்ளடக்கப் பகுதியை முழு அகலத்திற்கு (Full Width) மாற்றுதல் */
 #about .about-grid,
 .about-section .about-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 0px !important;
-    padding: 1.5rem 14px !important;
+    padding: 0 12px !important;
+}
+
+#about .about-content {
     width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-#about .about-content,
-.about-section .about-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0px !important;
-    margin: 0px !important;
-}
-
-/* 3. 'Visit The Store' பட்டனை மையத்திற்கு (Center Align) கொண்டு வருதல் */
-#about .about-btn-wrap,
-.about-section .about-btn-wrap {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-top: 1.5rem !important;
-    text-align: center !important;
-}
-
-#about .about-btn-wrap a,
-.about-section .about-btn-wrap a {
-    margin: 0 auto !important;
-    display: inline-flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    padding: 10px 24px !important;
-    font-size: 0.85rem !important;
-    border-radius: 25px !important;
-}
-/* ========================================================================== */
-/* OVERALL VERTICAL SPACING & COMPACT SECTION FLOW ENGINE (MOBILE ONLY)       */
-/* ========================================================================== */
-
-/* 1. ஹீரோ பகுதி & பட்டன்களின் கீழ் இடைவெளியை சுருக்குதல் */
-.hero-section {
-    padding-top: 1.5rem !important;
-    padding-bottom: 0px !important;
-    margin-bottom: 0px !important;
-}
-
-.hero-btn-group, 
-.hero-actions, 
-.hero-btn-row {
-    margin-top: 0px !important;
-    margin-bottom: 0.4rem !important; /* பட்டனுக்கு கீழே மிகக் குறைந்த ஸ்பேஸ் */
-}
-
-/* 2. STATS BAR (100% / 500+ / 4.9★) பட்டனுடன் நெருங்கி வருதல் */
-.stats-row, 
-.metrics-counter-wrap,
-[class*="stats-"] {
-    margin-top: 0px !important;
-    margin-bottom: 0.6rem !important; /* போர்ட்ஃபோலியோவிற்கு மேல் உள்ள ஸ்பேஸ் குறைப்பு */
-    padding: 0.4rem 8px !important;
-}
-
-/* 3. THE ROYAL PORTFOLIO செக்ஷனின் மேல் & கீழ் இடைவெளிகளை இறுக்குதல் */
-#portfolio,
-.portfolio-showcase-section {
-    padding-top: 0.6rem !important;   /* Stats பாருக்கும் போர்ட்ஃபோலியோவுக்கும் நடுவே குறைவான கேப் */
-    padding-bottom: 0.8rem !important; /* கீழே Spirit of Blue Skin உடன் நெருங்க */
-    margin: 0px !important;
-}
-
-#portfolio .section-header-center,
-.portfolio-showcase-section .section-header-center {
-    margin-bottom: 0.6rem !important;
-}
-
-#portfolio .portfolio-grid,
-.portfolio-showcase-section .portfolio-grid {
-    padding-bottom: 0.6rem !important;
-    margin-bottom: 0px !important;
-}
-
-/* 4. THE SPIRIT OF BLUE SKIN (ABOUT US) இடைவெளிகளை அட்ஜஸ்ட் செய்தல் */
-#about,
-.about-section {
-    padding-top: 0.8rem !important;   /* போர்ட்ஃபோலியோவிலிருந்து மிகக் குறைந்த இடைவெளியில் தொடங்குதல் */
-    padding-bottom: 1rem !important;
-    margin: 0px !important;
-}
-
-#about .about-grid,
-.about-section .about-grid {
-    padding-top: 0px !important;
-    padding-bottom: 0.4rem !important;
 }
 
 #about .section-title {
-    margin-top: 0.2rem !important;
-    margin-bottom: 0.4rem !important;
-}
-
-#about .about-lead {
+    font-size: 1.35rem !important;
     margin-bottom: 0.5rem !important;
-    font-size: 0.82rem !important;
-    line-height: 1.4 !important;
 }
 
+#about .about-lead,
 #about .about-text {
-    margin-bottom: 0.8rem !important;
     font-size: 0.78rem !important;
     line-height: 1.4 !important;
-}
-
-#about .about-features-list {
-    margin-bottom: 0.8rem !important;
+    margin-bottom: 0.6rem !important;
 }
 
 #about .feature-item {
     margin-bottom: 0.6rem !important;
 }
 
-#about .about-btn-wrap,
-.about-section .about-btn-wrap {
-    margin-top: 0.8rem !important;
-    margin-bottom: 0px !important;
+/* Visit The Store பட்டனை மையப்படுத்துதல் */
+#about .about-btn-wrap {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin-top: 1rem !important;
+}
+
+#about .about-btn-wrap a {
+    padding: 8px 22px !important;
+    font-size: 0.82rem !important;
+    border-radius: 20px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 8. OUR NEW PRODUCTS (LATEST ARRIVALS 2x2 GRID)                             */
+/* -------------------------------------------------------------------------- */
+.new-products-section,
+#new-products {
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
+}
+
+.new-products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    padding: 0 !important;
+    width: 100% !important;
+}
+
+.new-prod-card {
+    padding: 8px !important;
+    border-radius: 12px !important;
+}
+
+.new-prod-img {
+    width: 100% !important;
+    height: 130px !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.new-prod-img img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+.new-prod-name {
+    font-size: 0.75rem !important;
+    margin-top: 6px !important;
+    text-align: center !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 9. HALL OF PRESTIGE (CLIENT & GOOGLE REVIEWS HORIZONTAL SWIPE)              */
+/* -------------------------------------------------------------------------- */
+.reviews-section,
+#reviews {
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
+}
+
+.reviews-grid,
+.modern-reviews-grid {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 12px !important;
+    padding: 4px 12px 14px 12px !important;
+    width: 100% !important;
+}
+
+.review-card,
+.modern-review-card {
+    flex: 0 0 85% !important;
+    max-width: 85% !important;
+    scroll-snap-align: center !important;
+    padding: 14px !important;
+    border-radius: 14px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 10. CONNECT WITH BLUE SKIN & MESSAGE FORM                                  */
+/* -------------------------------------------------------------------------- */
+.contact-section,
+#contact {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.5rem !important;
+}
+
+.contact-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.2rem !important;
+}
+
+.contact-card {
+    padding: 10px !important;
+    border-radius: 12px !important;
+    margin-bottom: 8px !important;
+}
+
+.contact-form-card {
+    padding: 1.2rem !important;
+    border-radius: 16px !important;
+    width: 100% !important;
+}
+
+.form-group input,
+.form-group textarea {
+    font-size: 16px !important;
+    padding: 8px !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 11. ASSURANCE TERMS & CENTERED FOOTER                                      */
+/* -------------------------------------------------------------------------- */
+.terms-card {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.terms-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+}
+
+.term-box {
+    padding: 10px !important;
+    border-radius: 8px !important;
+}
+
+.footer-section {
+    padding: 2rem 12px 1.5rem 12px !important;
+    text-align: center !important;
+}
+
+.footer-bottom {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 1rem !important;
+}
+
+.footer-brand {
+    text-align: center !important;
+}
+
+.footer-socials {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 12px !important;
+}
+
+.copyright-bar {
+    text-align: center !important;
+    font-size: 0.72rem !important;
+    padding-top: 1rem !important;
 }
