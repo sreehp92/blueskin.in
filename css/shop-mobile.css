@@ -2,7 +2,7 @@
 /* BLUE SKIN LUXURY ENTERPRISE - MASTER MOBILE ENGINE (SPACE MANAGED)          */
 /* ========================================================================== */
 
-
+@media screen and (max-width: 768px) {
 /* ========================================================================== */
 /* === START: TOP SCROLLING TICKER BAR (EXACT FIRST PAGE CLONE) ============= */
 /* ========================================================================== */
@@ -993,4 +993,5 @@ header .nav-actions-right,
     letter-spacing: 0.5px !important;
     display: inline-block !important;
     text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
+}
 }
