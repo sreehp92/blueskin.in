@@ -67,19 +67,15 @@ nav ul {
     box-sizing: border-box !important;
 }
 
-/* 2. தலைப்பு துல்லியமாக 3 வரிகளில் அமைய கட்டுப்பாடு */
-.hero-title,
-.hero-section h1 {
-    font-size: 1.45rem !important;
-    line-height: 1.25 !important;
-    margin: 0 auto 0.45rem auto !important;
-    max-width: 250px !important; /* Your beauty deserves something extraordinary, / Carefully created to bring out your natural glow / Feel confident Feel radiant Feel beautiful சரியாக 3 வரிகளில் உடைய அகலம் */
-    text-align: center !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px !important;
-    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85) !important;
-    word-break: normal !important;
-}
+<!-- Left Column: Typography & Action Buttons -->
+            <div class="hero-left-box">
+                <span class="sub-badge"><i class="fa-solid fa-crown"></i> Handcrafted Elegance</span>
+                <h1 class="hero-title">Timeless Style,<br><span class="gold-gradient-text">Crafted for the Extraordinary.</span></h1>
+                <p class="hero-desc">
+                    Your beauty deserves something extraordinary,<br>
+                    Carefully created to bring out your natural glow<br>
+                    Feel confident Feel radiant Feel beautiful
+                </p>
 
 /* தலைப்பின் தங்க நிற உரை தனி வரியில் மிளிர */
 .hero-title .gold-gradient-text,
