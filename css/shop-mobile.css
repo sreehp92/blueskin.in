@@ -36,10 +36,10 @@
 
 
 /* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (LOCKED CIRCLES & ZERO DEAD-SPACE) ===== */
+/* === START: 2. HEADER & NAVIGATION (ZERO GHOST SPACE & 2PX GAP) =========== */
 /* ========================================================================== */
 
-/* 1. ஹெடர் கண்டெய்னர் */
+/* 1. ஹெடர் கண்டெய்னர் & லோகோ பகுதி */
 .header {
     position: sticky !important;
     top: 0 !important;
@@ -54,7 +54,7 @@
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 8px 12px !important;
+    padding: 6px 10px !important;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -63,7 +63,7 @@
     box-sizing: border-box !important;
 }
 
-/* 2. இடதுபுறம்: BLUE SKIN லோகோ */
+/* இடதுபுற லோகோவில் கிரீட ஐகான் நீக்கம் & BLUE SKIN */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
     display: none !important;
@@ -97,37 +97,47 @@
     text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* 3. வலதுபுறம்: 3 பட்டன்களும் வலது ஓரத்தில் ஒட்டி நிற்க */
+/* 2. வலதுபுற பட்டன் கண்டெய்னர் - தேவையில்லாத இடைவெளிகள் முழுமையாக நீக்கம் */
+.shop-nav-flex .nav-actions-right,
 .nav-actions-right {
-    display: inline-flex !important;
+    display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 3px !important;                       /* வெறும் 5px கேப் மட்டுமே */
+    gap: 2px !important;                       /* நீங்கள் கேட்ட மினிமம் 2px இடைவெளி */
     width: auto !important;
-    flex: 0 0 auto !important;                 /* விரிவடைவதை முழுமையாகத் தடுக்கும் */
+    max-width: fit-content !important;
+    flex: 0 0 auto !important;                 /* விரிவடைவதை முழுமையாக லாக் செய்தல் */
     margin: 0 !important;
+    margin-left: auto !important;
     padding: 0 !important;
 }
 
-/* 4. மூன்று பட்டன்களையும் 100% வட்டமாக லாக் செய்தல் (LOCKED CIRCLE) */
-.nav-actions-right a,
-.nav-actions-right button,
+/* பட்டன்களுக்கு நடுவில் டெஸ்க்டாப்பில் இருந்து வரும் மார்ஜின்களை ஒழிக்க */
+.nav-actions-right > * {
+    margin: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    flex-shrink: 0 !important;
+}
+
+/* 3. மூன்று வட்ட பட்டன்கள் (100% Circle & Equal 34px) */
 .btn-back-portfolio,
 .luxury-round-btn,
 .wishlist-nav-btn,
-.luxury-cart-btn {
-    width: 35px !important;
-    height: 35px !important;
-    min-width: 35px !important;
-    max-width: 35px !important;
-    min-height: 35px !important;
-    max-height: 35px !important;
-    flex: 0 0 35px !important;                 /* ஸ்ட்ரெட்ச் ஆகி ஓவல் ஆவதை அடியோடு தடுக்கும் */
-    padding: 0 !important;                     /* பழைய பேடிங் முழுமையாக நீக்கம் */
-    margin: 0 !important;
-    border-radius: 50% !important;             /* 100% சரியான வட்டம் */
+.luxury-cart-btn,
+#openWishlistBtn,
+#openCartBtn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
     aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
     background: rgba(16, 42, 78, 0.85) !important;
     border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
     display: inline-flex !important;
@@ -135,17 +145,21 @@
     justify-content: center !important;
     box-sizing: border-box !important;
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
+    flex-shrink: 0 !important;
     position: relative !important;
     text-decoration: none !important;
     cursor: pointer !important;
-    overflow: visible !important;
 }
 
-/* பேக் பட்டன் எழுத்து நீக்கம் & அம்பு ஐகான் */
+/* போர்ட்ஃபோலியோ டெக்ஸ்ட் முழு நீக்கம் (இடைவெளி வரவிடாமல் லாக் செய்தல்) */
 .btn-back-portfolio span {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden !important;
 }
 
+/* பேக் அம்பு ஐகான் */
 .btn-back-portfolio i {
     font-size: 0.82rem !important;
     color: #f5c443 !important;
@@ -157,7 +171,8 @@
 /* விஷ்லிஸ்ட் (Heart) & கார்ட் (Cart) ஐகான்கள் */
 .luxury-round-btn i,
 .wishlist-nav-btn i,
-.luxury-cart-btn i {
+.luxury-cart-btn i,
+#headerWishlistIcon {
     font-size: 0.82rem !important;
     color: #ffffff !important;
     line-height: 1 !important;
@@ -165,7 +180,7 @@
     padding: 0 !important;
 }
 
-/* 5. கவுண்ட் பேட்ஜ் (சிவப்பு/தங்க நிற கவுண்டர் புள்ளி) */
+/* 4. கவுண்ட் பேட்ஜ் (Corner Badge Dot) */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
@@ -174,8 +189,6 @@
     height: 15px !important;
     min-width: 15px !important;
     max-width: 15px !important;
-    min-height: 15px !important;
-    max-height: 15px !important;
     border-radius: 50% !important;
     aspect-ratio: 1 / 1 !important;
     background: #f5c443 !important;
