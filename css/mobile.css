@@ -1082,3 +1082,151 @@ div:has(> img[src*="1543163521"]) {
     padding: 0 !important;
     border: none !important;
 }
+/* ========================================================================== */
+/* HERO & STATS: FLAWLESS TYPOGRAPHY & 3-COLUMN SIZE ALIGNMENT (MOBILE)      */
+/* ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. HERO TITLE: PRECISE 3-LINE CINZEL GEOMETRY                              */
+/* -------------------------------------------------------------------------- */
+.hero-title,
+.hero-section h1 {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.55rem !important;
+    line-height: 1.3 !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    color: #ffffff !important;
+    margin: 0 auto 0.75rem auto !important;
+    text-align: center !important;
+    max-width: 310px !important; /* 3 வரிகளில் துல்லியமாக உடைய வைக்கும் அகலம் */
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
+    word-break: keep-all !important;
+}
+
+.hero-title .gold-gradient-text,
+.hero-section h1 span {
+    display: inline-block !important;
+    color: #f5c443 !important;
+    background: linear-gradient(135deg, #ffd768 0%, #f5c443 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. SUBTITLE: BALANCED 3-LINE ESSENCE                                       */
+/* -------------------------------------------------------------------------- */
+.hero-subtitle,
+.hero-desc {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.72rem !important;
+    line-height: 1.5 !important;
+    color: #cbd5e1 !important;
+    max-width: 320px !important;
+    margin: 0 auto 1.2rem auto !important;
+    text-align: center !important;
+    opacity: 0.95 !important;
+    display: block !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. ACTION BUTTONS: 3MM LOWERED & PROPORTIONAL                              */
+/* -------------------------------------------------------------------------- */
+.hero-cta-group,
+.hero-btn-row {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin-top: 2px !important;
+    margin-bottom: 1.4rem !important;
+}
+
+.hero-cta-group a,
+.btn-primary-gold,
+.btn-secondary-outline {
+    width: 138px !important;
+    height: 38px !important;
+    padding: 0 8px !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    border-radius: 25px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. STATS COUNTER STRIP: PERFECTLY SIZED & PROPORTIONALLY CENTERED          */
+/* -------------------------------------------------------------------------- */
+.hero-metrics {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 345px !important;
+    margin: 0.5rem auto 0 auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* ஒவ்வொரு காலமும் (33.33%) சம அளவில் பிரிந்து நிற்க */
+.hero-metrics .metric-item {
+    flex: 1 1 33.33% !important;
+    width: 33.33% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 2px !important;
+    box-sizing: border-box !important;
+}
+
+/* லைன் 1: எண்கள் (100% / 500+ / 4.9★) சரியான அளவு */
+.hero-metrics .metric-item h3 {
+    font-family: 'Cinzel', serif !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    color: #f5c443 !important;
+    margin: 0 0 4px 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    display: block !important;
+    white-space: nowrap !important;
+    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
+}
+
+/* லைன் 2: லேபிள்கள் (Authentic Quality / Curated Designs / Client Rating) */
+/* மொபைல் திரைக்கு ஏற்ற மைக்ரோ-டைப்போகிராபி அளவு */
+.hero-metrics .metric-item p {
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.52rem !important; /* சரியான ரீடபிலிட்டி அளவு */
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0.4px !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    text-align: center !important;
+    white-space: nowrap !important; /* வரியை உடைக்காமல் நேராக வைக்கும் */
+    text-wrap: nowrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+/* நடுவில் உள்ள கோடுகள் மறைப்பு */
+.hero-metrics .metric-divider {
+    display: none !important;
+}
