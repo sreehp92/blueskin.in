@@ -877,36 +877,179 @@ section#portfolio:not(.hero-section) {
 /* === END: 9. CLIENT ACCOLADES / REVIEWS ================================== */
 
 /* ========================================================================== */
-/* === START: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ==================== */
+/* === START: 10. CONNECT WITH BLUE SKIN & FORM (1x2 SIDE-BY-SIDE LAYOUT) === */
 /* ========================================================================== */
+
 .contact-section,
 #contact {
-    padding-top: 1rem !important;
-    padding-bottom: 1.2rem !important;
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.6rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
+/* செக்ஷன் தலைப்பு மையம் */
+.contact-section .section-header-center {
+    text-align: center !important;
+    margin-bottom: 1.2rem !important;
+    padding: 0 10px !important;
+}
+
+.contact-section .section-header-center .section-title {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+.contact-section .section-header-center .section-desc {
+    font-size: 0.74rem !important;
+    line-height: 1.35 !important;
+    color: #cbd5e1 !important;
+    opacity: 0.88 !important;
+    max-width: 330px !important;
+    margin: 0 auto !important;
+}
+
+/* 1. பிரதான கிரிட்: பக்கவாட்டில் 1x2 (Side-by-Side 2 Equal Columns) */
 .contact-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important; /* இடது பக்கம் தொடர்பு கார்டுகள், வலது பக்கம் ஃபார்ம் */
+    gap: 8px !important;
+    padding: 0 10px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. இடதுபுறம்: தொடர்பு விவரங்கள் (CONTACT INFO CARDS) */
+.contact-info-wrap {
     display: flex !important;
     flex-direction: column !important;
-    gap: 1rem !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    width: 100% !important;
 }
 
 .contact-card {
-    padding: 10px !important;
+    background: linear-gradient(160deg, rgba(20, 52, 95, 0.75) 0%, rgba(13, 34, 62, 0.9) 100%) !important;
+    border: 1px solid rgba(245, 196, 67, 0.25) !important;
+    padding: 8px 6px !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    flex-direction: column !important; /* ஐகான் மேலே, உரை கீழே */
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.contact-icon {
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    border-radius: 50% !important;
+    background: rgba(245, 196, 67, 0.12) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    color: #f5c443 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.72rem !important;
+}
+
+.contact-text h4 {
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin: 0 0 1px 0 !important;
+    line-height: 1.1 !important;
+}
+
+.contact-text p {
+    font-size: 0.58rem !important;
+    color: #cbd5e1 !important;
+    line-height: 1.2 !important;
+    margin: 0 !important;
+    word-break: break-word !important;
+}
+
+/* வாட்ஸ்அப் பட்டன் */
+.btn-whatsapp-direct {
+    background: #25d366 !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+    padding: 7px 6px !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    font-size: 0.65rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-top: 2px !important;
+    white-space: nowrap !important;
+}
+
+/* 3. வலதுபுறம்: செய்தி அனுப்பும் படிவம் (MESSAGE FORM CARD) */
+.contact-form-card {
+    background: linear-gradient(160deg, rgba(20, 52, 95, 0.8) 0%, rgba(13, 34, 62, 0.95) 100%) !important;
+    border: 1px solid rgba(245, 196, 67, 0.28) !important;
     border-radius: 12px !important;
+    padding: 10px 8px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.form-group {
     margin-bottom: 6px !important;
 }
 
-.contact-form-card {
-    padding: 1.1rem !important;
-    border-radius: 14px !important;
-    width: 100% !important;
+.form-group label {
+    display: block !important;
+    font-size: 0.6rem !important;
+    color: #f5c443 !important;
+    font-weight: 600 !important;
+    margin-bottom: 2px !important;
+    letter-spacing: 0.3px !important;
 }
 
 .form-group input,
 .form-group textarea {
-    font-size: 16px !important;
-    padding: 8px !important;
+    width: 100% !important;
+    background: rgba(11, 26, 48, 0.75) !important;
+    border: 1px solid rgba(245, 196, 67, 0.2) !important;
+    border-radius: 6px !important;
+    padding: 5px 6px !important;
+    color: #ffffff !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.68rem !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+.form-group textarea {
+    rows: 2 !important;
+    height: 48px !important;
+    resize: none !important;
+}
+
+.form-submit-btn {
+    width: 100% !important;
+    height: 32px !important;
+    padding: 0 4px !important;
+    font-size: 0.68rem !important;
+    font-weight: 600 !important;
+    border-radius: 18px !important;
+    margin-top: 4px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 5px !important;
+    cursor: pointer !important;
 }
 /* === END: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ====================== */
 
