@@ -403,23 +403,38 @@ section#portfolio:not(.hero-section) {
 
 
 /* ========================================================================== */
-/* === 7. OUR HERITAGE (CENTERED BADGE & SECTION TITLE ALIGNMENT) =========== */
+/* === START: 7. THE SPIRIT OF BLUE SKIN (HERITAGE / ABOUT US) ============== */
 /* ========================================================================== */
 
 #about,
 .about-section {
     padding-top: 1.2rem !important;
-    padding-bottom: 1.5rem !important;
-    text-align: center !important;
+    padding-bottom: 1.4rem !important;
     width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 1. இமேஜ், பார்டர் ஃபிரேம் & 10+ YEARS பேட்ஜை மொபைலில் அடியோடு நீக்குதல் */
+#about .about-visual,
+.about-section .about-visual,
+.about-frame-border,
+.about-image-card,
+.about-stat-tag,
+#about img {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0px !important;
+    width: 0px !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    border: none !important;
 }
 
 #about .about-grid,
 .about-section .about-grid {
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;     /* அனைத்தையும் நடுவில் வைக்க */
-    text-align: center !important;
+    align-items: center !important;
     padding: 0 14px !important;
     width: 100% !important;
     box-sizing: border-box !important;
@@ -431,15 +446,15 @@ section#portfolio:not(.hero-section) {
     max-width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    align-items: center !important;     /* உள் உறுப்புகள் மையம் */
-    text-align: center !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* 1. '👑 OUR HERITAGE' பேட்ஜை மையத்திற்கு (Center) கொண்டு வருதல் */
+/* 2. 'OUR HERITAGE' பேட்ஜ் & தலைப்பு மையத்தில் (Center) நிற்க */
 #about .sub-badge,
-#about .about-badge,
 .about-section .sub-badge {
-    margin: 0 auto 0.8rem auto !important;
+    margin: 0 auto 0.6rem auto !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -447,7 +462,6 @@ section#portfolio:not(.hero-section) {
     text-align: center !important;
 }
 
-/* 2. 'The Spectacle of Blue Skin' தலைப்பை மையப்படுத்துதல் */
 #about .section-title,
 .about-section .section-title {
     font-size: 1.35rem !important;
@@ -458,28 +472,104 @@ section#portfolio:not(.hero-section) {
     display: block !important;
 }
 
-/* 3. விளக்க உரைகள் மையமாக அமைய */
-#about .about-lead,
-#about .about-text,
-#about p {
-    font-size: 0.78rem !important;
-    line-height: 1.45 !important;
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    max-width: 330px !important;
+/* நடுவில் வரும் மஞ்சள் நிறக் கோடு நீக்கம் */
+#about .header-divider {
+    display: none !important;
 }
 
-/* 4. பட்டன் மையத்தில் அமைய */
+/* அறிமுக வரிகள் மையத்தில் அமைய */
+#about .about-lead,
+#about .about-text {
+    font-size: 0.76rem !important;
+    line-height: 1.45 !important;
+    text-align: center !important;
+    margin: 0 auto 0.7rem auto !important;
+    max-width: 325px !important;
+    color: #cbd5e1 !important;
+    opacity: 0.9 !important;
+}
+
+/* 3. PRECISION ENGINEERED & BESPOKE INDIVIDUALITY: இடதுபுற அலைன்மென்ட் (LEFT ALIGN) */
+#about .about-features-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.9rem !important;
+    width: 100% !important;
+    max-width: 325px !important;
+    margin: 1rem auto 1.2rem auto !important; /* பாக்ஸ் மையத்தில் இருக்கும், உள்ளடக்கங்கள் இடதுபுறம் நிற்கும் */
+    text-align: left !important;
+}
+
+#about .feature-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+    text-align: left !important;
+    width: 100% !important;
+}
+
+/* பொன்னிற வட்ட ஐகான்கள் */
+#about .feature-icon {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 50% !important;
+    background: rgba(245, 196, 67, 0.12) !important;
+    border: 1px solid rgba(245, 196, 67, 0.35) !important;
+    color: #f5c443 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.95rem !important;
+    flex-shrink: 0 !important;
+    margin-top: 2px !important;
+}
+
+/* தலைப்பு மற்றும் விளக்கம் இடதுபுறம் ஒட்டி அமைய */
+#about .feature-detail {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    flex: 1 !important;
+}
+
+#about .feature-detail h4 {
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    color: #ffffff !important;
+    margin: 0 0 3px 0 !important;
+    text-align: left !important;
+    letter-spacing: 0.3px !important;
+}
+
+#about .feature-detail p {
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
+    color: #cbd5e1 !important;
+    opacity: 0.85 !important;
+    margin: 0 !important;
+    text-align: left !important; /* கட்டாயமாக இடதுபுறம் நிற்றல் */
+    max-width: 100% !important;
+}
+
+/* 4. பட்டன் மையத்தில் (Center) அமைய */
 #about .about-btn-wrap {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
-    margin-top: 1rem !important;
+    margin-top: 0.6rem !important;
 }
 
-
+#about .about-btn-wrap a {
+    padding: 8px 24px !important;
+    font-size: 0.78rem !important;
+    border-radius: 25px !important;
+}
+/* === END: 7. THE SPIRIT OF BLUE SKIN ===================================== */
 /* ========================================================================== */
 /* === START: 8. OUR NEW PRODUCTS (2x2 GRID) =============================== */
 /* ========================================================================== */
