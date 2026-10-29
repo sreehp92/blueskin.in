@@ -5,7 +5,7 @@
 @media screen and (max-width: 768px) {
 
     /* ---------------------------------------------------------------------- */
-    /* 1. GLOBAL RESETS & CONTAINER SAFETY                                    */
+    /* 1. GLOBAL RESETS & HORIZONTAL OVERFLOW PREVENTION                      */
     /* ---------------------------------------------------------------------- */
     html, body {
         overflow-x: hidden !important;
@@ -26,7 +26,7 @@
     }
 
     /* ---------------------------------------------------------------------- */
-    /* 2. TOP ANNOUNCEMENT BAR (COMPACT & SMOOTH)                             */
+    /* 2. TOP ANNOUNCEMENT BAR                                                */
     /* ---------------------------------------------------------------------- */
     .top-ticker-bar {
         font-size: 0.60rem !important;
@@ -93,7 +93,7 @@
         gap: 8px !important;
     }
 
-    /* போர்ட்ஃபோலியோ பேக் பட்டன் (மொபைலுக்கு ஏற்ற மைக்ரோ பில்) */
+    /* போர்ட்ஃபோலியோ பேக் பட்டன் */
     .btn-back-portfolio {
         display: inline-flex !important;
         align-items: center !important;
@@ -130,7 +130,7 @@
         padding: 0 !important;
     }
 
-    /* கவுண்ட் பேட்ஜ் (Badge) */
+    /* கவுண்ட் பேட்ஜ் */
     .action-badge {
         position: absolute !important;
         top: -3px !important;
@@ -184,7 +184,7 @@
         margin: 0 !important;
     }
 
-    /* அம்பு பட்டன்களை மொபைலில் மறைத்து நேரடி ஸ்வைப் ஆக்குதல் */
+    /* அம்பு பட்டன்களை மொபைலில் மறைத்தல் */
     .cat-arrow-btn {
         display: none !important;
     }
@@ -195,7 +195,7 @@
         padding: 0 !important;
     }
 
-    /* ஹரிசாண்டல் ஸ்வைப் டிராக் (Touch Scrolling) */
+    /* ஹரிசாண்டல் டச்-ஸ்வைப் டிராக் */
     .cat-track-scroll {
         display: flex !important;
         flex-direction: row !important;
@@ -212,7 +212,7 @@
         display: none !important;
     }
 
-    /* கேட்டகரி வட்ட உருவம் & லேபிள் */
+    /* கேட்டகரி வட்டங்கள் */
     .cat-item {
         flex: 0 0 auto !important;
         display: flex !important;
@@ -233,7 +233,6 @@
         position: relative !important;
         border: 2px solid rgba(245, 196, 67, 0.3) !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
-        transition: all 0.3s ease !important;
     }
 
     .cat-thumb-circle img {
@@ -242,11 +241,9 @@
         object-fit: cover !important;
     }
 
-    /* ஆக்டிவ் கேட்டகரிக்கு பொன்னிற பார்டர் வெளிச்சம் */
     .cat-item.active .cat-thumb-circle {
         border-color: #f5c443 !important;
         box-shadow: 0 0 12px rgba(245, 196, 67, 0.5) !important;
-        transform: scale(1.05) !important;
     }
 
     .cat-label {
