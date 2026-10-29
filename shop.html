@@ -12,50 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css?v=2.0">
-    <!-- Shop Mobile Specific CSS -->
-    <link rel="stylesheet" href="css/shop-mobile.css">
-    
-    <!-- MOBILE HEADER ICON GAP & CIRCLE FIX -->
-    <style>
-        @media screen and (max-width: 768px) {
-            .shop-nav-flex .nav-actions-right,
-            .nav-actions-right {
-                display: flex !important;
-                flex-direction: row !important;
-                justify-content: flex-end !important;
-                align-items: center !important;
-                gap: 5px !important;                  /* 3 பட்டன்களுக்கு இடைவெளி 5px */
-                margin-left: auto !important;          /* மொத்த கிளஸ்டரையும் வலது விளிம்பிற்குத் தள்ளும் */
-                width: auto !important;
-                flex: 0 0 auto !important;
-            }
-
-            .nav-actions-right > * {
-                margin: 0 !important;                 /* நடுவில் இருந்த வெற்றிடங்களை நீக்குகிறது */
-                flex: 0 0 35px !important;            /* திரையில் விரிவடையாமல் 35px-ல் லாக் செய்கிறது */
-            }
-
-            .btn-back-portfolio,
-            #openWishlistBtn,
-            #openCartBtn {
-                width: 35px !important;
-                height: 35px !important;
-                min-width: 35px !important;
-                max-width: 35px !important;
-                aspect-ratio: 1 / 1 !important;
-                border-radius: 50% !important;        /* 100% சரியான வட்டம் */
-                padding: 0 !important;
-                display: inline-flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-sizing: border-box !important;
-            }
-
-            .btn-back-portfolio span {
-                display: none !important;
-            }
-        }
-    </style>
+    <!-- Shop Mobile & Responsive Master CSS with Cache Buster -->
+    <link rel="stylesheet" href="css/shop-mobile.css?v=3.0">
 </head>
 <body>
 
@@ -87,30 +45,31 @@
             <!-- Left: Brand Logo -->
             <div class="nav-left-brand">
                 <a href="index.html" class="logo">
-                    <span class="brand-emblem"><i class="fa-solid fa-crown"></i></span>
                     BLUE <span class="gold-text">SKIN</span>
                 </a>
             </div>
 
-          <!-- Right: Portfolio Link + Wishlist Button + Cart Button -->
-            <div class="nav-actions-right" style="display: flex !important; flex-direction: row !important; justify-content: flex-end !important; align-items: center !important; gap: 6px !important; width: auto !important; margin-left: auto !important; padding: 0 !important;">
-                <a href="index.html" class="btn-back-portfolio" style="margin: 0 !important;" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Go Back">
+            <!-- Right: Portfolio Button + Wishlist + Cart -->
+            <div class="nav-actions-right">
+                <a href="index.html#portfolio" class="btn-back-portfolio" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Portfolio">
                     <i class="fa-solid fa-arrow-left"></i>
+                    <span>Portfolio</span>
                 </a>
 
-                <!-- Wishlist Toggle Button -->
-                <button class="luxury-round-btn wishlist-nav-btn" id="openWishlistBtn" style="margin: 0 !important;" aria-label="Open Wishlist">
+                <!-- Wishlist Button -->
+                <button class="luxury-round-btn wishlist-nav-btn" id="openWishlistBtn" aria-label="Open Wishlist">
                     <i class="fa-regular fa-heart" id="headerWishlistIcon"></i>
                     <span class="action-badge wishlist-badge" id="wishlistCount">0</span>
                 </button>
 
                 <!-- Cart Button -->
-                <button class="luxury-round-btn luxury-cart-btn" id="openCartBtn" style="margin: 0 !important;" aria-label="Open Shopping Bag">
+                <button class="luxury-round-btn luxury-cart-btn" id="openCartBtn" aria-label="Open Shopping Bag">
                     <i class="fa-solid fa-bag-shopping"></i>
                     <span class="action-badge cart-badge" id="cartCount">0</span>
                 </button>
             </div>
-            </header>
+        </nav>
+    </header>
 
     <!-- VIEW 1: MAIN SHOP CATALOG VIEW -->
     <main id="shopMainCatalogView">
