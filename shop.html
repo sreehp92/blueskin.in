@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blue Skin Cosmetics | Luxury Boutique</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css?v=2.0">
+    <!-- Shop Mobile Master CSS -->
+    <link rel="stylesheet" href="css/shop-mobile.css?v=4.0" media="(max-width: 768px)">
+    <!-- Cart Mobile Master CSS -->
+    <link rel="stylesheet" href="css/cart-mobile.css?v=5.0" media="(max-width: 768px)">
+
+    <!-- மொபைலுக்கு மட்டுமேயான பிளர் நீக்கம் & லேயர் லாக் (டெஸ்க்டாப்பை தொடாது) -->
+    <style>
+    @media screen and (max-width: 768px) {
+        /* 1. Mobile GPU Blur Glitch Mothama Kill Panna (Desktop Affect Aagadhu) */
+        *, *::before, *::after {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            filter: none !important;
+        }
+
+        /* 2. Cart Overlay Dark Dimming (Drawer-kku pinnadi lock) */
+        .cart-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(2, 8, 18, 0.85) !important;
+            z-index: 99990 !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition: opacity 0.3s ease, visibility 0.3s ease !important;
+        }
+
+        .cart-overlay.active {
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }
+
+        /* 3. Solid Luxury Navy Cart Drawer - Zero Blur & Top Layer */
+        .cart-drawer {
+            position: fixed !important;
+            top: 0 !important;
+            right: -100% !important;
+            width: 100% !important;
+            max-width: 100vw !important;
+            height: 100% !important;
+            height: 100dvh !important;
+            background: #07172e !important;
+            border-left: 1px solid rgba(245, 196, 67, 0.4) !important;
+            box-shadow: -15px 0 40px rgba(0, 0, 0, 0.95) !important;
+            z-index: 999999 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            box-sizing: border-box !important;
+            transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            overflow: hidden !important;
+            transform: none !important;
+            -webkit-transform: none !important;
+        }
+
+        .cart-drawer.active {
+            right: 0 !important;
+        }
+
+        /* 4. Product Quick View Modal Fix */
+        .product-modal-backdrop, 
+        #productModal {
+            background: rgba(2, 8, 18, 0.85) !important;
+            z-index: 99990 !important;
+        }
+
+        .product-modal-content {
+            background: #08162d !important;
+            border: 1.5px solid #f5c443 !important;
+            z-index: 999999 !important;
+        }
+    }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="top-ticker-bar">
+        <div class="ticker-track">
+            <div class="ticker-content">
+                <span><i class="fa-solid fa-crown"></i> BLUE SKIN SIGNATURE BOUTIQUE</span>
+                <span class="ticker-dot">•</span>
+                <span><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY INSURED DISPATCH OVER ₹999</span>
+                <span class="ticker-dot">•</span>
+                <span><i class="fa-solid fa-shield-halved"></i> 100% DERMATOLOGICALLY AUTHENTIC</span>
+                <span class="ticker-dot">•</span>
+            </div>
+            <div class="ticker-content" aria-hidden="true">
+                <span><i class="fa-solid fa-crown"></i> BLUE SKIN SIGNATURE BOUTIQUE</span>
+                <span class="ticker-dot">•</span>
+                <span><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY INSURED DISPATCH OVER ₹999</span>
+                <span class="ticker-dot">•</span>
+                <span><i class="fa-solid fa-shield-halved"></i> 100% DERMATOLOGICALLY AUTHENTIC</span>
+                <span class="ticker-dot">•</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header (Brand Left | Actions Right) -->
+    <header class="header">
+        <nav class="nav-container shop-nav-flex">
+            <!-- Left: Brand Logo -->
+            <div class="nav-left-brand">
+                <a href="index.html" class="logo">
+                    BLUE <span class="gold-text">SKIN</span>
+                </a>
+            </div>
+
+            <!-- Right: Portfolio Button + Wishlist + Cart -->
+            <div class="nav-actions-right">
+                <a href="index.html#portfolio" class="btn-back-portfolio" onclick="if(window.history.length > 1){ window.history.back(); return false; }" aria-label="Portfolio">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Portfolio</span>
+                </a>
+
+                <!-- Wishlist Button -->
+                <button class="luxury-round-btn wishlist-nav-btn" id="openWishlistBtn" aria-label="Open Wishlist">
+                    <i class="fa-regular fa-heart" id="headerWishlistIcon"></i>
+                    <span class="action-badge wishlist-badge" id="wishlistCount">0</span>
+                </button>
+
+                <!-- Cart Button -->
+                <button class="luxury-round-btn luxury-cart-btn" id="openCartBtn" aria-label="Open Shopping Bag">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="action-badge cart-badge" id="cartCount">0</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- VIEW 1: MAIN SHOP CATALOG VIEW -->
+    <main id="shopMainCatalogView">
+        <!-- Category Section (5 Items in 29:53 Ratio) -->
+        <section class="cosmetics-cat-section">
+            <div class="section-container">
+                <div class="cat-slider-header">
+                    <span class="sub-badge"><i class="fa-solid fa-sparkles"></i> Curated Selections</span>
+                    <h2 class="cat-section-title">Shop by <span class="gold-gradient-text">Category</span></h2>
+                </div>
+
+                <div class="cat-carousel-container">
+                    <button class="cat-arrow-btn left" id="catScrollLeft" aria-label="Previous">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <div class="cat-track-scroll" id="catTrack">
+                        <div class="cat-item active" data-category="all">
+                            <div class="cat-thumb-circle">
+                                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=400&auto=format&fit=crop" alt="All Collections">
+                                <div class="cat-overlay-icon"><i class="fa-solid fa-border-all"></i></div>
+                            </div>
+                            <span class="cat-label">All Collections</span>
+                        </div>
+
+                        <div class="cat-item" data-category="face">
+                            <div class="cat-thumb-circle">
+                                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400&auto=format&fit=crop" alt="Face Cosmetics">
+                            </div>
+                            <span class="cat-label">Face</span>
+                        </div>
+
+                        <div class="cat-item" data-category="eye">
+                            <div class="cat-thumb-circle">
+                                <img src="https://images.unsplash.com/photo-1583241800698-e8ab01830a07?q=80&w=400&auto=format&fit=crop" alt="Eye Cosmetics">
+                            </div>
+                            <span class="cat-label">Eye</span>
+                        </div>
+
+                        <div class="cat-item" data-category="lip">
+                            <div class="cat-thumb-circle">
+                                <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=400&auto=format&fit=crop" alt="Lip Formulations">
+                            </div>
+                            <span class="cat-label">Lip</span>
+                        </div>
+
+                        <div class="cat-item" data-category="skin">
+                            <div class="cat-thumb-circle">
+                                <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=400&auto=format&fit=crop" alt="Skin Care & Tools">
+                            </div>
+                            <span class="cat-label">Skin & Tools</span>
+                        </div>
+                    </div>
+
+                    <button class="cat-arrow-btn right" id="catScrollRight" aria-label="Next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section class="shop-products-section">
+            <div class="section-container">
+                <div class="active-category-title-bar">
+                    <h3 id="currentCategoryHeading">All Luxury Collections</h3>
+                    <span id="productCounterText">Showing all editions</span>
+                </div>
+
+                <div class="products-grid-catalog" id="productsCatalog"></div>
+                <div class="view-more-container">
+                    <button type="button" class="btn-view-more-catalog" id="viewMoreBtn">
+                        <span>View More Creations</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- VIEW 2: FULL PAGE PRODUCT DETAILS VIEW -->
+    <main id="productFullPageView" style="display: none;">
+        <div class="section-container full-product-container">
+            <div class="full-view-nav-bar">
+                <button class="btn-back-catalog" onclick="closeFullProductPage()">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Catalog</span>
+                </button>
+                <div class="breadcrumb-trail">
+                    <span>Home</span> &gt; <span id="fullBreadCategory">Face</span> &gt; <strong id="fullBreadTitle">Product Name</strong>
+                </div>
+            </div>
+
+            <div class="full-product-layout">
+                <div class="full-gallery-col">
+                    <div class="full-main-image-wrap">
+                        <img id="detailMainImg" src="" alt="Main Display">
+                    </div>
+                    <div class="full-thumb-row" id="thumbGalleryRow"></div>
+                </div>
+
+                <div class="full-info-col">
+                    <span class="full-category-tag" id="detailCategoryBadge">LUXURY COLLECTION</span>
+                    <h1 class="full-prod-title" id="detailTitle">Powder Brush 245</h1>
+
+                    <div class="full-review-row">
+                        <div class="stars-gold">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <span class="review-counter-text">2 Verified Reviews</span>
+                    </div>
+
+                    <p class="full-sub-title" id="detailSubTitle">Tapered Sculpting Face Brush</p>
+                    <p class="full-net-weight">Net Weight : 1 Pcs</p>
+
+                    <div class="full-pricing-card">
+                        <span class="full-sale-label">Special Offer Price</span>
+                        <div class="full-price-flex">
+                            <span class="full-mrp-cut" id="detailOriginalPrice">₹ 600</span>
+                            <span class="full-discount-tag" id="detailDiscountPercent">20% OFF</span>
+                        </div>
+                        <div class="full-price-value" id="detailPrice">₹ 485</div>
+                        <span class="you-save-text" id="detailYouSave">You Save: ₹ 115</span>
+                        <span class="full-tax-sub">Inclusive of all taxes</span>
+                    </div>
+
+                    <div class="full-page-action-row">
+                        <div id="fullPageActionSlot"></div>
+                        <button class="btn-full-wishlist" id="fullWishlistActionBtn">
+                            <i class="fa-regular fa-heart"></i> Add To Wishlist
+                        </button>
+                    </div>
+
+                    <div class="full-shipping-banner">
+                        <div><i class="fa-solid fa-truck-fast"></i> Free shipping above ₹999</div>
+                        <div><i class="fa-solid fa-clock"></i> Orders ship the next business day</div>
+                        <div><i class="fa-solid fa-rotate-left"></i> Easy shipping and return policy</div>
+                    </div>
+
+                    <div class="accordion-suite">
+                        <div class="accordion-item active" id="accItemDesc">
+                            <button class="accordion-header" onclick="toggleAccordion('accItemDesc')">
+                                <span>Product Description</span>
+                                <span class="acc-icon"><i class="fa-solid fa-minus"></i></span>
+                            </button>
+                            <div class="accordion-body">
+                                <p id="detailDescText">Precision sculpted artisan powder brush engineered with ultra-soft synthetic fibres.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item" id="accItemHowTo">
+                            <button class="accordion-header" onclick="toggleAccordion('accItemHowTo')">
+                                <span>How to Use</span>
+                                <span class="acc-icon"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-body">
+                                <p>Swirl the tapered tip into loose or pressed powder. Gently sweep across cheekbones and contours for an airbrushed finish.</p>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item" id="accItemInfo">
+                            <button class="accordion-header" onclick="toggleAccordion('accItemInfo')">
+                                <span>Additional Information</span>
+                                <span class="acc-icon"><i class="fa-solid fa-plus"></i></span>
+                            </button>
+                            <div class="accordion-body">
+                                <p><strong>Material:</strong> Polished Ebony with Gilded Ferrule.<br>
+                                <strong>Bristles:</strong> 100% Cruelty-free Synthetic Silk.<br>
+                                <strong>Country:</strong> Handcrafted in India.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="full-recommended-shelf">
+                <div class="shelf-header">
+                    <span class="sub-badge"><i class="fa-solid fa-sparkles"></i> Curated Additions</span>
+                    <h2 class="shelf-title">Recommended <span class="gold-gradient-text">for You</span></h2>
+                </div>
+                <div class="products-grid-catalog" id="fullPageRecommendedRow"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- WISHLIST DRAWER OVERLAY & SIDEBAR -->
+    <div class="wishlist-overlay" id="wishlistOverlay"></div>
+    <div class="wishlist-drawer" id="wishlistDrawer">
+        <div class="wishlist-drawer-header">
+            <div class="wishlist-title-wrap">
+                <i class="fa-solid fa-heart gold-heart-icon"></i>
+                <h3>Saved Wishlist</h3>
+                <span class="wishlist-items-count" id="drawerWishlistCount">(0 items)</span>
+            </div>
+            <button class="cart-split-close" id="closeWishlistBtn">&times;</button>
+        </div>
+        <div class="wishlist-drawer-body" id="wishlistItemsList">
+            <!-- Wishlist Items loaded here via JS -->
+        </div>
+    </div>
+
+   <!-- WIDE LUXURY SPLIT-SCREEN CART DRAWER -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <div class="cart-split-modal" id="cartDrawer">
+        <div class="cart-split-header">
+            <div class="cart-split-title">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <h2>Your Curated Luxury Bag</h2>
+                <span id="drawerItemCount">(0 items)</span>
+            </div>
+            <button class="cart-split-close" id="closeCartBtn">&times;</button>
+        </div>
+
+        <div class="cart-split-body">
+            <!-- 1. Left Side: Items & Suggestions -->
+            <div class="cart-left-pane">
+                <div class="cart-items-scroll-box" id="cartItemsList"></div>
+
+                <div class="cart-bag-suggestions">
+                    <h4>Recommended for you</h4>
+                    <div class="cart-box-grid" id="cartSuggestionsRow"></div>
+                </div>
+
+                <!-- Mobile lo maathrame kanipinche Proceed to Checkout button -->
+                <div class="mobile-only-checkout-bar">
+                    <button type="button" class="btn-proceed-step2" onclick="showMobileCheckout(true)">
+                        <span>Proceed to Checkout</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Right Side: Invoice & Address Form -->
+            <div class="cart-right-pane" id="cartFooter">
+                <!-- Mobile lo maathrame kanipinche Back to Items button -->
+                <button type="button" class="mobile-only-back-btn" onclick="showMobileCheckout(false)">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span>Back to Items</span>
+                </button>
+
+                <div class="order-invoice-card">
+                    <h3>Checkout Concierge</h3>
+                    <div class="invoice-row">
+                        <span>Bag Value</span>
+                        <span id="cartSubTotal">₹0</span>
+                    </div>
+                    <div class="invoice-row">
+                        <span>Complimentary Shipping</span>
+                        <span class="text-gold-free" style="color: #f5c443; font-weight: 700;">FREE</span>
+                    </div>
+
+                    <div class="invoice-divider" style="height: 1px; background: rgba(245, 196, 67, 0.25); margin: 0.6rem 0;"></div>
+
+                    <div class="invoice-row total-highlight-row" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 600; color: #ffffff;">Total Payable</span>
+                        <span class="cart-total-price" id="cartTotalPrice" style="font-family: 'Poppins', sans-serif; font-size: 1.25rem; font-weight: 800; color: #f5c443;">₹0</span>
+                    </div>
+                </div>
+
+                <!-- Concierge Client Details Form -->
+                <div class="concierge-form-card">
+                    <div class="checkout-input-group">
+                        <label for="custName">Your Name *</label>
+                        <input type="text" id="custName" placeholder="Full name for delivery" required>
+                    </div>
+
+                    <div class="checkout-input-group">
+                        <label for="custPhone">Phone Number *</label>
+                        <input type="tel" id="custPhone" placeholder="Mobile / WhatsApp number" required>
+                    </div>
+
+                    <div class="checkout-input-group">
+                        <label for="custAddress">Delivery Address *</label>
+                        <textarea id="custAddress" rows="2" placeholder="Full address with landmark & pincode" required></textarea>
+                    </div>
+
+                    <!-- 👇 onclick சேர்க்கப்பட்ட பட்டன் 👇 -->
+                    <button type="button" class="btn-whatsapp-checkout" id="whatsappCheckoutBtn" onclick="submitWhatsAppOrder()">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>Complete Order on WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- WIDE LUXURY SPLIT-SCREEN CART DRAWER - END -->
+
+    <!-- Footer -->
+    <footer class="footer-section">
+        <div class="section-container">
+            <div class="footer-bottom">
+                <!-- Brand Logo & Heritage -->
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">BLUE <span class="gold-text">SKIN</span></a>
+                    <p>Artisan Aesthetics & Bespoke Luxury Cosmetics.</p>
+                </div>
+
+                <!-- Social & Concierge Direct Links -->
+                <div class="footer-socials">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://wa.me/" aria-label="WhatsApp Concierge"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="index.html#portfolio" aria-label="Portfolio Showcase"><i class="fa-solid fa-gem"></i></a>
+                </div>
+            </div>
+
+            <!-- Copyright with CorePulse Branding -->
+            <div class="copyright-bar">
+                <p>&copy; 2026 Blue Skin Luxury. All Rights Reserved.<br>Crafted with Distinction by <a href="https://corepulse.in" target="_blank" class="dev-brand-link">CorePulse</a>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- App JS -->
+    <script src="js/shop.js"></script>
+</body>
+</html>

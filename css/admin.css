@@ -1,0 +1,2054 @@
+/* ======================================================================= */
+/* [SECTION 1] MASTER DESIGN SYSTEM & THEME TOKENS — START                 */
+/* ======================================================================= */
+:root {
+    --bg-dark: #040913;
+    --card-surface: #0a1324;
+    --card-border: rgba(245, 196, 67, 0.28);
+    --input-surface: rgba(255, 255, 255, 0.05);
+    --text-pure: #ffffff;
+    --text-dim: #94a3b8;
+    --gold: #f5c443;
+    --gold-glow: rgba(245, 196, 67, 0.35);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 24px;
+    --transition: all 0.25s ease;
+}
+
+[data-theme="light"] {
+    --bg-dark: #f1f5f9;
+    --card-surface: #ffffff;
+    --card-border: rgba(0, 0, 0, 0.12);
+    --input-surface: #f8fafc;
+    --text-pure: #0f172a;
+    --text-dim: #64748b;
+    --gold: #d97706;
+    --gold-glow: rgba(217, 119, 6, 0.2);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-pure);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+/* ======================================================================= */
+/* [SECTION 1] MASTER DESIGN SYSTEM & THEME TOKENS — END                   */
+/* ======================================================================= */
+
+
+/* ======================================================================= */
+/* [SECTION 2] PIN AUTHENTICATION GATEWAY (MASTER KEY: 9658) — START       */
+/* ======================================================================= */
+.login-portal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #0e1e3b 0%, #040913 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    box-sizing: border-box;
+    z-index: 99999;
+}
+
+/* 700px Ultra-Wide Grand Frame */
+.login-card-box {
+    background: var(--card-surface);
+    border: 2px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 4.8rem 4.5rem;
+    width: 700px;
+    max-width: 95vw;
+    text-align: center;
+    box-shadow: 0 35px 85px rgba(0, 0, 0, 0.85), 0 0 35px rgba(245, 196, 67, 0.08);
+    backdrop-filter: blur(25px);
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.login-brand-mast h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    color: var(--gold);
+    letter-spacing: 5px;
+    margin-bottom: 0.6rem;
+    font-weight: 800;
+}
+
+.login-brand-mast p {
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    margin-bottom: 3.2rem;
+    letter-spacing: 1px;
+}
+
+/* 100% Center-Aligned PIN Field */
+.pin-input-container {
+    width: 100%;
+}
+
+.pin-input-container input {
+    width: 100%;
+    height: 85px;
+    background: var(--input-surface);
+    border: 2px solid var(--card-border);
+    border-radius: var(--radius-md);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 3.2rem;
+    color: var(--text-pure);
+    text-align: center;
+    letter-spacing: 24px;
+    padding-left: 24px;
+    outline: none;
+    box-sizing: border-box;
+    transition: var(--transition);
+}
+
+.pin-input-container input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 25px var(--gold-glow);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.login-alert-strip {
+    font-size: 1.05rem;
+    margin-top: 2rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1.2px;
+    min-height: 28px;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+/* Vibration / Screen Shake Animation */
+.shake-anim {
+    animation: heavyVibrate 0.45s cubic-bezier(.36,.07,.19,.97) both;
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 35px rgba(239, 68, 68, 0.4) !important;
+}
+
+@keyframes heavyVibrate {
+    10%, 90% { transform: translate3d(-5px, 0, 0); }
+    20%, 80% { transform: translate3d(7px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-9px, 0, 0); }
+    40%, 60% { transform: translate3d(9px, 0, 0); }
+}
+/* ======================================================================= */
+/* [SECTION 2] PIN AUTHENTICATION GATEWAY — END                             */
+/* ======================================================================= */
+
+
+/* ======================================================================= */
+/* [SECTION 3] CONSOLE CORE WORKSPACE & SIDEBAR — START                    */
+/* ======================================================================= */
+.admin-app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+.console-sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    background: var(--card-surface);
+    border-right: 1.5px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1rem;
+}
+
+.sidebar-brand {
+    padding-left: 0.4rem;
+    margin-bottom: 2rem;
+}
+
+.brand-text h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+    font-weight: 800;
+}
+
+.brand-text small {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+}
+
+.sidebar-nav-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menu-item-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: transparent;
+    border: 1px solid transparent;
+    outline: none;
+    color: var(--text-dim);
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition);
+}
+
+.menu-item-btn:hover {
+    background: var(--input-surface);
+    color: var(--text-pure);
+}
+
+.menu-item-btn.active {
+    background: rgba(245, 196, 67, 0.12);
+    color: var(--gold);
+    border: 1px solid var(--card-border);
+}
+
+.menu-alert-pill {
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+    margin-left: auto;
+}
+
+.console-main-canvas {
+    flex: 1;
+    min-width: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-dark);
+}
+
+.workspace-pane {
+    width: 100% !important;
+    padding: 1.5rem 2rem !important;
+    box-sizing: border-box !important;
+}
+
+/* INTEGRATED TITLE & CONTROL BAR */
+.deck-integrated-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.3rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--card-border);
+}
+
+.deck-title-meta h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    letter-spacing: 1px;
+    margin-bottom: 0.2rem;
+}
+
+.deck-title-meta small {
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.live-pulse-dot {
+    width: 7px;
+    height: 7px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px #22c55e;
+    animation: livePulseAnim 1.4s infinite;
+}
+
+@keyframes livePulseAnim {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.3); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+/* RECTANGULAR PILL BUTTONS (SIDE-BY-SIDE CONTROLS) */
+.deck-action-pills {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.btn-rect-pill {
+    background: var(--input-surface);
+    border: 1.2px solid var(--card-border);
+    color: var(--text-pure);
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.btn-rect-pill:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.btn-rect-pill.pill-lock:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+/* ======================================================================= */
+/* [SECTION 3] CONSOLE CORE WORKSPACE & SIDEBAR — END                      */
+/* ======================================================================= */
+
+
+/* ======================================================================= */
+/* [SECTION 4] MODULE 1: 5-GRID & EXPANDED CANVAS VELOCITY MATRIX — START  */
+/* ======================================================================= */
+
+.stats-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.9rem;
+    margin-bottom: 1.4rem;
+}
+
+@media (max-width: 1280px) {
+    .stats-metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    }
+}
+
+.metric-card {
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.15rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition);
+}
+
+.metric-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.metric-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+}
+
+.metric-lbl {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: var(--text-dim);
+}
+
+.metric-icon-tag {
+    font-size: 0.85rem;
+}
+
+.metric-val {
+    font-family: 'Cinzel', serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    margin-bottom: 0.35rem;
+}
+
+.metric-sub {
+    font-size: 0.72rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.text-green { color: #22c55e !important; }
+.text-gold { color: var(--gold) !important; }
+.text-gold-glow { color: var(--gold) !important; text-shadow: 0 0 12px var(--gold-glow); }
+.text-blue { color: #38bdf8 !important; }
+.text-amber { color: #f59e0b !important; }
+.text-red { color: #ef4444 !important; }
+
+/* REVENUE 1D / 1W TOGGLE PILL */
+.mini-toggle-pill {
+    display: flex;
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2px;
+}
+
+.btn-rev-toggle {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-dim);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-rev-toggle.active {
+    background: var(--gold);
+    color: #040913;
+}
+
+/* 5TH EXPORT CARD */
+.metric-export-hub {
+    border-color: rgba(16, 185, 129, 0.4);
+    background: linear-gradient(180deg, var(--card-surface) 0%, rgba(16, 185, 129, 0.05) 100%);
+}
+
+.pro-badge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #10b981;
+}
+
+.export-pill-strip {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.45rem;
+}
+
+.btn-range-pill {
+    flex: 1;
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    color: var(--text-dim);
+    padding: 0.25rem 0.2rem;
+    border-radius: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.btn-range-pill.active, .btn-range-pill:hover {
+    background: var(--gold);
+    color: #040913;
+    border-color: var(--gold);
+}
+
+.btn-export-quick {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.42rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: var(--transition);
+}
+
+.btn-export-quick:hover {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+}
+
+/* EXPANDED HIGH-DEFINITION CHART CARD */
+.overview-chart-card {
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: 1.6rem 1.8rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.overview-chart-card.graph-expanded {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999999;
+    height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(25px);
+    background: rgba(10, 19, 36, 0.96);
+    border-color: var(--gold);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.overview-chart-card.graph-expanded .canvas-chart-wrapper {
+    flex: 1;
+    height: 100% !important;
+}
+
+.card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.card-header-flex h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--text-pure);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.2rem;
+}
+
+.card-header-flex p {
+    font-size: 0.74rem;
+    color: var(--text-dim);
+}
+
+.btn-chart-action {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    color: var(--text-pure);
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: var(--transition);
+}
+
+.btn-chart-action:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+/* AMPLE CANVAS WRAPPER (UNCOMPRESSED HEIGHT) */
+.canvas-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 310px;
+}
+
+#velocityLiveCanvas {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* FLOATING POPUP WITH BLINK GLOW */
+.canvas-floating-popup {
+    position: absolute;
+    background: rgba(10, 19, 36, 0.94);
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 16px var(--gold-glow);
+    backdrop-filter: blur(12px);
+    pointer-events: none;
+    z-index: 100;
+    transform: translate(-50%, -122%);
+    animation: popupBlinkZoom 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popupBlinkZoom {
+    0% { opacity: 0; transform: translate(-50%, -100%) scale(0.8); }
+    50% { opacity: 1; transform: translate(-50%, -125%) scale(1.04); }
+    100% { opacity: 1; transform: translate(-50%, -122%) scale(1); }
+}
+
+.pop-header {
+    font-size: 0.74rem;
+    font-weight: 800;
+    color: var(--gold);
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.3rem;
+    margin-bottom: 0.35rem;
+}
+
+.pop-row {
+    font-size: 0.74rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 1.4rem;
+    margin-bottom: 0.2rem;
+}
+
+.pop-label { color: var(--text-dim); }
+.pop-val { font-weight: 800; font-family: 'JetBrains Mono', monospace; }
+
+.pop-arrow-indicator {
+    position: absolute;
+    bottom: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold);
+    font-size: 1.1rem;
+}
+
+/* CALENDAR RANGE MODAL */
+.calendar-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(4, 9, 19, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+}
+
+.calendar-modal-box {
+    background: var(--card-surface);
+    border: 1.5px solid var(--card-border);
+    border-radius: var(--radius-md);
+    padding: 1.8rem;
+    width: 360px;
+    max-width: 90vw;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.4rem;
+}
+
+.modal-head h4 {
+    font-size: 0.95rem;
+    color: var(--text-pure);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.date-pick-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.date-pick-field label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    font-weight: 700;
+}
+
+.date-pick-field input {
+    background: var(--input-surface);
+    border: 1.2px solid var(--card-border);
+    color: var(--text-pure);
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    outline: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.date-pick-field input:focus {
+    border-color: var(--gold);
+}
+
+.modal-foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+}
+
+.btn-cal-cancel {
+    background: transparent;
+    border: 1px solid var(--card-border);
+    color: var(--text-dim);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+
+.btn-cal-apply {
+    background: var(--gold);
+    border: none;
+    color: #040913;
+    font-weight: 800;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    cursor: pointer;
+}
+/* ======================================================================= */
+/* [SECTION 4] MODULE 1: 5-GRID & EXPANDED CANVAS VELOCITY MATRIX — END    */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 5] MODULE 2: HIGH-DENSITY ZERO-SCROLL ORDERS COCKPIT — START   */
+/* ======================================================================= */
+
+/* ANIMATIONS ENGINE */
+.anim-pop {
+    animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+.anim-slide-down {
+    animation: slideDown 0.35s ease-out both;
+}
+
+.anim-fade-up {
+    animation: fadeUp 0.4s ease-out both;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+    0% { transform: translateY(-10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeUp {
+    0% { transform: translateY(12px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* MINI KPI CARDS STRIP */
+.orders-mini-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.orders-kpi-card {
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem 1rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+    cursor: default;
+}
+
+.orders-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.orders-kpi-card.border-amber { border-color: rgba(245, 158, 11, 0.45); }
+.orders-kpi-card.border-blue { border-color: rgba(56, 189, 248, 0.45); }
+.orders-kpi-card.border-purple { border-color: rgba(168, 85, 247, 0.45); }
+.orders-kpi-card.border-green { border-color: rgba(34, 197, 94, 0.45); }
+
+/* PENDING LIVE GLOW ALERT */
+.pending-glow-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.pending-glow-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; width: 6px; height: 100%;
+    background: #f59e0b;
+    box-shadow: 0 0 10px #f59e0b;
+    animation: pendingPulse 1.8s infinite;
+}
+
+@keyframes pendingPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.orders-kpi-lbl {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: var(--text-dim);
+    letter-spacing: 0.6px;
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.orders-kpi-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-pure);
+}
+
+/* BANNER & SEARCH */
+.orders-cockpit-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.orders-workflow-filter-strip {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.orders-workflow-filter-strip .btn-filter-pill {
+    background: var(--input-surface);
+    border: 1.2px solid var(--card-border);
+    color: var(--text-dim);
+    padding: 0.38rem 0.85rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.orders-workflow-filter-strip .btn-filter-pill:hover,
+.orders-workflow-filter-strip .btn-filter-pill.active {
+    background: var(--gold);
+    color: #040913;
+    border-color: var(--gold);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px var(--gold-glow);
+}
+
+.btn-filter-pill.pill-alert-pending {
+    border-color: rgba(245, 158, 11, 0.5);
+    color: #f59e0b;
+}
+
+.btn-filter-pill.pill-alert-pending.active {
+    background: #f59e0b;
+    color: #040913;
+}
+
+.cockpit-search-input-box {
+    position: relative;
+    width: 310px;
+    display: flex;
+    align-items: center;
+}
+
+.cockpit-search-input-box i {
+    position: absolute;
+    left: 0.9rem;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.cockpit-search-input-box input {
+    width: 100%;
+    height: 36px;
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: 6px;
+    padding: 0 2rem 0 2.3rem;
+    color: var(--text-pure);
+    font-size: 0.78rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cockpit-search-input-box input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.btn-clear-search {
+    position: absolute;
+    right: 0.6rem;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* ZERO-SCROLL SINGLE-LINE TABLE */
+.orders-table-card {
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    overflow: hidden;
+}
+
+.enterprise-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.enterprise-orders-table th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.8rem 1rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--text-dim);
+    letter-spacing: 0.8px;
+    border-bottom: 1.2px solid var(--card-border);
+    text-align: left;
+}
+
+.enterprise-orders-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.78rem;
+    color: var(--text-pure);
+    border-bottom: 1px solid rgba(245, 196, 67, 0.08);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.enterprise-orders-table tbody tr {
+    transition: background-color 0.18s ease;
+}
+
+.enterprise-orders-table tbody tr:hover {
+    background: rgba(245, 196, 67, 0.05);
+}
+
+.enterprise-orders-table tbody tr.row-pending-alert {
+    background: rgba(245, 158, 11, 0.03);
+}
+
+.td-date-box span { font-weight: 600; display: block; }
+.td-date-box .sub-time { font-size: 0.68rem; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; }
+.td-order-id { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--gold); }
+.td-client-box strong { font-size: 0.82rem; font-weight: 700; color: var(--text-pure); }
+.td-net-price { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--text-pure); font-size: 0.82rem; }
+
+/* THEME SAFE STATUS DROPDOWN */
+.workflow-status-select {
+    width: 100%;
+    background: var(--card-surface);
+    border: 1.5px solid var(--card-border);
+    border-radius: 6px;
+    color: var(--text-pure);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.38rem 0.6rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.workflow-status-select option {
+    background: var(--card-surface);
+    color: var(--text-pure);
+}
+
+.workflow-status-select.st-pending { border-color: #ef4444; color: #ef4444; }
+.workflow-status-select.st-payment { border-color: #f59e0b; color: #f59e0b; }
+.workflow-status-select.st-processing { border-color: #38bdf8; color: #38bdf8; }
+.workflow-status-select.st-packed { border-color: #fb923c; color: #fb923c; }
+.workflow-status-select.st-dispatched { border-color: #a855f7; color: #a855f7; }
+.workflow-status-select.st-delivered { border-color: #22c55e; color: #22c55e; }
+
+/* ACTION BUTTONS */
+.action-btn-cluster {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.4rem;
+}
+
+.btn-instant-act {
+    background: var(--input-surface);
+    border: 1.2px solid var(--card-border);
+    color: var(--text-pure);
+    padding: 0.38rem 0.65rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.2s ease;
+}
+
+.btn-instant-act.act-invoice:hover {
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-instant-act.act-label:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+    transform: translateY(-1px);
+}
+/* ======================================================================= */
+/* [SECTION 5] MODULE 2: HIGH-DENSITY ZERO-SCROLL ORDERS COCKPIT — END     */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY DESK — START          */
+/* ======================================================================= */
+
+/* INTERACTIVE CLICKABLE KPI CARDS WITH HOVER LIFT */
+.inv-kpi-interactive {
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.22s, border-color 0.22s;
+}
+
+.inv-kpi-interactive:hover {
+    transform: translateY(-4px) scale(1.015);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    border-color: var(--gold);
+}
+
+.inv-kpi-interactive.active {
+    box-shadow: 0 0 16px var(--gold-glow);
+    border-color: var(--gold) !important;
+}
+
+.kpi-click-hint {
+    display: block;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+    font-weight: 600;
+}
+
+/* TABLE ROW HOVER GLOW & GLITCH LIFT EFFECT */
+.enterprise-orders-table tbody tr {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.enterprise-orders-table tbody tr:hover {
+    background: rgba(245, 196, 67, 0.08) !important;
+    transform: scale(1.002) translateX(4px);
+    box-shadow: inset 4px 0 0 var(--gold), 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* STOCK BADGES */
+.badge-stock-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.24rem 0.65rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s;
+}
+
+.badge-stock-pill.stock-ok {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1.2px solid rgba(34, 197, 94, 0.45);
+    color: #22c55e;
+}
+
+.badge-stock-pill.stock-low {
+    background: rgba(245, 158, 11, 0.14);
+    border: 1.2px solid rgba(245, 158, 11, 0.55);
+    color: #f59e0b;
+    animation: pendingPulse 1.8s infinite;
+}
+
+.badge-stock-pill.stock-out {
+    background: rgba(239, 68, 68, 0.14);
+    border: 1.2px solid rgba(239, 68, 68, 0.55);
+    color: #ef4444;
+}
+
+.td-item-weight {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.category-tag-chip {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--text-pure);
+}
+
+/* QUICK ACTION BUTTONS */
+.btn-inv-action {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    color: var(--text-pure);
+    padding: 0.32rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.btn-inv-action:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.btn-inv-action.btn-adjust:hover { border-color: #f59e0b; color: #f59e0b; }
+.btn-inv-action.btn-del:hover { border-color: #ef4444; color: #ef4444; }
+
+/* REDESIGNED LUXURY TELEMETRY BAR CARD */
+.telemetry-luxury-card {
+    margin-top: 1rem;
+    padding: 1.15rem 1.4rem;
+    background: var(--card-surface);
+    border: 1.2px solid var(--card-border);
+}
+
+.telemetry-head-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.9rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.telemetry-info h4 {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.telemetry-info p {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    margin: 0.15rem 0 0 0;
+}
+
+.telemetry-legend-wrap {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.legend-badge {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.22rem 0.55rem;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.legend-badge.leg-safe { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); color: #22c55e; }
+.legend-badge.leg-low { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.4); color: #f59e0b; }
+.legend-badge.leg-out { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; }
+
+.telemetry-sync-clock {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+#invCanvasBarChart {
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--card-border);
+}
+
+/* ======================================================================= */
+/* 100% FULL-SCREEN LUXURY INWARD MANAGER MODAL                            */
+/* ======================================================================= */
+
+.inward-fullscreen-window {
+    width: 95vw !important;
+    max-width: 1200px !important;
+    max-height: 92vh !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--card-surface) !important;
+    border: 1.5px solid var(--card-border) !important;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6) !important;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.inward-modal-head-strip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 1.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1.5px solid var(--card-border);
+}
+
+.inward-brand-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.inward-icon-frame {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(245, 196, 67, 0.12);
+    border: 1.2px solid rgba(245, 196, 67, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.inward-brand-tag h3 {
+    margin: 0;
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    letter-spacing: 0.5px;
+}
+
+.inward-brand-tag p {
+    margin: 0.15rem 0 0 0;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+}
+
+.inward-modal-body-scroll {
+    padding: 1.4rem 1.6rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.inward-two-col-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.4rem;
+}
+
+.inward-pane-card {
+    background: var(--input-surface);
+    border: 1.2px solid var(--card-border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.inward-card-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--text-pure);
+    border-bottom: 1px solid var(--card-border);
+    padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.inward-sub-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+.inward-live-lot-summary {
+    background: rgba(245, 196, 67, 0.08);
+    border: 1.2px dashed rgba(245, 196, 67, 0.45);
+    border-radius: 8px;
+    padding: 0.95rem 1.1rem;
+    color: var(--text-pure);
+    margin-top: 0.4rem;
+}
+
+.summary-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    margin-bottom: 0.35rem;
+}
+
+.summary-metrics-val {
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+}
+
+.inward-audit-timestamp-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    padding: 0.7rem 1rem;
+    margin-top: 1.2rem;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+}
+
+.inward-audit-timestamp-bar strong {
+    color: var(--text-pure);
+}
+
+.inward-modal-footer-strip {
+    padding: 1rem 1.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1.5px solid var(--card-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.85rem;
+}
+/* ======================================================================= */
+/* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY DESK — END            */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 7] MODULE 4: PORTFOLIO & FRONT PAGE CMS — START                */
+/* ======================================================================= */
+
+.portfolio-cms-tab-pane {
+    animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portfolio-cms-tab-pane textarea {
+    font-family: inherit;
+    resize: vertical;
+}
+
+.portfolio-cms-tab-pane input[type="text"],
+.portfolio-cms-tab-pane select,
+.portfolio-cms-tab-pane textarea {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text-pure);
+    font-size: 0.76rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+.portfolio-cms-tab-pane input[type="text"]:focus,
+.portfolio-cms-tab-pane select:focus,
+.portfolio-cms-tab-pane textarea:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+
+#portfolioTabsStrip .btn-filter-pill {
+    white-space: nowrap;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.72rem;
+}
+
+#portfolioTabsStrip .btn-filter-pill.active {
+    background: var(--gold);
+    color: #0b0f19;
+    border-color: var(--gold);
+    font-weight: 800;
+}
+/* ======================================================================= */
+/* [SECTION 7] MODULE 4: PORTFOLIO & FRONT PAGE CMS — END                  */
+/* ======================================================================= */
+
+
+/* ======================================================================= */
+/* [SECTION 8] MODULE 5: PRODUCT MASTER & PRICING STUDIO — START           */
+/* ======================================================================= */
+
+/* Product Thumbnail Frame */
+.prod-thumb-frame {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.prod-thumb-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Product Meta Row in Table */
+.prod-meta-title-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.prod-cell-text strong {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-pure);
+    font-weight: 700;
+}
+
+.prod-cell-text small {
+    display: block;
+    font-size: 0.66rem;
+    color: var(--text-dim);
+}
+
+/* Reviews & Net Measure Badges */
+.badge-review-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: rgba(245, 196, 67, 0.1);
+    border: 1px solid rgba(245, 196, 67, 0.35);
+    color: var(--gold);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+}
+
+.prod-net-measure-tag {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.67rem;
+    color: var(--text-dim);
+    margin-top: 0.2rem;
+}
+
+/* Pricing Dynamics Typography */
+.td-mrp-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.76rem;
+    color: var(--text-dim);
+    text-decoration: line-through;
+}
+
+.badge-discount-cut {
+    display: inline-block;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #ef4444;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0.18rem 0.45rem;
+    border-radius: 4px;
+}
+
+.td-special-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--gold);
+}
+
+.td-savings-label {
+    display: block;
+    font-size: 0.66rem;
+    color: #22c55e;
+    font-weight: 700;
+}
+
+/* Store Visibility Badges */
+.badge-vis-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+}
+
+.badge-vis-pill.vis-live {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #22c55e;
+}
+
+.badge-vis-pill.vis-draft {
+    background: rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    color: #94a3b8;
+}
+
+/* Product Modal Form Enhancements */
+#productStudioModal select,
+#productStudioModal input[type="text"],
+#productStudioModal input[type="number"],
+#productStudioModal textarea {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text-pure);
+    font-size: 0.76rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+#productStudioModal input:focus,
+#productStudioModal select:focus,
+#productStudioModal textarea:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+/* ======================================================================= */
+/* [SECTION 8] MODULE 5: PRODUCT MASTER & PRICING STUDIO — END             */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 9] MODULE 6: PROMOTIONS, COUPONS & 3-2-1 FLASH DESK — START    */
+/* ======================================================================= */
+
+/* Marketing Tabs Navigation */
+#marketingTabStrip .btn-filter-pill {
+    white-space: nowrap;
+    padding: 0.38rem 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+#marketingTabStrip .btn-filter-pill.active {
+    background: var(--gold);
+    color: #0b0f19;
+    border-color: var(--gold);
+    font-weight: 800;
+}
+
+.marketing-tab-content {
+    animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Coupon Table Badges */
+.badge-coupon-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(245, 196, 67, 0.12);
+    border: 1px dashed var(--gold);
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 0.76rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.td-quota-bar-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.quota-mini-progress {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.quota-mini-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #22c55e, var(--gold));
+    border-radius: 3px;
+}
+
+/* 3... 2... 1... CINEMATIC COUNTDOWN ANIMATION STYLES */
+.sim-countdown-number {
+    font-size: 6rem;
+    font-weight: 900;
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    text-shadow: 0 0 40px var(--gold-glow), 0 0 80px rgba(245, 196, 67, 0.5);
+    animation: countdownPulse 0.9s infinite cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    line-height: 1;
+}
+
+@keyframes countdownPulse {
+    0% {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.9;
+    }
+}
+
+.flash-offer-luxury-box {
+    background: radial-gradient(circle at top, #161f33, #0b0f19) !important;
+    position: relative;
+    padding: 2.2rem 2rem !important;
+}
+
+/* Coupon Modal Enhancements */
+#couponStudioModal select,
+#couponStudioModal input[type="text"],
+#couponStudioModal input[type="number"],
+#couponStudioModal input[type="date"],
+#couponStudioModal textarea {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text-pure);
+    font-size: 0.76rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+#couponStudioModal input:focus,
+#couponStudioModal select:focus,
+#couponStudioModal textarea:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+/* ======================================================================= */
+/* [SECTION 9] MODULE 6: PROMOTIONS, COUPONS & 3-2-1 FLASH DESK — END      */
+/* ======================================================================= */
+
+/* EXCEL TEMPLATE & BULK UPLOAD BUTTONS */
+.btn-excel-tool {
+    height: 36px;
+    padding: 0 0.85rem;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+    border: 1.2px solid var(--card-border);
+    background: var(--input-surface);
+    color: var(--text-pure);
+    white-space: nowrap;
+}
+
+.btn-excel-tool.btn-excel-download:hover {
+    border-color: #22c55e;
+    color: #22c55e;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-excel-tool.btn-excel-upload:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    box-shadow: 0 0 10px var(--gold-glow);
+    transform: translateY(-1px);
+}
+
+/* ======================================================================= */
+/* [SECTION 10] MODULE 7: VIP CLIENT CRM & DIRECTORY — START               */
+/* ======================================================================= */
+
+.badge-tier-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.badge-tier-pill.tier-platinum {
+    background: rgba(168, 85, 247, 0.15);
+    border: 1px solid rgba(168, 85, 247, 0.5);
+    color: #c084fc;
+}
+
+.badge-tier-pill.tier-gold {
+    background: rgba(245, 196, 67, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+}
+
+.badge-tier-pill.tier-silver {
+    background: rgba(148, 163, 184, 0.15);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    color: #cbd5e1;
+}
+
+.btn-wa-direct {
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #22c55e;
+    padding: 0.3rem 0.55rem;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-wa-direct:hover {
+    background: #22c55e;
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.4);
+}
+/* ======================================================================= */
+/* [SECTION 10] MODULE 7: VIP CLIENT CRM & DIRECTORY — END                 */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 11] MODULE 8: SYSTEM SETTINGS & GATEWAY — START                */
+/* ======================================================================= */
+
+#pane-settings input[type="text"],
+#pane-settings input[type="email"],
+#pane-settings input[type="password"],
+#pane-settings input[type="number"],
+#pane-settings select {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text-pure);
+    font-size: 0.76rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+#pane-settings input:focus,
+#pane-settings select:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+
+#pane-settings .inward-pane-card {
+    background: var(--bg-card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+
+#pane-settings input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: var(--gold);
+    cursor: pointer;
+}
+/* ======================================================================= */
+/* [SECTION 11] MODULE 8: SYSTEM SETTINGS & GATEWAY — END                  */
+/* ======================================================================= */
+
+/* ======================================================================= */
+/* [SECTION 12] MODULE 9: SUPABASE & SUPER CONNECTIONS VAULT — START       */
+/* ======================================================================= */
+
+#connectionsTabStrip .btn-filter-pill {
+    white-space: nowrap;
+    padding: 0.38rem 0.85rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+#connectionsTabStrip .btn-filter-pill.active {
+    background: var(--gold);
+    color: #0b0f19;
+    border-color: var(--gold);
+    font-weight: 800;
+}
+
+.connections-tab-content {
+    animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#pane-connections input[type="text"],
+#pane-connections input[type="password"],
+#pane-connections select,
+#pane-connections textarea {
+    background: var(--input-surface);
+    border: 1px solid var(--card-border);
+    border-radius: 4px;
+    padding: 0.55rem 0.75rem;
+    color: var(--text-pure);
+    font-size: 0.76rem;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+#pane-connections input:focus,
+#pane-connections select:focus,
+#pane-connections textarea:focus {
+    border-color: var(--gold);
+    outline: none;
+    box-shadow: 0 0 8px var(--gold-glow);
+}
+
+#pane-connections .inward-pane-card {
+    background: var(--bg-card);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 1.2rem;
+}
+/* ======================================================================= */
+/* [SECTION 12] MODULE 9: SUPABASE & SUPER CONNECTIONS VAULT — END         */
+/* ======================================================================= */
+
+/* ========================================================================== */
+/* ULTRA MOBILE RESPONSIVE ENGINE (SMARTPHONES & TABLETS)                     */
+/* ========================================================================== */
+
+/* STEP 1: MOBILE OVERFLOW FIX */
+@media screen and (max-width: 768px) {
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+}
+    /* 2. அனைத்து கிரிட்களையும் மொபைலுக்காக ஒற்றை வரிசையாக (Single Column) மாற்றுதல் */
+    .inward-two-col-layout,
+    .orders-mini-kpi-grid,
+    .analytics-grid,
+    .product-grid,
+    .boutique-shelf-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 12px !important;
+    }
+
+    /* 3. கார்டுகள் மற்றும் பாக்ஸ்களை முழு அகலத்திற்கு மாற்றுதல் */
+    .inward-pane-card,
+    .orders-kpi-card,
+    .product-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* 4. மொபைலில் டேபிள்களை விரலால் தள்ளிப் பார்க்கும் வகையில் அமைத்தல் (Horizontal Scroll) */
+    .table-responsive,
+    .orders-table-wrap,
+    table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* 5. பட்டன்கள் மற்றும் இன்புட் பாக்ஸ்கள் விரலால் தொட வசதியான அளவுக்கு மாற்றுதல் */
+    input[type="text"],
+    input[type="password"],
+    select,
+    textarea,
+    button {
+        font-size: 16px !important; /* ஐபோனில் தானாக ஜூம் ஆவதைத் தடுக்கும் */
+        min-height: 44px !important; /* டச் செய்ய வசதியான உயரம் */
+    }
+
+    /* 6. ஹெடர் மற்றும் ஆக்ஷன் பட்டன்கள் சீரமைப்பு */
+    .deck-integrated-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+
+    .deck-action-pills {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: space-between !important;
+    }
+}
+
+/* ========================================== */
+/* SAFE MOBILE RESPONSIVE FIX (STEP 1 & 2)    */
+/* ========================================== */
+@media screen and (max-width: 768px) {
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+
+    .stats-metrics-grid,
+    .analytics-grid,
+    .product-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 14px !important;
+    }
+
+    .metric-card,
+    .product-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+/* ========================================== */
+/* STEP 3: MOBILE TABLE SCROLL & TOUCH FIX    */
+/* ========================================== */
+@media screen and (max-width: 768px) {
+    table, 
+    .orders-table-wrap,
+    .table-responsive {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    input, select, textarea, button {
+        font-size: 16px !important;
+    }
+}
+
+/* ========================================== */
+/* STEP 4: MOBILE SIDEBAR & HEADER FIT        */
+/* ========================================== */
+@media screen and (max-width: 768px) {
+    .admin-app-layout,
+    .admin-app-container {
+        flex-direction: column !important;
+    }
+
+    .left-sidebar,
+    .console-sidebar {
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--card-border) !important;
+    }
+
+    .sidebar-nav-menu,
+    .sidebar-links {
+        display: flex !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        padding: 0.6rem !important;
+        gap: 8px !important;
+    }
+
+    .side-btn,
+    .menu-item-btn {
+        white-space: nowrap !important;
+    }
+
+    .canvas-header,
+    .card-inner-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        padding: 1rem !important;
+    }
+
+    .orders-search-wrapper {
+        width: 100% !important;
+    }
+}
+/* ####################################################################### */
+/* ####################################################################### */
+/* ###                                                                 ### */
+/* ###  [LOCKED ZONE] MASTER STYLESHEET FOOTER — DO NOT TOUCH!         ### */
+/* ###  அனைத்துப் புதிய CSS தொகுதிகளும் (Orders Desk, Labels) இதற்கு மேலேதான்   ### */
+/* ###  சேர்க்கப்பட வேண்டும்.                                           ### */
+/* ###                                                                 ### */
+/* ####################################################################### */
+/* ####################################################################### */

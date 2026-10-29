@@ -1,0 +1,672 @@
+/* ========================================================================== */
+/* === BLUE SKIN: LUXURY MOBILE CART (PERFECT CIRCLES & 2x2 GRID FIX)     === */
+/* ========================================================================== */
+
+@media screen and (max-width: 768px) {
+
+    /* 1. Background Overlay */
+    .cart-overlay {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(3, 10, 22, 0.78) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        z-index: 99990 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transition: opacity 0.3s ease, visibility 0.3s ease !important;
+    }
+
+    .cart-overlay.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }
+
+    /* 2. Main Cart Drawer */
+    .cart-split-modal,
+    #cartDrawer {
+        position: fixed !important;
+        top: 0 !important;
+        right: -100% !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        height: 100% !important;
+        height: 100dvh !important;
+        background: #08162d !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        filter: none !important;
+        border-left: 1.5px solid rgba(245, 196, 67, 0.35) !important;
+        box-shadow: -15px 0 45px rgba(0, 0, 0, 0.95) !important;
+        z-index: 99999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        overflow: hidden !important;
+        transform: none !important;
+    }
+
+    .cart-split-modal.active,
+    #cartDrawer.active {
+        right: 0 !important;
+    }
+
+    /* 3. Top Header, Items Badge mariyu Circle Close Button */
+    .cart-split-header {
+        padding: 0.9rem 14px !important;
+        background: linear-gradient(180deg, #0d2244 0%, #0a1b35 100%) !important;
+        border-bottom: 1.5px solid rgba(245, 196, 67, 0.3) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+
+    .cart-split-title {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    .cart-split-title i {
+        font-size: 1.15rem !important;
+        color: #f5c443 !important;
+        flex-shrink: 0 !important;
+    }
+
+    .cart-split-title h2 {
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px !important;
+        color: #ffffff !important;
+        margin: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        text-transform: uppercase !important;
+    }
+
+    #drawerItemCount,
+    .cart-items-count {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 800 !important;
+        color: #08162d !important;
+        background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+        padding: 4px 11px !important;
+        border-radius: 20px !important;
+        letter-spacing: 0.4px !important;
+        box-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    }
+
+    .cart-split-close {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        max-width: 32px !important;
+        min-height: 32px !important;
+        max-height: 32px !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1.5px solid rgba(245, 196, 67, 0.4) !important;
+        color: #ffffff !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.25rem !important;
+        line-height: 1 !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .cart-split-close:active {
+        background: #f5c443 !important;
+        color: #08162d !important;
+    }
+
+    /* ---------------------------------------------------------------------- */
+    /* 4. பாடி ஸ்க்ரோல் & விளிம்பு வரை அகலப்படுத்துதல் (1.5mm Side Space)     */
+    /* ---------------------------------------------------------------------- */
+    .cart-split-body {
+        flex: 1 1 0% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        overflow-y: scroll !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        touch-action: pan-y !important;
+        display: flex !important;
+        flex-direction: column !important;
+        /* இடது மற்றும் வலது பேடிங் வெறும் 5px (1.5mm) ஆகக் குறைக்கப்பட்டுள்ளது */
+        padding: 10px 5px 25px 5px !important;
+        box-sizing: border-box !important;
+        background: #08162d !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+    }
+
+    .cart-left-pane {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    .cart-items-scroll-box,
+    #cartItemsList {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* கார்ட்டில் உள்ள தயாரிப்பு அட்டை முழு அகலத்திற்கு விரிவடைய */
+    #cartItemsList .shop-prod-card,
+    .cart-item-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* பரிந்துரைப் பகுதியின் இருபுற இடைவெளியை நீக்குதல் */
+    .cart-bag-suggestions {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 10px !important;
+        padding: 8px 0 0 0 !important;
+        border-top: 1px dashed rgba(245, 196, 67, 0.25) !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2x2 க்ரிட் இருபுறமும் முழுமையாகப் பொருந்த */
+    .cart-box-grid,
+    #cartSuggestionsRow {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;                        /* கார்டுகளுக்கு நடுவே 6px இடைவெளி */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 5. Cart Added Product Item (Compact mariyu Perfect Circles) */
+    #cartItemsList .shop-prod-card,
+    .cart-item-card {
+        background: linear-gradient(145deg, #0e2446 0%, #081932 100%) !important;
+        border: 1.2px solid rgba(245, 196, 67, 0.3) !important;
+        border-radius: 10px !important;
+        padding: 8px 10px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 8px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    #cartItemsList .shop-prod-card > div:first-child {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+    }
+
+    /* Thumbnail Square Image */
+    #cartItemsList .shop-prod-img-box,
+    .cart-item-thumb {
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+        min-height: 52px !important;
+        max-width: 52px !important;
+        max-height: 52px !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 6px !important;
+        overflow: hidden !important;
+        background: #040c18 !important;
+        border: 1px solid rgba(245, 196, 67, 0.3) !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+    }
+
+    #cartItemsList .shop-prod-img-box img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* Unwanted tags hide cheyadam */
+    #cartItemsList .shop-prod-tag,
+    #cartItemsList .discount-badge-pill,
+    #cartItemsList .btn-card-view,
+    #cartItemsList .mrp-strikethrough {
+        display: none !important;
+    }
+
+    #cartItemsList .shop-prod-info {
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+        min-width: 0 !important;
+        flex: 1 !important;
+    }
+
+    #cartItemsList .shop-prod-title {
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin: 0 !important;
+    }
+
+    #cartItemsList .discounted-final-price,
+    #cartItemsList .shop-prod-price {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        color: #f5c443 !important;
+    }
+
+    #cartItemsList .shop-card-actions {
+        display: flex !important;
+        align-items: center !important;
+        flex-shrink: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* [- 1 +] Perfect Circles (Oval aavakunda lock chesamu) */
+    #cartItemsList .card-inline-counter,
+    .cart-item-qty-row {
+        display: inline-flex !important;
+        align-items: center !important;
+        background: #040c18 !important;
+        border: 1px solid rgba(245, 196, 67, 0.4) !important;
+        border-radius: 18px !important;
+        padding: 2px 4px !important;
+        gap: 4px !important;
+    }
+
+    #cartItemsList .card-inline-counter .inline-btn,
+    .cart-qty-btn {
+        width: 22px !important;
+        height: 22px !important;
+        min-width: 22px !important;
+        min-height: 22px !important;
+        max-width: 22px !important;
+        max-height: 22px !important;
+        aspect-ratio: 1 / 1 !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: none !important;
+        color: #f5c443 !important;
+        font-size: 0.95rem !important;
+        font-weight: 800 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        flex-shrink: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    #cartItemsList .card-inline-counter .inline-btn:active,
+    .cart-qty-btn:active {
+        background: #f5c443 !important;
+        color: #08162d !important;
+    }
+
+    #cartItemsList .card-inline-counter .inline-val,
+    .cart-qty-val {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        min-width: 14px !important;
+        text-align: center !important;
+    }
+
+    /* 6. RECOMMENDED FOR YOU (Fixed 2x2 Mini Square Grid) */
+    .cart-bag-suggestions {
+        width: 100% !important;
+        margin-top: 10px !important;
+        padding-top: 8px !important;
+        border-top: 1px dashed rgba(245, 196, 67, 0.25) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+    }
+
+    .cart-bag-suggestions h4 {
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.76rem !important;
+        font-weight: 700 !important;
+        color: #f5c443 !important;
+        letter-spacing: 0.6px !important;
+        margin: 0 auto 8px auto !important;
+        text-align: center !important;
+        width: 100% !important;
+        text-transform: uppercase !important;
+    }
+
+    /* Perfect 2x2 Grid Structure */
+    .cart-box-grid,
+    #cartSuggestionsRow {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    #cartSuggestionsRow .shop-prod-card {
+        background: linear-gradient(160deg, #0e2343 0%, #06152b 100%) !important;
+        border: 1px solid rgba(245, 196, 67, 0.25) !important;
+        border-radius: 8px !important;
+        padding: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Small Image Frame 65px */
+    #cartSuggestionsRow .shop-prod-img-box {
+        width: 100% !important;
+        height: 65px !important;
+        min-height: 65px !important;
+        max-height: 65px !important;
+        border-radius: 5px !important;
+        background: #040c18 !important;
+        border: 1px solid rgba(245, 196, 67, 0.2) !important;
+        display: block !important;
+        margin: 0 0 4px 0 !important;
+        overflow: hidden !important;
+    }
+
+    #cartSuggestionsRow .shop-prod-img-box img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    #cartSuggestionsRow .shop-prod-tag,
+    #cartSuggestionsRow .discount-badge-pill,
+    #cartSuggestionsRow .btn-card-view,
+    #cartSuggestionsRow .mrp-strikethrough {
+        display: none !important;
+    }
+
+    #cartSuggestionsRow .shop-prod-info {
+        padding: 0 !important;
+        margin-bottom: 4px !important;
+    }
+
+    #cartSuggestionsRow .shop-prod-title {
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.68rem !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
+        margin: 0 0 2px 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    #cartSuggestionsRow .discounted-final-price,
+    #cartSuggestionsRow .shop-prod-price {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: #f5c443 !important;
+    }
+
+    #cartSuggestionsRow .shop-card-actions,
+    #cartSuggestionsRow .card-action-slot {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    #cartSuggestionsRow .btn-card-add {
+        width: 100% !important;
+        height: 24px !important;
+        background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+        border: none !important;
+        border-radius: 5px !important;
+        color: #08162d !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.64rem !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 3px !important;
+    }
+
+    /* 7. Proceed to Checkout Button */
+    .mobile-only-checkout-bar {
+        display: block !important;
+        width: 100% !important;
+        margin-top: 12px !important;
+        margin-bottom: 8px !important;
+        box-sizing: border-box !important;
+    }
+
+    .btn-proceed-step2 {
+        display: flex !important;
+        width: 100% !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
+        color: #08162d !important;
+        border: none !important;
+        border-radius: 22px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.80rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 15px rgba(245, 196, 67, 0.4) !important;
+    }
+
+    .btn-proceed-step2:active {
+        transform: scale(0.97) !important;
+    }
+
+   /* ---------------------------------------------------------------------- */
+    /* 8. STEP 2 லேயர் & பேக் பட்டன் (மைல்டான இருபுற இடைவெளியுடன் விரிவடைதல்)   */
+    /* ---------------------------------------------------------------------- */
+    .cart-right-pane {
+        display: none !important;
+    }
+
+    .cart-split-modal.show-checkout .cart-left-pane {
+        display: none !important;
+    }
+
+    .cart-split-modal.show-checkout .cart-right-pane {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        /* இருபுறமும் வெறும் 2mm (7px) சீரான இடைவெளி */
+        padding: 4px 7px 20px 7px !important;
+        gap: 10px !important;                       /* நடுவில் லேசான 10px இடைவெளி */
+        box-sizing: border-box !important;
+        margin: 0 auto !important;
+    }
+
+    /* Back to Items பட்டன் */
+    .mobile-only-back-btn {
+        background: rgba(255, 255, 255, 0.06) !important;
+        border: 1.2px solid rgba(245, 196, 67, 0.35) !important;
+        color: #f5c443 !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.74rem !important;
+        font-weight: 600 !important;
+        width: fit-content !important;
+        margin-bottom: 2px !important;
+        cursor: pointer !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+    }
+
+    .mobile-only-back-btn:active {
+        background: rgba(245, 196, 67, 0.15) !important;
+    }
+
+    /* ---------------------------------------------------------------------- */
+    /* 9. பில் இன்வாய்ஸ் & வாடிக்கையாளர் படிவ அட்டைகள்                           */
+    /* ---------------------------------------------------------------------- */
+    .order-invoice-card,
+    .concierge-form-card {
+        background: #0d2244 !important;
+        border: 1.2px solid rgba(245, 196, 67, 0.28) !important;
+        border-radius: 12px !important;
+        padding: 12px 14px !important;              /* உள்ளடக்கத்திற்கு சரியான பேடிங் */
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+    }
+
+    .order-invoice-card h3 {
+        font-family: 'Cinzel', serif !important;
+        font-size: 0.92rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin: 0 0 4px 0 !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .invoice-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        font-size: 0.78rem !important;
+        color: #cbd5e1 !important;
+    }
+
+    .checkout-input-group {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 3px !important;
+        width: 100% !important;
+    }
+
+    .checkout-input-group label {
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.64rem !important;
+        font-weight: 600 !important;
+        color: #f5c443 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.4px !important;
+    }
+
+    .checkout-input-group input,
+    .checkout-input-group textarea {
+        width: 100% !important;
+        background: #06152b !important;
+        border: 1px solid rgba(245, 196, 67, 0.3) !important;
+        border-radius: 8px !important;
+        padding: 8px 10px !important;
+        color: #ffffff !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.78rem !important;
+        outline: none !important;
+        box-sizing: border-box !important;
+    }
+
+    .checkout-input-group input:focus,
+    .checkout-input-group textarea:focus {
+        border-color: #f5c443 !important;
+        background: #0a1e3b !important;
+    }
+
+    .btn-whatsapp-checkout {
+        width: 100% !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%) !important;
+        border: none !important;
+        border-radius: 22px !important;
+        color: #ffffff !important;
+        font-family: 'Poppins', sans-serif !important;
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.6px !important;
+        text-transform: uppercase !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35) !important;
+        margin-top: 4px !important;
+    }
+
+    .btn-whatsapp-checkout:active {
+        transform: scale(0.97) !important;
+    }
