@@ -46,44 +46,63 @@ nav ul {
     letter-spacing: 1px !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3. HERO SECTION (TYPOGRAPHY & ACTIONS)                                     */
-/* -------------------------------------------------------------------------- */
+/* ========================================================================== */
+/* EXACT TUNED HERO COLUMN WITH LUXURY COSMETIC BACKGROUND & COMPACT STATS    */
+/* ========================================================================== */
+
+/* 1. பின்னணியில் காஸ்மெடிக்ஸ் இமேஜ் ஃபிரேமுடன் கூடிய ஹீரோ செக்ஷன் */
 .hero-section {
-    padding-top: 1.5rem !important;
+    position: relative !important;
+    background: linear-gradient(180deg, rgba(9, 26, 54, 0.82) 0%, rgba(6, 13, 25, 0.94) 100%),
+                url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop') center center / cover no-repeat !important;
+    padding-top: 1.2rem !important;
     padding-bottom: 0px !important;
     margin-bottom: 0px !important;
+    border-bottom: 1.5px solid rgba(245, 196, 67, 0.3) !important;
+    box-shadow: inset 0 -15px 30px rgba(0, 0, 0, 0.6) !important;
     text-align: center !important;
     height: auto !important;
     min-height: 0 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
+/* பேட்ஜ் - இடைவெளி குறைப்பு */
 .hero-eyebrow,
 .hero-section .sub-badge {
-    font-size: 0.62rem !important;
-    padding: 4px 10px !important;
-    margin-bottom: 0.5rem !important;
+    font-size: 0.6rem !important;
+    padding: 3px 10px !important;
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.4rem !important;
     display: inline-block !important;
+    border: 1px solid rgba(245, 196, 67, 0.4) !important;
+    background: rgba(9, 26, 54, 0.6) !important;
+    backdrop-filter: blur(6px) !important;
 }
 
+/* தலைப்பு அளவு மற்றும் கேப் குறைப்பு */
 .hero-title,
 .hero-section h1 {
-    font-size: 1.45rem !important;
-    line-height: 1.22 !important;
-    margin-bottom: 0.5rem !important;
+    font-size: 1.35rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.4rem !important;
     text-align: center !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7) !important;
 }
 
+/* 3-வரி விளக்கம் */
 .hero-desc,
 .hero-section p {
-    font-size: 0.8rem !important;
-    line-height: 1.4 !important;
-    max-width: 330px !important;
-    margin: 0 auto 0.9rem auto !important;
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+    max-width: 310px !important;
+    margin: 0 auto 0.6rem auto !important;
     text-align: center !important;
-    opacity: 0.88 !important;
+    opacity: 0.9 !important;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8) !important;
 }
 
+/* பட்டன்கள் - கேப் குறைத்து சுருக்குதல் */
 .hero-btn-group,
 .hero-actions,
 .hero-btn-row {
@@ -92,38 +111,38 @@ nav ul {
     justify-content: center !important;
     gap: 8px !important;
     margin-top: 0px !important;
-    margin-bottom: 0.4rem !important;
+    margin-bottom: 0.35rem !important; /* பட்டன் கீழ் கேப் குறைப்பு */
     width: 100% !important;
 }
 
 .hero-btn-group a,
 .hero-actions a,
 .hero-btn-row a {
-    flex: 1 !important;
-    max-width: 140px !important;
-    padding: 8px 10px !important;
-    font-size: 0.74rem !important;
+    flex: 0 1 130px !important;
+    padding: 7px 10px !important;
+    font-size: 0.72rem !important;
     border-radius: 20px !important;
     text-align: center !important;
     white-space: nowrap !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 4. STATS COUNTER STRIP (100% / 500+ / 4.9★ STRICT 2-LINES)                 */
-/* -------------------------------------------------------------------------- */
+/* 2. STATS BAR (100% / 500+ / 4.9★) - பட்டனுடன் ஒட்டி, இடமிருந்து வலம் சுருங்கி அமைதல் */
 .stats-row,
 .metrics-counter-wrap,
 [class*="stats-"] {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: space-between !important;
+    justify-content: space-around !important;
     align-items: center !important;
-    margin-top: 0px !important;
-    margin-bottom: 0.8rem !important;
-    padding: 0.35rem 4px !important;
-    border-top: 0.5px solid rgba(245, 196, 67, 0.25) !important;
-    border-bottom: 0.5px solid rgba(245, 196, 67, 0.25) !important;
-    width: 100% !important;
+    margin: 0 auto 0.6rem auto !important; /* பட்டனை ஒட்டி மேலெழும்புதல் */
+    padding: 0.35rem 8px !important;
+    width: 90% !important; /* Left to Right கச்சிதமாக சுருங்கி நிற்க */
+    max-width: 340px !important;
+    background: rgba(6, 13, 25, 0.65) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(245, 196, 67, 0.25) !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
 }
 
 .stat-item,
@@ -134,37 +153,38 @@ nav ul {
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
-    flex: 1 1 33.33% !important;
-    min-width: 0 !important;
+    flex: 1 !important;
     padding: 0 2px !important;
 }
 
+/* எண் அளவு */
 .stat-number,
 .metric-count,
 .stats-row h3,
 .stats-row strong {
-    font-size: 1.15rem !important;
+    font-size: 1.05rem !important;
     line-height: 1.1 !important;
-    margin: 0 0 2px 0 !important;
+    color: #f5c443 !important;
+    margin: 0 0 1px 0 !important;
     display: block !important;
     white-space: nowrap !important;
 }
 
+/* உரை - 2வது வரியில் மட்டும் கச்சிதமாக நிற்க */
 .stat-label,
 .metric-lbl,
 .stats-row span,
 .stats-row p {
-    font-size: 0.52rem !important;
+    font-size: 0.5rem !important;
     line-height: 1 !important;
     white-space: nowrap !important;
     text-wrap: nowrap !important;
-    letter-spacing: 0.2px !important;
+    letter-spacing: 0.3px !important;
     text-transform: uppercase !important;
+    color: #ffffff !important;
     margin: 0 !important;
-    display: block !important;
     opacity: 0.85 !important;
 }
-
 /* -------------------------------------------------------------------------- */
 /* 5. HIDE THE SAPPHIRE ROYALE / LIMITED BATCH CARD FROM MOBILE               */
 /* -------------------------------------------------------------------------- */
