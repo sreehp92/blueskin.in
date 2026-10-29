@@ -9,9 +9,9 @@
 
 /* முதல் பக்கத்தின் அசல் ராயல் ப்ளூ கிரேடியன்ட் பின்னணி & பார்டர் */
 .top-ticker-bar {
-    height: 31px !important;
-    min-height: 31px !important;
-    max-height: 31px !important;
+    height: 60px !important;
+    min-height: 60px !important;
+    max-height: 60px !important;
     padding: 0 !important;
     display: flex !important;
     align-items: center !important;
