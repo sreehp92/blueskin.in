@@ -45,36 +45,14 @@
 }
 
 /* === END: TOP SCROLLING TICKER BAR ======================================= */
+
+
+
 /* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (EXACT 1ST PAGE CLONE & GOLD BUTTON) == */
+/* === START: 2. HEADER & NAVIGATION (EXACT COLOR & 100% ROUND CIRCLES) ===== */
 /* ========================================================================== */
 
-/* 1. டாப் டிக்கர் பார்: முதல் பக்கத்தின் அதே கிரேடியன்ட் நிறம் & 5px பேடிங் */
-.top-ticker-bar {
-    width: 100% !important;
-    background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
-    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-    padding: 5px 0 !important;
-    height: auto !important;
-}
-
-.ticker-content span {
-    font-size: 0.68rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.8px !important;
-    color: #ffffff !important;
-}
-
-.ticker-content span i {
-    color: #f5c443 !important;
-}
-
-.ticker-dot {
-    margin: 0 8px !important;
-    color: #f5c443 !important;
-}
-
-/* 2. ஹெடர் பார்: முதல் பக்கத்தின் அதே கிளாஸ்மார்பிசம் ராயல் நேவி நிறம் */
+/* 1. ஹெடர் பின்னணி: முதல் பக்கத்தின் அதே ராயல் கிளாஸ் நேவி நிறம் */
 .header {
     position: sticky !important;
     top: 0 !important;
@@ -87,7 +65,7 @@
     width: 100% !important;
 }
 
-/* கண்டெய்னர் பேடிங்: முதல் பக்கத்தின் அதே 0.6rem 12px */
+/* கண்டெய்னர் பேடிங் மற்றும் லேஅவுட் */
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
@@ -100,7 +78,7 @@
     box-sizing: border-box !important;
 }
 
-/* 3. லோகோ: முதல் பக்கத்தின் அதே 1.25rem அளவு, கிரீடம் இன்றி சுத்தமான BLUE SKIN */
+/* 2. பிராண்ட் லோகோ: கிரீடம் நீக்கப்பட்டு அசல் BLUE SKIN அளவு */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
     display: none !important;
@@ -132,155 +110,120 @@
     margin-left: 4px !important;
 }
 
-/* 4. டெஸ்க்டாப்பில் போர்ட்ஃபோலியோ பட்டன் (முதல் பக்க "Shop Now" பட்டனின் அதே முழு மஞ்சள்/தங்க நிறம்) */
+/* 3. வலதுபுற பட்டன்கள் தொகுப்பு (5px இடைவெளியில் வலது ஓரத்தில் ஒட்டி நிற்க) */
+.shop-nav-flex .nav-actions-right,
+header .nav-actions-right,
+.nav-actions-right {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 5px !important;                       /* 3 பட்டன்களுக்கு இடைவெளி வெறும் 5px */
+    width: auto !important;
+    margin: 0 0 0 auto !important;
+    padding: 0 !important;
+    flex: 0 0 auto !important;
+}
+
+.nav-actions-right > * {
+    margin: 0 !important;
+    flex: 0 0 35px !important;                 /* ஓவல் ஆகாமல் 35px-ல் லாக் செய்கிறது */
+}
+
+/* 4. பேக் பட்டன் (Arrow): முதல் பக்கத்தைப் போல உள்ளே முழு மஞ்சள் நிறம் (Solid Yellow) */
 .btn-back-portfolio {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+    max-width: 35px !important;
+    min-height: 35px !important;
+    max-height: 35px !important;
+    aspect-ratio: 1 / 1 !important;            /* 100% வட்டம் மட்டுமே வர கட்டுப்பாடு */
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
     background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important; /* அசல் மஞ்சள் நிறம் */
-    color: #0b1a30 !important;                     /* கறுப்பு/நேவி எழுத்து */
-    padding: 0.55rem 1.3rem !important;
-    border-radius: 25px !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.4px !important;
-    text-decoration: none !important;
+    color: #0b1a30 !important;
+    border: none !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 0.5rem !important;
-    box-shadow: 0 4px 15px rgba(245, 196, 67, 0.4) !important;
-    border: none !important;
-    transition: all 0.3s ease !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 0 12px rgba(245, 196, 67, 0.45) !important;
+    position: relative !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.btn-back-portfolio span {
+    display: none !important;
 }
 
 .btn-back-portfolio i {
-    color: #0b1a30 !important;
     font-size: 0.85rem !important;
+    color: #0b1a30 !important;                 /* அம்பு கறுப்பு நிறத்தில் பளிச்சென நிற்கும் */
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* டெஸ்க்டாப்பில் வலதுபுற பட்டன்கள் இடைவெளி */
-.nav-actions-right {
+/* 5. விஷ்லிஸ்ட் (Heart) & கார்ட் (Bag) - 100% வட்ட வடிவ பட்டன்கள் */
+#openWishlistBtn,
+#openCartBtn,
+.luxury-round-btn {
+    width: 35px !important;
+    height: 35px !important;
+    min-width: 35px !important;
+    max-width: 35px !important;
+    min-height: 35px !important;
+    max-height: 35px !important;
+    aspect-ratio: 1 / 1 !important;            /* ஓவல் ஆகாமல் தடுக்கும் விகிதம் */
+    border-radius: 50% !important;             /* முழுமையான வட்டம் */
+    padding: 0 !important;
+    margin: 0 !important;
+    background: rgba(16, 42, 78, 0.85) !important;
+    border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
+    position: relative !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+.luxury-round-btn i,
+#headerWishlistIcon,
+#openCartBtn i {
+    font-size: 0.82rem !important;
+    color: #ffffff !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* 6. கவுண்ட் பேட்ஜ் (Corner Dots) */
+.action-badge {
+    position: absolute !important;
+    top: -3px !important;
+    right: -3px !important;
+    width: 15px !important;
+    height: 15px !important;
+    min-width: 15px !important;
+    max-width: 15px !important;
+    border-radius: 50% !important;
+    aspect-ratio: 1 / 1 !important;
+    background: #f5c443 !important;
+    color: #0b1a30 !important;
+    font-size: 0.50rem !important;
+    font-weight: 800 !important;
     display: flex !important;
     align-items: center !important;
-    gap: 10px !important;
-}
-
-/* -------------------------------------------------------------------------- */
-/* MOBILE VIEW STYLES (SCREEN <= 768PX)                                       */
-/* -------------------------------------------------------------------------- */
-@media screen and (max-width: 768px) {
-
-    /* டெஸ்க்டாப் மெனுவை மொபைலில் மறைத்தல் */
-    .nav-links,
-    .header ul,
-    nav ul {
-        display: none !important;
-    }
-
-    /* மொபைல் வலதுபுற பட்டன் கிளஸ்டர் - 5px நெருக்கமான இடைவெளி */
-    .shop-nav-flex .nav-actions-right,
-    .nav-actions-right {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: flex-end !important;
-        gap: 5px !important;
-        width: auto !important;
-        margin: 0 0 0 auto !important;
-        padding: 0 !important;
-        flex: 0 0 auto !important;
-    }
-
-    .nav-actions-right > * {
-        margin: 0 !important;
-        flex: 0 0 35px !important;
-    }
-
-    /* 5. மொபைல் பேக் பட்டன்: உள்ளே முழுமையான மஞ்சள் நிறம் (Solid Yellow Filled Circle) */
-    .btn-back-portfolio {
-        width: 35px !important;
-        height: 35px !important;
-        min-width: 35px !important;
-        max-width: 35px !important;
-        aspect-ratio: 1 / 1 !important;
-        border-radius: 50% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important; /* உள்ளே முழு மஞ்சள் */
-        color: #0b1a30 !important;                     /* கறுப்பு அம்பு ஐகான் */
-        border: none !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-sizing: border-box !important;
-        box-shadow: 0 0 12px rgba(245, 196, 67, 0.45) !important; /* கோல்டன் க்ளோ */
-        position: relative !important;
-        flex-shrink: 0 !important;
-    }
-
-    .btn-back-portfolio span {
-        display: none !important;                      /* மொபைலில் எழுத்து மறைவு */
-    }
-
-    .btn-back-portfolio i {
-        font-size: 0.85rem !important;
-        color: #0b1a30 !important;                     /* அம்பு அடர் கறுப்பு நிறத்தில் பளிச்சென நிற்கும் */
-        line-height: 1 !important;
-        margin: 0 !important;
-    }
-
-    /* 6. விஷ்லிஸ்ட் & கார்ட் வட்ட பட்டன்கள் */
-    #openWishlistBtn,
-    #openCartBtn,
-    .luxury-round-btn {
-        width: 35px !important;
-        height: 35px !important;
-        min-width: 35px !important;
-        max-width: 35px !important;
-        aspect-ratio: 1 / 1 !important;
-        border-radius: 50% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        background: rgba(16, 42, 78, 0.85) !important;
-        border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        box-sizing: border-box !important;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
-        position: relative !important;
-        flex-shrink: 0 !important;
-        cursor: pointer !important;
-    }
-
-    .luxury-round-btn i,
-    #headerWishlistIcon,
-    #openCartBtn i {
-        font-size: 0.82rem !important;
-        color: #ffffff !important;
-        line-height: 1 !important;
-        margin: 0 !important;
-    }
-
-    /* கவுண்ட் பேட்ஜ் */
-    .action-badge {
-        position: absolute !important;
-        top: -3px !important;
-        right: -3px !important;
-        width: 15px !important;
-        height: 15px !important;
-        min-width: 15px !important;
-        max-width: 15px !important;
-        border-radius: 50% !important;
-        background: #f5c443 !important;
-        color: #0b1a30 !important;
-        font-size: 0.50rem !important;
-        font-weight: 800 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        border: 1.5px solid #08162d !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
-    }
+    justify-content: center !important;
+    border: 1.5px solid #08162d !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
 }
 /* === END: 2. HEADER & NAVIGATION ========================================= */
