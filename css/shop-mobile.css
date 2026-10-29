@@ -2,7 +2,7 @@
 /* === START: 1. TOP SCROLLING TICKER BAR (EXPANDED HEIGHT & CLEAN SIZE) ==== */
 /* ========================================================================== */
 .top-ticker-bar {
-    background: #06101e !important;                 /* அசல் மிட்நைட் நேவி */
+    background: #0d2244 !important;                 /* அசல் மிட்நைட் நேவி */
     border-bottom: 1.5px solid rgba(245, 196, 67, 0.28) !important;
     padding: 9px 0 !important;                      /* உயரத்தை அதிகரித்துள்ளோம் */
     min-height: 50px !important;
@@ -103,7 +103,7 @@
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 5px !important;                       /* வெறும் 5px கேப் மட்டுமே */
+    gap: 3px !important;                       /* வெறும் 5px கேப் மட்டுமே */
     width: auto !important;
     flex: 0 0 auto !important;                 /* விரிவடைவதை முழுமையாகத் தடுக்கும் */
     margin: 0 !important;
