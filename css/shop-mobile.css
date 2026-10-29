@@ -1,30 +1,33 @@
 /* ========================================================================== */
-/* BLUE SKIN LUXURY - SHOP MASTER ENGINE (DESKTOP & MOBILE HARMONY)           */
+/* BLUE SKIN LUXURY - SHOP MASTER ENGINE (100% COLOR HARMONY WITH INDEX.HTML) */
 /* ========================================================================== */
 
 /* -------------------------------------------------------------------------- */
-/* A. DESKTOP VIEW STYLES (MATCHING INDEX.HTML EXACTLY)                       */
+/* A. DESKTOP VIEW STYLES (MATCHING INDEX.HTML EXACT COLORS & STYLES)         */
 /* -------------------------------------------------------------------------- */
 
-/* 1. டாப் டிக்கர் பார் பின்னணி */
+/* 1. டாப் டிக்கர் பார்: INDEX.HTML-ல் உள்ள அதே அசல் கிரேடியன்ட் கலர் */
 .top-ticker-bar {
-    background: #06101e !important;
+    width: 100% !important;
+    background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
 }
 
-/* 2. ஹெடர் பார் பின்னணி */
+/* 2. ஹெடர் பார்: INDEX.HTML-ல் உள்ள அதே ராயல் நேவி & கிளாஸ் கலர் */
 .header {
-    background: #0d2244 !important;
+    background: rgba(8, 22, 45, 0.95) !important;
+    backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* 3. லோகோவில் கிரீட ஐகான் நீக்கம் (index.html போலவே இருக்க) */
+/* 3. லோகோவில் கிரீட ஐகான் நீக்கம் (INDEX.HTML போலவே இருக்க) */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
     display: none !important;
 }
 
-/* 4. டெஸ்க்டாப்பில் போர்ட்ஃபோலியோ பட்டன் (index.html "Shop Now" பட்டனின் அதே வடிவம்) */
+/* 4. டெஸ்க்டாப்பில் போர்ட்ஃபோலியோ பட்டன் (INDEX.HTML "SHOP NOW" பட்டனின் அசல் தங்கம்) */
 .btn-back-portfolio {
     background: linear-gradient(135deg, #f5c443 0%, #e0ab26 100%) !important;
     color: #0b1a30 !important;
@@ -44,6 +47,7 @@
 }
 
 .btn-back-portfolio:hover {
+    background: linear-gradient(135deg, #ffd768 0%, #f5c443 100%) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(245, 196, 67, 0.5) !important;
     color: #0b1a30 !important;
@@ -54,15 +58,16 @@
     font-size: 0.85rem !important;
 }
 
-/* 5. டெஸ்க்டாப்பில் வலதுபுற பட்டன்களின் வரிசை */
+/* 5. டெஸ்க்டாப்பில் வலதுபுற பட்டன்கள் சீரமைப்பு */
 .nav-actions-right {
     display: flex !important;
     align-items: center !important;
     gap: 12px !important;
 }
 
+
 /* -------------------------------------------------------------------------- */
-/* B. MOBILE VIEW STYLES (SCREEN <= 768PX)                                    */
+/* B. MOBILE VIEW STYLES (SCREEN <= 768PX) - EXACT COLORS & COMPACT CIRCLES   */
 /* -------------------------------------------------------------------------- */
 @media screen and (max-width: 768px) {
 
@@ -77,13 +82,21 @@
         box-sizing: border-box !important;
     }
 
-    /* டாப் டிக்கர் பார் */
+    /* டாப் டிக்கர் பார் மொபைல் அளவு (அதே ராயல் ப்ளூ கிரேடியன்ட் நிறத்தில்) */
     .top-ticker-bar {
+        background: linear-gradient(90deg, #0d223d 0%, #163d6b 50%, #0d223d 100%) !important;
         font-size: 0.65rem !important;
         padding: 6px 0 !important;
+        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
     }
 
     /* ஹெடர் கண்டெய்னர் */
+    .header {
+        background: rgba(8, 22, 45, 0.95) !important;
+        backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
+    }
+
     .header .nav-container,
     .nav-container,
     .shop-nav-flex {
@@ -200,7 +213,7 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        border: 1.5px solid #0d2244 !important;
+        border: 1.5px solid #08162d !important;
         padding: 0 !important;
         margin: 0 !important;
         box-sizing: border-box !important;
