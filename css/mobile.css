@@ -1,10 +1,11 @@
 /* ========================================================================== */
-/* BLUE SKIN LUXURY ENTERPRISE - MASTER MOBILE ENGINE (FULL FRONT-END)        */
+/* BLUE SKIN LUXURY ENTERPRISE - MASTER MOBILE ENGINE (SPACE MANAGED)         */
 /* ========================================================================== */
 
-/* -------------------------------------------------------------------------- */
-/* 1. GLOBAL RESETS & CONTAINER CONTROL                                       */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 1. GLOBAL RESETS & CONTAINER CONTROL ========================= */
+/* ========================================================================== */
 html, body {
     overflow-x: hidden !important;
     width: 100% !important;
@@ -22,18 +23,26 @@ html, body {
     padding-left: 12px !important;
     padding-right: 12px !important;
 }
+/* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
 
-/* -------------------------------------------------------------------------- */
-/* 2. HEADER & NAVIGATION                                                     */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 2. HEADER & NAVIGATION (COMPACT HEIGHT) ====================== */
+/* ========================================================================== */
+.top-ticker-bar {
+    font-size: 0.62rem !important;
+    padding: 5px 0 !important;
+}
+
 .header .nav-container,
 .nav-container {
-    padding: 0.9 rem 15px !important;
+    padding: 0.6rem 12px !important; /* இடைவெளி குறைப்பு */
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
 }
 
+/* டெஸ்க்டாப் மெனுவை மொபைலில் மறைத்தல் */
 .nav-links,
 .header ul,
 nav ul {
@@ -41,26 +50,24 @@ nav ul {
 }
 
 .logo {
-    font-size: 1.75rem !important;
+    font-size: 1.25rem !important;
     letter-spacing: 1px !important;
 }
 
-/* ========================================================================== */
-/* MOBILE HERO & STATS: PURE CSS OVERRIDE (DESKTOP ZERO TOUCH / 100% SAFE)   */
-/* ========================================================================== */
-
-/* 1. மொபைலில் மட்டும் வலதுபுற ஷோகேஸ் படத்தை மறைத்தல் (டெஸ்க்டாப்பில் அப்படியே இருக்கும்) */
-.hero-visual,
-.hero-product-showcase {
-    display: none !important;
+.cart-icon-btn {
+    padding: 6px !important;
 }
+/* === END: 2. HEADER & NAVIGATION ========================================= */
 
-/* 2. மொபைல் ஹீரோ கொள்கலன் & HD பேக்ரவுண்ட் */
+
+/* ========================================================================== */
+/* === START: 3. HERO STAGE & BACKGROUND (TIGHT SPACING) =================== */
+/* ========================================================================== */
 .hero-section {
     position: relative !important;
     background: radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.82) 0%, rgba(5, 12, 24, 0.95) 100%),
                 url('https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop') center center / cover no-repeat !important;
-    padding: 1.6rem 14px 1.2rem 14px !important;
+    padding: 1.2rem 12px 0.8rem 12px !important; /* தேவையற்ற காலி இடம் குறைப்பு */
     margin: 0 !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
     text-align: center !important;
@@ -82,11 +89,11 @@ nav ul {
 
 /* பேட்ஜ் */
 .hero-badge {
-    font-size: 0.62rem !important;
+    font-size: 0.6rem !important;
     letter-spacing: 1.2px !important;
     text-transform: uppercase !important;
-    padding: 5px 14px !important;
-    margin-bottom: 0.8rem !important;
+    padding: 4px 12px !important;
+    margin-bottom: 0.5rem !important; /* இடைவெளி சுருக்கம் */
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
@@ -97,21 +104,24 @@ nav ul {
     backdrop-filter: blur(8px) !important;
 }
 
-/* தலைப்பு: 3 வரிகளில் சமச்சீரான டைப்போகிராபி */
-.hero-title {
+/* தலைப்பு: 3 வரிகளில் சமச்சீராய் நிற்றல் */
+.hero-title,
+.hero-section h1 {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.55rem !important;
-    line-height: 1.35 !important;
+    font-size: 1.48rem !important;
+    line-height: 1.25 !important;
     font-weight: 700 !important;
-    letter-spacing: 0.8px !important;
+    letter-spacing: 0.6px !important;
     color: #ffffff !important;
-    margin: 0 auto 0.8rem auto !important;
+    margin: 0 auto 0.5rem auto !important; /* தலைப்புக் கீழ் இடைவெளி சுருக்கம் */
     text-align: center !important;
-    max-width: 320px !important;
+    max-width: 310px !important;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
+    word-break: keep-all !important;
 }
 
-.hero-title .gold-gradient-text {
+.hero-title .gold-gradient-text,
+.hero-section h1 span {
     display: inline-block !important;
     color: #f5c443 !important;
     background: linear-gradient(135deg, #ffd768 0%, #f5c443 100%) !important;
@@ -119,58 +129,49 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* 3. புதிய 3-வரிகள்: மொபைலில் பழைய எழுத்தை மறைத்து புதியதை வரவழைத்தல் */
-.hero-subtitle {
-    font-size: 0px !important;
-    line-height: 0 !important;
-    color: transparent !important;
-    margin: 0 auto 1.1rem auto !important;
-    max-width: 330px !important;
-    text-align: center !important;
-    display: block !important;
-}
-
-.hero-subtitle::before {
-    content: "Your beauty deserves something extraordinary.\A Carefully created to bring out your natural glow.\A Feel confident    Feel radiant    Feel beautiful" !important;
-    white-space: pre-line !important;
-    display: block !important;
+/* 3-வரி விளக்கம் */
+.hero-subtitle,
+.hero-desc {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.74rem !important;
-    line-height: 1.55 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.45 !important;
     color: #cbd5e1 !important;
+    max-width: 320px !important;
+    margin: 0 auto 0.8rem auto !important; /* பட்டனுக்கு முந்தைய இடைவெளி குறைப்பு */
     text-align: center !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
     opacity: 0.95 !important;
+    display: block !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
 }
 
-/* 4. பட்டன்கள்: சமச்சீர் அளவு & 3mm கீழே இறக்கம் */
-.hero-cta-group {
+/* பட்டன்கள்: சமச்சீர் அளவு & குறைந்த இடைவெளி */
+.hero-cta-group,
+.hero-btn-row {
     display: flex !important;
     flex-direction: row !important;
     justify-content: center !important;
     align-items: center !important;
-    gap: 12px !important;
+    gap: 10px !important;
     width: 100% !important;
-    margin-top: 4px !important;
-    margin-bottom: 1.4rem !important;
+    margin-top: 2px !important;
+    margin-bottom: 0.9rem !important; /* கவுண்டர் பார்க்கு முந்தைய இடைவெளி சுருக்கம் */
 }
 
+.hero-cta-group a,
 .btn-primary-gold,
 .btn-secondary-outline {
+    width: 135px !important;
+    height: 38px !important;
+    padding: 0 8px !important;
+    font-size: 0.72rem !important;
+    font-weight: 600 !important;
+    border-radius: 25px !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
-    width: 140px !important;
-    height: 40px !important;
-    padding: 0 10px !important;
-    font-size: 0.72rem !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.5px !important;
-    border-radius: 25px !important;
-    text-decoration: none !important;
     white-space: nowrap !important;
     box-sizing: border-box !important;
+    text-decoration: none !important;
 }
 
 .btn-primary-gold {
@@ -185,8 +186,12 @@ nav ul {
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.35) !important;
 }
+/* === END: 3. HERO STAGE & BACKGROUND ===================================== */
 
-/* 5. STATS: பாக்ஸ் இல்லாமல் 3 சம காலம்களில் எண்களும் வார்த்தைகளும் தெரிய */
+
+/* ========================================================================== */
+/* === START: 4. STATS COUNTER STRIP (NO BOX / COMPACT & CENTERED) ========= */
+/* ========================================================================== */
 .hero-metrics {
     display: flex !important;
     flex-direction: row !important;
@@ -194,16 +199,14 @@ nav ul {
     align-items: center !important;
     width: 100% !important;
     max-width: 350px !important;
-    margin: 0 auto 0.4rem auto !important;
+    margin: 0 auto 0.4rem auto !important; /* மேல்-கீழ் இடைவெளி கச்சிதமாகக் குறைப்பு */
     padding: 0 !important;
-    background: transparent !important;   /* ஃபிரேம் / பாக்ஸ் நீக்கம் */
+    background: transparent !important;   /* பாக்ஸ் பின்னணி நீக்கம் */
     border: none !important;              /* பார்டர் நீக்கம் */
     box-shadow: none !important;
-    backdrop-filter: none !important;
-    box-sizing: border-box !important;
 }
 
-/* ஒவ்வொரு காலமும் சமமான 33.33% எடுத்து மையத்தில் நிற்க */
+/* 3 காலம்களும் சமமாகப் பிரிந்து நிற்க */
 .hero-metrics .metric-item {
     flex: 1 1 33.33% !important;
     width: 33.33% !important;
@@ -216,14 +219,14 @@ nav ul {
     padding: 0 2px !important;
 }
 
-/* வரி 1: எண்கள் (100% / 500+ / 4.9★) */
+/* லைன் 1: எண்கள் (100% / 500+ / 4.9★) */
 .hero-metrics .metric-item h3 {
     font-family: 'Cinzel', serif !important;
     font-size: 1.15rem !important;
     font-weight: 700 !important;
     line-height: 1.1 !important;
     color: #f5c443 !important;
-    margin: 0 0 3px 0 !important;
+    margin: 0 0 2px 0 !important;
     padding: 0 !important;
     text-align: center !important;
     display: block !important;
@@ -231,51 +234,45 @@ nav ul {
     text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
 }
 
-/* வரி 2: விடுபட்ட வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
+/* லைன் 2: எழுத்துக்கள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
 .hero-metrics .metric-item p {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
     font-family: 'Poppins', sans-serif !important;
     font-size: 0.52rem !important;
     font-weight: 600 !important;
     line-height: 1.1 !important;
     letter-spacing: 0.3px !important;
     text-transform: uppercase !important;
-    color: #ffffff !important;           /* தூய பிரகாசமான வெள்ளை */
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
+    color: #ffffff !important;           /* பிரகாசமான வெள்ளை நிறம் */
     text-align: center !important;
-    white-space: nowrap !important;       /* ஒரே லைனில் நிற்க */
+    white-space: nowrap !important;
     text-wrap: nowrap !important;
     margin: 0 !important;
     padding: 0 !important;
-    height: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
-/* நடுவில் உள்ள கோடுகள் நீக்கம் */
+/* நடுவில் உள்ள கோடுகள் மறைப்பு */
 .hero-metrics .metric-divider {
     display: none !important;
 }
-/* -------------------------------------------------------------------------- */
-/* 5. HIDE THE SAPPHIRE ROYALE / LIMITED BATCH CARD FROM MOBILE               */
-/* -------------------------------------------------------------------------- */
-.hero-right-box,
-.hero-product-showcase,
+/* === END: 4. STATS COUNTER STRIP ========================================= */
+
+
+/* ========================================================================== */
+/* === START: 5. HIDE DESKTOP SHOWCASE ON MOBILE =========================== */
+/* ========================================================================== */
 .hero-visual,
-.hero-card,
+.hero-product-showcase,
+.hero-right-box,
 .signature-card,
-.card-floating-badge,
-.card-details,
-.card-meta,
-.card-action-btn,
-div:has(> .card-details),
-div:has(> .card-floating-badge),
 div:has(> img[src*="1543163521"]) {
     display: none !important;
     visibility: hidden !important;
     opacity: 0 !important;
     height: 0px !important;
-    min-height: 0px !important;
+    width: 0px !important;
     margin: 0px !important;
     padding: 0px !important;
     border: none !important;
@@ -283,13 +280,15 @@ div:has(> img[src*="1543163521"]) {
     left: -9999px !important;
     pointer-events: none !important;
 }
+/* === END: 5. HIDE DESKTOP SHOWCASE ON MOBILE ============================= */
 
-/* -------------------------------------------------------------------------- */
-/* 6. THE ROYAL PORTFOLIO (1x4 HORIZONTAL SWIPE CAROUSEL)                     */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 6. THE ROYAL PORTFOLIO (1x4 HORIZONTAL SWIPE) ================ */
+/* ========================================================================== */
 #portfolio,
 .portfolio-showcase-section {
-    padding-top: 0.8rem !important;
+    padding-top: 1rem !important; /* Stats-ல் இருந்து சரியான இடைவெளி */
     padding-bottom: 0.8rem !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
@@ -313,20 +312,12 @@ div:has(> img[src*="1543163521"]) {
     margin: 0 !important;
 }
 
-/* தேவையற்ற விளக்க உரை, பேட்ஜ், மற்றும் கோட்டை நீக்குதல் */
+/* தேவையற்ற விளக்க உரை, கோடு மற்றும் பேட்ஜை நீக்குதல் */
 #portfolio p,
 #portfolio .section-desc,
-.portfolio-showcase-section p,
-.portfolio-showcase-section .section-desc,
 #portfolio .header-divider,
-.portfolio-showcase-section .header-divider,
-#portfolio .sub-badge,
-.portfolio-showcase-section .sub-badge {
+#portfolio .sub-badge {
     display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
 }
 
 /* எட்ஜ்-டு-எட்ஜ் ஸ்வைப் டிராக் */
@@ -338,7 +329,7 @@ div:has(> img[src*="1543163521"]) {
     scroll-snap-type: x mandatory !important;
     -webkit-overflow-scrolling: touch !important;
     gap: 12px !important;
-    padding: 4px 14px 12px 14px !important;
+    padding: 4px 14px 10px 14px !important;
     width: 100% !important;
 }
 
@@ -354,7 +345,7 @@ div:has(> img[src*="1543163521"]) {
 
 #portfolio .portfolio-image-wrapper {
     width: 100% !important;
-    height: 185px !important;
+    height: 180px !important;
     border-radius: 10px !important;
     overflow: hidden !important;
 }
@@ -374,26 +365,25 @@ div:has(> img[src*="1543163521"]) {
     font-size: 0.74rem !important;
     margin-bottom: 6px !important;
 }
+/* === END: 6. THE ROYAL PORTFOLIO ========================================= */
 
-/* -------------------------------------------------------------------------- */
-/* 7. THE SPIRIT OF BLUE SKIN (HERITAGE / ABOUT US)                           */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 7. THE SPIRIT OF BLUE SKIN (HERITAGE / ABOUT US) ============= */
+/* ========================================================================== */
 #about,
 .about-section {
     padding-top: 0.8rem !important;
-    padding-bottom: 1.2rem !important;
+    padding-bottom: 1rem !important;
 }
 
+/* மொபைலில் பெரிய இமேஜ் ஃபிரேமை மறைத்தல் */
 #about .about-visual,
 .about-section .about-visual,
 .about-frame-border,
 .about-image-card,
 .about-stat-tag {
     display: none !important;
-    visibility: hidden !important;
-    height: 0px !important;
-    margin: 0px !important;
-    padding: 0px !important;
 }
 
 #about .about-grid,
@@ -401,10 +391,6 @@ div:has(> img[src*="1543163521"]) {
     display: flex !important;
     flex-direction: column !important;
     padding: 0 12px !important;
-}
-
-#about .about-content {
-    width: 100% !important;
 }
 
 #about .section-title {
@@ -419,16 +405,11 @@ div:has(> img[src*="1543163521"]) {
     margin-bottom: 0.6rem !important;
 }
 
-#about .feature-item {
-    margin-bottom: 0.6rem !important;
-}
-
-/* Visit The Store பட்டனை மையப்படுத்துதல் */
 #about .about-btn-wrap {
     display: flex !important;
     justify-content: center !important;
     width: 100% !important;
-    margin-top: 1rem !important;
+    margin-top: 0.8rem !important;
 }
 
 #about .about-btn-wrap a {
@@ -436,15 +417,16 @@ div:has(> img[src*="1543163521"]) {
     font-size: 0.82rem !important;
     border-radius: 20px !important;
 }
+/* === END: 7. THE SPIRIT OF BLUE SKIN ===================================== */
 
-/* -------------------------------------------------------------------------- */
-/* 8. OUR NEW PRODUCTS (STRICT 2x2 LUXURY GRID ON MOBILE)                     */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 8. OUR NEW PRODUCTS (2x2 GRID) =============================== */
+/* ========================================================================== */
 .new-products-section,
 #new-products {
     padding-top: 1rem !important;
-    padding-bottom: 1.5rem !important;
-    width: 100% !important;
+    padding-bottom: 1.2rem !important;
 }
 
 .new-products-section .section-header-center {
@@ -503,16 +485,16 @@ div:has(> img[src*="1543163521"]) {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+/* === END: 8. OUR NEW PRODUCTS ============================================ */
 
-/* -------------------------------------------------------------------------- */
-/* 9. HALL OF PRESTIGE / CLIENT ACCOLADES (STRICT 2x2 COMPACT GRID ON MOBILE) */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 9. CLIENT ACCOLADES / REVIEWS (2x2 GRID) ===================== */
+/* ========================================================================== */
 .reviews-section,
 #reviews {
-    padding-top: 1.2rem !important;
-    padding-bottom: 1.5rem !important;
-    width: 100% !important;
-    overflow: hidden !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
 }
 
 .reviews-header-wrap {
@@ -520,13 +502,9 @@ div:has(> img[src*="1543163521"]) {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    gap: 0.8rem !important;
-    margin-bottom: 1.2rem !important;
+    gap: 0.6rem !important;
+    margin-bottom: 1rem !important;
     padding: 0 12px !important;
-}
-
-.reviews-title-area {
-    text-align: center !important;
 }
 
 .reviews-title-area .section-title {
@@ -542,27 +520,8 @@ div:has(> img[src*="1543163521"]) {
 }
 
 .google-capsule {
-    padding: 0.4rem 1rem !important;
+    padding: 0.35rem 0.9rem !important;
     border-radius: 25px !important;
-    gap: 0.6rem !important;
-}
-
-.google-g-wrap {
-    width: 28px !important;
-    height: 28px !important;
-}
-
-.google-g-wrap svg {
-    width: 16px !important;
-    height: 16px !important;
-}
-
-.capsule-score {
-    font-size: 1.1rem !important;
-}
-
-.capsule-label {
-    font-size: 0.6rem !important;
 }
 
 .reviews-grid,
@@ -572,7 +531,6 @@ div:has(> img[src*="1543163521"]) {
     gap: 10px !important;
     padding: 0 12px !important;
     width: 100% !important;
-    overflow: visible !important;
 }
 
 .review-card,
@@ -589,99 +547,36 @@ div:has(> img[src*="1543163521"]) {
     overflow: hidden !important;
 }
 
-.review-card-header,
-.review-card-top {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 4px !important;
-    margin-bottom: 4px !important;
-}
-
-.client-profile,
-.client-info {
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-}
-
-.avatar-ring,
-.avatar-letter {
-    width: 24px !important;
-    height: 24px !important;
-    font-size: 0.7rem !important;
-}
-
-.client-meta h4,
-.client-info h4 {
-    font-size: 0.72rem !important;
-    margin: 0 !important;
-    line-height: 1.1 !important;
-}
-
-.client-loc,
-.verified-tag {
-    font-size: 0.55rem !important;
-    line-height: 1 !important;
-}
-
-.card-stars-row,
-.card-stars {
-    font-size: 0.6rem !important;
-    gap: 1px !important;
-}
-
-.review-text-quote,
-.review-comment {
-    font-size: 0.65rem !important;
-    line-height: 1.3 !important;
-    margin: 4px 0 !important;
-    display: -webkit-box !important;
-    -webkit-line-clamp: 3 !important;
-    -webkit-box-orient: vertical !important;
-    overflow: hidden !important;
-    opacity: 0.88 !important;
-}
-
-.review-product-tag {
-    font-size: 0.58rem !important;
-    padding: 2px 6px !important;
-    margin-top: 2px !important;
-    border-radius: 4px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-}
-
 .quote-watermark {
     display: none !important;
 }
+/* === END: 9. CLIENT ACCOLADES / REVIEWS ================================== */
 
-/* -------------------------------------------------------------------------- */
-/* 10. CONNECT WITH BLUE SKIN & MESSAGE FORM                                  */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ==================== */
+/* ========================================================================== */
 .contact-section,
 #contact {
-    padding-top: 1.2rem !important;
-    padding-bottom: 1.5rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1.2rem !important;
 }
 
 .contact-grid {
     display: flex !important;
     flex-direction: column !important;
-    gap: 1.2rem !important;
+    gap: 1rem !important;
 }
 
 .contact-card {
     padding: 10px !important;
     border-radius: 12px !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
 }
 
 .contact-form-card {
-    padding: 1.2rem !important;
-    border-radius: 16px !important;
+    padding: 1.1rem !important;
+    border-radius: 14px !important;
     width: 100% !important;
 }
 
@@ -690,14 +585,16 @@ div:has(> img[src*="1543163521"]) {
     font-size: 16px !important;
     padding: 8px !important;
 }
+/* === END: 10. CONNECT WITH BLUE SKIN & MESSAGE FORM ====================== */
 
-/* -------------------------------------------------------------------------- */
-/* 11. ASSURANCE TERMS & CENTERED FOOTER                                      */
-/* -------------------------------------------------------------------------- */
+
+/* ========================================================================== */
+/* === START: 11. ASSURANCE TERMS & CENTERED FOOTER ======================== */
+/* ========================================================================== */
 .terms-card {
-    padding: 1rem !important;
-    border-radius: 14px !important;
-    margin-bottom: 1.5rem !important;
+    padding: 0.9rem !important;
+    border-radius: 12px !important;
+    margin-bottom: 1.2rem !important;
 }
 
 .terms-grid {
@@ -706,13 +603,8 @@ div:has(> img[src*="1543163521"]) {
     gap: 8px !important;
 }
 
-.term-box {
-    padding: 10px !important;
-    border-radius: 8px !important;
-}
-
 .footer-section {
-    padding: 2rem 12px 1.5rem 12px !important;
+    padding: 1.5rem 12px 1rem 12px !important;
     text-align: center !important;
 }
 
@@ -721,7 +613,7 @@ div:has(> img[src*="1543163521"]) {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    gap: 1rem !important;
+    gap: 0.8rem !important;
 }
 
 .footer-brand {
@@ -737,496 +629,6 @@ div:has(> img[src*="1543163521"]) {
 .copyright-bar {
     text-align: center !important;
     font-size: 0.72rem !important;
-    padding-top: 1rem !important;
+    padding-top: 0.8rem !important;
 }
-
-/* ========================================================================== */
-/* 4. EXACT 3-COLUMN CENTERED STATS BOX WITH FORCED VISIBLE LABELS (MOBILE)   */
-/* ========================================================================== */
-
-/* 1. பிரதான செவ்வக பாக்ஸ் (3 சமச்சீர் பிரிவுகளுடன்) */
-.hero-metrics,
-.stats-row,
-.metrics-counter-wrap {
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr auto 1fr !important; /* 3 சம பாகங்கள் + 2 மெல்லிய கோடுகள் */
-    align-items: center !important;
-    justify-items: center !important;
-    width: 92% !important;
-    max-width: 360px !important;
-    margin: 0 auto 0.8rem auto !important;
-    padding: 10px 6px !important;
-    background: rgba(8, 22, 45, 0.85) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.35) !important;
-    border-radius: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. ஒவ்வொரு காலமும் (Column) அதன் எல்லைக்குள் சரியாக நடுவில் (Center) நிற்க */
-.metric-item,
-.stat-item {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    width: 100% !important;
-    padding: 0 2px !important;
-    margin: 0 !important;
-}
-
-/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) சென்டரில் அமைய */
-.metric-item h3,
-.metric-item h3 *,
-.stat-number {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
-    color: #f5c443 !important;
-    margin: 0 0 3px 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    display: block !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
-}
-
-/* 4. வரி 2: விடுபட்ட வார்த்தைகளை (Authentic Quality) கட்டாயமாக வெளியே கொண்டுவருதல் */
-.metric-item p,
-.metric-item span,
-.stat-label {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important; /* மொபைல் திரையில் ஒரே லைனில் உடையாமல் நிற்க */
-    line-height: 1.1 !important;
-    letter-spacing: 0.3px !important;
-    text-transform: uppercase !important;
-    color: #e2e8f0 !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    text-wrap: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    min-height: 12px !important;
-}
-
-/* 5. நடுவில் உள்ள பிரிப்புக் கோடுகள் (Dividers) */
-.metric-divider {
-    width: 1px !important;
-    height: 24px !important;
-    background: rgba(245, 196, 67, 0.25) !important;
-    display: block !important;
-    margin: 0 !important;
-}
-
-/* ========================================================================== */
-/* MASTER FIX: 3 PERFECTLY CENTERED STATS WITH VISIBLE 2-LINE LABELS          */
-/* ========================================================================== */
-
-/* 1. மெயின் பாக்ஸ்: மையத்தில் கச்சிதமாக அமையும் கிளாஸ் காப்சியூல் */
-.hero-metrics,
-.hero-section .hero-metrics {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 92% !important;
-    max-width: 350px !important;
-    margin: 0 auto 0.6rem auto !important;
-    padding: 8px 4px !important;
-    background: rgba(8, 22, 45, 0.88) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.35) !important;
-    border-radius: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. ஒவ்வொரு காலமும் (100%, 500+, 4.9★) சரியாக சம அளவில் 33% எடுத்து மையத்தில் நிற்க */
-.metric-item,
-.hero-metrics .metric-item {
-    flex: 1 1 33.33% !important;
-    width: 33.33% !important;
-    max-width: 33.33% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    margin: 0 !important;
-    padding: 0 2px !important;
-    box-sizing: border-box !important;
-}
-
-/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) காலத்தின் நடுவில் நிற்க */
-.metric-item h3,
-.hero-metrics .metric-item h3 {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 700 !important;
-    line-height: 1.15 !important;
-    color: #f5c443 !important;
-    margin: 0 0 3px 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    display: block !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
-}
-
-/* 4. வரி 2: விடுபட்ட எழுத்துக்கள் (Authentic Quality / Curated Designs / Client Rating) */
-/* கண்ணுக்குத் தெரியும்படி பிரகாசமான வெள்ளியில் கட்டாயமாக வரவழைத்தல் */
-.metric-item p,
-.hero-metrics .metric-item p {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important;
-    font-weight: 600 !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.3px !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;           /* பின்னணியில் பளிச்சென்று தெரிய தூய வெள்ளை */
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
-    text-align: center !important;
-    white-space: nowrap !important;       /* ஒரே வரியில் நிற்க */
-    text-wrap: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-    width: auto !important;
-}
-
-/* 5. பிரிப்புக் கோடுகள் (Dividers) காலத்தை விட்டு விலகாமல் மெல்லியதாக அமைய */
-.metric-divider,
-.hero-metrics .metric-divider {
-    flex: 0 0 1px !important;
-    width: 1px !important;
-    height: 22px !important;
-    background: rgba(245, 196, 67, 0.3) !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-/* ========================================================================== */
-/* ABSOLUTE FORCE: 3-COLUMNS CENTERED & GUARANTEED 2-LINE LABELS              */
-/* ========================================================================== */
-
-/* 1. மெயின் பாக்ஸ் - 3 காலம்களும் சமமாக அமையும் கிரிட் */
-.hero-section .hero-metrics,
-.hero-metrics {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-evenly !important;
-    align-items: center !important;
-    width: 92% !important;
-    max-width: 350px !important;
-    margin: 0 auto 0.8rem auto !important;
-    padding: 8px 4px !important;
-    background: rgba(8, 22, 45, 0.9) !important;
-    backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(245, 196, 67, 0.35) !important;
-    border-radius: 14px !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. ஒவ்வொரு பாக்ஸும் 33% எடுத்து மையத்தில் நிற்க (Center Alignment) */
-.hero-section .hero-metrics .metric-item,
-.hero-metrics .metric-item {
-    flex: 1 1 33.33% !important;
-    width: 33.33% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
-.hero-section .hero-metrics .metric-item h3,
-.hero-metrics .metric-item h3 {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
-    color: #f5c443 !important;
-    margin: 0 0 2px 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    display: block !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.35) !important;
-}
-
-/* 4. வரி 2: விடுபட்ட வார்த்தைகள் (AUTHENTIC QUALITY / CURATED DESIGNS / CLIENT RATING) */
-.hero-section .hero-metrics .metric-item p,
-.hero-section .hero-metrics .metric-item span,
-.hero-metrics .metric-item p,
-.hero-metrics .metric-item span {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important;
-    font-weight: 600 !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.2px !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;           /* பிரகாசமான வெள்ளை நிறம் */
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
-    text-align: center !important;
-    white-space: nowrap !important;       /* ஒரே வரியில் அமைய */
-    text-wrap: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-}
-
-/* 5. பிரிப்புக் கோடுகள் (Dividers) */
-.hero-section .hero-metrics .metric-divider,
-.hero-metrics .metric-divider {
-    flex: 0 0 1px !important;
-    width: 1px !important;
-    height: 22px !important;
-    background: rgba(245, 196, 67, 0.3) !important;
-    margin: 0 2px !important;
-}
-/* ========================================================================== */
-/* STATS STRIP: REMOVE BOX/CONTAINER & FREELY ALIGN 3 EQUAL STATS (MOBILE)    */
-/* ========================================================================== */
-
-/* 1. செவ்வக பாக்ஸ், பார்டர், பேக்ரவுண்ட் அனைத்தையும் மொபைலில் நீக்குதல் */
-.hero-section .hero-metrics,
-.hero-metrics {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: flex-start !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0.8rem auto 0 auto !important;
-    padding: 0 4px !important;
-    background: transparent !important;   /* பாக்ஸ் பின்னணி நீக்கம் */
-    border: none !important;              /* பாக்ஸ் பார்டர் நீக்கம் */
-    box-shadow: none !important;
-    backdrop-filter: none !important;
-    box-sizing: border-box !important;
-}
-
-/* 2. ஒவ்வொரு ஸ்டேட்ஸ் காலமும் சமமான 33% அகலத்தில் நடுநாயகமாக நிற்க */
-.hero-section .hero-metrics .metric-item,
-.hero-metrics .metric-item {
-    flex: 1 1 33.33% !important;
-    width: 33.33% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    margin: 0 !important;
-    padding: 0 2px !important;
-}
-
-/* 3. வரி 1: எண்கள் (100% / 500+ / 4.9★) */
-.hero-section .hero-metrics .metric-item h3,
-.hero-metrics .metric-item h3 {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.18rem !important;
-    font-weight: 700 !important;
-    line-height: 1.15 !important;
-    color: #f5c443 !important;
-    margin: 0 0 4px 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    display: block !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9) !important;
-}
-
-/* 4. வரி 2: விடுபட்ட எழுத்துக்கள் பிரகாசமாக கீழே தோன்றுதல் */
-.hero-section .hero-metrics .metric-item p,
-.hero-metrics .metric-item p {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.54rem !important;
-    font-weight: 600 !important;
-    line-height: 1.2 !important;
-    letter-spacing: 0.4px !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;           /* தூய பிரகாசமான வெள்ளை நிறம் */
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95) !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    text-wrap: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    height: auto !important;
-}
-
-/* 5. நடுவில் உள்ள கோடுகளையும் முழுமையாக நீக்குதல் (Clean Open Layout) */
-.hero-section .hero-metrics .metric-divider,
-.hero-metrics .metric-divider {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-}
-/* ========================================================================== */
-/* HERO & STATS: FLAWLESS TYPOGRAPHY & 3-COLUMN SIZE ALIGNMENT (MOBILE)      */
-/* ========================================================================== */
-
-/* -------------------------------------------------------------------------- */
-/* 1. HERO TITLE: PRECISE 3-LINE CINZEL GEOMETRY                              */
-/* -------------------------------------------------------------------------- */
-.hero-title,
-.hero-section h1 {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.55rem !important;
-    line-height: 1.3 !important;
-    font-weight: 700 !important;
-    letter-spacing: 0.5px !important;
-    color: #ffffff !important;
-    margin: 0 auto 0.75rem auto !important;
-    text-align: center !important;
-    max-width: 310px !important; /* 3 வரிகளில் துல்லியமாக உடைய வைக்கும் அகலம் */
-    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9) !important;
-    word-break: keep-all !important;
-}
-
-.hero-title .gold-gradient-text,
-.hero-section h1 span {
-    display: inline-block !important;
-    color: #f5c443 !important;
-    background: linear-gradient(135deg, #ffd768 0%, #f5c443 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 2. SUBTITLE: BALANCED 3-LINE ESSENCE                                       */
-/* -------------------------------------------------------------------------- */
-.hero-subtitle,
-.hero-desc {
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.72rem !important;
-    line-height: 1.5 !important;
-    color: #cbd5e1 !important;
-    max-width: 320px !important;
-    margin: 0 auto 1.2rem auto !important;
-    text-align: center !important;
-    opacity: 0.95 !important;
-    display: block !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 3. ACTION BUTTONS: 3MM LOWERED & PROPORTIONAL                              */
-/* -------------------------------------------------------------------------- */
-.hero-cta-group,
-.hero-btn-row {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 12px !important;
-    width: 100% !important;
-    margin-top: 2px !important;
-    margin-bottom: 1.4rem !important;
-}
-
-.hero-cta-group a,
-.btn-primary-gold,
-.btn-secondary-outline {
-    width: 138px !important;
-    height: 38px !important;
-    padding: 0 8px !important;
-    font-size: 0.72rem !important;
-    font-weight: 600 !important;
-    border-radius: 25px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    white-space: nowrap !important;
-    box-sizing: border-box !important;
-}
-
-/* -------------------------------------------------------------------------- */
-/* 4. STATS COUNTER STRIP: PERFECTLY SIZED & PROPORTIONALLY CENTERED          */
-/* -------------------------------------------------------------------------- */
-.hero-metrics {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    width: 100% !important;
-    max-width: 345px !important;
-    margin: 0.5rem auto 0 auto !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* ஒவ்வொரு காலமும் (33.33%) சம அளவில் பிரிந்து நிற்க */
-.hero-metrics .metric-item {
-    flex: 1 1 33.33% !important;
-    width: 33.33% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    margin: 0 !important;
-    padding: 0 2px !important;
-    box-sizing: border-box !important;
-}
-
-/* லைன் 1: எண்கள் (100% / 500+ / 4.9★) சரியான அளவு */
-.hero-metrics .metric-item h3 {
-    font-family: 'Cinzel', serif !important;
-    font-size: 1.15rem !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
-    color: #f5c443 !important;
-    margin: 0 0 4px 0 !important;
-    padding: 0 !important;
-    text-align: center !important;
-    display: block !important;
-    white-space: nowrap !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
-}
-
-/* லைன் 2: லேபிள்கள் (Authentic Quality / Curated Designs / Client Rating) */
-/* மொபைல் திரைக்கு ஏற்ற மைக்ரோ-டைப்போகிராபி அளவு */
-.hero-metrics .metric-item p {
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.52rem !important; /* சரியான ரீடபிலிட்டி அளவு */
-    font-weight: 600 !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.4px !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9) !important;
-    text-align: center !important;
-    white-space: nowrap !important; /* வரியை உடைக்காமல் நேராக வைக்கும் */
-    text-wrap: nowrap !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: block !important;
-}
-
-/* நடுவில் உள்ள கோடுகள் மறைப்பு */
-.hero-metrics .metric-divider {
-    display: none !important;
-}
+/* === END: 11. ASSURANCE TERMS & CENTERED FOOTER ========================== */
