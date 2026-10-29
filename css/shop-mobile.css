@@ -1,79 +1,58 @@
 /* ========================================================================== */
-/* BLUE SKIN LUXURY ENTERPRISE - SHOP MOBILE MASTER ENGINE                    */
+/* === START: 1. TOP SCROLLING TICKER BAR (EXPANDED HEIGHT & CLEAN SIZE) ==== */
 /* ========================================================================== */
-
-
-/* ========================================================================== */
-/* === START: 1. GLOBAL RESETS & CONTAINER CONTROL ========================= */
-/* ========================================================================== */
-html, body {
-    overflow-x: hidden !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-* {
-    box-sizing: border-box !important;
-}
-
-.section-container {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding-left: 12px !important;
-    padding-right: 12px !important;
-}
-/* === END: 1. GLOBAL RESETS & CONTAINER CONTROL =========================== */
-
-
-/* ========================================================================== */
-/* === START: 2. HEADER & NAVIGATION (FRONT-PAGE CLONED EXACT LOOK) ========= */
-/* ========================================================================== */
-
-/* 1. டாப் டிக்கர் பார்: FRONT PAGE அசல் நிறம் & அளவு */
 .top-ticker-bar {
-    background: #06101e !important;                 /* FRONT PAGE MIDNIGHT NAVY */
-    border-bottom: 1px solid rgba(245, 196, 67, 0.25) !important;
-    padding: 6px 0 !important;
-    height: auto !important;
+    background: #06101e !important;                 /* அசல் மிட்நைட் நேவி */
+    border-bottom: 1.5px solid rgba(245, 196, 67, 0.28) !important;
+    padding: 9px 0 !important;                      /* உயரத்தை அதிகரித்துள்ளோம் */
+    min-height: 34px !important;
+    display: flex !important;
+    align-items: center !important;
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .ticker-content span {
     font-family: 'Poppins', sans-serif !important;
-    font-size: 0.62rem !important;
+    font-size: 0.74rem !important;                  /* தெளிவான பெரிய எழுத்துக்கள் */
     font-weight: 500 !important;
     letter-spacing: 0.8px !important;
     color: #e2e8f0 !important;
+    line-height: 1 !important;
 }
 
 .ticker-content span i {
     color: #f5c443 !important;                     /* பொன்னிற ஐகான்கள் */
-    margin-right: 4px !important;
+    font-size: 0.78rem !important;
+    margin-right: 5px !important;
 }
 
 .ticker-dot {
-    margin: 0 8px !important;
+    margin: 0 10px !important;
     color: #f5c443 !important;
-    font-size: 0.75rem !important;
+    font-size: 0.85rem !important;
 }
+/* === END: 1. TOP SCROLLING TICKER BAR ===================================== */
 
-/* 2. ஹெடர் பார்: FRONT PAGE அசல் ராயல் நேவி பேக்ரவுண்ட் */
+
+/* ========================================================================== */
+/* === START: 2. HEADER & TIGHTLY GROUPED RIGHT ICONS ======================= */
+/* ========================================================================== */
 .header {
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
-    background: #0d2244 !important;                 /* FRONT PAGE ROYAL NAVY */
+    background: #0d2244 !important;                 /* ராயல் நேவி பின்னணி */
     border-bottom: 1px solid rgba(245, 196, 67, 0.3) !important;
     padding: 0 !important;
     width: 100% !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5) !important;
 }
 
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.65rem 12px !important;
+    padding: 0.6rem 12px !important;
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -82,60 +61,55 @@ html, body {
     box-sizing: border-box !important;
 }
 
-/* 3. லெஃப்ட்: லோகோவில் கிரீடம் நீக்கம் & பெரிய BLUE SKIN எழுத்து */
+/* 1. இடதுபுறம்: பிராண்ட் லோகோ (கிரீடம் இன்றி சுத்தமான BLUE SKIN) */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
-    display: none !important;                      /* கிரீட ஐகான் நிரந்தர நீக்கம் */
+    display: none !important;
 }
 
 .nav-left-brand .logo,
 .logo {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.52rem !important;                 /* பெரிய ராயல் லோகோ அளவு */
+    font-size: 1.45rem !important;
     font-weight: 700 !important;
     letter-spacing: 1.2px !important;
-    color: #ffffff !important;                     /* தூய வெள்ளை BLUE */
+    color: #ffffff !important;
     text-decoration: none !important;
     line-height: 1 !important;
     display: inline-flex !important;
     align-items: center !important;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
 }
 
 .nav-left-brand .logo .gold-text,
 .gold-text {
-    color: #f5c443 !important;                     /* அசல் தங்கம் SKIN */
+    color: #f5c443 !important;
     margin-left: 5px !important;
     text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* 4. ரைட்: பட்டன்கள் வரிசை */
+/* 2. வலதுபுறம்: 3 வட்ட ஐகான்களை ஒட்டி வைக்கும் பகுதி */
 .nav-actions-right {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 8px !important;
+    justify-content: flex-end !important;
+    gap: 6px !important;                           /* நடுத்திரை வரை பரவாமல் ஒட்டி நிற்கும் */
     margin: 0 !important;
     padding: 0 !important;
+    flex-shrink: 0 !important;
 }
 
-/* ========================================================================== */
-/* போர்ட்ஃபோலியோ டெக்ஸ்ட் நீக்கம் - வட்ட வடிவ பேக் அம்பு ஐகான்                */
-/* ========================================================================== */
-
-/* 'Portfolio' என்ற எழுத்தை முழுமையாக மறைத்தல் */
+/* பேக் பட்டன் (வட்ட வடிவ கோல்ட் அம்பு) */
 .btn-back-portfolio span {
     display: none !important;
 }
 
-/* விஷ்லிஸ்ட் & கார்ட் போன்றே 100% வட்ட வடிவமாக (Perfect Circle) மாற்றுதல் */
 .btn-back-portfolio {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    min-height: 38px !important;
-    max-height: 38px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
     aspect-ratio: 1 / 1 !important;
     border-radius: 50% !important;
     background: rgba(16, 42, 78, 0.85) !important;
@@ -148,29 +122,27 @@ html, body {
     padding: 0 !important;
     margin: 0 !important;
     box-sizing: border-box !important;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
     flex-shrink: 0 !important;
 }
 
 .btn-back-portfolio i {
-    font-size: 0.9rem !important;
+    font-size: 0.86rem !important;
     color: #f5c443 !important;
     line-height: 1 !important;
     margin: 0 !important;
 }
 
-/* 6. விஷ்லிஸ்ட் (ஹார்ட்) & கார்ட் (பேக்): 100% பெர்ஃபெக்ட் சர்க்கிள் (வட்டம்) */
+/* விஷ்லிஸ்ட் (ஹார்ட்) & கார்ட் (பேக்) வட்ட பட்டன்கள் */
 .luxury-round-btn,
 .wishlist-nav-btn,
 .luxury-cart-btn {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    min-height: 38px !important;
-    max-height: 38px !important;
-    aspect-ratio: 1 / 1 !important;                 /* ஓவல் ஆகாமல் தடுக்கும் விகிதம் */
-    border-radius: 50% !important;                  /* முழுமையான வட்டம் */
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    max-width: 36px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
     background: rgba(16, 42, 78, 0.85) !important;
     border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
     color: #ffffff !important;
@@ -178,41 +150,37 @@ html, body {
     align-items: center !important;
     justify-content: center !important;
     position: relative !important;
-    font-size: 0.88rem !important;
+    font-size: 0.85rem !important;
     cursor: pointer !important;
     padding: 0 !important;
     margin: 0 !important;
     box-sizing: border-box !important;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
     flex-shrink: 0 !important;
 }
 
 .luxury-round-btn i {
     line-height: 1 !important;
     margin: 0 !important;
-    padding: 0 !important;
 }
 
-/* கவுண்ட் பேட்ஜ் (வட்டத்தின் விளிம்பில் சரியாக அமர) */
+/* கவுண்ட் பேட்ஜ் */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
     right: -3px !important;
-    width: 17px !important;
-    height: 17px !important;
-    min-width: 17px !important;
-    max-width: 17px !important;
+    width: 16px !important;
+    height: 16px !important;
     border-radius: 50% !important;
     background: #f5c443 !important;
     color: #0b1a30 !important;
-    font-size: 0.55rem !important;
+    font-size: 0.52rem !important;
     font-weight: 800 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     border: 1.5px solid #0d2244 !important;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5) !important;
     padding: 0 !important;
     margin: 0 !important;
 }
-/* === END: 2. HEADER & NAVIGATION ========================================= */
+/* === END: 2. HEADER & TIGHTLY GROUPED RIGHT ICONS ========================= */
