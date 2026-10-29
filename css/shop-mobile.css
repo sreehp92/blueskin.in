@@ -119,31 +119,44 @@ html, body {
     padding: 0 !important;
 }
 
-/* 5. போர்ட்ஃபோலியோ பட்டன்: FRONT PAGE "SHOP NOW" பட்டனின் அதே கோல்டன் பில் */
+/* ========================================================================== */
+/* போர்ட்ஃபோலியோ டெக்ஸ்ட் நீக்கம் - வட்ட வடிவ பேக் அம்பு ஐகான்                */
+/* ========================================================================== */
+
+/* 'Portfolio' என்ற எழுத்தை முழுமையாக மறைத்தல் */
+.btn-back-portfolio span {
+    display: none !important;
+}
+
+/* விஷ்லிஸ்ட் & கார்ட் போன்றே 100% வட்ட வடிவமாக (Perfect Circle) மாற்றுதல் */
 .btn-back-portfolio {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    aspect-ratio: 1 / 1 !important;
+    border-radius: 50% !important;
+    background: rgba(16, 42, 78, 0.85) !important;
+    border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
+    color: #f5c443 !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
-    height: 38px !important;
-    padding: 0 14px !important;
-    background: #f5c443 !important;                /* FRONT PAGE அசல் தங்கம் */
-    color: #0b1a30 !important;                     /* கறுப்பு எழுத்து */
-    border: none !important;
-    border-radius: 25px !important;                /* FRONT PAGE பில் ரேடியஸ் */
-    font-family: 'Poppins', sans-serif !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
     text-decoration: none !important;
-    white-space: nowrap !important;
-    box-shadow: 0 0 15px rgba(245, 196, 67, 0.45) !important; /* FRONT PAGE கோல்டன் க்ளோ */
+    padding: 0 !important;
+    margin: 0 !important;
     box-sizing: border-box !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) !important;
     flex-shrink: 0 !important;
 }
 
 .btn-back-portfolio i {
-    font-size: 0.70rem !important;
-    color: #0b1a30 !important;
+    font-size: 0.9rem !important;
+    color: #f5c443 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
 }
 
 /* 6. விஷ்லிஸ்ட் (ஹார்ட்) & கார்ட் (பேக்): 100% பெர்ஃபெக்ட் சர்க்கிள் (வட்டம்) */
