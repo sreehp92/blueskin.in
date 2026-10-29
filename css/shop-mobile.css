@@ -5,7 +5,7 @@
     background: #06101e !important;                 /* அசல் மிட்நைட் நேவி */
     border-bottom: 1.5px solid rgba(245, 196, 67, 0.28) !important;
     padding: 9px 0 !important;                      /* உயரத்தை அதிகரித்துள்ளோம் */
-    min-height: 34px !important;
+    min-height: 50px !important;
     display: flex !important;
     align-items: center !important;
     width: 100% !important;
@@ -36,23 +36,25 @@
 
 
 /* ========================================================================== */
-/* === START: 2. HEADER & TIGHTLY GROUPED RIGHT ICONS ======================= */
+/* === START: 2. HEADER & NAVIGATION (PERFECT CIRCLES & TIGHT SPACING) ====== */
 /* ========================================================================== */
+
+/* 1. Header Bar Background & Height */
 .header {
     position: sticky !important;
     top: 0 !important;
     z-index: 1000 !important;
-    background: #0d2244 !important;                 /* ராயல் நேவி பின்னணி */
+    background: #0d2244 !important;
     border-bottom: 1px solid rgba(245, 196, 67, 0.3) !important;
     padding: 0 !important;
     width: 100% !important;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.45) !important;
 }
 
 .header .nav-container,
 .nav-container,
 .shop-nav-flex {
-    padding: 0.6rem 12px !important;
+    padding: 0.5rem 10px !important;            /* Extra space reduce panniyachu */
     display: flex !important;
     flex-direction: row !important;
     justify-content: space-between !important;
@@ -61,120 +63,114 @@
     box-sizing: border-box !important;
 }
 
-/* 1. இடதுபுறம்: பிராண்ட் லோகோ (கிரீடம் இன்றி சுத்தமான BLUE SKIN) */
+/* 2. Left: Brand Logo (Crown removed, clean BLUE SKIN) */
 .brand-emblem,
 .nav-left-brand .brand-emblem {
-    display: none !important;
+    display: none !important;                  /* Kreedam complete remove */
 }
 
 .nav-left-brand .logo,
 .logo {
     font-family: 'Cinzel', serif !important;
-    font-size: 1.45rem !important;
+    font-size: 1.35rem !important;
     font-weight: 700 !important;
-    letter-spacing: 1.2px !important;
+    letter-spacing: 1px !important;
     color: #ffffff !important;
     text-decoration: none !important;
     line-height: 1 !important;
     display: inline-flex !important;
     align-items: center !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 .nav-left-brand .logo .gold-text,
 .gold-text {
     color: #f5c443 !important;
-    margin-left: 5px !important;
-    text-shadow: 0 2px 8px rgba(245, 196, 67, 0.4) !important;
+    margin-left: 4px !important;
+    text-shadow: 0 0 10px rgba(245, 196, 67, 0.4) !important;
 }
 
-/* 2. வலதுபுறம்: 3 வட்ட ஐகான்களை ஒட்டி வைக்கும் பகுதி */
+/* 3. Right: Action Buttons Group (Tight space) */
 .nav-actions-right {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-end !important;
-    gap: 6px !important;                           /* நடுத்திரை வரை பரவாமல் ஒட்டி நிற்கும் */
+    gap: 6px !important;                       /* Spacing romba pakkathula set panniyachu */
     margin: 0 !important;
     padding: 0 !important;
     flex-shrink: 0 !important;
 }
 
-/* பேக் பட்டன் (வட்ட வடிவ கோல்ட் அம்பு) */
+/* 4. Common Circular Rule (Oval aagatha strict circle shape) */
+.btn-back-portfolio,
+.luxury-round-btn,
+.wishlist-nav-btn,
+.luxury-cart-btn {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+    aspect-ratio: 1 / 1 !important;            /* Oval aagave aagathu */
+    border-radius: 50% !important;             /* 100% Perfect round */
+    padding: 0 !important;                     /* Padding zero panni oval deformation fix */
+    margin: 0 !important;
+    background: rgba(16, 42, 78, 0.85) !important;
+    border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35) !important;
+    flex-shrink: 0 !important;
+    position: relative !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+}
+
+/* Back Arrow Button specific */
 .btn-back-portfolio span {
     display: none !important;
 }
 
-.btn-back-portfolio {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    max-width: 36px !important;
-    aspect-ratio: 1 / 1 !important;
-    border-radius: 50% !important;
-    background: rgba(16, 42, 78, 0.85) !important;
-    border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
-    color: #f5c443 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-decoration: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
-    flex-shrink: 0 !important;
-}
-
 .btn-back-portfolio i {
-    font-size: 0.86rem !important;
+    font-size: 0.82rem !important;
     color: #f5c443 !important;
     line-height: 1 !important;
     margin: 0 !important;
-}
-
-/* விஷ்லிஸ்ட் (ஹார்ட்) & கார்ட் (பேக்) வட்ட பட்டன்கள் */
-.luxury-round-btn,
-.wishlist-nav-btn,
-.luxury-cart-btn {
-    width: 36px !important;
-    height: 36px !important;
-    min-width: 36px !important;
-    max-width: 36px !important;
-    aspect-ratio: 1 / 1 !important;
-    border-radius: 50% !important;
-    background: rgba(16, 42, 78, 0.85) !important;
-    border: 1.5px solid rgba(245, 196, 67, 0.45) !important;
-    color: #ffffff !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: relative !important;
-    font-size: 0.85rem !important;
-    cursor: pointer !important;
     padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4) !important;
-    flex-shrink: 0 !important;
 }
 
-.luxury-round-btn i {
+/* Wishlist & Cart Icons */
+.luxury-round-btn i,
+.wishlist-nav-btn i,
+.luxury-cart-btn i {
+    font-size: 0.82rem !important;
+    color: #ffffff !important;
     line-height: 1 !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
-/* கவுண்ட் பேட்ஜ் */
+/* 5. Count Badge (Corner-la correct round dot) */
 .action-badge {
     position: absolute !important;
     top: -3px !important;
     right: -3px !important;
-    width: 16px !important;
-    height: 16px !important;
+    width: 15px !important;
+    height: 15px !important;
+    min-width: 15px !important;
+    max-width: 15px !important;
+    min-height: 15px !important;
+    max-height: 15px !important;
+    aspect-ratio: 1 / 1 !important;
     border-radius: 50% !important;
     background: #f5c443 !important;
     color: #0b1a30 !important;
-    font-size: 0.52rem !important;
+    font-size: 0.50rem !important;
     font-weight: 800 !important;
     display: flex !important;
     align-items: center !important;
@@ -182,5 +178,6 @@
     border: 1.5px solid #0d2244 !important;
     padding: 0 !important;
     margin: 0 !important;
+    box-sizing: border-box !important;
 }
-/* === END: 2. HEADER & TIGHTLY GROUPED RIGHT ICONS ========================= */
+/* === END: 2. HEADER & NAVIGATION ========================================= */
