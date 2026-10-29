@@ -126,19 +126,33 @@ nav ul {
     -webkit-text-fill-color: transparent !important;
 }
 
-/* -------------------------------------------------------------------------- */
-/* 3.4 SUBTITLE & BRAND ESSENCE (HIGH-LEGIBILITY READOUT)                     */
-/* -------------------------------------------------------------------------- */
+/* ========================================================================== */
+/* 3.4 FORCE NEW 3-LINE SUBTEXT VIA CSS ONLY (ZERO HTML TOUCH - DESKTOP SAFE) */
+/* ========================================================================== */
+
+/* HTML-ல் உள்ள பழைய டெக்ஸ்ட்டை மொபைலில் மட்டும் மறைத்தல் */
 .hero-subtitle {
-    font-size: 0.76rem !important;
-    line-height: 1.5 !important;
-    color: #cbd5e1 !important;
-    max-width: 325px !important;
-    margin: 0 auto 1.1rem auto !important;
+    font-size: 0px !important;
+    line-height: 0 !important;
+    color: transparent !important;
+    margin: 0 auto 1.2rem auto !important;
+    max-width: 335px !important;
     text-align: center !important;
-    opacity: 0.95 !important;
     display: block !important;
+}
+
+/* நீங்கள் கொடுத்த புதிய 3-வரிகளை மொபைலில் மட்டும் கொண்டு வருதல் */
+.hero-subtitle::before {
+    content: "Your beauty deserves something extraordinary.\A Carefully created to bring out your natural glow.\A Feel confident    Feel radiant    Feel beautiful" !important;
+    white-space: pre-line !important; /* சரியாக 3 வரிகளாக உடைக்கும் */
+    display: block !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 0.74rem !important;
+    line-height: 1.55 !important;
+    color: #cbd5e1 !important;
+    text-align: center !important;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+    opacity: 0.95 !important;
 }
 
 /* -------------------------------------------------------------------------- */
