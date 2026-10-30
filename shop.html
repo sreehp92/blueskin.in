@@ -456,14 +456,24 @@
         </div>
     </footer>
 
-    <!-- 1. Supabase Official JS Library CDN (முதலில் வர வேண்டும்) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- 1. Supabase CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- 2. Supabase Configuration (அடுத்ததாக வர வேண்டும்) -->
-    <script src="js/supabase-config.js"></script>
+<!-- 2. Supabase நேரடி இணைப்பு (Direct Integration) -->
+<script>
+    const SUPABASE_URL = "https://xijzftvmvajnboywnmbe.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_BNT6jfQA2pGyo_rLmU4xvg_jv-_emF9";
+    
+    if (typeof supabase !== 'undefined') {
+        window.dbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase dbClient வெற்றிகரமாக இணைக்கப்பட்டது!");
+    } else {
+        console.error("❌ Supabase CDN லோட் ஆகவில்லை!");
+    }
+</script>
 
-    <!-- App JS -->
-    <script src="js/shop.js"></script>
+<!-- 3. Shop Logic -->
+<script src="js/shop.js"></script>
     
 </body>
 </html>
