@@ -2231,7 +2231,7 @@ window.closeProductStudioModal = function() {
     document.getElementById('productStudioModal').style.display = 'none';
 };
 
-// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — Supabase Cloud Sync உடன்
+// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — முழுமையான Supabase Cloud Sync
 window.saveProductStudioEntry = async function() {
     const title = document.getElementById('prodInputTitle').value.trim();
     const subtitle = document.getElementById('prodInputSubtitle').value.trim();
@@ -2311,9 +2311,6 @@ window.saveProductStudioEntry = async function() {
                 how_to: howTo
             };
 
-            const targetId = editingProductItemRefId || (masterProductsData[0] ? masterProductsData[0].id : null);
-
-            // Supabase-ல் upsert செய்தல் (இருந்தால் Update, இல்லையென்றால் Insert)
             const { error } = await client
                 .from('products')
                 .upsert({ ...supabasePayload, updated_at: new Date() });
@@ -2329,6 +2326,39 @@ window.saveProductStudioEntry = async function() {
         }
     } else {
         alert("✅ தயாரிப்பு லோக்கலில் சேமிக்கப்பட்டது (Supabase client கிடைக்கவில்லை)!");
+    }
+};
+
+// ==========================================================================
+// Portfolio CMS வார்த்தைகளை Supabase மற்றும் LocalStorage-ல் சேமிக்கும் முறை
+// ==========================================================================
+window.publishAllPortfolioCmsChanges = async function() {
+    if (typeof gatherPortfolioCmsFormData === 'function') {
+        const cmsPayload = gatherPortfolioCmsFormData();
+        localStorage.setItem('BLUESKIN_PORTFOLIO_CMS_DATA', JSON.stringify(cmsPayload));
+
+        const client = window.dbClient;
+        if (client) {
+            try {
+                const { error } = await client
+                    .from('site_content')
+                    .upsert({
+                        key: 'portfolio_cms',
+                        value: JSON.stringify(cmsPayload),
+                        updated_at: new Date()
+                    });
+
+                if (error) {
+                    console.error("Supabase CMS Sync Error:", error);
+                } else {
+                    console.log("✅ Landing page CMS successfully published to cloud!");
+                }
+            } catch (err) {
+                console.error("Cloud Error:", err);
+            }
+        }
+
+        alert("🚀 லேண்டிங் பேஜின் அனைத்து வார்த்தைகளும் வெற்றிகரமாக நேரலையாகப் பப்ளிஷ் செய்யப்பட்டன!");
     }
 };
 
