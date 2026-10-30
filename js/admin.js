@@ -7,9 +7,13 @@ let adminOrders = [];
 // (A) Supabase-லிருந்து அனைத்து ஆர்டர்களையும் எடுத்தல்
 async function fetchAdminOrdersFromSupabase() {
     try {
-        if (typeof dbClient === 'undefined') return;
+        const client = window.dbClient;
+        if (!client) {
+            console.warn("Supabase dbClient இன்னும் தயாராகவில்லை.");
+            return;
+        }
 
-        const { data, error } = await dbClient
+        const { data, error } = await client
             .from('orders')
             .select('*')
             .order('created_at', { ascending: false });
@@ -41,8 +45,11 @@ async function fetchAdminOrdersFromSupabase() {
 }
 
 // (B) புதிய ஆர்டர் வரும்போது தானாகவே அட்டவணையைப் புதுப்பிக்கும் Realtime Listener
-if (typeof dbClient !== 'undefined') {
-    dbClient
+function initAdminRealtime() {
+    const client = window.dbClient;
+    if (!client) return;
+
+    client
         .channel('admin_orders_channel')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
             console.log("🔔 Realtime New Order:", payload);
@@ -50,6 +57,13 @@ if (typeof dbClient !== 'undefined') {
         })
         .subscribe();
 }
+
+// பக்கம் லோட் ஆனதும் Realtime-ஐ ஆன் செய்து ஆர்டர்களை எடுத்தல்
+window.addEventListener('load', () => {
+    fetchAdminOrdersFromSupabase();
+    initAdminRealtime();
+});
+
 
 /* ======================================================================= */
 /* [SECTION 1] MASTER SECURITY & LOGIN ENGINE — START                      */
@@ -2217,8 +2231,8 @@ window.closeProductStudioModal = function() {
     document.getElementById('productStudioModal').style.display = 'none';
 };
 
-// 10. தயாரிப்பைச் சேமித்தல் (Save Product)
-window.saveProductStudioEntry = function() {
+// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — Supabase Cloud Sync உடன்
+window.saveProductStudioEntry = async function() {
     const title = document.getElementById('prodInputTitle').value.trim();
     const subtitle = document.getElementById('prodInputSubtitle').value.trim();
     const weight = document.getElementById('prodInputWeight').value.trim();
@@ -2267,6 +2281,7 @@ window.saveProductStudioEntry = function() {
         addInfo
     };
 
+    // 1. உள்ளூர் பிரவுசரில் அப்டேட் செய்தல்
     if (editingProductItemRefId) {
         const item = masterProductsData.find(i => i.id === editingProductItemRefId);
         if (item) Object.assign(item, payload);
@@ -2278,7 +2293,43 @@ window.saveProductStudioEntry = function() {
     localStorage.setItem(PRODUCT_STORAGE_KEY, JSON.stringify(masterProductsData));
     closeProductStudioModal();
     renderProductMasterTable();
-    alert("✅ தயாரிப்பு வெற்றிகரமாகச் சேமிக்கப்பட்டு Shop-ல் இணைக்கப்பட்டது!");
+
+    // 2. நேரடியாக Supabase கிளவுடிற்கு அனுப்பி சேமித்தல்
+    const client = window.dbClient;
+    if (client) {
+        try {
+            const supabasePayload = {
+                name: title,
+                category: category,
+                sub_title: subtitle,
+                weight: weight,
+                original_price: mrp,
+                discount_percent: discount,
+                stock: 25,
+                images: imgUrl ? [imgUrl] : [],
+                description: desc,
+                how_to: howTo
+            };
+
+            const targetId = editingProductItemRefId || (masterProductsData[0] ? masterProductsData[0].id : null);
+
+            // Supabase-ல் upsert செய்தல் (இருந்தால் Update, இல்லையென்றால் Insert)
+            const { error } = await client
+                .from('products')
+                .upsert({ ...supabasePayload, updated_at: new Date() });
+
+            if (error) {
+                console.error("Supabase Product Sync Error:", error);
+                alert("கிளவுடில் சேமிப்பதில் பிழை: " + error.message);
+            } else {
+                alert("✅ தயாரிப்பு வெற்றிகரமாக கிளவுட் டேட்டாபேஸில் நேரலையாகச் சேமிக்கப்பட்டது!");
+            }
+        } catch (cloudErr) {
+            console.error("Cloud Error:", cloudErr);
+        }
+    } else {
+        alert("✅ தயாரிப்பு லோக்கலில் சேமிக்கப்பட்டது (Supabase client கிடைக்கவில்லை)!");
+    }
 };
 
 // 11. தயாரிப்பை நீக்குதல் (Delete Item)
