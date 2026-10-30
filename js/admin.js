@@ -1,9 +1,62 @@
+// ==========================================================================
+// === BLUE SKIN ADMIN: SUPABASE REALTIME CLOUD INTEGRATION               ===
+// ==========================================================================
+
+let adminOrders = [];
+
+// (A) Supabase-லிருந்து அனைத்து ஆர்டர்களையும் எடுத்தல்
+async function fetchAdminOrdersFromSupabase() {
+    try {
+        if (typeof dbClient === 'undefined') return;
+
+        const { data, error } = await dbClient
+            .from('orders')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data) {
+            adminOrders = data.map(o => ({
+                id: o.id,
+                date: new Date(o.created_at).toLocaleString('en-IN'),
+                customer: o.customer_name,
+                phone: o.customer_phone,
+                address: o.customer_address,
+                items: o.items_summary,
+                total: Number(o.total_amount),
+                paid: o.is_paid,
+                status: o.order_status,
+                carrier: o.carrier || '',
+                awb: o.awb_number || ''
+            }));
+
+            if (typeof renderOrdersTable === 'function') {
+                renderOrdersTable();
+            }
+        }
+    } catch (err) {
+        console.error("Supabase Admin Orders Fetch Error:", err);
+    }
+}
+
+// (B) புதிய ஆர்டர் வரும்போது தானாகவே அட்டவணையைப் புதுப்பிக்கும் Realtime Listener
+if (typeof dbClient !== 'undefined') {
+    dbClient
+        .channel('admin_orders_channel')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'orders' }, (payload) => {
+            console.log("🔔 Realtime New Order:", payload);
+            fetchAdminOrdersFromSupabase();
+        })
+        .subscribe();
+}
+
 /* ======================================================================= */
 /* [SECTION 1] MASTER SECURITY & LOGIN ENGINE — START                      */
-/* Purpose: Master PIN 9658 Direct Auto-Verification & Screen Transition   */
+/* Purpose: Master PIN 1283 Direct Auto-Verification & Screen Transition   */
 /* ======================================================================= */
 
-const MASTER_PIN = "9658";
+const MASTER_PIN = "1283";
 
 // 4 எண்களை உள்ளிட்டவுடன் தானாகச் சரிபார்க்கும் செயல்பாடு
 function handlePinAuto(input) {
@@ -47,6 +100,9 @@ function verifyAdminPin() {
 
             // டேஷ்போர்டு திறந்ததும் 7-Day Sales வரைபடத்தை ஏற்றும் செயல்பாடு
             renderModernTelemetryBars();
+
+            // 👇 [புதிய வரி] லாகின் ஆனவுடன் Supabase ஆர்டர்களை உடனடியாக லோட் செய்தல் 👇
+            fetchAdminOrdersFromSupabase();
 
         }, 400);
 
@@ -3182,3 +3238,62 @@ window.exportSuperConnectionsVault = function() {
 /* ======================================================================= */
 /* [SECTION 12] MODULE 9: SUPABASE & SUPER CONNECTIONS ENGINE — END        */
 /* ======================================================================= */
+
+// ==========================================================================
+// 1. அட்மினில் ஆர்டர் ஸ்டேட்டஸ் மாற்றினால் Supabase-ல் அப்டேட் செய்யும் ஃபங்ஷன்
+// ==========================================================================
+async function updateOrderStatusInSupabase(orderId, newStatus, isPaid = false) {
+    try {
+        if (typeof dbClient === 'undefined') return;
+
+        const { error } = await dbClient
+            .from('orders')
+            .update({ 
+                order_status: newStatus, 
+                is_paid: isPaid 
+            })
+            .eq('id', orderId);
+
+        if (error) throw error;
+        console.log(`Order ${orderId} status updated successfully!`);
+    } catch (err) {
+        console.error("Supabase Order Update Error:", err);
+    }
+}
+
+// ==========================================================================
+// 2. அட்மினில் புது ப்ராடக்ட் சேர்த்தால் Supabase-ல் சேமிக்கும் ஃபங்ஷன்
+// ==========================================================================
+async function saveProductToSupabase(productData) {
+    try {
+        if (typeof dbClient === 'undefined') return;
+
+        const payload = {
+            name: productData.name,
+            category: productData.category,
+            sub_title: productData.subTitle || '',
+            weight: productData.weight || '',
+            original_price: Number(productData.originalPrice),
+            discount_percent: Number(productData.discountPercent || 0),
+            stock: Number(productData.stock || 10),
+            images: productData.images && productData.images.length > 0 ? productData.images : [productData.image],
+            description: productData.desc || '',
+            how_to: productData.howTo || ''
+        };
+
+        if (productData.id) {
+            // ஏற்கெனவே இருக்கும் பொருளை எடிட் செய்தல்
+            const { error } = await dbClient.from('products').update(payload).eq('id', productData.id);
+            if (error) throw error;
+            alert("✅ பொருள் வெற்றிகரமாக கிளவுடில் புதுப்பிக்கப்பட்டது!");
+        } else {
+            // புதிய பொருளை டேட்டாபேஸில் சேர்த்தல்
+            const { error } = await dbClient.from('products').insert([payload]);
+            if (error) throw error;
+            alert("✅ புதிய பொருள் வெற்றிகரமாக சேர்க்கப்பட்டது!");
+        }
+    } catch (err) {
+        console.error("Product Save Error:", err);
+        alert("பிழை: " + err.message);
+    }
+}
