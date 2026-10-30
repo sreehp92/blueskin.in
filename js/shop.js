@@ -900,10 +900,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 // ==========================================================================
-// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & AUTO-RESET ENGINE       ===
+// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE CLOUD SYNC    ===
 // ==========================================================================
 
-window.submitWhatsAppOrder = function() {
+window.submitWhatsAppOrder = async function() {
     // 1. உள்ளீட்டுப் புலங்களை எடுத்தல்
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
@@ -957,16 +957,16 @@ window.submitWhatsAppOrder = function() {
         return;
     }
 
-    // 4. ஆடம்பர வாட்ஸ்அப் இன்வாய்ஸ் மெசேஜ் தயாரித்தல்
+    // 4. வாட்ஸ்அப் இன்வாய்ஸ் மெசேஜ் தயாரித்தல்
     let orderItemsText = "";
     let grandTotal = 0;
 
     activeCart.forEach((item, index) => {
-        const itemPrice = Number(item.price || item.finalPrice || 0);
+        const itemPrice = Number(item.price || item.finalPrice || item.specialPrice || 0);
         const itemQty = Number(item.qty || 1);
         const itemTotal = itemPrice * itemQty;
         grandTotal += itemTotal;
-        orderItemsText += `${index + 1}️⃣ *${item.name}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
+        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
     });
 
     const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -983,9 +983,9 @@ window.submitWhatsAppOrder = function() {
 ────────────────────────
 
 👤 *CLIENT INFORMATION*
-• *Name    :* ${name}
-• *Phone   :* +91 ${phone}
-• *Address :* ${address}
+- *Name    :* ${name}
+- *Phone   :* +91 ${phone}
+- *Address :* ${address}
 
 🛍️ *ORDERED CREATIONS*
 ────────────────────────
@@ -993,9 +993,9 @@ ${orderItemsText.trim()}
 ────────────────────────
 
 💳 *PAYMENT SUMMARY*
-• *Total Value :* ₹ ${grandTotal.toLocaleString('en-IN')}
-• *Shipping    :* Complimentary Insured Delivery (FREE)
-• *Net Payable :* *₹ ${grandTotal.toLocaleString('en-IN')}*
+- *Total Value :* ₹ ${grandTotal.toLocaleString('en-IN')}
+- *Shipping    :* Complimentary Insured Delivery (FREE)
+- *Net Payable :* *₹ ${grandTotal.toLocaleString('en-IN')}*
 ────────────────────────
 
 ✨ *Assurance:* 100% Authentic Handcrafted Formulation
@@ -1006,46 +1006,47 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-   // ----------------------------------------------------------------------
-    // 👇 புதிய சேர்க்கை: SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் 👇
     // ----------------------------------------------------------------------
-    if (typeof dbClient !== 'undefined') {
-        dbClient.from('orders').insert([
-            {
-                id: orderId,
-                customer_name: name,
-                customer_phone: phone,
-                customer_address: address,
-                items_summary: activeCart.map(i => `${i.name} (x${i.qty || 1})`).join(", "),
-                total_amount: grandTotal,
-                is_paid: false,
-                order_status: 'Pending Verification'
-            }
-        ]).then(({ error }) => {
+    // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (AWAIT உடனான நேரடி பதிவு)
+    // ----------------------------------------------------------------------
+    const client = window.dbClient;
+    if (client) {
+        try {
+            const { data, error } = await client.from('orders').insert([
+                {
+                    id: orderId,
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_address: address,
+                    items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
+                    total_amount: grandTotal,
+                    is_paid: false,
+                    order_status: 'Pending Verification'
+                }
+            ]);
+
             if (error) {
                 console.error("Supabase Order DB Error:", error);
             } else {
-                console.log("ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
+                console.log("✅ ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
             }
-        });
+        } catch (dbErr) {
+            console.error("Supabase Connection Error:", dbErr);
+        }
     }
 
     // ----------------------------------------------------------------------
-    // 5. ஆட்டோ-ரீசெட் & பிரண்ட் பேஜ் திரும்புதல் (AUTO RESET & CLOSE DRAWER)
+    // 6. ஆட்டோ-ரீசெட் & கார்ட் டிராயரை மூடுதல்
     // ----------------------------------------------------------------------
-    
-    // (A) கார்ட் டேட்டாவை முழுமையாகக் காலி செய்தல்
     cart = [];
     localStorage.removeItem('blueskin_cart');
     localStorage.removeItem('blueskin_checkout_draft');
     localStorage.setItem('blueskin_cart_screen', 'closed');
 
-    // (B) படிவ உள்ளீடுகளைக் காலி செய்தல்
     nameInput.value = '';
     phoneInput.value = '';
     addressInput.value = '';
 
-    // (C) கார்ட் UI கவுண்டர்களை உடனே '0' ஆக்குதல்
     if (typeof updateCartUI === 'function') {
         updateCartUI();
     }
@@ -1054,7 +1055,6 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const drawerItemCountEl = document.getElementById('drawerItemCount');
     if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
 
-    // (D) கார்ட் டிராயரை மூடிவிட்டு முகப்புப் பக்கத்திற்கு (Front Page) மாற்றுதல்
     const drawer = document.getElementById('cartDrawer');
     const overlay = document.getElementById('cartOverlay');
     if (drawer) {
@@ -1064,8 +1064,8 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     if (overlay) {
         overlay.classList.remove('active');
     }
-    document.body.style.overflow = ''; // ஸ்க்ரோலை இயல்பாக்குதல்
+    document.body.style.overflow = '';
 
-    // 6. வாட்ஸ்அப்பைத் திறத்தல்
+    // 7. ஆர்டர் பதிவான பிறகு வாட்ஸ்அப்பைத் திறத்தல்
     window.location.href = whatsappURL;
 };
