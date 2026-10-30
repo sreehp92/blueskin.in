@@ -93,9 +93,13 @@ let products = [
 // =====================================================
 async function fetchSupabaseProducts() {
     try {
-        if (typeof dbClient === 'undefined') return;
+        const client = window.dbClient;
+        if (!client) {
+            console.warn("Supabase client இன்னும் தயாராகவில்லை.");
+            return;
+        }
 
-        const { data, error } = await dbClient
+        const { data, error } = await client
             .from('products')
             .select('*')
             .order('id', { ascending: true });
@@ -110,31 +114,30 @@ async function fetchSupabaseProducts() {
                 id: p.id,
                 name: p.name,
                 category: p.category,
-                subTitle: p.sub_title || '',
+                subTitle: p.sub_title || p.subtitle || '',
                 weight: p.weight || '',
-                originalPrice: Number(p.original_price),
-                discountPercent: Number(p.discount_percent || 0),
-                stock: p.stock,
+                originalPrice: Number(p.original_price || p.originalPrice || 0),
+                discountPercent: Number(p.discount_percent || p.discountPercent || 0),
+                stock: p.stock || 10,
                 images: p.images && p.images.length > 0 ? p.images : [p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'],
-                image: p.images && p.images[0] ? p.images[0] : (p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'),
-                desc: p.description || '',
-                howTo: p.how_to || ''
+                image: (p.images && p.images[0]) ? p.images[0] : (p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'),
+                desc: p.description || p.desc || '',
+                howTo: p.how_to || p.howTo || ''
             }));
 
-            // ஸ்கிரீனில் புதிய தயாரிப்புகளை ரீ-ரெண்டர் செய்தல்
+            // 👇 மிக முக்கியம்: தயாரிப்புகளைத் திரையில் உடனே ஏற்றுதல்
             if (typeof renderProducts === 'function') {
-                const currentCat = typeof getActiveCategory === 'function' ? getActiveCategory() : 'all';
-                renderProducts(currentCat);
+                renderProducts('all');
             }
         }
     } catch (err) {
-        console.error("Supabase Products Fetch Error:", err);
+        console.error("Fetch Supabase Error:", err);
     }
 }
 
-// 3. அட்மின்ல ஏதாவது மாத்துனா உடனே தானாகவே அப்டேட் ஆக Realtime Listener
-if (typeof dbClient !== 'undefined') {
-    dbClient
+// Realtime Listener: அட்மினில் எடிட் செய்தால் ஷாப்பில் உடனே மாறும்
+if (window.dbClient) {
+    window.dbClient
         .channel('public:products')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
             fetchSupabaseProducts();
@@ -142,6 +145,13 @@ if (typeof dbClient !== 'undefined') {
         .subscribe();
 }
 
+// பேஜ் திறந்ததும் அழைத்தல்
+window.addEventListener('load', () => {
+    fetchSupabaseProducts();
+});
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSupabaseProducts();
+});
 // 4. பேஜ் லோட் ஆனதும் டேட்டாபேஸை அழைக்க
 document.addEventListener('DOMContentLoaded', () => {
     fetchSupabaseProducts();
