@@ -2,20 +2,20 @@
   "name": "Blue Skin Luxury Boutique",
   "short_name": "Blue Skin",
   "description": "Artisanal Luxury Cosmetics & Bespoke Formulations",
-  "start_url": "index.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#08162d",
   "theme_color": "#08162d",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=192&auto=format&fit=crop",
+      "src": "images/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=512&auto=format&fit=crop",
+      "src": "images/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
