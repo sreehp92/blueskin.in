@@ -4,7 +4,8 @@
 
 const CLIENT_WHATSAPP_NUMBER = "919658399991";
 
-const products = [
+// 1. ஆரம்ப நிலை / Backup தயாரிப்புகள் (const-க்கு பதிலா let)
+let products = [
     {
         id: 1,
         name: "Luminous Velvet Foundation",
@@ -87,6 +88,64 @@ const products = [
     }
 ];
 
+// =====================================================
+// 2. SUPABASE-லிருந்து லைவ் டேட்டா எடுக்கும் என்ஜின்
+// =====================================================
+async function fetchSupabaseProducts() {
+    try {
+        if (typeof dbClient === 'undefined') return;
+
+        const { data, error } = await dbClient
+            .from('products')
+            .select('*')
+            .order('id', { ascending: true });
+
+        if (error) {
+            console.warn("Supabase fetch error, fallback to initial items:", error);
+            return;
+        }
+
+        if (data && data.length > 0) {
+            products = data.map(p => ({
+                id: p.id,
+                name: p.name,
+                category: p.category,
+                subTitle: p.sub_title || '',
+                weight: p.weight || '',
+                originalPrice: Number(p.original_price),
+                discountPercent: Number(p.discount_percent || 0),
+                stock: p.stock,
+                images: p.images && p.images.length > 0 ? p.images : [p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'],
+                image: p.images && p.images[0] ? p.images[0] : (p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'),
+                desc: p.description || '',
+                howTo: p.how_to || ''
+            }));
+
+            // ஸ்கிரீனில் புதிய தயாரிப்புகளை ரீ-ரெண்டர் செய்தல்
+            if (typeof renderProducts === 'function') {
+                const currentCat = typeof getActiveCategory === 'function' ? getActiveCategory() : 'all';
+                renderProducts(currentCat);
+            }
+        }
+    } catch (err) {
+        console.error("Supabase Products Fetch Error:", err);
+    }
+}
+
+// 3. அட்மின்ல ஏதாவது மாத்துனா உடனே தானாகவே அப்டேட் ஆக Realtime Listener
+if (typeof dbClient !== 'undefined') {
+    dbClient
+        .channel('public:products')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+            fetchSupabaseProducts();
+        })
+        .subscribe();
+}
+
+// 4. பேஜ் லோட் ஆனதும் டேட்டாபேஸை அழைக்க
+document.addEventListener('DOMContentLoaded', () => {
+    fetchSupabaseProducts();
+});
 function getDiscountedPrice(item) {
     if (!item.discountPercent || item.discountPercent <= 0) return item.originalPrice;
     const discountAmount = Math.round((item.originalPrice * item.discountPercent) / 100);
