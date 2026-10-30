@@ -1006,6 +1006,30 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
+   // ----------------------------------------------------------------------
+    // 👇 புதிய சேர்க்கை: SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் 👇
+    // ----------------------------------------------------------------------
+    if (typeof dbClient !== 'undefined') {
+        dbClient.from('orders').insert([
+            {
+                id: orderId,
+                customer_name: name,
+                customer_phone: phone,
+                customer_address: address,
+                items_summary: activeCart.map(i => `${i.name} (x${i.qty || 1})`).join(", "),
+                total_amount: grandTotal,
+                is_paid: false,
+                order_status: 'Pending Verification'
+            }
+        ]).then(({ error }) => {
+            if (error) {
+                console.error("Supabase Order DB Error:", error);
+            } else {
+                console.log("ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
+            }
+        });
+    }
+
     // ----------------------------------------------------------------------
     // 5. ஆட்டோ-ரீசெட் & பிரண்ட் பேஜ் திரும்புதல் (AUTO RESET & CLOSE DRAWER)
     // ----------------------------------------------------------------------
