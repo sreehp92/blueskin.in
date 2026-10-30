@@ -2511,13 +2511,23 @@
     <!-- ####################################################################### -->
 
     <!-- 1. Supabase JS CDN Library -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- 2. Supabase Configuration (நாம் ஏற்கனவே உருவாக்கிய ஃபைல்) -->
-    <script src="js/supabase-config.js"></script>
+<!-- 2. Supabase நேரடி இணைப்பு (Direct Integration) -->
+<script>
+    const SUPABASE_URL = "https://xijzftvmvajnboywnmbe.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_BNT6jfQA2pGyo_rLmU4xvg_jv-_emF9";
+    
+    if (typeof supabase !== 'undefined') {
+        window.dbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("✅ Supabase dbClient வெற்றிகரமாக இணைக்கப்பட்டது!");
+    } else {
+        console.error("❌ Supabase CDN லோட் ஆகவில்லை!");
+    }
+</script>
 
-    <!-- 3. Admin Panel Logic -->
-    <script src="js/admin.js"></script>
+<!-- 3. Admin Panel Logic -->
+<script src="js/admin.js"></script>
 
 </body>
 </html>
