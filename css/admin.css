@@ -2043,6 +2043,70 @@ body {
         width: 100% !important;
     }
 }
+
+/* ======================================================================= */
+/* PRODUCT MANAGER: 100% FULL-FRAME ZERO-SCROLL EXTENDED DESK STYLES       */
+/* ======================================================================= */
+
+#pane-products {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#pane-products .orders-table-card {
+    width: 100% !important;
+    background: var(--card-surface, #0c1527) !important;
+    border: 1.2px solid var(--card-border, rgba(245, 196, 67, 0.2)) !important;
+    border-radius: var(--radius-md, 12px) !important;
+    overflow-x: auto !important;
+    box-sizing: border-box !important;
+}
+
+#pane-products .enterprise-orders-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+}
+
+#pane-products .enterprise-orders-table th {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-bottom: 1.5px solid var(--card-border, rgba(245, 196, 67, 0.2)) !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.8px !important;
+    color: var(--text-dim, #94a3b8) !important;
+    font-weight: 800 !important;
+    padding: 1rem 1.1rem !important;
+    text-align: left !important;
+}
+
+#pane-products .enterprise-orders-table td {
+    padding: 0.95rem 1.1rem !important;
+    font-size: 0.76rem !important;
+    border-bottom: 1px solid rgba(245, 196, 67, 0.08) !important;
+    vertical-align: middle !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+
+#pane-products .enterprise-orders-table tbody tr {
+    transition: background 0.18s ease !important;
+}
+
+#pane-products .enterprise-orders-table tbody tr:hover {
+    background: rgba(245, 196, 67, 0.05) !important;
+}
+
+/* 1-Line 5-KPI Grid Desktop Fix */
+#pane-products .single-row-kpi-belt {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
+}
 /* ####################################################################### */
 /* ####################################################################### */
 /* ###                                                                 ### */
