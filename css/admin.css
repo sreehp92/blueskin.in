@@ -944,8 +944,8 @@ body {
 
 .enterprise-orders-table {
     width: 100%;
-    border-collapse: collapse;
     table-layout: fixed;
+    white-space: nowrap;
 }
 
 .enterprise-orders-table th {
