@@ -2446,29 +2446,38 @@ window.clearProdSearch = function() {
     if (inp) { inp.value = ''; renderProductMasterTable(); }
 };
 
-// 5. ஒற்றை வரி 5-KPI அளவீடுகளைப் புதுப்பித்தல்
+// 5. ஒற்றை வரி 5-KPI அளவீடுகளைப் புதுப்பித்தல் (உண்மையான வேர்ஹவுஸ் ஸ்டாக் சின்க்)
 function updateProductMasterKPIMetrics() {
     const totalCount = masterProductsData.length;
     const liveCount = masterProductsData.filter(i => i.visibility === "LIVE").length;
     const offerCount = masterProductsData.filter(i => i.discount > 0).length;
 
     let totalWhseUnits = 0;
+    let totalWhseValuation = 0;
+    let linkedProductsCount = 0;
+
+    // வேர்ஹவுஸ் ஸ்டாக் டேட்டாவிலிருந்து மட்டுமே கணக்கீடு செய்தல்
     if (typeof warehouseInventoryData !== 'undefined' && Array.isArray(warehouseInventoryData) && warehouseInventoryData.length > 0) {
         totalWhseUnits = warehouseInventoryData.reduce((acc, curr) => acc + (Number(curr.currentStock) || 0), 0);
+        totalWhseValuation = warehouseInventoryData.reduce((acc, curr) => acc + ((Number(curr.currentStock) || 0) * (Number(curr.unitCost) || 0)), 0);
+        linkedProductsCount = warehouseInventoryData.length;
     } else {
         totalWhseUnits = masterProductsData.reduce((acc, curr) => acc + (Number(curr.stock) || 0), 0);
+        totalWhseValuation = masterProductsData.reduce((acc, curr) => acc + ((Number(curr.stock) || 0) * Number(curr.specialPrice || 0)), 0);
+        linkedProductsCount = masterProductsData.length;
     }
-
-    const totalVal = masterProductsData.reduce((acc, curr) => acc + (curr.specialPrice * (curr.stock || 1)), 0);
 
     if (document.getElementById('kpiProdTotalCount')) document.getElementById('kpiProdTotalCount').textContent = `${totalCount} Items`;
     if (document.getElementById('kpiProdLiveCount')) document.getElementById('kpiProdLiveCount').textContent = `${liveCount} Active`;
     if (document.getElementById('kpiProdOfferCount')) document.getElementById('kpiProdOfferCount').textContent = `${offerCount} Offers`;
     if (document.getElementById('kpiProdStockUnits')) document.getElementById('kpiProdStockUnits').textContent = `${totalWhseUnits} Units`;
-    if (document.getElementById('kpiProdWhseItemsDesc')) document.getElementById('kpiProdWhseItemsDesc').textContent = `${totalCount} Products Linked`;
-    if (document.getElementById('kpiProdTotalVal')) document.getElementById('kpiProdTotalVal').textContent = `₹ ${totalVal.toLocaleString('en-IN')}`;
+    if (document.getElementById('kpiProdWhseItemsDesc')) document.getElementById('kpiProdWhseItemsDesc').textContent = `${linkedProductsCount} Warehouse Linked`;
+    
+    // ஸ்டாக் 0-ஆக இருந்தால் துல்லியமாக ₹ 0.00 என்று மட்டுமே காட்டும்
+    if (document.getElementById('kpiProdTotalVal')) {
+        document.getElementById('kpiProdTotalVal').textContent = `₹ ${totalWhseValuation.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
 }
-
 // 6. விலையைத் தானாகக் கணக்கிடுதல் (Auto Calculator)
 window.calculateProductOfferPricing = function() {
     const mrp = parseFloat(document.getElementById('prodInputMrp')?.value) || 0;
