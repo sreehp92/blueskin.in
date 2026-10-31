@@ -1846,35 +1846,46 @@ window.saveStockInwardEntry = async function() {
 };
 
 // ==========================================================================
-// 10. LUXURY TELEMETRY BAR GRAPH (CANVAS ENGINE)
+// 1. DYNAMIC ZERO-CROWD CANVAS TELEMETRY (எத்தனை பொருட்கள் வந்தாலும் இடிக்காது)
 // ==========================================================================
 function drawInventoryCanvasTelemetry() {
     const canvas = document.getElementById('invCanvasBarChart');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
-    const width = canvas.offsetWidth;
-    const height = canvas.offsetHeight;
-    canvas.width = width;
+    const containerWidth = canvas.parentElement.offsetWidth || 800;
+    const height = 85;
+
+    if (warehouseInventoryData.length === 0) {
+        canvas.width = containerWidth;
+        canvas.height = height;
+        ctx.clearRect(0, 0, containerWidth, height);
+        return;
+    }
+
+    // ஒரு பொருளுக்கு 65 பிக்சல் இடம் - 50 பொருட்கள் வந்தாலும் நீளமாக உருட்டிப் பார்க்கலாம்!
+    const itemSlotWidth = 65;
+    const computedWidth = Math.max(containerWidth, warehouseInventoryData.length * itemSlotWidth + 40);
+    
+    canvas.width = computedWidth;
     canvas.height = height;
+    ctx.clearRect(0, 0, computedWidth, height);
 
-    ctx.clearRect(0, 0, width, height);
-
-    if (warehouseInventoryData.length === 0) return;
-
-    const maxStock = Math.max(...warehouseInventoryData.map(i => i.currentStock), 30);
-    const colWidth = (width - 40) / warehouseInventoryData.length;
+    const maxStock = Math.max(...warehouseInventoryData.map(i => Number(i.currentStock) || 0), 20);
 
     warehouseInventoryData.forEach((item, idx) => {
-        const barHeight = Math.max((item.currentStock / maxStock) * (height - 30), 4);
-        const x = 20 + (idx * colWidth);
-        const y = height - barHeight - 16;
+        const stock = Number(item.currentStock) || 0;
+        const minAlert = Number(item.minAlert) || 5;
+        const barHeight = Math.max((stock / maxStock) * (height - 35), 4);
+        const x = 20 + (idx * itemSlotWidth);
+        const y = height - barHeight - 18;
 
+        // நவீன கிரேடியன்ட் வண்ணங்கள்
         const grad = ctx.createLinearGradient(0, y, 0, height);
-        if (item.currentStock === 0) {
+        if (stock === 0) {
             grad.addColorStop(0, '#ef4444');
             grad.addColorStop(1, '#450a0a');
-        } else if (item.currentStock <= item.minAlert) {
+        } else if (stock <= minAlert) {
             grad.addColorStop(0, '#f59e0b');
             grad.addColorStop(1, '#451a03');
         } else {
@@ -1885,30 +1896,30 @@ function drawInventoryCanvasTelemetry() {
         ctx.fillStyle = grad;
         ctx.beginPath();
         if (ctx.roundRect) {
-            ctx.roundRect(x + 10, y, colWidth - 20, barHeight, [4, 4, 0, 0]);
+            ctx.roundRect(x + 10, y, itemSlotWidth - 20, barHeight, [4, 4, 0, 0]);
         } else {
-            ctx.rect(x + 10, y, colWidth - 20, barHeight);
+            ctx.rect(x + 10, y, itemSlotWidth - 20, barHeight);
         }
         ctx.fill();
 
-        // பாதுகாப்பு வரம்பு புள்ளி (Safety limit line dot)
-        const thresholdY = height - ((item.minAlert / maxStock) * (height - 30)) - 16;
-        ctx.fillStyle = 'rgba(245, 196, 67, 0.8)';
+        // குறைந்தபட்ச அலர்ட் வரம்பு புள்ளி (Alert Threshold Dot)
+        const thresholdY = height - ((minAlert / maxStock) * (height - 35)) - 18;
+        ctx.fillStyle = 'rgba(245, 196, 67, 0.85)';
         ctx.beginPath();
-        ctx.arc(x + (colWidth / 2), thresholdY, 2.5, 0, Math.PI * 2);
+        ctx.arc(x + (itemSlotWidth / 2), Math.max(thresholdY, 5), 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // ஸ்டாக் எண்ணிக்கை டெக்ஸ்ட்
+        // ஸ்டாக் எண்ணிக்கை
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 10px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`${item.currentStock}`, x + (colWidth / 2), y - 4);
+        ctx.fillText(`${stock}`, x + (itemSlotWidth / 2), y - 4);
 
-        // பொருளின் சுருக்கப் பெயர்
+        // பொருளின் பெயர்
         ctx.fillStyle = '#94a3b8';
         ctx.font = '9px sans-serif';
-        const shortName = (item.name || '').split(' ')[0];
-        ctx.fillText(shortName, x + (colWidth / 2), height - 4);
+        const shortName = (item.name || '').split(' ')[0].substring(0, 8);
+        ctx.fillText(shortName, x + (itemSlotWidth / 2), height - 4);
     });
 
     const syncEl = document.getElementById('invLastSyncTimestamp');
@@ -1917,6 +1928,124 @@ function drawInventoryCanvasTelemetry() {
         syncEl.innerHTML = `<i class="fa-regular fa-clock"></i> Cloud Synced: ${now.toLocaleTimeString('en-IN')}`;
     }
 }
+
+
+// ==========================================================================
+// 2. EXCEL / CSV BLANK TEMPLATE DOWNLOAD ENGINE
+// ==========================================================================
+window.downloadInventoryExcelTemplate = function() {
+    const csvHeaders = ["Product Name", "Category", "Weight / Net", "Current Stock", "Unit Cost (INR)", "Min Alert Level", "Batch Ref"];
+    
+    // மாதிரி வரிசை (Sample row)
+    const sampleRows = [
+        ["Luminous Velvet Foundation", "face", "30ml Pump Bottle", "40", "1200", "10", "Batch-FND-01"],
+        ["Sapphire Eye Palette", "eye", "18g Couture Pan", "25", "1400", "5", "Batch-EYE-02"]
+    ];
+
+    const csvContent = "\uFEFF" + [csvHeaders.join(","), ...sampleRows.map(r => r.map(c => `"${c}"`).join(","))].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `BlueSkin_Warehouse_Stock_Template.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+};
+
+
+// ==========================================================================
+// 3. BULK UPLOAD CONTROLLER & SUPABASE CLOUD INSERT
+// ==========================================================================
+window.triggerExcelFileInput = function() {
+    const fileInput = document.getElementById('invExcelFileInput');
+    if (fileInput) fileInput.click();
+};
+
+window.handleInventoryExcelUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const text = e.target.result;
+            const lines = text.split(/\r\n|\n/).filter(line => line.trim() !== '');
+
+            if (lines.length <= 1) {
+                alert("தேர்ந்தெடுக்கப்பட்ட ஃபைலில் தயாரிப்பு விவரங்கள் எதுவும் இல்லை!");
+                return;
+            }
+
+            // முதல் வரி தலைப்புகள் (Headers)
+            const productsToInsert = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                // CSV கமாவைப் பிரித்தல் (Quotes-ஐப் பாதுகாப்பாக நீக்குதல்)
+                const cols = lines[i].split(',').map(col => col.replace(/^"|"$/g, '').trim());
+                
+                if (cols.length >= 4 && cols[0]) {
+                    const name = cols[0];
+                    const category = cols[1] || 'General';
+                    const weight = cols[2] || 'Standard';
+                    const stock = parseInt(cols[3]) || 0;
+                    const cost = parseFloat(cols[4]) || 0;
+                    const minAlert = parseInt(cols[5]) || 5;
+                    const batchRef = cols[6] || `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}`;
+                    const retailPrice = cost > 0 ? Math.round(cost * 2.2) : 1999;
+
+                    productsToInsert.push({
+                        name: name,
+                        category: category,
+                        weight: weight,
+                        stock: stock,
+                        unit_cost: cost,
+                        min_alert: minAlert,
+                        batch_ref: batchRef,
+                        original_price: retailPrice,
+                        discount_percent: 15,
+                        description: `${name} luxury artisanal cosmetic formulation.`,
+                        images: ['https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop']
+                    });
+                }
+            }
+
+            if (productsToInsert.length === 0) {
+                alert("சரியான தயாரிப்பு விவரங்கள் கிடைக்கவில்லை. தயவுசெய்து டெம்ப்ளேட்டின்படி ஃபைலை நிரப்பவும்!");
+                return;
+            }
+
+            const client = window.dbClient;
+            if (!client) {
+                alert("Supabase கிளவுட் கிளையண்ட் தயாராகவில்லை. பக்கத்தை ரீஃப்ரெஷ் செய்யவும்.");
+                return;
+            }
+
+            // Supabase கிளவுடில் மொத்தமாக INSERT செய்தல்
+            const { error } = await client
+                .from('products')
+                .insert(productsToInsert);
+
+            if (error) {
+                console.error("Bulk Upload Error:", error);
+                alert("பல்க் அப்லோட் தோல்வியடைந்தது: " + error.message);
+            } else {
+                alert(`✅ வெற்றிகரமாக ${productsToInsert.length} தயாரிப்புகள் Supabase கிளவுடில் பதிவேற்றப்பட்டன!`);
+                await fetchWarehouseStockFromSupabase();
+            }
+
+        } catch (err) {
+            console.error("Excel Read Error:", err);
+            alert("ஃபைலை வாசிப்பதில் பிழை ஏற்பட்டது!");
+        } finally {
+            event.target.value = ''; // மீண்டும் அதே ஃபைலைத் தேர்ந்தெடுக்க ரீசெட்
+        }
+    };
+
+    reader.readAsText(file);
+};
 
 // ==========================================================================
 // 11. வழிசெலுத்தல் மற்றும் தொடக்க அழைப்பு (NAVIGATION ROUTER & AUTO LOADER)
