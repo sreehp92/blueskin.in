@@ -39,7 +39,7 @@
                 <span class="ticker-dot" id="tickerDot2">•</span>
                 <span id="tickerWrap3"><i class="fa-solid fa-truck-fast"></i> <span id="tickerItem3"></span></span>
             </div>
-            <!-- Seamless infinite scroll loop-kaga duplicate content -->
+            <!-- Infinite loop duplicate -->
             <div class="ticker-content" aria-hidden="true">
                 <span id="tickerWrap1Dup"><i class="fa-solid fa-crown"></i> <span id="tickerItem1Dup"></span></span>
                 <span class="ticker-dot" id="tickerDot1Dup">•</span>
@@ -711,27 +711,52 @@
       }
     </script>
 
-    <!-- ======================================================================= -->
+  <!-- ======================================================================= -->
     <!-- BLUE SKIN: ZERO-FLICKER REALTIME PORTFOLIO CMS LIVE BINDER ENGINE       -->
     <!-- ======================================================================= -->
     <script>
     function renderCmsDataToDOM(cms) {
         if (!cms) return;
 
-        // 1. TOP TICKER (டெலீட் செய்தாலும் திரையில் காலியாகும் படி !== undefined)
-        const tickerEl1 = document.getElementById('tickerItem1');
-        const tickerEl2 = document.getElementById('tickerItem2');
-        const tickerEl3 = document.getElementById('tickerItem3');
-        const tickerEl1Dup = document.getElementById('tickerItem1Dup');
-        const tickerEl2Dup = document.getElementById('tickerItem2Dup');
-        const tickerEl3Dup = document.getElementById('tickerItem3Dup');
-        
-        if (tickerEl1 && cms.ticker1 !== undefined) tickerEl1.textContent = cms.ticker1;
-        if (tickerEl2 && cms.ticker2 !== undefined) tickerEl2.textContent = cms.ticker2;
-        if (tickerEl3 && cms.ticker3 !== undefined) tickerEl3.textContent = cms.ticker3;
-        if (tickerEl1Dup && cms.ticker1 !== undefined) tickerEl1Dup.textContent = cms.ticker1;
-        if (tickerEl2Dup && cms.ticker2 !== undefined) tickerEl2Dup.textContent = cms.ticker2;
-        if (tickerEl3Dup && cms.ticker3 !== undefined) tickerEl3Dup.textContent = cms.ticker3;
+        // 1. TOP TICKER (டெலீட் செய்தால் ஐகான் மற்றும் புள்ளி தானாக மறையும்)
+        const t1 = (cms.ticker1 || '').trim();
+        const t2 = (cms.ticker2 || '').trim();
+        const t3 = (cms.ticker3 || '').trim();
+
+        const w1 = document.getElementById('tickerWrap1');
+        const w1D = document.getElementById('tickerWrap1Dup');
+        const dot1 = document.getElementById('tickerDot1');
+        const dot1D = document.getElementById('tickerDot1Dup');
+        const el1 = document.getElementById('tickerItem1');
+        const el1D = document.getElementById('tickerItem1Dup');
+        if (el1) el1.textContent = t1;
+        if (el1D) el1D.textContent = t1;
+        if (w1) w1.style.display = t1 ? 'inline' : 'none';
+        if (w1D) w1D.style.display = t1 ? 'inline' : 'none';
+        if (dot1) dot1.style.display = (t1 && (t2 || t3)) ? 'inline' : 'none';
+        if (dot1D) dot1D.style.display = (t1 && (t2 || t3)) ? 'inline' : 'none';
+
+        const w2 = document.getElementById('tickerWrap2');
+        const w2D = document.getElementById('tickerWrap2Dup');
+        const dot2 = document.getElementById('tickerDot2');
+        const dot2D = document.getElementById('tickerDot2Dup');
+        const el2 = document.getElementById('tickerItem2');
+        const el2D = document.getElementById('tickerItem2Dup');
+        if (el2) el2.textContent = t2;
+        if (el2D) el2D.textContent = t2;
+        if (w2) w2.style.display = t2 ? 'inline' : 'none';
+        if (w2D) w2D.style.display = t2 ? 'inline' : 'none';
+        if (dot2) dot2.style.display = (t2 && t3) ? 'inline' : 'none';
+        if (dot2D) dot2D.style.display = (t2 && t3) ? 'inline' : 'none';
+
+        const w3 = document.getElementById('tickerWrap3');
+        const w3D = document.getElementById('tickerWrap3Dup');
+        const el3 = document.getElementById('tickerItem3');
+        const el3D = document.getElementById('tickerItem3Dup');
+        if (el3) el3.textContent = t3;
+        if (el3D) el3D.textContent = t3;
+        if (w3) w3.style.display = t3 ? 'inline' : 'none';
+        if (w3D) w3D.style.display = t3 ? 'inline' : 'none';
 
         // 2. BRAND & NAVBAR
         const brandWord1 = document.getElementById('navBrandWord1');
@@ -914,7 +939,7 @@
         if (footCopy && cms.footerCopyright !== undefined) footCopy.innerHTML = cms.footerCopyright;
     }
 
-    // ⚡ STEP 1: பேஜ் திறந்த உடனே 0-மில்லிசெகண்டில் லோக்கலில் உள்ள புதிய டேட்டாவை ஏற்றுதல் (Flicker தடுத்தல்)
+    // ⚡ STEP 1: பேஜ் திறந்த உடனே 0-மில்லிசெகண்டில் லோக்கலில் உள்ள கேச் டேட்டாவை ஏற்றுதல்
     try {
         const cached = localStorage.getItem('BLUESKIN_PORTFOLIO_CMS_DATA');
         if (cached) {
@@ -957,6 +982,5 @@
                 .subscribe();
         }
     });
-    </script>
-</body>
+    </script></body>
 </html>
