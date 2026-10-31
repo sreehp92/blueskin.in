@@ -2314,82 +2314,458 @@
 </body>
 </html>
 
-    <!-- STOCK INWARD & ITEM ENTRY MODAL -->
-    <div class="calendar-modal-backdrop" id="stockInwardModal" style="display: none;">
-        <div class="calendar-modal-box" style="max-width: 540px;">
-            <div class="modal-head">
-                <h4 id="inwardModalHeaderTitle"><i class="fa-solid fa-box-archive text-gold"></i> Stock Inward & Inventory Entry Desk</h4>
-                <button type="button" class="btn-modal-close" onclick="closeStockInwardModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="inwardItemId">
-                
-                <div class="date-pick-field">
-                    <label>Product Name & Specification:</label>
-                    <input type="text" id="inwardItemName" placeholder="e.g. Luminous Velvet Foundation">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="date-pick-field">
-                        <label>Weight / Net Measure:</label>
-                        <input type="text" id="inwardItemWeight" placeholder="e.g. 30ml / 12g / 0.5ml">
+   <!-- ======================================================================= -->
+    <!-- [MODULE 3] LUXURY 80% DESKTOP WAREHOUSE STOCK INWARD MODAL              -->
+    <!-- ======================================================================= -->
+    <div class="luxury-modal-backdrop" id="stockInwardModal" style="display: none;">
+        <div class="luxury-modal-box">
+            
+            <!-- 1. MODAL HEADER BAR -->
+            <div class="lx-modal-head">
+                <div class="lx-head-info">
+                    <div class="lx-gold-icon-box">
+                        <i class="fa-solid fa-boxes-packing"></i>
                     </div>
-                    <div class="date-pick-field">
-                        <label>Existing Category:</label>
-                        <select id="inwardCategorySelect" onchange="toggleInlineCategoryInput()">
-                            <option value="Face Products">Face Products</option>
-                            <option value="Eye Artistry">Eye Artistry</option>
-                            <option value="Lip Products">Lip Products</option>
-                            <option value="Artisan Tools">Artisan Tools</option>
-                            <option value="__NEW__">+ Create New Category</option>
-                        </select>
+                    <div>
+                        <h3 id="inwardModalHeaderTitle">Stock Inward & Warehouse Inventory Manager</h3>
+                        <p>Supabase கிளவுட் கிடங்கில் சரக்குகளை உள்ளீடு மற்றும் இருப்பு மாற்றும் மேலாண்மை தளம்</p>
                     </div>
                 </div>
-
-                <!-- INLINE NEW CATEGORY INPUT -->
-                <div class="date-pick-field" id="newCategoryInlineWrap" style="display: none;">
-                    <label>Type New Category Name:</label>
-                    <input type="text" id="inwardNewCategoryName" placeholder="e.g. Skin Care">
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="date-pick-field">
-                        <label id="inwardUnitsLabel">Units To Add (+):</label>
-                        <input type="number" id="inwardUnitsCount" placeholder="e.g. 25" min="0" oninput="calculateInwardLiveSummary()">
-                    </div>
-                    <div class="date-pick-field">
-                        <label>Min Alert Threshold:</label>
-                        <input type="number" id="inwardThresholdCount" placeholder="e.g. 10" min="1">
-                    </div>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                    <div class="date-pick-field">
-                        <label>Unit Cost Value (₹):</label>
-                        <input type="number" id="inwardUnitCost" placeholder="e.g. 1200" min="0" oninput="calculateInwardLiveSummary()">
-                    </div>
-                    <div class="date-pick-field">
-                        <label>Supplier / Batch Ref:</label>
-                        <input type="text" id="inwardBatchRef" placeholder="e.g. Batch-261026-FND">
-                    </div>
-                </div>
-
-                <!-- LIVE INWARD SUMMARY CARD -->
-                <div style="background: rgba(245, 196, 67, 0.06); border: 1px dashed rgba(245, 196, 67, 0.35); border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.74rem; color: var(--text-pure); margin-top: 0.5rem;">
-                    <span id="inwardLiveCalcText">ℹ️ Current Available Stock: 0 Units ──(+) Inward: 0 Units ──(=) Updated Total: 0 Units</span>
-                </div>
-                <div style="font-size: 0.68rem; color: var(--text-dim); margin-top: 0.4rem; text-align: right;" id="inwardLastUpdatedDateInfo">
-                    Last Updated: Never
-                </div>
-            </div>
-            <div class="modal-foot">
-                <button type="button" class="btn-cal-cancel" onclick="closeStockInwardModal()">Cancel / Close</button>
-                <button type="button" class="btn-cal-apply" onclick="saveStockInwardEntry()">
-                    <i class="fa-solid fa-floppy-disk"></i> Update Inventory & Log Stock
+                <button type="button" class="lx-btn-close" onclick="closeStockInwardModal()" title="Close Window">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
+
+            <!-- 2. MODAL TWO-COLUMN DESKTOP BODY -->
+            <div class="lx-modal-body">
+                <input type="hidden" id="inwardItemId">
+
+                <div class="lx-grid-layout">
+                    
+                    <!-- COLUMN 1: PRODUCT IDENTITY & PACKAGING -->
+                    <div class="lx-form-panel">
+                        <div class="lx-panel-title">
+                            <i class="fa-solid fa-gem text-gold"></i>
+                            <span>1. தயாரிப்பு விவரங்கள் (Product Specifications)</span>
+                        </div>
+
+                        <!-- Product Name -->
+                        <div class="lx-input-group">
+                            <label for="inwardItemName">தயாரிப்பின் பெயர் (Product Name) <span class="req">*</span></label>
+                            <div class="lx-field-wrap">
+                                <i class="fa-solid fa-tag"></i>
+                                <input type="text" id="inwardItemName" placeholder="எ.கா: Luminous Velvet Foundation" required>
+                            </div>
+                        </div>
+
+                        <!-- Weight / Net Vol -->
+                        <div class="lx-input-group">
+                            <label for="inwardItemWeight">அளவு / எடை (Weight / Net Volume)</label>
+                            <div class="lx-field-wrap">
+                                <i class="fa-solid fa-weight-scale"></i>
+                                <input type="text" id="inwardItemWeight" placeholder="எ.கா: 30ml Pump Bottle / 15g Compact">
+                            </div>
+                        </div>
+
+                        <!-- Category Selector -->
+                        <div class="lx-input-group">
+                            <label for="inwardCategorySelect">பிரிவு (Product Category)</label>
+                            <div class="lx-field-wrap">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <select id="inwardCategorySelect" onchange="toggleInlineCategoryInput()">
+                                    <!-- Injected Dynamically by JS -->
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic New Category Input (Show only when needed) -->
+                        <div class="lx-input-group" id="newCategoryInlineWrap" style="display: none;">
+                            <label for="inwardNewCategoryName" style="color: var(--gold, #f5c443);">
+                                <i class="fa-solid fa-folder-plus"></i> புதிய பிரிவின் பெயர் (New Category Title)
+                            </label>
+                            <div class="lx-field-wrap">
+                                <i class="fa-solid fa-pen-nib" style="color: var(--gold, #f5c443);"></i>
+                                <input type="text" id="inwardNewCategoryName" placeholder="எ.கா: Skin Botanicals">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUMN 2: STOCK LOGISTICS & VALUATION -->
+                    <div class="lx-form-panel">
+                        <div class="lx-panel-title">
+                            <i class="fa-solid fa-warehouse text-gold"></i>
+                            <span>2. இருப்பு & அடக்க விலை (Stock Units & Pricing)</span>
+                        </div>
+
+                        <!-- Units & Min Alert Grid -->
+                        <div class="lx-sub-grid">
+                            <div class="lx-input-group">
+                                <label id="inwardUnitsLabel" for="inwardUnitsCount">
+                                    <i class="fa-solid fa-plus text-green"></i> உள்ளிடும் எண்ணிக்கை (Units):
+                                </label>
+                                <div class="lx-field-wrap">
+                                    <i class="fa-solid fa-cubes"></i>
+                                    <input type="number" id="inwardUnitsCount" placeholder="எ.கா: 50" min="0" oninput="calculateInwardLiveSummary()">
+                                </div>
+                            </div>
+
+                            <div class="lx-input-group">
+                                <label for="inwardThresholdCount">
+                                    <i class="fa-solid fa-triangle-exclamation text-amber"></i> எச்சரிக்கை அளவு (Min Alert):
+                                </label>
+                                <div class="lx-field-wrap">
+                                    <i class="fa-solid fa-bell"></i>
+                                    <input type="number" id="inwardThresholdCount" placeholder="5" min="1" value="5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Unit Cost & Batch Reference Grid -->
+                        <div class="lx-sub-grid">
+                            <div class="lx-input-group">
+                                <label for="inwardUnitCost">அடக்க விலை (Unit Cost ₹):</label>
+                                <div class="lx-field-wrap">
+                                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                                    <input type="number" id="inwardUnitCost" placeholder="எ.கா: 850" min="0" oninput="calculateInwardLiveSummary()">
+                                </div>
+                            </div>
+
+                            <div class="lx-input-group">
+                                <label for="inwardBatchRef">பேட்ச் எண் (Batch / Lot Ref):</label>
+                                <div class="lx-field-wrap">
+                                    <i class="fa-solid fa-barcode"></i>
+                                    <input type="text" id="inwardBatchRef" placeholder="Batch-2026-STK">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- LIVE VALUATION SUMMARY BADGE -->
+                        <div class="lx-valuation-card">
+                            <div class="lx-val-title" id="inwardLiveCalcTitle">
+                                <i class="fa-solid fa-calculator text-gold"></i> நேரலை மதிப்பீடு (Real-Time Inward Summary)
+                            </div>
+                            <div class="lx-val-desc" id="inwardLiveCalcText">
+                                Adding 0 Units to Warehouse • Net Asset Value: ₹ 0.00
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 3. MODAL FOOTER BAR -->
+            <div class="lx-modal-foot">
+                <div class="lx-foot-sync" id="inwardLastUpdatedDateInfo">
+                    <i class="fa-regular fa-clock"></i> Date: Today
+                </div>
+                <div class="lx-foot-actions">
+                    <button type="button" class="lx-btn-cancel" onclick="closeStockInwardModal()">
+                        <i class="fa-solid fa-xmark"></i> ரத்து செய் (Discard)
+                    </button>
+                    <button type="button" class="lx-btn-save" onclick="saveStockInwardEntry()">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> சேமி & கிடங்கில் ஏற்று (Commit Stock)
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <!-- EMBEDDED DEDICATED STYLES FOR DESKTOP MODAL (முக்கால் ஸ்கிரீன் அலைன்மென்ட்) -->
+    <style>
+        .luxury-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(4, 9, 19, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            box-sizing: border-box;
+            animation: lxFadeIn 0.25s ease-out;
+        }
+
+        .luxury-modal-box {
+            width: 82vw;
+            max-width: 1050px;
+            background: #09101d;
+            border: 1.5px solid rgba(245, 196, 67, 0.35);
+            border-radius: 16px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.75), 0 0 35px rgba(245, 196, 67, 0.12);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            animation: lxScaleUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Header */
+        .lx-modal-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.75rem;
+            background: linear-gradient(90deg, rgba(245, 196, 67, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border-bottom: 1.2px solid rgba(245, 196, 67, 0.2);
+        }
+
+        .lx-head-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .lx-gold-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(245, 196, 67, 0.12);
+            border: 1.2px solid var(--gold, #f5c443);
+            color: var(--gold, #f5c443);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .lx-head-info h3 {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.4px;
+        }
+
+        .lx-head-info p {
+            margin: 0.2rem 0 0;
+            font-size: 0.74rem;
+            color: #94a3b8;
+        }
+
+        .lx-btn-close {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .lx-btn-close:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        /* Body & Grid */
+        .lx-modal-body {
+            padding: 1.75rem;
+            max-height: calc(85vh - 160px);
+            overflow-y: auto;
+        }
+
+        .lx-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .lx-form-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .lx-panel-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #cbd5e1;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 0.2rem;
+        }
+
+        .lx-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .lx-input-group label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.3px;
+        }
+
+        .lx-input-group label .req {
+            color: #ef4444;
+        }
+
+        .lx-field-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .lx-field-wrap i {
+            position: absolute;
+            left: 0.9rem;
+            color: #64748b;
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        .lx-field-wrap input,
+        .lx-field-wrap select {
+            width: 100%;
+            height: 42px;
+            background: #050a14;
+            border: 1.2px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            padding: 0 1rem 0 2.5rem;
+            color: #ffffff;
+            font-size: 0.84rem;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .lx-field-wrap input[type="number"] {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .lx-field-wrap input:focus,
+        .lx-field-wrap select:focus {
+            border-color: var(--gold, #f5c443);
+            box-shadow: 0 0 12px rgba(245, 196, 67, 0.25);
+            background: #070e1c;
+        }
+
+        .lx-sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.9rem;
+        }
+
+        /* Valuation Live Summary */
+        .lx-valuation-card {
+            margin-top: 0.3rem;
+            background: linear-gradient(135deg, rgba(245, 196, 67, 0.08) 0%, rgba(4, 9, 19, 0.4) 100%);
+            border: 1.2px dashed rgba(245, 196, 67, 0.4);
+            border-radius: 10px;
+            padding: 0.9rem 1.1rem;
+        }
+
+        .lx-val-title {
+            font-size: 0.78rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .lx-val-desc {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--gold, #f5c443);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .lx-modal-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.1rem 1.75rem;
+            background: #050a14;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .lx-foot-sync {
+            font-size: 0.74rem;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .lx-foot-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .lx-btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.2px solid rgba(255, 255, 255, 0.12);
+            color: #cbd5e1;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lx-btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .lx-btn-save {
+            background: var(--gold, #f5c443);
+            border: 1.2px solid var(--gold, #f5c443);
+            color: #040913;
+            padding: 0.6rem 1.5rem;
+            font-size: 0.8rem;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(245, 196, 67, 0.25);
+        }
+
+        .lx-btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(245, 196, 67, 0.4);
+            background: #ffcf4d;
+        }
+
+        @keyframes lxFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes lxScaleUp {
+            from { transform: scale(0.96); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
 
     <!-- ORDER DOSSIER FULL VIEW MODAL -->
     <div class="calendar-modal-backdrop" id="orderInspectModal" style="display: none;">
