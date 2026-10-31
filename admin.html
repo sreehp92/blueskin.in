@@ -1006,7 +1006,7 @@
             <!-- [MODULE 4] PANE 4: PORTFOLIO / FRONT PAGE MASTER CMS — END      -->
             <!-- --------------------------------------------------------------- -->
 
-            <!-- --------------------------------------------------------------- -->
+           <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 5] PANE 5: PRODUCT MANAGER & SHOP ACTIVITY — START      -->
             <!-- --------------------------------------------------------------- -->
             <section class="workspace-pane" id="pane-products" style="display: none;">
@@ -1015,7 +1015,7 @@
                 <div class="deck-integrated-header">
                     <div class="deck-title-meta">
                         <h2>LIVE PRODUCT MANAGER & SHOP ACTIVITY STUDIO</h2>
-                        <small><span class="live-pulse-dot"></span> Realtime Store Catalog Sync, Warehouse Stock Integration & Category Control</small>
+                        <small><span class="live-pulse-dot"></span> 100% Realtime Cloud Sync & Category Controls</small>
                     </div>
 
                     <div class="deck-action-pills">
@@ -1030,70 +1030,72 @@
                     </div>
                 </div>
 
-                <!-- 1. 5-COMPACT KPI PRODUCT CATALOG METRICS BELT -->
-                <div class="orders-mini-kpi-grid">
-                    <div class="orders-kpi-card anim-pop">
-                        <span class="orders-kpi-lbl">TOTAL PRODUCTS</span>
-                        <div class="orders-kpi-val" id="kpiProdTotalCount">5 Items</div>
-                        <small class="kpi-click-hint">Catalog Collections</small>
+                <!-- 1. COMPACT 5-METRIC SINGLE-LINE GRID (ஒரே வரி டிசைன்) -->
+                <div class="single-row-kpi-belt" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; margin-bottom: 0.85rem;">
+                    <div class="orders-kpi-card anim-pop" style="padding: 0.65rem 0.85rem; margin: 0;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.65rem;">TOTAL PRODUCTS</span>
+                        <div class="orders-kpi-val" id="kpiProdTotalCount" style="font-size: 1.15rem; margin: 2px 0;">--</div>
+                        <small class="kpi-click-hint" style="font-size: 0.65rem;">Catalog Items</small>
                     </div>
 
-                    <div class="orders-kpi-card border-green anim-pop">
-                        <span class="orders-kpi-lbl">SHOP ACTIVITY (LIVE)</span>
-                        <div class="orders-kpi-val text-green" id="kpiProdLiveCount">5 Active</div>
-                        <small class="kpi-click-hint">Visible on Storefront</small>
+                    <div class="orders-kpi-card border-green anim-pop" style="padding: 0.65rem 0.85rem; margin: 0;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.65rem;">SHOP ACTIVITY</span>
+                        <div class="orders-kpi-val text-green" id="kpiProdLiveCount" style="font-size: 1.15rem; margin: 2px 0;">--</div>
+                        <small class="kpi-click-hint" style="font-size: 0.65rem;">Visible on Store</small>
                     </div>
 
-                    <div class="orders-kpi-card border-amber anim-pop">
-                        <span class="orders-kpi-lbl">SPECIAL OFFERS ACTIVE</span>
-                        <div class="orders-kpi-val text-amber" id="kpiProdOfferCount">4 Offers</div>
-                        <small class="kpi-click-hint">Promotional Discounts</small>
+                    <div class="orders-kpi-card border-amber anim-pop" style="padding: 0.65rem 0.85rem; margin: 0;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.65rem;">SPECIAL OFFERS</span>
+                        <div class="orders-kpi-val text-amber" id="kpiProdOfferCount" style="font-size: 1.15rem; margin: 2px 0;">--</div>
+                        <small class="kpi-click-hint" style="font-size: 0.65rem;">Active Discounts</small>
                     </div>
 
-                    <div class="orders-kpi-card border-purple anim-pop">
-                        <span class="orders-kpi-lbl">WAREHOUSE STOCK SYNC</span>
-                        <div class="orders-kpi-val text-purple" id="kpiProdStockUnits">118 Units</div>
-                        <small class="kpi-click-hint" id="kpiProdWhseItemsDesc">5 Warehouse Products Linked</small>
+                    <div class="orders-kpi-card border-purple anim-pop" style="padding: 0.65rem 0.85rem; margin: 0;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.65rem;">WAREHOUSE STOCK</span>
+                        <div class="orders-kpi-val text-purple" id="kpiProdStockUnits" style="font-size: 1.15rem; margin: 2px 0;">--</div>
+                        <small class="kpi-click-hint" id="kpiProdWhseItemsDesc" style="font-size: 0.65rem;">Linked Stock</small>
                     </div>
 
-                    <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
-                        <span class="orders-kpi-lbl">TOTAL CATALOG VALUE</span>
-                        <div class="orders-kpi-val text-gold" id="kpiProdTotalVal">₹ 1,48,200.00</div>
-                        <small class="kpi-click-hint">Live Inventory Worth</small>
+                    <div class="orders-kpi-card anim-pop" style="padding: 0.65rem 0.85rem; margin: 0; border-color: rgba(245, 196, 67, 0.45);">
+                        <span class="orders-kpi-lbl" style="font-size: 0.65rem;">CATALOG VALUE</span>
+                        <div class="orders-kpi-val text-gold" id="kpiProdTotalVal" style="font-size: 1.15rem; margin: 2px 0;">--</div>
+                        <small class="kpi-click-hint" style="font-size: 0.65rem;">Total Inventory</small>
                     </div>
                 </div>
 
-                <!-- 2. SEARCH & ACTION FILTER STRIP WITH CATEGORY ADD BUTTON -->
-                <div class="orders-cockpit-banner anim-slide-down">
-                    <div class="orders-workflow-filter-strip" id="productCategoryFilterStrip">
-                        <!-- Dynamic Category Filter Pills -->
-                    </div>
+                <!-- 2. SEARCH & ACTION FILTER STRIP (வித் பல்க் டூல்ஸ் & கேட்டகிரி) -->
+                <div class="orders-cockpit-banner anim-slide-down" style="display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.85rem;">
+                    <!-- Dynamic Category Filter Pills -->
+                    <div class="orders-workflow-filter-strip" id="productCategoryFilterStrip" style="margin: 0;"></div>
 
-                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                        <div class="cockpit-search-input-box" style="width: 220px;">
+                    <!-- Right Action Controls -->
+                    <div style="display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap;">
+                        <div class="cockpit-search-input-box" style="width: 200px;">
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <input type="text" id="prodSearchInput" placeholder="Search Product, Shade..." oninput="filterProductMasterTable()">
                             <button type="button" class="btn-clear-search" onclick="clearProdSearch()">&times;</button>
                         </div>
 
-                        <!-- QUICK CATEGORY ADD BUTTON -->
-                        <button type="button" class="btn-excel-tool" onclick="openQuickCategoryModal()" title="Add New Category with Image" style="border-color: var(--gold); color: var(--gold);">
+                        <!-- BULK CSV HIDDEN INPUT -->
+                        <input type="file" id="prodBulkCsvFileInput" accept=".csv" style="display: none;" onchange="handleProductCsvUpload(event)">
+
+                        <!-- CSV TEMPLATE DOWNLOAD -->
+                        <button type="button" class="btn-excel-tool" onclick="downloadProductCsvTemplate()" title="Download Products CSV Template">
+                            <i class="fa-solid fa-download"></i> Template
+                        </button>
+
+                        <!-- BULK UPLOAD BUTTON -->
+                        <button type="button" class="btn-excel-tool" onclick="triggerProductCsvUpload()" title="Bulk Upload Products via CSV">
+                            <i class="fa-solid fa-file-arrow-up"></i> Upload
+                        </button>
+
+                        <!-- QUICK CATEGORY ADD -->
+                        <button type="button" class="btn-excel-tool" onclick="openQuickCategoryModal()" title="Add Category" style="border-color: var(--gold); color: var(--gold);">
                             <i class="fa-solid fa-folder-plus"></i> + Category
                         </button>
 
-                        <!-- PRODUCT BULK EXCEL TOOLS -->
-                        <button type="button" class="btn-excel-tool btn-excel-download" onclick="downloadProductExcelTemplate()" title="Download Complete Products Excel/CSV Template">
-                            <i class="fa-solid fa-file-excel"></i> Template
-                        </button>
-
-                        <button type="button" class="btn-excel-tool btn-excel-upload" onclick="triggerProductExcelFileInput()" title="Upload Products in Bulk">
-                            <i class="fa-solid fa-cloud-arrow-up"></i> Bulk Upload
-                        </button>
-
-                        <!-- HIDDEN FILE INPUT FOR PRODUCT EXCEL -->
-                        <input type="file" id="prodExcelFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleProductExcelUpload(event)">
-
-                        <button type="button" class="btn-cal-apply" onclick="openProductStudioModal()" style="padding: 0.45rem 0.95rem; font-size: 0.76rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
+                        <!-- ADD PRODUCT BUTTON -->
+                        <button type="button" class="btn-cal-apply" onclick="openProductStudioModal()" style="padding: 0 0.85rem; font-size: 0.74rem; font-weight: 800; height: 34px; border-radius: 6px; display: inline-flex; align-items: center; gap: 5px;">
                             <i class="fa-solid fa-plus"></i> Add Product
                         </button>
                     </div>
@@ -1104,18 +1106,18 @@
                     <table class="enterprise-orders-table">
                         <thead>
                             <tr>
-                                <th style="width: 24%;">PRODUCT & SHADE SPECS</th>
-                                <th style="width: 12%;">REVIEWS & WT</th>
+                                <th style="width: 25%;">PRODUCT & SHADE SPECS</th>
+                                <th style="width: 14%;">REVIEWS & MEASURE</th>
                                 <th style="width: 10%;">MRP (₹)</th>
-                                <th style="width: 10%;">DISC (%)</th>
-                                <th style="width: 11%;">SPECIAL (₹)</th>
-                                <th style="width: 11%;">SAVINGS (₹)</th>
-                                <th style="width: 10%;">SHOP STATE</th>
-                                <th style="width: 12%; text-align: right;">ACTIONS</th>
+                                <th style="width: 9%;">DISC (%)</th>
+                                <th style="width: 11%;">OFFER (₹)</th>
+                                <th style="width: 11%;">SAVINGS & STOCK</th>
+                                <th style="width: 9%;">SHOP STATE</th>
+                                <th style="width: 11%; text-align: right;">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody id="productMasterTableBody">
-                            <!-- Injected dynamically by JS -->
+                            <!-- Injected dynamically from Supabase Cloud -->
                         </tbody>
                     </table>
                 </div>
