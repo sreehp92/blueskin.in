@@ -358,7 +358,7 @@
             <!-- --------------------------------------------------------------- -->
 
 
-            <!-- --------------------------------------------------------------- -->
+           <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 3] PANE 3: WAREHOUSE & STOCK INVENTORY DESK — START     -->
             <!-- --------------------------------------------------------------- -->
             <section class="workspace-pane" id="pane-inventory" style="display: none;">
@@ -382,40 +382,40 @@
                     </div>
                 </div>
 
-                <!-- 1. 5-COMPACT KPI INVENTORY METRICS BELT -->
+                <!-- 1. 5-COMPACT KPI INVENTORY METRICS BELT (CLEAN CLOUD PLACEHOLDERS) -->
                 <div class="orders-mini-kpi-grid">
                     <div class="orders-kpi-card anim-pop inv-kpi-interactive active" id="cardKpiAll" onclick="filterByStockState('ALL')" title="Click to view all products">
                         <span class="orders-kpi-lbl">TOTAL PRODUCTS</span>
-                        <div class="orders-kpi-val" id="kpiInvTotalItems">5 Products</div>
-                        <small class="kpi-click-hint">Click to View All (5)</small>
+                        <div class="orders-kpi-val" id="kpiInvTotalItems">0 Products</div>
+                        <small class="kpi-click-hint">Click to View All</small>
                     </div>
 
                     <div class="orders-kpi-card border-green anim-pop inv-kpi-interactive" id="cardKpiInStock" onclick="filterByStockState('IN_STOCK')" title="Click to filter In-Stock">
                         <span class="orders-kpi-lbl">IN-STOCK READY</span>
-                        <div class="orders-kpi-val text-green" id="kpiInvInStock">3 Products</div>
-                        <small class="kpi-click-hint">Click to Filter (Safe: 3)</small>
+                        <div class="orders-kpi-val text-green" id="kpiInvInStock">0 Products</div>
+                        <small class="kpi-click-hint">Click to Filter (Safe)</small>
                     </div>
 
                     <div class="orders-kpi-card border-amber anim-pop pending-glow-card inv-kpi-interactive" id="cardKpiLowStock" onclick="filterByStockState('LOW_STOCK')" title="Click to view Low Stock">
                         <span class="orders-kpi-lbl">LOW STOCK ALERT</span>
-                        <div class="orders-kpi-val text-amber" id="kpiInvLowStock">1 Product</div>
-                        <small class="kpi-click-hint">⚠️ Click to Inspect (1)</small>
+                        <div class="orders-kpi-val text-amber" id="kpiInvLowStock">0 Product</div>
+                        <small class="kpi-click-hint">⚠️ Click to Inspect</small>
                     </div>
 
                     <div class="orders-kpi-card border-purple anim-pop inv-kpi-interactive" id="cardKpiOutStock" onclick="filterByStockState('OUT_OF_STOCK')" title="Click to view Out of Stock">
                         <span class="orders-kpi-lbl">OUT OF STOCK / ZERO</span>
-                        <div class="orders-kpi-val text-purple" id="kpiInvOutStock">1 Product</div>
-                        <small class="kpi-click-hint">🚫 Click to Refill (1)</small>
+                        <div class="orders-kpi-val text-purple" id="kpiInvOutStock">0 Product</div>
+                        <small class="kpi-click-hint">🚫 Click to Refill</small>
                     </div>
 
                     <div class="orders-kpi-card anim-pop" style="border-color: rgba(245, 196, 67, 0.45);">
                         <span class="orders-kpi-lbl">TOTAL STOCK ASSET VALUE</span>
-                        <div class="orders-kpi-val text-gold" id="kpiInvTotalAssetVal">₹ 94,650.00</div>
-                        <small class="kpi-click-hint">Verified Warehouse Net</small>
+                        <div class="orders-kpi-val text-gold" id="kpiInvTotalAssetVal">₹ 0.00</div>
+                        <small class="kpi-click-hint">Verified Cloud Valuation</small>
                     </div>
                 </div>
 
-                <!-- 2. SEARCH & DYNAMIC CATEGORY FILTER STRIP -->
+                <!-- 2. SEARCH, CATEGORY & EXCEL BULK TOOLS STRIP -->
                 <div class="orders-cockpit-banner anim-slide-down">
                     <div class="orders-workflow-filter-strip" id="invCategoryFilterStrip">
                         <!-- Dynamic Category Filter Pills Injected by JS -->
@@ -429,15 +429,15 @@
                         </div>
 
                         <!-- EXCEL BULK TOOLS BUTTONS -->
-                        <button type="button" class="btn-excel-tool btn-excel-download" onclick="downloadInventoryExcelTemplate()" title="Download Blank Excel Template">
+                        <button type="button" class="btn-cal-apply" onclick="downloadInventoryExcelTemplate()" style="background: rgba(34, 197, 94, 0.15); border: 1.2px solid #22c55e; color: #22c55e; height: 36px; padding: 0.45rem 0.85rem; font-size: 0.74rem; font-weight: 800; border-radius: 6px; cursor: pointer;">
                             <i class="fa-solid fa-file-excel"></i> Template
                         </button>
 
-                        <button type="button" class="btn-excel-tool btn-excel-upload" onclick="triggerExcelFileInput()" title="Upload Completed Excel File">
+                        <button type="button" class="btn-cal-apply" onclick="triggerExcelFileInput()" style="background: rgba(56, 189, 248, 0.15); border: 1.2px solid #38bdf8; color: #38bdf8; height: 36px; padding: 0.45rem 0.85rem; font-size: 0.74rem; font-weight: 800; border-radius: 6px; cursor: pointer;">
                             <i class="fa-solid fa-cloud-arrow-up"></i> Bulk Upload
                         </button>
                         
-                        <input type="file" id="invExcelFileInput" accept=".csv, .xlsx, .xls" style="display: none;" onchange="handleInventoryExcelUpload(event)">
+                        <input type="file" id="invExcelFileInput" accept=".csv" style="display: none;" onchange="handleInventoryExcelUpload(event)">
 
                         <button type="button" class="btn-cal-apply" onclick="openStockInwardModal()" style="padding: 0.45rem 0.85rem; font-size: 0.74rem; font-weight: 800; white-space: nowrap; height: 36px; border-radius: 6px;">
                             <i class="fa-solid fa-plus"></i> Inward / Add
@@ -466,21 +466,27 @@
                     </table>
                 </div>
 
-                <!-- 4. REDESIGNED LUXURY WAREHOUSE STOCK LEVEL TELEMETRY -->
-                <div class="orders-table-card anim-fade-up telemetry-luxury-card">
-                    <div class="telemetry-head-bar">
+                <!-- 4. ZERO-CROWD HORIZONTAL SCROLL TELEMETRY CANVAS -->
+                <div class="orders-table-card anim-fade-up telemetry-luxury-card" style="margin-top: 1rem;">
+                    <div class="telemetry-head-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                         <div class="telemetry-info">
-                            <h4><i class="fa-solid fa-chart-column text-gold"></i> Live Warehouse Stock Level Telemetry</h4>
-                            <p>Realtime visual distribution of units, safety thresholds, and warehouse buffer capacity</p>
+                            <h4 style="margin: 0; font-size: 0.85rem; color: var(--text-pure); display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-chart-column text-gold"></i> Live Warehouse Stock Level Telemetry
+                            </h4>
+                            <p style="margin: 0.2rem 0 0; font-size: 0.7rem; color: var(--text-dim);">Real-time unit capacity visualization across all active inventory lots</p>
                         </div>
-                        <div class="telemetry-legend-wrap">
-                            <span class="legend-badge leg-safe"><i class="fa-solid fa-shield-halved"></i> Optimal Reserve (>10)</span>
-                            <span class="legend-badge leg-low"><i class="fa-solid fa-triangle-exclamation"></i> Low Alert Threshold</span>
-                            <span class="legend-badge leg-out"><i class="fa-solid fa-ban"></i> Zero Stock Depleted</span>
-                            <span class="telemetry-sync-clock" id="invLastSyncTimestamp"><i class="fa-regular fa-clock"></i> Sync: Just now</span>
+                        <div class="telemetry-legend-wrap" style="display: flex; gap: 0.8rem; align-items: center; font-size: 0.7rem;">
+                            <span style="color: #22c55e;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Safe Stock</span>
+                            <span style="color: #f59e0b;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Low Alert</span>
+                            <span style="color: #ef4444;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Out of Stock</span>
+                            <span id="invLastSyncTimestamp" style="color: var(--text-dim);"><i class="fa-regular fa-clock"></i> Sync: Just now</span>
                         </div>
                     </div>
-                    <canvas id="invCanvasBarChart" height="75"></canvas>
+                    
+                    <!-- 30+ பொருட்கள் வந்தாலும் நேர்த்தியாக உருட்டும் (Scrollable) பெட்டி -->
+                    <div style="width: 100%; overflow-x: auto; padding-bottom: 0.5rem;">
+                        <canvas id="invCanvasBarChart" height="85" style="display: block; border-radius: 6px; background: rgba(0,0,0,0.25);"></canvas>
+                    </div>
                 </div>
 
             </section>
