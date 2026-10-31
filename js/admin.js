@@ -309,7 +309,6 @@ function generateLiveWeeklyVelocity() {
 /* [SECTION 3] MODULE 1: DETAILED CANVAS ENGINE & DATE RANGE MODAL — START */
 /* ======================================================================= */
 
-// 1D, 1W மற்றும் ALL பட்டன்களை மாற்றும்போது Revenue மாறும் செயல்பாடு
 window.toggleRevenueMode = function(mode) {
     activeRevenueView = mode;
 
@@ -318,38 +317,37 @@ window.toggleRevenueMode = function(mode) {
     if (mode === 'week' || mode === '1w') document.getElementById('btnRevWeek')?.classList.add('active');
     if (mode === 'all') document.getElementById('btnRevAll')?.classList.add('active');
 
-    if (!Array.isArray(liveOrdersData)) return;
+    if (!Array.isArray(liveOrdersData) || liveOrdersData.length === 0) return;
 
     const now = new Date();
-    const todayDateString = now.toLocaleDateString('en-IN');
-    const oneWeekAgoTime = now.getTime() - (7 * 24 * 60 * 60 * 1000);
-
     let targetOrders = [];
     let subNotice = "";
 
     if (mode === 'day' || mode === '1d') {
-        targetOrders = liveOrdersData.filter(o => o.date && o.date.includes(todayDateString));
-        // டெஸ்டிங் நேரத்தில் இன்றைய ஆர்டர்கள் இல்லை எனில் சமீபத்திய அனைத்து ஆர்டர்களையும் காட்டும்
-        if (targetOrders.length === 0 && liveOrdersData.length > 0) {
-            targetOrders = liveOrdersData;
-        }
+        // இன்று 31-ஆம் தேதி வந்த ஆர்டர்கள் மட்டும்
+        targetOrders = liveOrdersData.filter(o => {
+            if (!o.rawDate) return false;
+            const d = new Date(o.rawDate);
+            return d.getDate() === now.getDate() &&
+                   d.getMonth() === now.getMonth() &&
+                   d.getFullYear() === now.getFullYear();
+        });
         subNotice = "<i class='fa-solid fa-bolt'></i> Today's Live Sales";
     } else if (mode === 'week' || mode === '1w') {
+        // கடந்த 7 நாட்கள்
+        const sevenDaysAgo = now.getTime() - (7 * 24 * 60 * 60 * 1000);
         targetOrders = liveOrdersData.filter(o => {
-            const parts = (o.date || '').split('/');
-            if (parts.length >= 3) {
-                const orderTime = new Date(parts[2].slice(0, 4), parts[1] - 1, parts[0]).getTime();
-                return orderTime >= oneWeekAgoTime;
-            }
-            return true;
+            if (!o.rawDate) return false;
+            return new Date(o.rawDate).getTime() >= sevenDaysAgo;
         });
         subNotice = "<i class='fa-solid fa-calendar-week'></i> Last 7 Days Sales";
     } else if (mode === 'all') {
+        // மொத்த ஆர்டர்கள்
         targetOrders = liveOrdersData;
         subNotice = "<i class='fa-solid fa-vault'></i> Lifetime Cumulative Sales";
     }
 
-    const totalRev = targetOrders.reduce((sum, ord) => sum + Number(ord.amount || ord.net || 0), 0);
+    const totalRev = targetOrders.reduce((sum, ord) => sum + Number(ord.net || ord.amount || 0), 0);
     
     const metricTurnover = document.getElementById('metricTurnoverVal');
     const metricTurnoverSub = document.getElementById('metricTurnoverSub');
@@ -658,93 +656,7 @@ window.downloadSalesLedgerExcel = function() {
 /* ======================================================================= */
 
 // ஆரம்பத்தில் ஆர்டர்கள் 'PENDING' (Waiting for verify) நிலையில் இருக்கும்
-let liveOrdersData = [
-    {
-        orderId: "#BS-413607",
-        date: "26/10/2026",
-        time: "04:32 PM",
-        customer: "Sreekumar G",
-        phone: "+91 96583 99991",
-        address: "23 / 43 FCI Road, BPC Colony, Ganapathy, Coimbatore - 641006, Tamil Nadu.",
-        itemsList: [
-            { desc: "Luminous Velvet Foundation (30ml)", hsn: "330499", qty: 1, mrp: 3499, taxable: 2965.25, total: 3499.00 },
-            { desc: "Precision Liquid Liner (0.5ml Jet Black)", hsn: "330499", qty: 1, mrp: 699, taxable: 592.37, total: 699.00 }
-        ],
-        net: 4198,
-        taxableSubtotal: 3557.62,
-        cgst: 320.19,
-        sgst: 320.19,
-        amountWords: "Four Thousand One Hundred Ninety Eight Only",
-        paymentMode: "PAID (UPI)",
-        status: "PENDING", // ஆரம்பத்தில் வெரிஃபைக்காக காத்திருக்கும்
-        carrier: "The Professional Couriers (TPC)",
-        awb: "PC-CBE-984210084",
-        weight: "0.45 KG"
-    },
-    {
-        orderId: "#BS-291845",
-        date: "26/10/2026",
-        time: "02:15 PM",
-        customer: "Aathava S",
-        phone: "+91 73733 30696",
-        address: "Flat 204, Royal Palms, Thudiyalur Road, Coimbatore - 641034, Tamil Nadu.",
-        itemsList: [
-            { desc: "Golden Aura Highlighter (12g)", hsn: "330499", qty: 1, mrp: 1899, taxable: 1609.32, total: 1899.00 }
-        ],
-        net: 1899,
-        taxableSubtotal: 1609.32,
-        cgst: 144.84,
-        sgst: 144.84,
-        amountWords: "One Thousand Eight Hundred Ninety Nine Only",
-        paymentMode: "PAID (ONLINE CARD)",
-        status: "PENDING", // ஆரம்பத்தில் வெரிஃபைக்காக காத்திருக்கும்
-        carrier: "DTDC Express Courier",
-        awb: "DT-CBE-77102941",
-        weight: "0.30 KG"
-    },
-    {
-        orderId: "#BS-110294",
-        date: "25/10/2026",
-        time: "06:10 PM",
-        customer: "Megala L",
-        phone: "+91 98421 11002",
-        address: "78, West Sambandam Road, RS Puram, Coimbatore - 641002, Tamil Nadu.",
-        itemsList: [
-            { desc: "Sapphire Midnight Palette (18 Shades)", hsn: "330499", qty: 1, mrp: 3499, taxable: 2965.25, total: 3499.00 }
-        ],
-        net: 3499,
-        taxableSubtotal: 2965.25,
-        cgst: 266.87,
-        sgst: 266.87,
-        amountWords: "Three Thousand Four Hundred Ninety Nine Only",
-        paymentMode: "PAID (NET BANKING)",
-        status: "PROCESSING",
-        carrier: "Blue Dart Express",
-        awb: "BD-CBE-10928374",
-        weight: "0.50 KG"
-    },
-    {
-        orderId: "#BS-883012",
-        date: "24/10/2026",
-        time: "07:30 PM",
-        customer: "Kavitha R",
-        phone: "+91 94432 44921",
-        address: "Plot 5, Green Avenue, Race Course, Coimbatore - 641018, Tamil Nadu.",
-        itemsList: [
-            { desc: "Satin Matte Lipstick (4.2g Ruby Rose)", hsn: "330499", qty: 2, mrp: 1699, taxable: 2879.66, total: 3398.00 }
-        ],
-        net: 3398,
-        taxableSubtotal: 2879.66,
-        cgst: 259.17,
-        sgst: 259.17,
-        amountWords: "Three Thousand Three Hundred Ninety Eight Only",
-        paymentMode: "PAID (UPI)",
-        status: "DISPATCHED",
-        carrier: "The Professional Couriers (TPC)",
-        awb: "PC-CBE-984210084",
-        weight: "0.35 KG"
-    }
-];
+let liveOrdersData = [];
 
 let activeStatusFilter = "ALL";
 
@@ -818,21 +730,31 @@ function renderOrdersTable() {
     }).join('');
 }
 
-// ரியல்-டைம் கவுண்டர் லாஜிக் (சரியான கணக்கீடு)
+// ரியல்-டைம் கவுண்டர் லாஜிக் (Overview & Orders Table இரண்டையும் இணைக்கும்)
 function updateDynamicOrderCounters() {
     const totalAll = liveOrdersData.length;
-    
-    // 1. Pending (Verification தேவைப்படுபவை)
-    const totalPending = liveOrdersData.filter(o => o.status === 'PENDING').length;
-    
-    // 2. Verified & in flow
+    const now = new Date();
+
+    // 1. இன்றைய ஆர்டர்கள் மட்டும் (நாள், மாதம், வருடம்)
+    const todayOrders = liveOrdersData.filter(o => {
+        if (!o.rawDate) return false;
+        const d = new Date(o.rawDate);
+        return d.getDate() === now.getDate() &&
+               d.getMonth() === now.getMonth() &&
+               d.getFullYear() === now.getFullYear();
+    });
+
+    // 2. Pending ஆர்டர்கள் மட்டும்
+    const totalPending = liveOrdersData.filter(o => {
+        const s = (o.status || '').toUpperCase();
+        return s === 'PENDING' || s.includes('UNVERIFIED');
+    }).length;
+
     const totalPay = liveOrdersData.filter(o => o.status === 'PAYMENT_RECEIVED').length;
     const totalProc = liveOrdersData.filter(o => o.status === 'PROCESSING').length;
     const totalPack = liveOrdersData.filter(o => o.status === 'PACKED').length;
     const totalDisp = liveOrdersData.filter(o => o.status === 'DISPATCHED').length;
     const totalDelivered = liveOrdersData.filter(o => o.status === 'DELIVERED').length;
-
-    // 3. டெலிவரி ஆனவை போக மீதமுள்ளவை மட்டுமே Active!
     const totalActive = liveOrdersData.filter(o => o.status !== 'DELIVERED').length;
 
     // Filter Buttons Counters Update
@@ -844,17 +766,31 @@ function updateDynamicOrderCounters() {
     if (document.getElementById('countDispatched')) document.getElementById('countDispatched').textContent = totalDisp;
     if (document.getElementById('countDelivered')) document.getElementById('countDelivered').textContent = totalDelivered;
 
-    // Top Mini KPI Metrics Update
+    // Module 2 Top Mini KPI
     if (document.getElementById('kpiTotalOrders')) document.getElementById('kpiTotalOrders').textContent = totalActive;
-    
-    // WAITING PAYMENT VERIFY: 'PENDING' ஆர்டர்கள் மட்டுமே இங்கே கவுண்ட் ஆகும்!
     if (document.getElementById('kpiNeedVerify')) document.getElementById('kpiNeedVerify').textContent = totalPending;
-    
     if (document.getElementById('kpiPackedReady')) document.getElementById('kpiPackedReady').textContent = totalPay + totalProc + totalPack;
     if (document.getElementById('kpiDispatchedToday')) document.getElementById('kpiDispatchedToday').textContent = totalDisp;
     if (document.getElementById('kpiDeliveredTotal')) document.getElementById('kpiDeliveredTotal').textContent = totalDelivered;
 
-    // Sidebar Badge-ல் வெரிஃபை செய்ய வேண்டிய Pending எண்ணிக்கை மட்டுமே காட்டும்
+    // Module 1 Overview கார்டுகள் நேரலை அப்டேட்
+    const metricToday = document.getElementById('metricTodayOrders');
+    if (metricToday) metricToday.textContent = `${todayOrders.length} Orders`;
+
+    const metricPending = document.getElementById('metricPendingOrders');
+    if (metricPending) metricPending.textContent = `${totalPending} Orders`;
+
+    const metricAllTime = document.getElementById('metricConcession');
+    if (metricAllTime) {
+        const allTimeTotal = liveOrdersData.reduce((sum, ord) => sum + Number(ord.net || ord.amount || 0), 0);
+        metricAllTime.textContent = `₹ ${allTimeTotal.toLocaleString('en-IN')}`;
+    }
+
+    if (typeof toggleRevenueMode === 'function') {
+        toggleRevenueMode(activeRevenueView || '1d');
+    }
+
+    // Sidebar Badge
     const navBadge = document.getElementById('badgePendingCount');
     if (navBadge) {
         navBadge.textContent = totalPending;
@@ -862,9 +798,10 @@ function updateDynamicOrderCounters() {
     }
 }
 
-// ஸ்டேட்டஸ் மாற்றம் & ஆட்டோமேட்டிக் வாட்ஸ்அப் மெசேஜ்
-window.handleWorkflowStatusChange = function(orderId, newStatus) {
-    const ord = liveOrdersData.find(o => o.orderId === orderId);
+// ஸ்டேட்டஸ் மாற்றம் & SUPABASE கிளவுட் சேமிப்பு (NO REVERT ON REFRESH)
+window.handleWorkflowStatusChange = async function(orderId, newStatus) {
+    const cleanId = String(orderId).replace('#', '').replace('BS-', '').trim();
+    const ord = liveOrdersData.find(o => String(o.orderId) === cleanId || String(o.orderId) === String(orderId));
     if (!ord) return;
 
     if (newStatus === 'DISPATCHED') {
@@ -872,10 +809,28 @@ window.handleWorkflowStatusChange = function(orderId, newStatus) {
         return;
     }
 
+    // 1. திரையில் உடனே மாற்றுதல்
     ord.status = newStatus;
     renderOrdersTable();
 
-    // வாட்ஸ்அப் நோட்டிபிகேஷன் தூண்டுதல் (Pending-க்கு மெசேஜ் இல்லை, Payment Received முதல் தொடங்கும்)
+    // 2. Supabase கிளவுடில் நிரந்தரமாகச் சேமித்தல்
+    const client = window.dbClient;
+    if (client) {
+        const numericId = Number(cleanId);
+        const targetId = (!isNaN(numericId) && numericId > 0) ? numericId : cleanId;
+        const { error } = await client
+            .from('orders')
+            .update({ order_status: newStatus })
+            .eq('id', targetId);
+
+        if (error) {
+            console.error("Supabase Status Save Error:", error);
+        } else {
+            console.log(`✅ Order #${targetId} updated to ${newStatus}`);
+        }
+    }
+
+    // 3. வாட்ஸ்அப் மெசேஜ் தூண்டுதல்
     if (newStatus !== 'PENDING') {
         triggerStatusWhatsAppNotification(ord, newStatus);
     }
