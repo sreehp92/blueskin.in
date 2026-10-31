@@ -1401,70 +1401,59 @@ document.addEventListener('DOMContentLoaded', () => {
 /* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY ENGINE — START        */
 /* ======================================================================= */
 
-// மாஸ்டர் ஸ்டாக் டேட்டா (3 In-Stock, 1 Low-Stock, 1 Out-of-Stock)
-let warehouseInventoryData = [
-    {
-        id: "INV-101",
-        name: "Luminous Velvet Foundation",
-        weight: "30ml Pump Bottle",
-        category: "Face Products",
-        currentStock: 42,
-        minAlert: 10,
-        unitCost: 1200,
-        batchRef: "Batch-261026-FND",
-        lastUpdated: "26/10/2026, 04:32 PM"
-    },
-    {
-        id: "INV-102",
-        name: "Golden Aura Highlighter",
-        weight: "12g Powder Pan",
-        category: "Face Products",
-        currentStock: 3,
-        minAlert: 5,
-        unitCost: 850,
-        batchRef: "Batch-261026-HLT",
-        lastUpdated: "26/10/2026, 02:15 PM"
-    },
-    {
-        id: "INV-103",
-        name: "Sapphire Midnight Palette",
-        weight: "18 Shade Palette",
-        category: "Eye Artistry",
-        currentStock: 18,
-        minAlert: 5,
-        unitCost: 1400,
-        batchRef: "Batch-251026-SMP",
-        lastUpdated: "25/10/2026, 06:10 PM"
-    },
-    {
-        id: "INV-104",
-        name: "Satin Matte Lipstick (Ruby)",
-        weight: "4.2g Classic Casing",
-        category: "Lip Products",
-        currentStock: 0,
-        minAlert: 8,
-        unitCost: 650,
-        batchRef: "Batch-241026-SML",
-        lastUpdated: "24/10/2026, 07:30 PM"
-    },
-    {
-        id: "INV-105",
-        name: "Precision Liquid Liner",
-        weight: "0.5ml Jet Black",
-        category: "Eye Artistry",
-        currentStock: 55,
-        minAlert: 12,
-        unitCost: 300,
-        batchRef: "Batch-261026-PLL",
-        lastUpdated: "26/10/2026, 03:00 PM"
-    }
-];
-
+// 1. SUPABASE நேரலை டேட்டா ஹோல்டர் (LOCALSTORAGE முற்றிலும் நீக்கப்பட்டது)
+let warehouseInventoryData = [];
 let activeInventoryCategory = "ALL";
 let activeStockStateFilter = "ALL";
 let editingInventoryItemId = null;
 
-// 1. அட்டவணை ரெண்டரிங் (Hover Lift & Animation உடன்)
+// ==========================================================================
+// 2. SUPABASE-லிருந்து கிடங்கு இருப்பு முழுவதையும் எடுக்கும் நேரலை என்ஜின்
+// ==========================================================================
+async function fetchWarehouseStockFromSupabase() {
+    try {
+        const client = window.dbClient;
+        if (!client) {
+            console.warn("Warehouse: Supabase client இன்னும் தயாராகவில்லை.");
+            return;
+        }
+
+        const { data, error } = await client
+            .from('products')
+            .select('*')
+            .order('id', { ascending: true });
+
+        if (error) throw error;
+
+        if (data) {
+            warehouseInventoryData = data.map(p => {
+                const now = new Date(p.created_at || new Date());
+                const formattedDate = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+
+                return {
+                    id: p.id,
+                    name: p.name || 'Unnamed Product',
+                    weight: p.weight || 'Standard',
+                    category: p.category || 'General',
+                    currentStock: Number(p.stock !== undefined ? p.stock : 0),
+                    minAlert: Number(p.min_alert !== undefined ? p.min_alert : 5),
+                    unitCost: Number(p.unit_cost !== undefined ? p.unit_cost : (p.original_price ? Math.round(p.original_price * 0.4) : 0)),
+                    batchRef: p.batch_ref || `Batch-${p.id}-GEN`,
+                    lastUpdated: formattedDate
+                };
+            });
+
+            // அட்டவணை, KPI கார்டுகள் மற்றும் கிராஃபை உடனடியாகத் திரையில் புதுப்பித்தல்
+            renderInventoryTable();
+        }
+    } catch (err) {
+        console.error("Supabase Warehouse Fetch Error:", err);
+    }
+}
+
+// ==========================================================================
+// 3. ZERO-SCROLL அட்டவணை ரெண்டரிங் (TABLE RENDER LOGIC)
+// ==========================================================================
 function renderInventoryTable() {
     const tbody = document.getElementById('inventoryTableBody');
     if (!tbody) return;
@@ -1472,7 +1461,7 @@ function renderInventoryTable() {
     const query = (document.getElementById('invSearchInput')?.value || '').toLowerCase().trim();
 
     const filtered = warehouseInventoryData.filter(item => {
-        const matchesCategory = (activeInventoryCategory === "ALL") || (item.category === activeInventoryCategory);
+        const matchesCategory = (activeInventoryCategory === "ALL") || (item.category.toLowerCase() === activeInventoryCategory.toLowerCase());
         
         let matchesStockState = true;
         if (activeStockStateFilter === 'IN_STOCK') {
@@ -1484,10 +1473,10 @@ function renderInventoryTable() {
         }
 
         const matchesSearch = 
-            item.name.toLowerCase().includes(query) ||
-            item.weight.toLowerCase().includes(query) ||
-            item.category.toLowerCase().includes(query) ||
-            item.batchRef.toLowerCase().includes(query);
+            (item.name || '').toLowerCase().includes(query) ||
+            (item.weight || '').toLowerCase().includes(query) ||
+            (item.category || '').toLowerCase().includes(query) ||
+            (item.batchRef || '').toLowerCase().includes(query);
 
         return matchesCategory && matchesStockState && matchesSearch;
     });
@@ -1499,9 +1488,10 @@ function renderInventoryTable() {
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">
-                    <i class="fa-solid fa-boxes-stacked" style="font-size: 1.8rem; margin-bottom: 0.5rem; display: block; opacity: 0.4;"></i>
-                    பொருத்தமான இருப்பு விவரங்கள் எதுவும் இல்லை!
+                <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-dim);">
+                    <i class="fa-solid fa-boxes-stacked" style="font-size: 2rem; margin-bottom: 0.6rem; display: block; opacity: 0.3;"></i>
+                    கிடங்கில் சரக்கு இருப்பு விவரங்கள் எதுவும் கிடைக்கவில்லை!<br>
+                    <small style="opacity: 0.7;">புதிய சரக்குகளைச் சேர்க்க மேலே உள்ள <strong>"+ Inward / Add"</strong> பட்டனைப் பயன்படுத்தவும்.</small>
                 </td>
             </tr>
         `;
@@ -1509,7 +1499,7 @@ function renderInventoryTable() {
     }
 
     tbody.innerHTML = filtered.map(item => {
-        const totalVal = item.currentStock * item.unitCost;
+        const totalVal = (Number(item.currentStock) || 0) * (Number(item.unitCost) || 0);
         const isOut = item.currentStock === 0;
         const isLow = !isOut && (item.currentStock <= item.minAlert);
         
@@ -1520,7 +1510,7 @@ function renderInventoryTable() {
             <tr class="anim-fade-up">
                 <td>
                     <strong style="display: block; font-size: 0.8rem; color: var(--text-pure);">${item.name}</strong>
-                    <small style="color: var(--text-dim); font-size: 0.65rem;">Ref: ${item.batchRef} • Last Inward: ${item.lastUpdated}</small>
+                    <small style="color: var(--text-dim); font-size: 0.65rem;">Ref: ${item.batchRef} • Last Sync: ${item.lastUpdated}</small>
                 </td>
                 <td class="td-item-weight">${item.weight}</td>
                 <td><span class="category-tag-chip">${item.category}</span></td>
@@ -1528,10 +1518,10 @@ function renderInventoryTable() {
                     <span class="badge-stock-pill ${pillClass}">${statusLabel}</span>
                 </td>
                 <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim);">Min: ${item.minAlert} Pcs</td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">₹ ${item.unitCost.toLocaleString('en-IN')}</td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">₹ ${(Number(item.unitCost) || 0).toLocaleString('en-IN')}</td>
                 <td style="font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--gold);">₹ ${totalVal.toLocaleString('en-IN')}</td>
                 <td style="text-align: right;">
-                    <div style="display: flex; gap: 0.25rem; justify-content: flex-end;">
+                    <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
                         <button type="button" class="btn-inv-action" title="Quick Stock Inward (+10)" onclick="quickStockAdjust('${item.id}', 10)">
                             <i class="fa-solid fa-plus text-green"></i>
                         </button>
@@ -1551,28 +1541,44 @@ function renderInventoryTable() {
     }).join('');
 }
 
-// 2. கிளிக் செய்யக்கூடிய 5 கார்டுகள்
+// ==========================================================================
+// 4. KPI மெட்ரிக்ஸ் கார்டுகள் (DYNAMIC CLOUD CALCULATION)
+// ==========================================================================
+function updateInventoryKPIMetrics() {
+    const totalItems = warehouseInventoryData.length;
+    const inStock = warehouseInventoryData.filter(i => Number(i.currentStock) > Number(i.minAlert)).length;
+    const lowStock = warehouseInventoryData.filter(i => Number(i.currentStock) > 0 && Number(i.currentStock) <= Number(i.minAlert)).length;
+    const outStock = warehouseInventoryData.filter(i => Number(i.currentStock) === 0).length;
+    const totalAssetVal = warehouseInventoryData.reduce((acc, curr) => acc + ((Number(curr.currentStock) || 0) * (Number(curr.unitCost) || 0)), 0);
+
+    if (document.getElementById('kpiInvTotalItems')) document.getElementById('kpiInvTotalItems').textContent = `${totalItems} Products`;
+    if (document.getElementById('kpiInvInStock')) document.getElementById('kpiInvInStock').textContent = `${inStock} Ready`;
+    if (document.getElementById('kpiInvLowStock')) document.getElementById('kpiInvLowStock').textContent = `${lowStock} Alert`;
+    if (document.getElementById('kpiInvOutStock')) document.getElementById('kpiInvOutStock').textContent = `${outStock} Zero`;
+    if (document.getElementById('kpiInvTotalAssetVal')) document.getElementById('kpiInvTotalAssetVal').textContent = `₹ ${totalAssetVal.toLocaleString('en-IN')}.00`;
+}
+
+// ==========================================================================
+// 5. கேட்டகிரி பில்ஸ் & ஸ்டாக் பில்டர்கள்
+// ==========================================================================
 window.filterByStockState = function(state) {
     activeStockStateFilter = state;
-
     document.querySelectorAll('.inv-kpi-interactive').forEach(c => c.classList.remove('active'));
     if (state === 'ALL') document.getElementById('cardKpiAll')?.classList.add('active');
     if (state === 'IN_STOCK') document.getElementById('cardKpiInStock')?.classList.add('active');
     if (state === 'LOW_STOCK') document.getElementById('cardKpiLowStock')?.classList.add('active');
     if (state === 'OUT_OF_STOCK') document.getElementById('cardKpiOutStock')?.classList.add('active');
-
     renderInventoryTable();
 };
 
-// 3. கேட்டகிரி பில்ஸ்
 function renderDynamicCategoryPills() {
     const strip = document.getElementById('invCategoryFilterStrip');
     if (!strip) return;
 
-    const categories = ["ALL", ...new Set(warehouseInventoryData.map(i => i.category))];
+    const categories = ["ALL", ...new Set(warehouseInventoryData.map(i => i.category).filter(Boolean))];
 
     strip.innerHTML = categories.map(cat => {
-        const count = cat === "ALL" ? warehouseInventoryData.length : warehouseInventoryData.filter(i => i.category === cat).length;
+        const count = cat === "ALL" ? warehouseInventoryData.length : warehouseInventoryData.filter(i => i.category.toLowerCase() === cat.toLowerCase()).length;
         const activeClass = (activeInventoryCategory === cat) ? 'active' : '';
         const displayLabel = cat === "ALL" ? `All Categories (${count})` : `${cat} (${count})`;
         return `
@@ -1594,169 +1600,254 @@ window.clearInvSearch = function() {
     if (inp) { inp.value = ''; renderInventoryTable(); }
 };
 
-// 4. KPI மெட்ரிக்ஸ்
-function updateInventoryKPIMetrics() {
-    const totalItems = warehouseInventoryData.length;
-    const inStock = warehouseInventoryData.filter(i => i.currentStock > i.minAlert).length;
-    const lowStock = warehouseInventoryData.filter(i => i.currentStock > 0 && i.currentStock <= i.minAlert).length;
-    const outStock = warehouseInventoryData.filter(i => i.currentStock === 0).length;
-    const totalAssetVal = warehouseInventoryData.reduce((acc, curr) => acc + (curr.currentStock * curr.unitCost), 0);
-
-    if (document.getElementById('kpiInvTotalItems')) document.getElementById('kpiInvTotalItems').textContent = `${totalItems} Products`;
-    if (document.getElementById('kpiInvInStock')) document.getElementById('kpiInvInStock').textContent = `${inStock} Products`;
-    if (document.getElementById('kpiInvLowStock')) document.getElementById('kpiInvLowStock').textContent = `${lowStock} Product`;
-    if (document.getElementById('kpiInvOutStock')) document.getElementById('kpiInvOutStock').textContent = `${outStock} Product`;
-    if (document.getElementById('kpiInvTotalAssetVal')) document.getElementById('kpiInvTotalAssetVal').textContent = `₹ ${totalAssetVal.toLocaleString('en-IN')}.00`;
-}
-
-// 5. விரைவு வரவு-செலவு (+ / -)
-window.quickStockAdjust = function(id, delta) {
-    const item = warehouseInventoryData.find(i => i.id === id);
+// ==========================================================================
+// 6. விரைவு வரவு-செலவு (+ / -) SUPABASE நேரலை அப்டேட்
+// ==========================================================================
+window.quickStockAdjust = async function(id, delta) {
+    const item = warehouseInventoryData.find(i => String(i.id) === String(id));
     if (!item) return;
 
-    if (item.currentStock + delta < 0) {
+    const newStock = Number(item.currentStock) + delta;
+    if (newStock < 0) {
         alert("இருப்பு 0-க்குக் கீழே செல்ல முடியாது!");
         return;
     }
 
-    item.currentStock += delta;
-    const now = new Date();
-    item.lastUpdated = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+    // திரையில் உடனடியாக மாற்றுதல்
+    item.currentStock = newStock;
     renderInventoryTable();
-};
 
-window.deleteInventoryItem = function(id) {
-    if (confirm("இந்த பொருளை கிடங்கு இருப்பிலிருந்து முழுமையாக நீக்க விரும்புகிறீர்களா?")) {
-        warehouseInventoryData = warehouseInventoryData.filter(i => i.id !== id);
-        renderInventoryTable();
+    // Supabase கிளவுடில் சேமித்தல்
+    const client = window.dbClient;
+    if (client) {
+        const { error } = await client
+            .from('products')
+            .update({ stock: newStock })
+            .eq('id', Number(id));
+
+        if (error) {
+            console.error("Stock Quick Adjust Supabase Error:", error);
+            alert("கிளவுடில் ஸ்டாக் மாற்ற முடியவில்லை: " + error.message);
+        }
     }
 };
 
-// 6. 100% Full-Screen Inward Manager Modal
+// ==========================================================================
+// 7. தயாரிப்பு நீக்குதல் (SUPABASE CLOUD DELETE)
+// ==========================================================================
+window.deleteInventoryItem = async function(id) {
+    if (!confirm("இந்த தயாரிப்பை கிடங்கு மற்றும் ஸ்டோரிலிருந்து நிரந்தரமாக நீக்க விரும்புகிறீர்களா?")) return;
+
+    // திரையிலிருந்து நீக்குதல்
+    warehouseInventoryData = warehouseInventoryData.filter(i => String(i.id) !== String(id));
+    renderInventoryTable();
+
+    // Supabase கிளவுடிலிருந்து நீக்குதல்
+    const client = window.dbClient;
+    if (client) {
+        const { error } = await client
+            .from('products')
+            .delete()
+            .eq('id', Number(id));
+
+        if (error) {
+            console.error("Supabase Delete Error:", error);
+            alert("கிளவுடிலிருந்து நீக்குவதில் பிழை: " + error.message);
+        }
+    }
+};
+
+// ==========================================================================
+// 8. INWARD MANAGER பாப்அப் மாடல் கண்ட்ரோலர் (MODAL OPEN & CLOSE)
+// ==========================================================================
 window.openStockInwardModal = function(editId = null) {
     editingInventoryItemId = editId;
+    const modal = document.getElementById('stockInwardModal');
+    if (!modal) {
+        console.error("stockInwardModal HTML element கிடைக்கவில்லை!");
+        return;
+    }
+
     const select = document.getElementById('inwardCategorySelect');
-    
-    // சுத்தமான வகை தேர்வு (Skeleton Mode Bug நீக்கப்பட்டது)
-    const existingCats = [...new Set(warehouseInventoryData.map(i => i.category))];
-    select.innerHTML = existingCats.map(c => `<option value="${c}">${c}</option>`).join('') + `<option value="__NEW__">+ Create New Category</option>`;
+    if (select) {
+        let existingCats = [...new Set(warehouseInventoryData.map(i => i.category).filter(Boolean))];
+        if (existingCats.length === 0) existingCats = ['face', 'eye', 'lip', 'tools', 'Skin Botanicals'];
+        
+        select.innerHTML = existingCats.map(c => `<option value="${c}">${c}</option>`).join('') + `<option value="__NEW__">+ Create New Category</option>`;
+    }
 
     if (editId) {
-        const item = warehouseInventoryData.find(i => i.id === editId);
+        const item = warehouseInventoryData.find(i => String(i.id) === String(editId));
         if (!item) return;
 
-        document.getElementById('inwardModalHeaderTitle').textContent = `Edit Stock Item: ${item.name}`;
-        document.getElementById('inwardItemId').value = item.id;
-        document.getElementById('inwardItemName').value = item.name;
-        document.getElementById('inwardItemWeight').value = item.weight;
-        document.getElementById('inwardCategorySelect').value = item.category;
-        document.getElementById('inwardUnitsLabel').innerHTML = `<i class="fa-solid fa-boxes-stacked text-gold"></i> Current Stock Units:`;
-        document.getElementById('inwardUnitsCount').value = item.currentStock;
-        document.getElementById('inwardThresholdCount').value = item.minAlert;
-        document.getElementById('inwardUnitCost').value = item.unitCost;
-        document.getElementById('inwardBatchRef').value = item.batchRef;
-        document.getElementById('inwardLastUpdatedDateInfo').textContent = item.lastUpdated;
+        const titleEl = document.getElementById('inwardModalHeaderTitle');
+        if (titleEl) titleEl.textContent = `Edit Stock Item: ${item.name}`;
+
+        if (document.getElementById('inwardItemId')) document.getElementById('inwardItemId').value = item.id;
+        if (document.getElementById('inwardItemName')) document.getElementById('inwardItemName').value = item.name;
+        if (document.getElementById('inwardItemWeight')) document.getElementById('inwardItemWeight').value = item.weight || '';
+        if (select) select.value = item.category;
+        
+        const unitsLbl = document.getElementById('inwardUnitsLabel');
+        if (unitsLbl) unitsLbl.innerHTML = `<i class="fa-solid fa-boxes-stacked text-gold"></i> Current Stock Units:`;
+        
+        if (document.getElementById('inwardUnitsCount')) document.getElementById('inwardUnitsCount').value = item.currentStock;
+        if (document.getElementById('inwardThresholdCount')) document.getElementById('inwardThresholdCount').value = item.minAlert;
+        if (document.getElementById('inwardUnitCost')) document.getElementById('inwardUnitCost').value = item.unitCost;
+        if (document.getElementById('inwardBatchRef')) document.getElementById('inwardBatchRef').value = item.batchRef;
+        if (document.getElementById('inwardLastUpdatedDateInfo')) document.getElementById('inwardLastUpdatedDateInfo').textContent = `Last Sync: ${item.lastUpdated}`;
     } else {
-        document.getElementById('inwardModalHeaderTitle').textContent = `Stock Inward & Warehouse Inventory Manager`;
-        document.getElementById('inwardItemId').value = '';
-        document.getElementById('inwardItemName').value = '';
-        document.getElementById('inwardItemWeight').value = '';
-        document.getElementById('inwardUnitsLabel').innerHTML = `<i class="fa-solid fa-plus text-green"></i> Inward Units To Add (+):`;
-        document.getElementById('inwardUnitsCount').value = '';
-        document.getElementById('inwardThresholdCount').value = '5';
-        document.getElementById('inwardUnitCost').value = '';
-        document.getElementById('inwardBatchRef').value = `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
+        const titleEl = document.getElementById('inwardModalHeaderTitle');
+        if (titleEl) titleEl.textContent = `Stock Inward & Warehouse Inventory Manager`;
+
+        if (document.getElementById('inwardItemId')) document.getElementById('inwardItemId').value = '';
+        if (document.getElementById('inwardItemName')) document.getElementById('inwardItemName').value = '';
+        if (document.getElementById('inwardItemWeight')) document.getElementById('inwardItemWeight').value = '';
+        
+        const unitsLbl = document.getElementById('inwardUnitsLabel');
+        if (unitsLbl) unitsLbl.innerHTML = `<i class="fa-solid fa-plus text-green"></i> Inward Units To Add (+):`;
+        
+        if (document.getElementById('inwardUnitsCount')) document.getElementById('inwardUnitsCount').value = '';
+        if (document.getElementById('inwardThresholdCount')) document.getElementById('inwardThresholdCount').value = '5';
+        if (document.getElementById('inwardUnitCost')) document.getElementById('inwardUnitCost').value = '';
+        if (document.getElementById('inwardBatchRef')) document.getElementById('inwardBatchRef').value = `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
         
         const now = new Date();
-        document.getElementById('inwardLastUpdatedDateInfo').textContent = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+        if (document.getElementById('inwardLastUpdatedDateInfo')) {
+            document.getElementById('inwardLastUpdatedDateInfo').textContent = `Date: Today (${now.toLocaleDateString('en-GB')})`;
+        }
     }
 
     toggleInlineCategoryInput();
     calculateInwardLiveSummary();
-    document.getElementById('stockInwardModal').style.display = 'flex';
+    modal.style.display = 'flex';
 };
 
 window.closeStockInwardModal = function() {
-    document.getElementById('stockInwardModal').style.display = 'none';
+    const modal = document.getElementById('stockInwardModal');
+    if (modal) modal.style.display = 'none';
 };
 
 window.toggleInlineCategoryInput = function() {
-    const val = document.getElementById('inwardCategorySelect').value;
+    const select = document.getElementById('inwardCategorySelect');
     const wrap = document.getElementById('newCategoryInlineWrap');
-    wrap.style.display = (val === '__NEW__') ? 'block' : 'none';
+    if (select && wrap) {
+        wrap.style.display = (select.value === '__NEW__') ? 'block' : 'none';
+    }
 };
 
 window.calculateInwardLiveSummary = function() {
     const editId = editingInventoryItemId;
-    const units = parseInt(document.getElementById('inwardUnitsCount').value) || 0;
-    const cost = parseFloat(document.getElementById('inwardUnitCost').value) || 0;
+    const units = parseInt(document.getElementById('inwardUnitsCount')?.value) || 0;
+    const cost = parseFloat(document.getElementById('inwardUnitCost')?.value) || 0;
     const title = document.getElementById('inwardLiveCalcTitle');
     const notice = document.getElementById('inwardLiveCalcText');
 
     if (editId) {
         const total = units * cost;
-        title.textContent = "Modified Stock Valuation";
-        notice.textContent = `Set to ${units} Units in Warehouse • Net Asset Value: ₹ ${total.toLocaleString('en-IN')}.00`;
+        if (title) title.textContent = "Modified Stock Valuation";
+        if (notice) notice.textContent = `Set to ${units} Units in Warehouse • Net Asset Value: ₹ ${total.toLocaleString('en-IN')}.00`;
     } else {
         const totalVal = units * cost;
-        title.textContent = "Real-Time Inward Batch Summary";
-        notice.textContent = `Adding +${units} Units to Stock • Inward Batch Cost: ₹ ${totalVal.toLocaleString('en-IN')}.00`;
+        if (title) title.textContent = "Real-Time Inward Batch Summary";
+        if (notice) notice.textContent = `Adding +${units} Units to Stock • Inward Batch Cost: ₹ ${totalVal.toLocaleString('en-IN')}.00`;
     }
 };
 
-window.saveStockInwardEntry = function() {
-    const name = document.getElementById('inwardItemName').value.trim();
-    const weight = document.getElementById('inwardItemWeight').value.trim();
-    let category = document.getElementById('inwardCategorySelect').value;
+// ==========================================================================
+// 9. புதிய சரக்கு பதிவு & எடிட் (SUPABASE CLOUD INSERT & UPDATE)
+// ==========================================================================
+window.saveStockInwardEntry = async function() {
+    const nameInput = document.getElementById('inwardItemName');
+    const weightInput = document.getElementById('inwardItemWeight');
+    const select = document.getElementById('inwardCategorySelect');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const weight = weightInput ? weightInput.value.trim() : 'Standard';
+    
+    let category = select ? select.value : 'General';
     if (category === '__NEW__') {
-        category = document.getElementById('inwardNewCategoryName').value.trim() || 'General Products';
+        const newCatInput = document.getElementById('inwardNewCategoryName');
+        category = (newCatInput && newCatInput.value.trim()) ? newCatInput.value.trim() : 'General';
     }
 
-    const units = parseInt(document.getElementById('inwardUnitsCount').value) || 0;
-    const threshold = parseInt(document.getElementById('inwardThresholdCount').value) || 5;
-    const cost = parseFloat(document.getElementById('inwardUnitCost').value) || 0;
-    const batch = document.getElementById('inwardBatchRef').value.trim() || 'Batch-GEN';
+    const units = parseInt(document.getElementById('inwardUnitsCount')?.value) || 0;
+    const threshold = parseInt(document.getElementById('inwardThresholdCount')?.value) || 5;
+    const cost = parseFloat(document.getElementById('inwardUnitCost')?.value) || 0;
+    const batchInput = document.getElementById('inwardBatchRef');
+    const batch = (batchInput && batchInput.value.trim()) ? batchInput.value.trim() : `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
 
     if (!name) {
         alert("தயவுசெய்து பொருளின் பெயரை உள்ளிடவும்!");
         return;
     }
 
-    const now = new Date();
-    const dateStr = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
-
-    if (editingInventoryItemId) {
-        const item = warehouseInventoryData.find(i => i.id === editingInventoryItemId);
-        if (item) {
-            item.name = name;
-            item.weight = weight;
-            item.category = category;
-            item.currentStock = units;
-            item.minAlert = threshold;
-            item.unitCost = cost;
-            item.batchRef = batch;
-            item.lastUpdated = dateStr;
-        }
-    } else {
-        const newId = `INV-${Math.floor(100 + Math.random() * 900)}`;
-        warehouseInventoryData.push({
-            id: newId,
-            name: name,
-            weight: weight,
-            category: category,
-            currentStock: units,
-            minAlert: threshold,
-            unitCost: cost,
-            batchRef: batch,
-            lastUpdated: dateStr
-        });
+    const client = window.dbClient;
+    if (!client) {
+        alert("Supabase கிளவுட் தயாராகவில்லை. தயவுசெய்து பக்கத்தை ரீஃப்ரெஷ் செய்யவும்.");
+        return;
     }
 
+    // Modal-ஐ உடனடியாக மூடுதல்
     closeStockInwardModal();
-    renderInventoryTable();
+
+    if (editingInventoryItemId) {
+        // ஏற்கெனவே உள்ள பொருளை UPDATE செய்தல்
+        const numId = Number(editingInventoryItemId);
+        const { error } = await client
+            .from('products')
+            .update({
+                name: name,
+                weight: weight,
+                category: category,
+                stock: units,
+                min_alert: threshold,
+                unit_cost: cost,
+                batch_ref: batch
+            })
+            .eq('id', numId);
+
+        if (error) {
+            console.error("Supabase Stock Update Error:", error);
+            alert("கிளவுடில் புதுப்பிப்பதில் பிழை: " + error.message);
+        } else {
+            console.log(`✅ Product #${numId} கிளவுடில் புதுப்பிக்கப்பட்டது!`);
+            await fetchWarehouseStockFromSupabase();
+        }
+    } else {
+        // புதிய பொருளை INSERT செய்தல்
+        const retailPrice = cost > 0 ? Math.round(cost * 2.2) : 1999;
+        const { error } = await client
+            .from('products')
+            .insert([
+                {
+                    name: name,
+                    category: category,
+                    weight: weight,
+                    stock: units,
+                    min_alert: threshold,
+                    unit_cost: cost,
+                    batch_ref: batch,
+                    original_price: retailPrice,
+                    discount_percent: 15,
+                    description: `${name} artisanal luxury cosmetic formulation.`,
+                    images: ['https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop']
+                }
+            ]);
+
+        if (error) {
+            console.error("Supabase Stock Insert Error:", error);
+            alert("கிளவுடில் சேர்க்க முடியவில்லை: " + error.message);
+        } else {
+            console.log("✅ புதிய தயாரிப்பு Supabase-ல் வெற்றிகரமாகப் பதிவானது!");
+            await fetchWarehouseStockFromSupabase();
+        }
+    }
 };
 
-// 7. புத்தம் புதிய Luxury Telemetry Bar Graph (Safety Limit Dots & Gradients)
+// ==========================================================================
+// 10. LUXURY TELEMETRY BAR GRAPH (CANVAS ENGINE)
+// ==========================================================================
 function drawInventoryCanvasTelemetry() {
     const canvas = document.getElementById('invCanvasBarChart');
     if (!canvas) return;
@@ -1779,7 +1870,6 @@ function drawInventoryCanvasTelemetry() {
         const x = 20 + (idx * colWidth);
         const y = height - barHeight - 16;
 
-        // நவீன கிரேடியன்ட்
         const grad = ctx.createLinearGradient(0, y, 0, height);
         if (item.currentStock === 0) {
             grad.addColorStop(0, '#ef4444');
@@ -1794,7 +1884,11 @@ function drawInventoryCanvasTelemetry() {
 
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.roundRect(x + 10, y, colWidth - 20, barHeight, [4, 4, 0, 0]);
+        if (ctx.roundRect) {
+            ctx.roundRect(x + 10, y, colWidth - 20, barHeight, [4, 4, 0, 0]);
+        } else {
+            ctx.rect(x + 10, y, colWidth - 20, barHeight);
+        }
         ctx.fill();
 
         // பாதுகாப்பு வரம்பு புள்ளி (Safety limit line dot)
@@ -1813,16 +1907,52 @@ function drawInventoryCanvasTelemetry() {
         // பொருளின் சுருக்கப் பெயர்
         ctx.fillStyle = '#94a3b8';
         ctx.font = '9px sans-serif';
-        const shortName = item.name.split(' ')[0];
+        const shortName = (item.name || '').split(' ')[0];
         ctx.fillText(shortName, x + (colWidth / 2), height - 4);
     });
 
     const syncEl = document.getElementById('invLastSyncTimestamp');
     if (syncEl) {
         const now = new Date();
-        syncEl.innerHTML = `<i class="fa-regular fa-clock"></i> Sync: ${now.toLocaleTimeString('en-IN')}`;
+        syncEl.innerHTML = `<i class="fa-regular fa-clock"></i> Cloud Synced: ${now.toLocaleTimeString('en-IN')}`;
     }
 }
+
+// ==========================================================================
+// 11. வழிசெலுத்தல் மற்றும் தொடக்க அழைப்பு (NAVIGATION ROUTER & AUTO LOADER)
+// ==========================================================================
+// அட்மின் மெனுவில் Warehouse Stock கிளிக் செய்தால் கிளவுட் டேட்டாவை உடனே ஏற்றுதல்
+const originalSwitchNavPane = window.switchNavPane;
+window.switchNavPane = function(paneId, btn) {
+    if (typeof originalSwitchNavPane === 'function') {
+        originalSwitchNavPane(paneId, btn);
+    } else {
+        document.querySelectorAll('.workspace-pane').forEach(p => p.style.display = 'none');
+        document.querySelectorAll('.menu-item-btn').forEach(b => b.classList.remove('active'));
+        const target = document.getElementById(paneId);
+        if (target) target.style.display = 'block';
+        if (btn) btn.classList.add('active');
+    }
+
+    if (paneId === 'pane-inventory') {
+        fetchWarehouseStockFromSupabase();
+    }
+};
+
+// பக்கம் லோட் ஆனதும் கிளவுடிலிருந்து எடுப்பதுடன், Real-time Subscription-ஐயும் இயக்குதல்
+document.addEventListener('DOMContentLoaded', () => {
+    fetchWarehouseStockFromSupabase();
+
+    // Supabase Realtime Listener (வேறு சிஸ்டத்தில் மாற்றினாலும் இங்கேயும் உடனே மாறும்)
+    if (window.dbClient) {
+        window.dbClient
+            .channel('public:products_warehouse')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+                fetchWarehouseStockFromSupabase();
+            })
+            .subscribe();
+    }
+});
 /* ======================================================================= */
 /* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY ENGINE — END          */
 /* ======================================================================= */
