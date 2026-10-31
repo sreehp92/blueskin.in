@@ -2116,3 +2116,30 @@ body {
 /* ###                                                                 ### */
 /* ####################################################################### */
 /* ####################################################################### */
+
+/* ======================================================================= */
+/* PRODUCT MASTER DESK: FULL-WIDTH SCREEN FIT FIX                         */
+/* ======================================================================= */
+#pane-products .orders-table-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    box-sizing: border-box !important;
+}
+
+#pane-products .enterprise-orders-table {
+    width: 100% !important;
+    min-width: 100% !important;
+    table-layout: auto !important;
+}
+
+#pane-products .enterprise-orders-table th,
+#pane-products .enterprise-orders-table td {
+    white-space: normal !important;
+    padding: 1rem 1.2rem !important;
+}
+
+#pane-products .enterprise-orders-table td:first-child,
+#pane-products .enterprise-orders-table th:first-child {
+    width: 30% !important;
+}
