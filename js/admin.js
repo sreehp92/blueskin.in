@@ -4,14 +4,60 @@
 
 let adminOrders = [];
 
-// (A) Supabase-லிருந்து அனைத்து ஆர்டர்களையும் எடுத்து அட்மின் டேபிளில் காட்டுதல்
+// ==========================================================================
+// 1. அனைத்து இடங்களிலும் பேட்ஜ் & OVERVIEW எண்களை லைவாக மாற்றும் மாஸ்டர் கவுண்டர்
+// ==========================================================================
+function updateOrderBadges() {
+    if (!Array.isArray(liveOrdersData)) return;
+
+    // பெண்டிங் ஆர்டர்கள் (PENDING அல்லது PENDING VERIFICATION அல்லது PAYMENT RECEIVED)
+    const pendingOrders = liveOrdersData.filter(o => {
+        const st = (o.status || '').toUpperCase();
+        return st.includes('PENDING') || st.includes('PAYMENT') || st === 'UNVERIFIED';
+    });
+
+    const pendingCount = pendingOrders.length;
+    const totalOrdersCount = liveOrdersData.length;
+
+    // 1. Orders டேப் பட்டனில் உள்ள கவுண்டர்: Pending (X)
+    const countTab = document.getElementById('countPendingTab');
+    if (countTab) countTab.textContent = pendingCount;
+
+    // 2. இடதுபுற சைட்பார் மெனுவில் உள்ள சிவப்பு பேட்ஜ்
+    const navBadge = document.getElementById('badgePendingCount');
+    if (navBadge) {
+        navBadge.textContent = pendingCount;
+        navBadge.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+    }
+
+    // 3. OVERVIEW STATS: 4-வது கார்டு (PENDING ORDERS) - பழைய 2 என்பதை மாற்றி லைவ் எண்ணிக்கை
+    const metricPending = document.getElementById('metricPendingOrders');
+    if (metricPending) {
+        metricPending.textContent = `${pendingCount} Orders`;
+    }
+
+    // 4. OVERVIEW STATS: 1-வது கார்டு (TODAY ORDERS)
+    const metricToday = document.getElementById('metricTodayOrders');
+    if (metricToday) {
+        metricToday.textContent = `${totalOrdersCount} Orders`;
+    }
+
+    // 5. OVERVIEW STATS: 2-வது கார்டு (TOTAL REVENUE) - மொத்த தொகை கணக்கீடு
+    const metricTurnover = document.getElementById('metricTurnoverVal');
+    if (metricTurnover) {
+        const totalRev = liveOrdersData.reduce((sum, ord) => sum + (Number(ord.amount || ord.net || 0)), 0);
+        metricTurnover.textContent = `₹ ${totalRev.toLocaleString('en-IN')}`;
+    }
+}
+
+
+// ==========================================================================
+// 2. SUPABASE FETCH & LIVE DATA MAPPING (100% Status Matching)
+// ==========================================================================
 async function fetchAdminOrdersFromSupabase() {
     try {
         const client = window.dbClient;
-        if (!client) {
-            console.warn("Supabase dbClient இன்னும் தயாராகவில்லை.");
-            return;
-        }
+        if (!client) return;
 
         const { data, error } = await client
             .from('orders')
@@ -21,45 +67,57 @@ async function fetchAdminOrdersFromSupabase() {
         if (error) throw error;
 
         if (data && data.length > 0) {
-            adminOrders = data.map(o => ({
-                id: o.id,
-                date: new Date(o.created_at).toLocaleString('en-IN'),
-                customer: o.customer_name,
-                phone: o.customer_phone,
-                address: o.customer_address,
-                items: o.items_summary,
-                total: Number(o.total_amount),
-                paid: o.is_paid,
-                status: o.order_status,
-                carrier: o.carrier || '',
-                awb: o.awb_number || ''
-            }));
+            // Supabase தரவை அட்மின் பார்மட்டிற்கு மாற்றுதல்
+            liveOrdersData = data.map(o => {
+                const rawDate = new Date(o.created_at);
+                const dateStr = rawDate.toLocaleDateString('en-IN');
+                const timeStr = rawDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-            // 👇 அட்மின் டேபிள் படித்துக் காட்டும் liveOrdersData-விற்கு மாற்றுதல்
-            liveOrdersData = adminOrders.map(o => ({
-                orderId: o.id,
-                date: o.date.split(',')[0] || o.date,
-                time: o.date.split(',')[1] || '',
-                customer: o.customer,
-                phone: o.phone,
-                address: o.address,
-                items: o.items,
-                qty: 'Items',
-                amount: o.total,
-                net: o.total,
-                paymentMode: o.paid ? 'Paid' : 'Pending',
-                status: (o.status || 'PENDING').toUpperCase()
-            }));
+                // எந்த விதமான பெண்டிங் ஸ்டேட்டஸாக இருந்தாலும் PENDING என ஒழுங்குபடுத்துதல்
+                let cleanStatus = (o.order_status || 'PENDING').toUpperCase();
+                if (cleanStatus.includes('PENDING') || cleanStatus.includes('VERIFICATION')) {
+                    cleanStatus = 'PENDING';
+                }
 
-            // டேபிளை உடனே ரெண்டர் செய்தல்
+                return {
+                    orderId: o.id,
+                    date: dateStr,
+                    time: timeStr,
+                    customer: o.customer_name,
+                    phone: o.customer_phone,
+                    address: o.customer_address,
+                    items: o.items_summary,
+                    qty: 'Merchandise',
+                    amount: Number(o.total_amount),
+                    net: Number(o.total_amount),
+                    paymentMode: o.is_paid ? 'Paid / Online' : 'Pending Verification',
+                    status: cleanStatus
+                };
+            });
+
+            // டேபிள் மற்றும் அனைத்து புள்ளிவிவரங்களையும் ஒரே நேரத்தில் புதுப்பித்தல்
             if (typeof renderOrdersTable === 'function') {
                 renderOrdersTable();
             }
+            updateOrderBadges();
         }
     } catch (err) {
         console.error("Supabase Admin Orders Fetch Error:", err);
     }
 }
+
+
+// ==========================================================================
+// 3. FILTER BY STATUS LOGIC (Pending பட்டன் கிளிக் செய்தால் துல்லியமாக வடிகட்டுதல்)
+// ==========================================================================
+window.filterByStatus = function(status, btn) {
+    activeStatusFilter = status.toUpperCase();
+    document.querySelectorAll('.btn-filter-pill').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    // ஃபில்டர் செய்யப்பட்ட டேபிளை ரெண்டர் செய்ய
+    renderOrdersTable();
+};
 
 // (B) புதிய ஆர்டர் வரும்போது தானாகவே அட்டவணையைப் புதுப்பிக்கும் Realtime Listener
 function initAdminRealtime() {
