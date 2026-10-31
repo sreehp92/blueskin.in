@@ -3410,3 +3410,4 @@ async function saveProductToSupabase(productData) {
         alert("பிழை: " + err.message);
     }
 }
+}
