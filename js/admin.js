@@ -52,7 +52,22 @@ function updateOrderBadges() {
 
 
 // ==========================================================================
-// 2. SUPABASE FETCH & LIVE DATA MAPPING (100% Status & Date Matching)
+// 1. ஸ்டேட்டஸ் பெயர்களை ஒன்றுபடுத்தும் துணை ஃபங்ஷன் (HELPER)
+// ==========================================================================
+function normalizeStatus(st) {
+    if (!st) return 'PENDING';
+    const s = String(st).trim().toUpperCase().replace(/\s+/g, '_');
+    if (s.includes('PENDING') || s.includes('UNVERIFIED')) return 'PENDING';
+    if (s.includes('PAYMENT') || s === 'PAID') return 'PAYMENT_RECEIVED';
+    if (s.includes('PROCESS')) return 'PROCESSING';
+    if (s.includes('PACK')) return 'PACKED';
+    if (s.includes('DISPATCH')) return 'DISPATCHED';
+    if (s.includes('DELIVER')) return 'DELIVERED';
+    return s;
+}
+
+// ==========================================================================
+// 2. SUPABASE FETCH & LIVE ORDER STORE WITH NORMALIZED STATUS
 // ==========================================================================
 async function fetchAdminOrdersFromSupabase() {
     try {
@@ -71,20 +86,16 @@ async function fetchAdminOrdersFromSupabase() {
 
         if (data && data.length > 0) {
             liveOrdersData = data.map(o => {
-                const rawDate = new Date(o.created_at);
-                const dateStr = rawDate.toLocaleDateString('en-IN');
-                const timeStr = rawDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+                const dateObj = new Date(o.created_at);
+                const dateStr = dateObj.toLocaleDateString('en-IN');
+                const timeStr = dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-                // ஸ்டேட்டஸை ஒழுங்குபடுத்துதல்
-                let cleanStatus = (o.order_status || 'PENDING').trim();
-                const upperStatus = cleanStatus.toUpperCase();
-                if (upperStatus === 'PENDING VERIFICATION' || upperStatus === 'UNVERIFIED') {
-                    cleanStatus = 'PENDING';
-                }
+                // ஸ்டேட்டஸை டிராப்டவுன் ஆப்ஷன்களுக்கு ஏற்றவாறு மாற்றுதல்
+                const cleanStatus = normalizeStatus(o.order_status);
 
                 return {
-                    orderId: o.id,
-                    rawDate: rawDate, // இன்றைய 2 ஆர்டர்களைத் துல்லியமாகப் பிரிக்கும் தேதி ஆப்ஜெக்ட்
+                    orderId: o.id, // Supabase-ன் அசல் ID அப்படியே பாதுகாக்கப்படுகிறது
+                    rawDate: dateObj,
                     date: dateStr,
                     time: timeStr,
                     customer: o.customer_name || 'Customer',
@@ -94,7 +105,7 @@ async function fetchAdminOrdersFromSupabase() {
                     qty: 'Merchandise',
                     amount: Number(o.total_amount || 0),
                     net: Number(o.total_amount || 0),
-                    paymentMode: o.is_paid ? 'Paid / Online' : 'Pending Verification',
+                    paymentMode: (cleanStatus !== 'PENDING') ? 'PAID (UPI)' : 'Pending Verification',
                     status: cleanStatus,
                     carrier: o.carrier || 'The Professional Couriers (TPC)',
                     awb: o.awb_number || `PC-CBE-${o.id}084`
@@ -106,7 +117,7 @@ async function fetchAdminOrdersFromSupabase() {
                 renderOrdersTable();
             }
 
-            // 2. ஓவர்வியூ மற்றும் டேபிள் கவுண்டர்களை உடனே மாற்றுதல்
+            // 2. கவுண்டர்கள் மற்றும் Overview கார்டுகளை உடனே மாற்றுதல்
             if (typeof updateDynamicOrderCounters === 'function') {
                 updateDynamicOrderCounters();
             }
@@ -808,48 +819,85 @@ function updateDynamicOrderCounters() {
     }
 }
 
-// ஸ்டேட்டஸ் மாற்றம் & SUPABASE கிளவுட் நேரலைச் சேமிப்பு (F5 அடித்தாலும் மாறாது)
+// ==========================================================================
+// 3. ஸ்டேட்டஸ் மாற்றம் & SUPABASE நேரலைச் சேமிப்பு (NO REVERT ON REFRESH)
+// ==========================================================================
 window.handleWorkflowStatusChange = async function(orderId, newStatus) {
-    const cleanId = String(orderId).replace('#', '').replace('BS-', '').trim();
-    const ord = liveOrdersData.find(o => String(o.orderId) === cleanId || String(o.orderId) === String(orderId));
-    if (!ord) return;
+    try {
+        const rawId = String(orderId).trim();
+        const cleanId = rawId.replace('#', '').trim();
+        
+        // liveOrdersData-வில் உள்ள ஆர்டரைக் கண்டுபிடித்தல்
+        const ord = liveOrdersData.find(o => 
+            String(o.orderId) === rawId || 
+            String(o.orderId) === cleanId ||
+            String(o.orderId).replace('BS-', '') === cleanId.replace('BS-', '')
+        );
 
-    if (newStatus === 'DISPATCHED') {
-        openDispatchModal(orderId);
-        return;
-    }
-
-    // 1. திரையில் உடனே மாற்றுதல் (4-லிருந்து 3-ஆக உடனே மாறும்)
-    ord.status = newStatus;
-    renderOrdersTable();
-
-    // 2. Supabase கிளவுட் டேட்டாபேஸில் நிரந்தரமாக UPDATE செய்தல்
-    const client = window.dbClient;
-    if (client) {
-        const numericId = Number(cleanId);
-        const targetId = (!isNaN(numericId) && numericId > 0) ? numericId : cleanId;
-
-        const isPaidStatus = (newStatus === 'PAYMENT_RECEIVED' || newStatus === 'PROCESSING' || newStatus === 'PACKED' || newStatus === 'DISPATCHED');
-
-        const { error } = await client
-            .from('orders')
-            .update({ 
-                order_status: newStatus,
-                is_paid: isPaidStatus
-            })
-            .eq('id', targetId);
-
-        if (error) {
-            console.error("Supabase Status Save Error:", error);
-        } else {
-            console.log(`✅ Order #${targetId} கிளவுடில் "${newStatus}" எனச் சேமிக்கப்பட்டது.`);
+        if (!ord) {
+            console.error("Order memory-ல் கிடைக்கவில்லை:", orderId);
+            return;
         }
-    }
 
-    // 3. வாட்ஸ்அப் மெசேஜ் அனுப்புதல்
-    if (newStatus !== 'PENDING') {
-        triggerStatusWhatsAppNotification(ord, newStatus);
+        const normalized = normalizeStatus(newStatus);
+        ord.status = normalized;
+
+        if (normalized === 'DISPATCHED') {
+            openDispatchModal(ord.orderId);
+            return;
+        }
+
+        // 1. பிரவுசர் திரையில் உடனே மாற்றுதல் (5-லிருந்து உடனே 4-ஆகக் குறையும்)
+        if (typeof renderOrdersTable === 'function') {
+            renderOrdersTable();
+        }
+        if (typeof updateDynamicOrderCounters === 'function') {
+            updateDynamicOrderCounters();
+        }
+
+        // 2. Supabase கிளவுடில் சரியான ID கொண்டு சேமித்தல்
+        const client = window.dbClient;
+        if (client) {
+            // 'BS-' இருந்தாலும் இல்லாவிட்டாலும் இரண்டையும் தேடும் வகையில் பாதுகாப்பு
+            const targetIds = [
+                ord.orderId,
+                cleanId,
+                cleanId.startsWith('BS-') ? cleanId : `BS-${cleanId}`,
+                cleanId.replace(/^BS-?/i, '')
+            ].filter(Boolean);
+
+            const isPaid = (normalized !== 'PENDING');
+
+            const { data, error } = await client
+                .from('orders')
+                .update({ 
+                    order_status: normalized,
+                    is_paid: isPaid 
+                })
+                .in('id', targetIds)
+                .select();
+
+            if (error) {
+                console.error("Supabase Save Error:", error);
+                alert("❌ கிளவுடில் சேமிப்பதில் பிழை: " + error.message);
+            } else if (!data || data.length === 0) {
+                console.warn("⚠️ எச்சரிக்கை: இந்த ஆர்டர் ID Supabase-ல் பொருந்தவில்லை:", targetIds);
+            } else {
+                console.log(`✅ Order ${targetIds[0]} கிளவுடில் வெற்றிகரமாக "${normalized}" என சேமிக்கப்பட்டது!`);
+            }
+        }
+
+        // 3. வாட்ஸ்அப் மெசேஜ் தூண்டுதல்
+        if (normalized !== 'PENDING') {
+            triggerStatusWhatsAppNotification(ord, normalized);
+        }
+    } catch (err) {
+        console.error("Status Change Error:", err);
     }
+};
+
+window.updateCockpitOrderStatus = function(orderId, newStatus) {
+    window.handleWorkflowStatusChange(orderId, newStatus);
 };
 
 function openDispatchModal(orderId) {
