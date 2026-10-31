@@ -466,30 +466,13 @@
                     </table>
                 </div>
 
-                <!-- 4. ZERO-CROWD HORIZONTAL SCROLL TELEMETRY CANVAS -->
-                <div class="orders-table-card anim-fade-up telemetry-luxury-card" style="margin-top: 1rem;">
-                    <div class="telemetry-head-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                        <div class="telemetry-info">
-                            <h4 style="margin: 0; font-size: 0.85rem; color: var(--text-pure); display: flex; align-items: center; gap: 0.5rem;">
-                                <i class="fa-solid fa-chart-column text-gold"></i> Live Warehouse Stock Level Telemetry
-                            </h4>
-                            <p style="margin: 0.2rem 0 0; font-size: 0.7rem; color: var(--text-dim);">Real-time unit capacity visualization across all active inventory lots</p>
-                        </div>
-                        <div class="telemetry-legend-wrap" style="display: flex; gap: 0.8rem; align-items: center; font-size: 0.7rem;">
-                            <span style="color: #22c55e;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Safe Stock</span>
-                            <span style="color: #f59e0b;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Low Alert</span>
-                            <span style="color: #ef4444;"><i class="fa-solid fa-circle" style="font-size: 0.5rem;"></i> Out of Stock</span>
-                            <span id="invLastSyncTimestamp" style="color: var(--text-dim);"><i class="fa-regular fa-clock"></i> Sync: Just now</span>
-                        </div>
-                    </div>
-                    
-                    <!-- 30+ பொருட்கள் வந்தாலும் நேர்த்தியாக உருட்டும் (Scrollable) பெட்டி -->
-                    <div style="width: 100%; overflow-x: auto; padding-bottom: 0.5rem;">
-                        <canvas id="invCanvasBarChart" height="85" style="display: block; border-radius: 6px; background: rgba(0,0,0,0.25);"></canvas>
-                    </div>
+                <!-- LIVE CLOUD SYNC STATUS BAR -->
+                <div style="display: flex; justify-content: flex-end; align-items: center; padding: 0.5rem 0.2rem; font-size: 0.72rem; color: var(--text-dim);">
+                    <span id="invLastSyncTimestamp"><i class="fa-regular fa-clock"></i> Cloud Synced: Just now</span>
                 </div>
 
             </section>
+            
             <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 3] PANE 3: WAREHOUSE & STOCK INVENTORY DESK — END       -->
             <!-- --------------------------------------------------------------- -->
