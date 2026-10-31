@@ -4,7 +4,7 @@
 
 let adminOrders = [];
 
-// (A) Supabase-லிருந்து அனைத்து ஆர்டர்களையும் எடுத்தல்
+// (A) Supabase-லிருந்து அனைத்து ஆர்டர்களையும் எடுத்து அட்மின் டேபிளில் காட்டுதல்
 async function fetchAdminOrdersFromSupabase() {
     try {
         const client = window.dbClient;
@@ -20,7 +20,7 @@ async function fetchAdminOrdersFromSupabase() {
 
         if (error) throw error;
 
-        if (data) {
+        if (data && data.length > 0) {
             adminOrders = data.map(o => ({
                 id: o.id,
                 date: new Date(o.created_at).toLocaleString('en-IN'),
@@ -35,6 +35,23 @@ async function fetchAdminOrdersFromSupabase() {
                 awb: o.awb_number || ''
             }));
 
+            // 👇 அட்மின் டேபிள் படித்துக் காட்டும் liveOrdersData-விற்கு மாற்றுதல்
+            liveOrdersData = adminOrders.map(o => ({
+                orderId: o.id,
+                date: o.date.split(',')[0] || o.date,
+                time: o.date.split(',')[1] || '',
+                customer: o.customer,
+                phone: o.phone,
+                address: o.address,
+                items: o.items,
+                qty: 'Items',
+                amount: o.total,
+                net: o.total,
+                paymentMode: o.paid ? 'Paid' : 'Pending',
+                status: (o.status || 'PENDING').toUpperCase()
+            }));
+
+            // டேபிளை உடனே ரெண்டர் செய்தல்
             if (typeof renderOrdersTable === 'function') {
                 renderOrdersTable();
             }
