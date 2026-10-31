@@ -2364,46 +2364,46 @@ window.renderProductMasterTable = function() {
 
     const fallbackImg = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80";
 
-    tbody.innerHTML = filtered.map(item => {
+   tbody.innerHTML = filtered.map(item => {
         const isLive = item.visibility === "LIVE";
         const visClass = isLive ? "vis-live" : "vis-draft";
         const visText = isLive ? "🟢 Live" : "🟡 Draft";
 
         return `
-            <tr class="anim-fade-up">
-                <td>
-                    <div class="prod-meta-title-cell" style="display:flex; align-items:center; gap:10px;">
-                        <div class="prod-thumb-frame" style="width:42px; height:42px; border-radius:6px; overflow:hidden; background:#071224; flex-shrink:0; border:1px solid rgba(245,196,67,0.2);">
+            <tr class="anim-fade-up" style="border-bottom: 1px solid rgba(245, 196, 67, 0.08); transition: background 0.2s;">
+                <td style="padding: 0.9rem 1.2rem;">
+                    <div class="prod-meta-title-cell" style="display:flex; align-items:center; gap:12px;">
+                        <div class="prod-thumb-frame" style="width:46px; height:46px; border-radius:8px; overflow:hidden; background:#071224; flex-shrink:0; border:1px solid rgba(245,196,67,0.25);">
                             <img src="${item.imgUrl || fallbackImg}" alt="${item.title}" onerror="this.src='${fallbackImg}'" style="width:100%; height:100%; object-fit:cover;">
                         </div>
-                        <div class="prod-cell-text">
-                            <strong style="color:var(--text-pure); font-size:0.8rem; display:block;">${item.title}</strong>
-                            <small style="color:var(--text-dim); font-size:0.68rem;">${item.subtitle ? item.subtitle + ' • ' : ''}<span style="color: var(--gold);">${item.category}</span></small>
+                        <div class="prod-cell-text" style="overflow:hidden;">
+                            <strong style="color:var(--text-pure); font-size:0.84rem; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.title}</strong>
+                            <small style="color:var(--text-dim); font-size:0.7rem;">${item.subtitle ? item.subtitle + ' • ' : ''}<span style="color: var(--gold); font-weight:600;">${item.category}</span></small>
                         </div>
                     </div>
                 </td>
-                <td>
-                    <span class="badge-review-pill" style="display:inline-block; font-size:0.68rem; padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.05); color:var(--text-dim);"><i class="fa-solid fa-star" style="color:var(--gold);"></i> ${item.reviewsText}</span>
-                    <span class="prod-net-measure-tag" style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">${item.weight}</span>
+                <td style="padding: 0.9rem 1rem;">
+                    <span class="badge-review-pill" style="display:inline-block; font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(255,255,255,0.05); color:var(--text-dim);"><i class="fa-solid fa-star" style="color:var(--gold);"></i> ${item.reviewsText}</span>
+                    <span class="prod-net-measure-tag" style="display:block; font-size:0.68rem; color:var(--text-dim); margin-top:3px;">${item.weight}</span>
                 </td>
-                <td class="td-mrp-price" style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-dim); text-decoration:line-through;">₹ ${item.mrp.toLocaleString('en-IN')}</td>
-                <td>
-                    <span class="badge-discount-cut" style="font-size:0.68rem; font-weight:700; color:#ef4444; background:rgba(239,68,68,0.1); padding:2px 6px; border-radius:4px;">${item.discount}% OFF</span>
+                <td class="td-mrp-price" style="padding: 0.9rem 1rem; font-family:'JetBrains Mono',monospace; font-size:0.8rem; color:var(--text-dim); text-decoration:line-through;">₹ ${item.mrp.toLocaleString('en-IN')}</td>
+                <td style="padding: 0.9rem 0.8rem;">
+                    <span class="badge-discount-cut" style="font-size:0.7rem; font-weight:700; color:#ef4444; background:rgba(239,68,68,0.12); padding:3px 7px; border-radius:4px;">${item.discount}% OFF</span>
                 </td>
-                <td class="td-special-price" style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--gold); font-size:0.8rem;">₹ ${item.specialPrice.toLocaleString('en-IN')}</td>
-                <td>
-                    <span class="td-savings-label" style="font-size:0.72rem; color:#10b981; font-weight:600; display:block;">Save ₹ ${item.savings.toLocaleString('en-IN')}</span>
-                    <small style="color: var(--text-dim); font-size: 0.62rem;">Stock: ${item.stock}</small>
+                <td class="td-special-price" style="padding: 0.9rem 1rem; font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--gold); font-size:0.86rem;">₹ ${item.specialPrice.toLocaleString('en-IN')}</td>
+                <td style="padding: 0.9rem 1rem;">
+                    <span class="td-savings-label" style="font-size:0.75rem; color:#10b981; font-weight:600; display:block;">Save ₹ ${item.savings.toLocaleString('en-IN')}</span>
+                    <small style="color: var(--text-dim); font-size: 0.65rem;">Stock: <strong>${item.stock}</strong></small>
                 </td>
-                <td>
-                    <button type="button" class="badge-vis-pill ${visClass}" onclick="toggleProductVisibility('${item.id}', '${item.visibility}')" title="Click to Toggle Live / Draft" style="cursor:pointer; border:none; outline:none; background:transparent; font-size:0.72rem;">${visText}</button>
+                <td style="padding: 0.9rem 0.8rem; text-align: center;">
+                    <button type="button" class="badge-vis-pill ${visClass}" onclick="toggleProductVisibility('${item.id}', '${item.visibility}')" title="Click to Toggle Live / Draft" style="cursor:pointer; border:none; outline:none; background:transparent; font-size:0.74rem;">${visText}</button>
                 </td>
-                <td style="text-align: right;">
-                    <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
-                        <button type="button" class="btn-inv-action" title="Edit Product Studio" onclick="openProductStudioModal('${item.id}')">
+                <td style="padding: 0.9rem 1.2rem; text-align: right;">
+                    <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+                        <button type="button" class="btn-inv-action" title="Edit Product Studio" onclick="openProductStudioModal('${item.id}')" style="width:32px; height:32px; border-radius:6px; cursor:pointer;">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button type="button" class="btn-inv-action btn-del" title="Delete Product" onclick="deleteProductStudioItem('${item.id}')">
+                        <button type="button" class="btn-inv-action btn-del" title="Delete Product" onclick="deleteProductStudioItem('${item.id}')" style="width:32px; height:32px; border-radius:6px; cursor:pointer;">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -2411,7 +2411,6 @@ window.renderProductMasterTable = function() {
             </tr>
         `;
     }).join('');
-};
 
 // 4. கேட்டகிரி பில்டர் பில்ஸ் (Dynamic Category Pills)
 function renderDynamicProductCategoryPills() {
