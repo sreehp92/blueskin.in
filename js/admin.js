@@ -2024,12 +2024,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 /* ======================================================================= */
+/* ======================================================================= */
 /* [SECTION 7] MODULE 4: PORTFOLIO & FRONT PAGE CMS ENGINE — START         */
 /* ======================================================================= */
 
-const PORTFOLIO_STORAGE_KEY = "BLUESKIN_PORTFOLIO_CMS_DATA";
-
-// Default Master Configuration (Full 9 Visual Blocks)
+// Default Master Configuration (Full 9 Visual Blocks - Untouched Exact Data)
 const defaultPortfolioCmsData = {
     // 1. Ticker
     ticker1: "BLUE SKIN LUXURY COSMETICS & ARTISAN BOTANICALS",
@@ -2133,7 +2132,7 @@ const defaultPortfolioCmsData = {
     footerCopyright: "© 2026 Blue Skin Luxury Enterprise. All Rights Reserved. Crafted with Distinction."
 };
 
-// Tab Switcher inside Module 4
+// 1. Tab Switcher inside Module 4
 window.switchPortfolioTab = function(tabId, btn) {
     document.querySelectorAll('.portfolio-cms-tab-pane').forEach(p => p.style.display = 'none');
     document.querySelectorAll('#portfolioTabsStrip .btn-filter-pill').forEach(b => b.classList.remove('active'));
@@ -2143,34 +2142,50 @@ window.switchPortfolioTab = function(tabId, btn) {
     if (btn) btn.classList.add('active');
 };
 
-// Load saved data or defaults into inputs
-window.loadPortfolioCmsDataIntoInputs = function() {
-    let saved = null;
+// 2. SUPABASE கிளவுடிலிருந்து CMS டேட்டாவை எடுத்து ஃபார்மில் ஏற்றுதல் (Cloud Sync Loader)
+window.loadPortfolioCmsDataIntoInputs = async function() {
+    let cloudData = null;
+    let publishedTime = null;
+
     try {
-        saved = JSON.parse(localStorage.getItem(PORTFOLIO_STORAGE_KEY));
-    } catch(e) {
-        saved = null;
+        const client = window.dbClient;
+        if (client) {
+            const { data, error } = await client
+                .from('site_content')
+                .select('value, updated_at')
+                .eq('key', 'portfolio_cms')
+                .single();
+
+            if (!error && data && data.value) {
+                cloudData = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                if (data.updated_at) {
+                    const d = new Date(data.updated_at);
+                    publishedTime = `${d.toLocaleDateString('en-GB')}, ${d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+                }
+            }
+        }
+    } catch(err) {
+        console.warn("Portfolio CMS Cloud Fetch Notice:", err);
     }
 
-    const data = Object.assign({}, defaultPortfolioCmsData, saved || {});
+    const data = Object.assign({}, defaultPortfolioCmsData, cloudData || {});
 
-    // Set values into form fields
-    for (const key in data) {
+    // ஃபார்ம் ஃபீல்டுகளுக்குள் மதிப்புகளை அமைத்தல்
+    for (const key in defaultPortfolioCmsData) {
         const el = document.getElementById('cms' + key.charAt(0).toUpperCase() + key.slice(1));
         if (el) {
-            el.value = data[key];
+            el.value = (data[key] !== undefined) ? data[key] : defaultPortfolioCmsData[key];
         }
     }
 
-    const lastPublished = localStorage.getItem("BLUESKIN_CMS_LAST_PUBLISHED");
     const pubBadge = document.getElementById('cmsLastPublishedTime');
     if (pubBadge) {
-        pubBadge.textContent = lastPublished || "Default Active";
+        pubBadge.textContent = publishedTime || "Cloud Synced (Default)";
     }
 };
 
-// Publish Changes
-window.publishPortfolioCmsChanges = function() {
+// 3. நேரடியாக SUPABASE கிளவுடில் பப்ளிஷ் செய்தல் (100% CLOUD PUBLISH ENGINE)
+window.publishPortfolioCmsChanges = async function() {
     const dataToSave = {};
 
     for (const key in defaultPortfolioCmsData) {
@@ -2182,34 +2197,58 @@ window.publishPortfolioCmsChanges = function() {
         }
     }
 
-    const now = new Date();
-    const timestampStr = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+    const client = window.dbClient;
+    if (!client) {
+        alert("❌ Supabase கிளவுட் கிளையண்ட் தயாராகவில்லை. தயவுசெய்து பக்கத்தை ரீஃப்ரெஷ் செய்யவும்!");
+        return;
+    }
 
-    localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(dataToSave));
-    localStorage.setItem("BLUESKIN_CMS_LAST_PUBLISHED", timestampStr);
+    try {
+        const now = new Date();
+        const { error } = await client
+            .from('site_content')
+            .upsert({
+                key: 'portfolio_cms',
+                value: JSON.stringify(dataToSave),
+                updated_at: now.toISOString()
+            });
 
-    const pubBadge = document.getElementById('cmsLastPublishedTime');
-    if (pubBadge) pubBadge.textContent = timestampStr;
+        if (error) {
+            console.error("Supabase CMS Publish Error:", error);
+            alert("❌ கிளவுடில் சேமிப்பதில் பிழை: " + error.message);
+            return;
+        }
 
-    alert("🚀 Success! All 9 sections have been synchronized and published to the Front Page (index.html).");
-};
+        const timestampStr = `${now.toLocaleDateString('en-GB')}, ${now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true })}`;
+        const pubBadge = document.getElementById('cmsLastPublishedTime');
+        if (pubBadge) pubBadge.textContent = timestampStr;
 
-// Reset to Defaults
-window.resetPortfolioCmsDefaults = function() {
-    if (confirm("Are you sure you want to restore all Front Page texts and assets to default settings?")) {
-        localStorage.removeItem(PORTFOLIO_STORAGE_KEY);
-        loadPortfolioCmsDataIntoInputs();
-        alert("Restored to factory default copy.");
+        alert("🚀 வெற்றி! அனைத்து 9 பிரிவுகளின் மாற்றங்களும் Supabase கிளவுடில் வெற்றிகரமாகப் பப்ளிஷ் செய்யப்பட்டன!");
+    } catch (err) {
+        console.error("Publish Exception:", err);
+        alert("❌ பப்ளிஷ் செய்வதில் பிழை: " + err.message);
     }
 };
 
+// 4. தொழிற்சாலை இயல்புநிலைக்கு மாற்றுதல் (Reset to Defaults & Sync to Cloud)
+window.resetPortfolioCmsDefaults = async function() {
+    if (confirm("அனைத்து எழுத்துக்கள் மற்றும் அமைப்புகளையும் இயல்புநிலைக்கு (Factory Defaults) மாற்ற விரும்புகிறீர்களா?")) {
+        for (const key in defaultPortfolioCmsData) {
+            const el = document.getElementById('cms' + key.charAt(0).toUpperCase() + key.slice(1));
+            if (el) el.value = defaultPortfolioCmsData[key];
+        }
+        await window.publishPortfolioCmsChanges();
+        alert("மீண்டும் இயல்புநிலை அமைப்புகள் கிளவுடில் சேமிக்கப்பட்டன.");
+    }
+};
+
+// பேஜ் லோட் ஆனதும் கிளவுடிலிருந்து ஃபார்மை நிரப்புதல்
 document.addEventListener('DOMContentLoaded', () => {
-    loadPortfolioCmsDataIntoInputs();
+    window.loadPortfolioCmsDataIntoInputs();
 });
 /* ======================================================================= */
 /* [SECTION 7] MODULE 4: PORTFOLIO & FRONT PAGE CMS ENGINE — END           */
 /* ======================================================================= */
-
 /* ======================================================================= */
 /* [SECTION 8] MODULE 5: PRODUCT MANAGER & SHOP ACTIVITY STUDIO — START    */
 /* ======================================================================= */
