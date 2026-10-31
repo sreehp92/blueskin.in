@@ -20,40 +20,33 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Blue Skin">
 
-    <!-- PWA Manifest -->
-<link rel="manifest" href="manifest.json">
+    <!-- Apple / iPhone லோகோ -->
+    <link rel="apple-touch-icon" href="images/icon-192.png">
 
-<!-- Apple / iPhone லோகோ -->
-<link rel="apple-touch-icon" href="images/icon-192.png">
-
-<!-- Browser Tab Favicon -->
-<link rel="icon" type="image/png" href="images/icon-192.png">
-
-<!-- ஆப் திறக்கும்போது மேலே வரும் தீம் நிறம் -->
-<meta name="theme-color" content="#08162d">
-    
+    <!-- Browser Tab Favicon -->
+    <link rel="icon" type="image/png" href="images/icon-192.png">
 </head>
 <body>
-    <!-- Top Scrolling Announcement Bar -->
+    <!-- 1. Top Scrolling Announcement Bar -->
     <div class="top-ticker-bar">
         <div class="ticker-track">
             <div class="ticker-content">
-                <span><i class="fa-solid fa-crown"></i> BLUE SKIN SIGNATURE COLLECTION</span>
+                <span><i class="fa-solid fa-crown"></i> <span id="tickerItem1">BLUE SKIN SIGNATURE COLLECTION</span></span>
                 <span class="ticker-dot">•</span>
-                <span><i class="fa-solid fa-gem"></i> BESPOKE ARTISAN CRAFTED DESIGNS</span>
+                <span><i class="fa-solid fa-gem"></i> <span id="tickerItem2">BESPOKE ARTISAN CRAFTED DESIGNS</span></span>
                 <span class="ticker-dot">•</span>
-                <span><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY EXPRESS SHIPPING ON ORDERS</span>
+                <span><i class="fa-solid fa-truck-fast"></i> <span id="tickerItem3">COMPLIMENTARY EXPRESS SHIPPING ON ORDERS</span></span>
                 <span class="ticker-dot">•</span>
                 <span><i class="fa-solid fa-sparkles"></i> 100% HANDCRAFTED PRESTIGE QUALITY</span>
                 <span class="ticker-dot">•</span>
             </div>
             <!-- Seamless infinite scroll loop-kaga duplicate content -->
             <div class="ticker-content" aria-hidden="true">
-                <span><i class="fa-solid fa-crown"></i> BLUE SKIN SIGNATURE COLLECTION</span>
+                <span><i class="fa-solid fa-crown"></i> <span id="tickerItem1Dup">BLUE SKIN SIGNATURE COLLECTION</span></span>
                 <span class="ticker-dot">•</span>
-                <span><i class="fa-solid fa-gem"></i> BESPOKE ARTISAN CRAFTED DESIGNS</span>
+                <span><i class="fa-solid fa-gem"></i> <span id="tickerItem2Dup">BESPOKE ARTISAN CRAFTED DESIGNS</span></span>
                 <span class="ticker-dot">•</span>
-                <span><i class="fa-solid fa-truck-fast"></i> COMPLIMENTARY EXPRESS SHIPPING ON ORDERS</span>
+                <span><i class="fa-solid fa-truck-fast"></i> <span id="tickerItem3Dup">COMPLIMENTARY EXPRESS SHIPPING ON ORDERS</span></span>
                 <span class="ticker-dot">•</span>
                 <span><i class="fa-solid fa-sparkles"></i> 100% HANDCRAFTED PRESTIGE QUALITY</span>
                 <span class="ticker-dot">•</span>
@@ -61,34 +54,34 @@
         </div>
     </div>
 
-    <!-- Header / Navigation Bar -->
+    <!-- 2. Header / Navigation Bar -->
     <header class="header">
         <nav class="nav-container">
             <!-- Brand Logo -->
             <a href="index.html" class="logo">
-                BLUE <span class="gold-text">SKIN</span>
+                <span id="navBrandWord1">BLUE</span> <span class="gold-text" id="navBrandWord2">SKIN</span>
             </a>
 
             <!-- Navigation Links with Luxury Icons -->
             <ul class="nav-links" id="navLinks">
                 <li>
                     <a href="#portfolio" class="nav-item active">
-                        <i class="fa-solid fa-gem"></i> Portfolio
+                        <i class="fa-solid fa-gem"></i> <span id="navLink1">Portfolio</span>
                     </a>
                 </li>
                 <li>
                     <a href="#about" class="nav-item">
-                        <i class="fa-solid fa-crown"></i> About Us
+                        <i class="fa-solid fa-crown"></i> <span id="navLink2">About Us</span>
                     </a>
                 </li>
                 <li>
                     <a href="#contact" class="nav-item">
-                        <i class="fa-solid fa-paper-plane"></i> Contact
+                        <i class="fa-solid fa-paper-plane"></i> <span id="navLink3">Contact</span>
                     </a>
                 </li>
                 <li>
                     <a href="#terms" class="nav-item">
-                        <i class="fa-solid fa-shield-halved"></i> Terms & Conditions
+                        <i class="fa-solid fa-shield-halved"></i> <span id="navLink4">Terms & Conditions</span>
                     </a>
                 </li>
             </ul>
@@ -96,14 +89,14 @@
             <!-- Shop Now Action Button -->
             <div class="nav-actions">
                 <a href="shop.html" class="btn-shop">
-                    <span>Shop Now</span>
+                    <span id="navActionBtn">Shop Now</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         </nav>
     </header>
 
-   <!-- Hero Showcase Section -->
+    <!-- 3. Hero Showcase Section -->
     <section class="hero-section" id="portfolio">
         <div class="hero-container">
             <!-- Left Side: Content & Call to Actions -->
@@ -187,7 +180,6 @@
     <!-- DIRECT INLINE MOBILE FIX (No mobile.css Dependency) -->
     <style>
         @media screen and (max-width: 768px) {
-            /* 1. மொபைலில் வலதுபுற படத்தை மறைத்து, ஹீரோவை மையப்படுத்துதல் */
             .hero-visual { display: none !important; }
             .hero-container, .hero-content {
                 width: 100% !important;
@@ -236,8 +228,6 @@
                 justify-content: center !important;
                 white-space: nowrap !important;
             }
-
-            /* 2. STATS STRIP: பாக்ஸை நீக்கி 3 காலம்களையும் மையப்படுத்துதல் */
             .hero-metrics {
                 display: flex !important;
                 flex-direction: row !important;
@@ -247,8 +237,8 @@
                 max-width: 350px !important;
                 margin: 0.4rem auto 0 auto !important;
                 padding: 0 !important;
-                background: transparent !important; /* பாக்ஸ் நீக்கம் */
-                border: none !important;            /* பார்டர் நீக்கம் */
+                background: transparent !important;
+                border: none !important;
                 box-shadow: none !important;
             }
             .hero-metrics .metric-item {
@@ -282,137 +272,132 @@
                 margin: 0 !important;
             }
             .hero-metrics .metric-divider {
-                display: none !important; /* நடுவில் உள்ள கோடுகள் நீக்கம் */
+                display: none !important;
             }
         }
     </style>
-</body>
-</html>
-<!-- =========================================
-     PORTFOLIO SHOWCASE SECTION (SEPARATE)
-     ========================================= -->
-<section class="portfolio-showcase-section" id="portfolio">
-    <div class="section-container">
-        <!-- Section Header -->
-        <div class="section-header-center">
-            <span class="sub-badge"><i class="fa-solid fa-gem"></i> Curated Gallery</span>
-            <h2 class="section-title">The Royal <span class="gold-gradient-text">Portfolio</span></h2>
-            <div class="header-divider"></div>
-            <p class="section-desc">Explore our signature catalog of bespoke textures, elite finishes, and master-crafted designs.</p>
-        </div>
 
-        <!-- Portfolio Items Grid -->
-        <div class="portfolio-grid">
-            <!-- Item 1 -->
-            <div class="portfolio-card">
-                <div class="portfolio-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop" alt="The Azure Monogram">
-                    <div class="portfolio-tag">Artisan Series</div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>The Azure Monogram</h3>
-                    <p>Hand-stitched bespoke leather finish</p>
-                    <a href="shop.html" class="portfolio-link-btn">
-                        <span>View Piece</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
+    <!-- 4. PORTFOLIO SHOWCASE SECTION (SEPARATE) -->
+    <section class="portfolio-showcase-section" id="portfolio">
+        <div class="section-container">
+            <!-- Section Header -->
+            <div class="section-header-center">
+                <span class="sub-badge"><i class="fa-solid fa-gem"></i> <span id="galleryEyebrowTag">Curated Gallery</span></span>
+                <h2 class="section-title" id="gallerySectionTitle">The Royal <span class="gold-gradient-text">Portfolio</span></h2>
+                <div class="header-divider"></div>
+                <p class="section-desc" id="gallerySubtitleText">Explore our signature catalog of bespoke textures, elite finishes, and master-crafted designs.</p>
             </div>
 
-            <!-- Item 2 -->
-            <div class="portfolio-card">
-                <div class="portfolio-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop" alt="The Sovereign Case">
-                    <div class="portfolio-tag">Limited Edition</div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>The Sovereign Case</h3>
-                    <p>Gilded accents with premium grain</p>
-                    <a href="shop.html" class="portfolio-link-btn">
-                        <span>View Piece</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="portfolio-card">
-                <div class="portfolio-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?q=80&w=800&auto=format&fit=crop" alt="The Obsidian Royale">
-                    <div class="portfolio-tag">Signature Core</div>
-                </div>
-                <div class="portfolio-info">
-                    <h3>The Obsidian Royale</h3>
-                    <p>Minimalist luxury with matte gold frame</p>
-                    <a href="shop.html" class="portfolio-link-btn">
-                        <span>View Piece</span>
-                        <i class="fa-solid fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- =========================================
-     ABOUT US & CRAFTSMANSHIP SECTION (SEPARATE)
-     ========================================= -->
-<section class="about-section" id="about">
-    <div class="section-container about-grid">
-        <!-- Left: Brand Heritage Visual -->
-        <div class="about-visual">
-            <div class="about-frame-border"></div>
-            <div class="about-image-card">
-                <img src="https://images.unsplash.com/photo-1513094735237-8f2714d57c13?q=80&w=800&auto=format&fit=crop" alt="Blue Skin Craftsmanship">
-                <div class="about-stat-tag">
-                    <span class="stat-num">10+</span>
-                    <span class="stat-text">Years of Mastery</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right: Story & Values -->
-        <div class="about-content">
-            <span class="sub-badge"><i class="fa-solid fa-crown"></i> Our Heritage</span>
-            <h2 class="section-title">The Spirit of <span class="gold-gradient-text">Blue Skin</span></h2>
-            <div class="header-divider left"></div>
-            <p class="about-lead">
-                Blue Skin was created to bridge modern minimalism with timeless luxury craftsmanship.
-            </p>
-            <p class="about-text">
-                Every material is handpicked, refined with perfection, and crafted into pieces that stand as a testament to sophistication. We do not just make products; we sculpt statements.
-            </p>
-
-            <!-- Feature Points -->
-            <div class="about-features-list">
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
-                    <div>
-                        <h4>Precision Engineered</h4>
-                        <p>Flawless edges and durable luxury composition.</p>
+            <!-- Portfolio Items Grid -->
+            <div class="portfolio-grid">
+                <!-- Item 1 -->
+                <div class="portfolio-card">
+                    <div class="portfolio-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop" alt="The Azure Monogram">
+                        <div class="portfolio-tag">Artisan Series</div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>The Azure Monogram</h3>
+                        <p>Hand-stitched bespoke leather finish</p>
+                        <a href="shop.html" class="portfolio-link-btn">
+                            <span>View Piece</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                    <div>
-                        <h4>Bespoke Individuality</h4>
-                        <p>Unique textures tailored to stand apart.</p>
+
+                <!-- Item 2 -->
+                <div class="portfolio-card">
+                    <div class="portfolio-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=800&auto=format&fit=crop" alt="The Sovereign Case">
+                        <div class="portfolio-tag">Limited Edition</div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>The Sovereign Case</h3>
+                        <p>Gilded accents with premium grain</p>
+                        <a href="shop.html" class="portfolio-link-btn">
+                            <span>View Piece</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="portfolio-card">
+                    <div class="portfolio-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1509695507497-903c140c43b0?q=80&w=800&auto=format&fit=crop" alt="The Obsidian Royale">
+                        <div class="portfolio-tag">Signature Core</div>
+                    </div>
+                    <div class="portfolio-info">
+                        <h3>The Obsidian Royale</h3>
+                        <p>Minimalist luxury with matte gold frame</p>
+                        <a href="shop.html" class="portfolio-link-btn">
+                            <span>View Piece</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. ABOUT US & CRAFTSMANSHIP SECTION (SEPARATE) -->
+    <section class="about-section" id="about">
+        <div class="section-container about-grid">
+            <!-- Left: Brand Heritage Visual -->
+            <div class="about-visual">
+                <div class="about-frame-border"></div>
+                <div class="about-image-card">
+                    <img src="https://images.unsplash.com/photo-1513094735237-8f2714d57c13?q=80&w=800&auto=format&fit=crop" alt="Blue Skin Craftsmanship">
+                    <div class="about-stat-tag">
+                        <span class="stat-num">10+</span>
+                        <span class="stat-text">Years of Mastery</span>
                     </div>
                 </div>
             </div>
 
-            <!-- About Button -->
-            <div class="about-btn-wrap">
-                <a href="shop.html" class="btn-primary-gold">
-                    <span>Visit The Store</span>
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
+            <!-- Right: Story & Values -->
+            <div class="about-content">
+                <span class="sub-badge"><i class="fa-solid fa-crown"></i> Our Heritage</span>
+                <h2 class="section-title" id="heritageTitleText">The Spirit of <span class="gold-gradient-text">Blue Skin</span></h2>
+                <div class="header-divider left"></div>
+                <p class="about-lead" id="heritageParagraph1">
+                    Blue Skin was created to bridge modern minimalism with timeless luxury craftsmanship.
+                </p>
+                <p class="about-text" id="heritageParagraph2">
+                    Every material is handpicked, refined with perfection, and crafted into pieces that stand as a testament to sophistication. We do not just make products; we sculpt statements.
+                </p>
+
+                <!-- Feature Points -->
+                <div class="about-features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div>
+                            <h4 id="pillar1HeadingText">Precision Engineered</h4>
+                            <p id="pillar1DescText">Flawless edges and durable luxury composition.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <div>
+                            <h4 id="pillar2HeadingText">Bespoke Individuality</h4>
+                            <p id="pillar2DescText">Unique textures tailored to stand apart.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Button -->
+                <div class="about-btn-wrap">
+                    <a href="shop.html" class="btn-primary-gold" id="heritageBtnAnchor">
+                        <span>Visit The Store</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- =========================================
-         1. OUR NEW PRODUCTS (COMPACT 4 ITEMS IN A ROW)
-         ========================================= -->
+    </section>
+
+    <!-- 1. OUR NEW PRODUCTS (COMPACT 4 ITEMS IN A ROW) -->
     <section class="new-products-section" id="new-products">
         <div class="section-container">
             <div class="section-header-center">
@@ -458,17 +443,15 @@
         </div>
     </section>
 
-    <!-- =========================================
-         ULTRA-MODERN GOOGLE & CLIENT REVIEWS
-         ========================================= -->
+    <!-- 5. ULTRA-MODERN GOOGLE & CLIENT REVIEWS -->
     <section class="reviews-section" id="reviews">
         <div class="section-container">
             <!-- Modern Header with Live Google Rating Capsule -->
             <div class="reviews-header-wrap">
                 <div class="reviews-title-area">
-                    <span class="sub-badge"><i class="fa-solid fa-award"></i> Hall of Prestige</span>
-                    <h2 class="section-title">Client <span class="gold-gradient-text">Accolades</span></h2>
-                    <p class="section-desc">Real stories of craftsmanship experienced by connoisseurs across India.</p>
+                    <span class="sub-badge"><i class="fa-solid fa-award"></i> <span id="reviewsBadgeTag">Hall of Prestige</span></span>
+                    <h2 class="section-title" id="reviewsSectionTitle">Client <span class="gold-gradient-text">Accolades</span></h2>
+                    <p class="section-desc" id="reviewsSubtitleText">Real stories of craftsmanship experienced by connoisseurs across India.</p>
                 </div>
 
                 <!-- Floating Google Metric Capsule -->
@@ -483,7 +466,7 @@
                     </div>
                     <div class="capsule-data">
                         <div class="capsule-top">
-                            <span class="capsule-score">4.9</span>
+                            <span class="capsule-score" id="reviewsScoreVal">4.9</span>
                             <div class="capsule-stars">
                                 <i class="fa-solid fa-star"></i>
                                 <i class="fa-solid fa-star"></i>
@@ -492,7 +475,7 @@
                                 <i class="fa-solid fa-star"></i>
                             </div>
                         </div>
-                        <span class="capsule-label">Verified Google Reviews</span>
+                        <span class="capsule-label" id="reviewsBadgeText">Verified Google Reviews</span>
                     </div>
                 </div>
             </div>
@@ -506,11 +489,11 @@
                     <div class="review-card-header">
                         <div class="client-profile">
                             <div class="avatar-ring">
-                                <span>V</span>
+                                <span id="rev1InitialBadge">V</span>
                             </div>
                             <div class="client-meta">
-                                <h4>Vikram Anand</h4>
-                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> Chennai • Verified</span>
+                                <h4 id="rev1AuthorName">Vikram Anand</h4>
+                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> <span id="rev1LocationTag">Chennai • Verified</span></span>
                             </div>
                         </div>
                         <div class="card-stars-row">
@@ -518,12 +501,12 @@
                         </div>
                     </div>
 
-                    <p class="review-text-quote">
+                    <p class="review-text-quote" id="rev1FeedbackText">
                         "The sapphire tone on the leather is breathtaking. In person, it looks even more royal than the pictures. Impeccable packaging and fast delivery."
                     </p>
 
                     <div class="review-product-tag">
-                        <i class="fa-solid fa-bag-shopping"></i> Azure Bifold Wallet
+                        <i class="fa-solid fa-bag-shopping"></i> <span id="rev1ProductName">Azure Bifold Wallet</span>
                     </div>
                 </div>
 
@@ -534,11 +517,11 @@
                     <div class="review-card-header">
                         <div class="client-profile">
                             <div class="avatar-ring gold-accent-ring">
-                                <span>R</span>
+                                <span id="rev2InitialBadge">R</span>
                             </div>
                             <div class="client-meta">
-                                <h4>Rajesh Kumar</h4>
-                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> Coimbatore • Verified</span>
+                                <h4 id="rev2AuthorName">Rajesh Kumar</h4>
+                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> <span id="rev2LocationTag">Coimbatore • Verified</span></span>
                             </div>
                         </div>
                         <div class="card-stars-row">
@@ -546,12 +529,12 @@
                         </div>
                     </div>
 
-                    <p class="review-text-quote">
+                    <p class="review-text-quote" id="rev2FeedbackText">
                         "Solid gold hardware and deep texture. The WhatsApp concierge helped me personalize the order within minutes. A true homegrown luxury benchmark."
                     </p>
 
                     <div class="review-product-tag">
-                        <i class="fa-solid fa-bag-shopping"></i> Sapphire Travel Duffle
+                        <i class="fa-solid fa-bag-shopping"></i> <span id="rev2ProductName">Sapphire Travel Duffle</span>
                     </div>
                 </div>
 
@@ -562,11 +545,11 @@
                     <div class="review-card-header">
                         <div class="client-profile">
                             <div class="avatar-ring">
-                                <span>A</span>
+                                <span id="rev3InitialBadge">A</span>
                             </div>
                             <div class="client-meta">
-                                <h4>Arun Prasad</h4>
-                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> Bangalore • Verified</span>
+                                <h4 id="rev3AuthorName">Arun Prasad</h4>
+                                <span class="client-loc"><i class="fa-solid fa-location-dot"></i> <span id="rev3LocationTag">Bangalore • Verified</span></span>
                             </div>
                         </div>
                         <div class="card-stars-row">
@@ -574,20 +557,19 @@
                         </div>
                     </div>
 
-                    <p class="review-text-quote">
+                    <p class="review-text-quote" id="rev3FeedbackText">
                         "Unboxing experience is 10/10. The craftsmanship and leather aroma speak volumes about its authenticity. You have a customer for life."
                     </p>
 
                     <div class="review-product-tag">
-                        <i class="fa-solid fa-bag-shopping"></i> Royale Leather Jacket
+                        <i class="fa-solid fa-bag-shopping"></i> <span id="rev3ProductName">Royale Leather Jacket</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-<!-- =========================================
-         CONTACT US & CONCIERGE SECTION
-         ========================================= -->
+
+    <!-- 7. CONTACT US & CONCIERGE SECTION -->
     <section class="contact-section" id="contact">
         <div class="section-container">
             <!-- Header -->
@@ -605,7 +587,7 @@
                         <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
                         <div class="contact-text">
                             <h4>Flagship Studio</h4>
-                            <p>Luxury Avenue, High-Street Quarter, Tamil Nadu, India</p>
+                            <p id="studioAddressText">Luxury Avenue, High-Street Quarter, Tamil Nadu, India</p>
                         </div>
                     </div>
 
@@ -613,7 +595,7 @@
                         <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
                         <div class="contact-text">
                             <h4>Client Concierge</h4>
-                            <p>+91 96583 99991</p>
+                            <p id="studioPhoneText">+91 96583 99991</p>
                         </div>
                     </div>
 
@@ -621,12 +603,12 @@
                         <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
                         <div class="contact-text">
                             <h4>Direct Inquiries</h4>
-                            <p>contact@blueskin.luxury</p>
+                            <p id="studioEmailText">contact@blueskin.luxury</p>
                         </div>
                     </div>
 
                     <!-- Direct WhatsApp Connect -->
-                    <a href="https://wa.me/919658399991?text=Hello%20Blue%20Skin,%20I%20have%20an%20inquiry." target="_blank" class="btn-whatsapp-direct">
+                    <a href="https://wa.me/919658399991?text=Hello%20Blue%20Skin,%20I%20have%20an%20inquiry." target="_blank" class="btn-whatsapp-direct" id="studioWaBtnAnchor">
                         <i class="fa-brands fa-whatsapp"></i>
                         <span>Chat via WhatsApp</span>
                     </a>
@@ -657,29 +639,27 @@
         </div>
     </section>
 
-    <!-- =========================================
-         TERMS & CONDITIONS & FOOTER SECTION
-         ========================================= -->
+    <!-- 8. TERMS & CONDITIONS & FOOTER SECTION -->
     <footer class="footer-section" id="terms">
         <div class="section-container">
             <!-- Terms Highlight Bar -->
             <div class="terms-card">
                 <div class="terms-header">
                     <i class="fa-solid fa-shield-halved"></i>
-                    <h3>Blue Skin Assurance & Terms</h3>
+                    <h3 id="assuranceSectionTitleText">Blue Skin Assurance & Terms</h3>
                 </div>
                 <div class="terms-grid">
                     <div class="term-box">
-                        <h4>Authenticity Guaranteed</h4>
-                        <p>All showcase pieces are 100% original, crafted strictly according to verified quality benchmarks.</p>
+                        <h4 id="assurance1TitleText">Authenticity Guaranteed</h4>
+                        <p id="assurance1DescText">All showcase pieces are 100% original, crafted strictly according to verified quality benchmarks.</p>
                     </div>
                     <div class="term-box">
-                        <h4>Secure Orders</h4>
-                        <p>Direct verification and bespoke order placement confirmed straight via official WhatsApp concierge.</p>
+                        <h4 id="assurance2TitleText">Secure Orders</h4>
+                        <p id="assurance2DescText">Direct verification and bespoke order placement confirmed straight via official WhatsApp concierge.</p>
                     </div>
                     <div class="term-box">
-                        <h4>Express Handling</h4>
-                        <p>Insured priority packaging ensuring your premium selections arrive in pristine condition.</p>
+                        <h4 id="assurance3TitleText">Express Handling</h4>
+                        <p id="assurance3DescText">Insured priority packaging ensuring your premium selections arrive in pristine condition.</p>
                     </div>
                 </div>
             </div>
@@ -687,8 +667,8 @@
             <!-- Main Footer Links & Copyright -->
             <div class="footer-bottom">
                 <div class="footer-brand">
-                    <a href="index.html" class="logo">BLUE <span class="gold-text">SKIN</span></a>
-                    <p>Artisan Aesthetics & Bespoke Luxury Collections.</p>
+                    <a href="index.html" class="logo"><span id="footerBrandWord1">BLUE</span> <span class="gold-text" id="footerBrandWord2">SKIN</span></a>
+                    <p id="footerTaglineText">Artisan Aesthetics & Bespoke Luxury Collections.</p>
                 </div>
 
                 <div class="footer-socials">
@@ -698,30 +678,30 @@
                 </div>
             </div>
 
-          <!-- Copyright with CorePulse Branding -->
+            <!-- Copyright with CorePulse Branding -->
             <div class="copyright-bar">
-                <p>&copy; 2026 Blue Skin Luxury. All Rights Reserved. Crafted with Distinction by <a href="https://corepulse.in" target="_blank" class="dev-brand-link">CorePulse</a>.</p>
+                <p id="footerCopyrightText">&copy; 2026 Blue Skin Luxury. All Rights Reserved. Crafted with Distinction by <a href="https://corepulse.in" target="_blank" class="dev-brand-link">CorePulse</a>.</p>
             </div>
         </div>
     </footer>
 
     <!-- 1. Supabase CDN Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- 2. Supabase நேரடி இணைப்பு -->
-<script>
-    const SUPABASE_URL = "https://xijzftvmvajnboywnmbe.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_BNT6jfQA2pGyo_rLmU4xvg_jv-_emF9";
-    
-    if (typeof supabase !== 'undefined') {
-        window.dbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("✅ Supabase dbClient வெற்றிகரமாக இணைக்கப்பட்டது!");
-    } else {
-        console.error("❌ Supabase CDN லோட் ஆகவில்லை!");
-    }
-</script>
+    <!-- 2. Supabase நேரடி இணைப்பு -->
+    <script>
+        const SUPABASE_URL = "https://xijzftvmvajnboywnmbe.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_BNT6jfQA2pGyo_rLmU4xvg_jv-_emF9";
+        
+        if (typeof supabase !== 'undefined') {
+            window.dbClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("✅ Supabase dbClient வெற்றிகரமாக இணைக்கப்பட்டது!");
+        } else {
+            console.error("❌ Supabase CDN லோட் ஆகவில்லை!");
+        }
+    </script>
 
-    <!-- 👇 PWA ஆப் இன்ஸ்டால் செய்வதற்கான Service Worker கோட் 👇 -->
+    <!-- 3. PWA ஆப் இன்ஸ்டால் செய்வதற்கான Service Worker கோட் -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -732,220 +712,228 @@
       }
     </script>
 
-   <!-- ======================================================================= -->
-<!-- BLUE SKIN: SUPABASE REALTIME PORTFOLIO CMS LIVE BINDER ENGINE           -->
-<!-- ======================================================================= -->
-<script>
-async function applyLivePortfolioCMS() {
-    try {
-        // 1. Supabase Client உள்ளதா எனப் பார்த்தல்
-        const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
-        if (!client) {
-            console.warn("Supabase client not yet initialized on index.html");
-            return;
+    <!-- ======================================================================= -->
+    <!-- 4. BLUE SKIN: SUPABASE REALTIME PORTFOLIO CMS LIVE BINDER ENGINE        -->
+    <!-- ======================================================================= -->
+    <script>
+    async function applyLivePortfolioCMS() {
+        try {
+            const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+            if (!client) {
+                console.warn("Supabase client not yet initialized on index.html");
+                return;
+            }
+
+            const { data, error } = await client
+                .from('site_content')
+                .select('value')
+                .eq('key', 'portfolio_cms')
+                .single();
+
+            if (error || !data || !data.value) return;
+
+            const cms = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+
+            // 1. TOP TICKER
+            const tickerEl1 = document.getElementById('tickerItem1');
+            const tickerEl2 = document.getElementById('tickerItem2');
+            const tickerEl3 = document.getElementById('tickerItem3');
+            const tickerEl1Dup = document.getElementById('tickerItem1Dup');
+            const tickerEl2Dup = document.getElementById('tickerItem2Dup');
+            const tickerEl3Dup = document.getElementById('tickerItem3Dup');
+            if (tickerEl1 && cms.ticker1) tickerEl1.textContent = cms.ticker1;
+            if (tickerEl2 && cms.ticker2) tickerEl2.textContent = cms.ticker2;
+            if (tickerEl3 && cms.ticker3) tickerEl3.textContent = cms.ticker3;
+            if (tickerEl1Dup && cms.ticker1) tickerEl1Dup.textContent = cms.ticker1;
+            if (tickerEl2Dup && cms.ticker2) tickerEl2Dup.textContent = cms.ticker2;
+            if (tickerEl3Dup && cms.ticker3) tickerEl3Dup.textContent = cms.ticker3;
+
+            // 2. BRAND & NAVBAR
+            const brandWord1 = document.getElementById('navBrandWord1');
+            const brandWord2 = document.getElementById('navBrandWord2');
+            if (brandWord1 && cms.brandWord1) brandWord1.textContent = cms.brandWord1;
+            if (brandWord2 && cms.brandWord2) brandWord2.textContent = cms.brandWord2;
+
+            const nav1 = document.getElementById('navLink1');
+            const nav2 = document.getElementById('navLink2');
+            const nav3 = document.getElementById('navLink3');
+            const nav4 = document.getElementById('navLink4');
+            const navAction = document.getElementById('navActionBtn');
+            if (nav1 && cms.navLink1) nav1.textContent = cms.navLink1;
+            if (nav2 && cms.navLink2) nav2.textContent = cms.navLink2;
+            if (nav3 && cms.navLink3) nav3.textContent = cms.navLink3;
+            if (nav4 && cms.navLink4) nav4.textContent = cms.navLink4;
+            if (navAction && cms.navActionBtnText) navAction.textContent = cms.navActionBtnText;
+
+            // 3. HERO SECTION & STAT BADGES
+            const heroEyebrow = document.getElementById('heroEyebrowTag');
+            const heroTitle = document.getElementById('heroMainTitle');
+            const heroSub = document.getElementById('heroSubtitleText');
+            const heroImg = document.getElementById('heroMediaImg');
+            const heroCta1 = document.getElementById('heroCtaBtn1');
+            const heroCta2 = document.getElementById('heroCtaBtn2');
+
+            if (heroEyebrow && cms.heroEyebrow) heroEyebrow.innerHTML = `<i class="fa-solid fa-sparkles"></i> ${cms.heroEyebrow}`;
+            if (heroTitle && cms.heroTitle) heroTitle.innerHTML = cms.heroTitle;
+            if (heroSub && cms.heroSubtitle) heroSub.textContent = cms.heroSubtitle;
+            if (heroImg && cms.heroBannerMedia) heroImg.src = cms.heroBannerMedia;
+            if (heroCta1 && cms.heroCta1Text) {
+                const span1 = heroCta1.querySelector('span');
+                if (span1) span1.textContent = cms.heroCta1Text;
+            }
+            if (heroCta2 && cms.heroCta2Text) {
+                const span2 = heroCta2.querySelector('span');
+                if (span2) span2.textContent = cms.heroCta2Text;
+            }
+
+            const stat1V = document.getElementById('heroStat1Val');
+            const stat1L = document.getElementById('heroStat1Lbl');
+            const stat2V = document.getElementById('heroStat2Val');
+            const stat2L = document.getElementById('heroStat2Lbl');
+            const stat3V = document.getElementById('heroStat3Val');
+            const stat3L = document.getElementById('heroStat3Lbl');
+            if (stat1V && cms.stat1Val) stat1V.textContent = cms.stat1Val;
+            if (stat1L && cms.stat1Lbl) stat1L.textContent = cms.stat1Lbl;
+            if (stat2V && cms.stat2Val) stat2V.textContent = cms.stat2Val;
+            if (stat2L && cms.stat2Lbl) stat2L.textContent = cms.stat2Lbl;
+            if (stat3V && cms.stat3Val) stat3V.textContent = cms.stat3Val;
+            if (stat3L && cms.stat3Lbl) stat3L.textContent = cms.stat3Lbl;
+
+            // 4. GALLERY SHOWCASE HEADER
+            const galEye = document.getElementById('galleryEyebrowTag');
+            const galTitle = document.getElementById('gallerySectionTitle');
+            const galSub = document.getElementById('gallerySubtitleText');
+            if (galEye && cms.galleryEyebrow) galEye.textContent = cms.galleryEyebrow;
+            if (galTitle && cms.galleryTitle) galTitle.innerHTML = cms.galleryTitle;
+            if (galSub && cms.gallerySubtitle) galSub.textContent = cms.gallerySubtitle;
+
+            // 5. GOOGLE CLIENT REVIEWS (HALL OF PRESTIGE)
+            const revBadge = document.getElementById('reviewsBadgeTag');
+            const revTitle = document.getElementById('reviewsSectionTitle');
+            const revSub = document.getElementById('reviewsSubtitleText');
+            const revScore = document.getElementById('reviewsScoreVal');
+            const revBadgeTxt = document.getElementById('reviewsBadgeText');
+            if (revBadge && cms.reviewsBadge) revBadge.textContent = cms.reviewsBadge;
+            if (revTitle && cms.reviewsTitle) revTitle.innerHTML = cms.reviewsTitle;
+            if (revSub && cms.reviewsSubtitle) revSub.textContent = cms.reviewsSubtitle;
+            if (revScore && cms.reviewsScore) revScore.textContent = cms.reviewsScore;
+            if (revBadgeTxt && cms.reviewsBadgeText) revBadgeTxt.textContent = cms.reviewsBadgeText;
+
+            // Review 1
+            const r1Init = document.getElementById('rev1InitialBadge');
+            const r1Auth = document.getElementById('rev1AuthorName');
+            const r1Loc = document.getElementById('rev1LocationTag');
+            const r1Prod = document.getElementById('rev1ProductName');
+            const r1Feed = document.getElementById('rev1FeedbackText');
+            if (r1Init && cms.rev1Initial) r1Init.textContent = cms.rev1Initial;
+            if (r1Auth && cms.rev1Author) r1Auth.textContent = cms.rev1Author;
+            if (r1Loc && cms.rev1Location) r1Loc.textContent = cms.rev1Location;
+            if (r1Prod && cms.rev1Product) r1Prod.textContent = cms.rev1Product;
+            if (r1Feed && cms.rev1Feedback) r1Feed.textContent = `"${cms.rev1Feedback}"`;
+
+            // Review 2
+            const r2Init = document.getElementById('rev2InitialBadge');
+            const r2Auth = document.getElementById('rev2AuthorName');
+            const r2Loc = document.getElementById('rev2LocationTag');
+            const r2Prod = document.getElementById('rev2ProductName');
+            const r2Feed = document.getElementById('rev2FeedbackText');
+            if (r2Init && cms.rev2Initial) r2Init.textContent = cms.rev2Initial;
+            if (r2Auth && cms.rev2Author) r2Auth.textContent = cms.rev2Author;
+            if (r2Loc && cms.rev2Location) r2Loc.textContent = cms.rev2Location;
+            if (r2Prod && cms.rev2Product) r2Prod.textContent = cms.rev2Product;
+            if (r2Feed && cms.rev2Feedback) r2Feed.textContent = `"${cms.rev2Feedback}"`;
+
+            // Review 3
+            const r3Init = document.getElementById('rev3InitialBadge');
+            const r3Auth = document.getElementById('rev3AuthorName');
+            const r3Loc = document.getElementById('rev3LocationTag');
+            const r3Prod = document.getElementById('rev3ProductName');
+            const r3Feed = document.getElementById('rev3FeedbackText');
+            if (r3Init && cms.rev3Initial) r3Init.textContent = cms.rev3Initial;
+            if (r3Auth && cms.rev3Author) r3Auth.textContent = cms.rev3Author;
+            if (r3Loc && cms.rev3Location) r3Loc.textContent = cms.rev3Location;
+            if (r3Prod && cms.rev3Product) r3Prod.textContent = cms.rev3Product;
+            if (r3Feed && cms.rev3Feedback) r3Feed.textContent = `"${cms.rev3Feedback}"`;
+
+            // 6. HERITAGE & CRAFTSMANSHIP PILLARS
+            const herTitle = document.getElementById('heritageTitleText');
+            const herP1 = document.getElementById('heritageParagraph1');
+            const herP2 = document.getElementById('heritageParagraph2');
+            const pil1H = document.getElementById('pillar1HeadingText');
+            const pil1D = document.getElementById('pillar1DescText');
+            const pil2H = document.getElementById('pillar2HeadingText');
+            const pil2D = document.getElementById('pillar2DescText');
+            const herBtn = document.getElementById('heritageBtnAnchor');
+            if (herTitle && cms.heritageTitle) herTitle.innerHTML = cms.heritageTitle;
+            if (herP1 && cms.heritagePara1) herP1.textContent = cms.heritagePara1;
+            if (herP2 && cms.heritagePara2) herP2.textContent = cms.heritagePara2;
+            if (pil1H && cms.pillar1Heading) pil1H.textContent = cms.pillar1Heading;
+            if (pil1D && cms.pillar1Desc) pil1D.textContent = cms.pillar1Desc;
+            if (pil2H && cms.pillar2Heading) pil2H.textContent = cms.pillar2Heading;
+            if (pil2D && cms.pillar2Desc) pil2D.textContent = cms.pillar2Desc;
+            if (herBtn && cms.heritageBtnText) {
+                const btnSpan = herBtn.querySelector('span');
+                if (btnSpan) btnSpan.textContent = cms.heritageBtnText;
+            }
+
+            // 7. FLAGSHIP STUDIO & CONTACT HUB
+            const stuAddr = document.getElementById('studioAddressText');
+            const stuPhone = document.getElementById('studioPhoneText');
+            const stuMail = document.getElementById('studioEmailText');
+            const stuWa = document.getElementById('studioWaBtnAnchor');
+            if (stuAddr && cms.studioAddress) stuAddr.textContent = cms.studioAddress;
+            if (stuPhone && cms.studioPhone) stuPhone.textContent = cms.studioPhone;
+            if (stuMail && cms.studioEmail) stuMail.textContent = cms.studioEmail;
+            if (stuWa && cms.studioWaBtnText) {
+                const waSpan = stuWa.querySelector('span');
+                if (waSpan) waSpan.textContent = cms.studioWaBtnText;
+            }
+
+            // 8. ASSURANCE TERMS & GUARANTEE
+            const assTitle = document.getElementById('assuranceSectionTitleText');
+            const a1Title = document.getElementById('assurance1TitleText');
+            const a1Desc = document.getElementById('assurance1DescText');
+            const a2Title = document.getElementById('assurance2TitleText');
+            const a2Desc = document.getElementById('assurance2DescText');
+            const a3Title = document.getElementById('assurance3TitleText');
+            const a3Desc = document.getElementById('assurance3DescText');
+            if (assTitle && cms.assuranceSectionTitle) assTitle.textContent = cms.assuranceSectionTitle;
+            if (a1Title && cms.assurance1Title) a1Title.textContent = cms.assurance1Title;
+            if (a1Desc && cms.assurance1Desc) a1Desc.textContent = cms.assurance1Desc;
+            if (a2Title && cms.assurance2Title) a2Title.textContent = cms.assurance2Title;
+            if (a2Desc && cms.assurance2Desc) a2Desc.textContent = cms.assurance2Desc;
+            if (a3Title && cms.assurance3Title) a3Title.textContent = cms.assurance3Title;
+            if (a3Desc && cms.assurance3Desc) a3Desc.textContent = cms.assurance3Desc;
+
+            // 9. FOOTER & LEGAL
+            const footB1 = document.getElementById('footerBrandWord1');
+            const footB2 = document.getElementById('footerBrandWord2');
+            const footTag = document.getElementById('footerTaglineText');
+            const footCopy = document.getElementById('footerCopyrightText');
+            if (footB1 && cms.footerBrand1) footB1.textContent = cms.footerBrand1;
+            if (footB2 && cms.footerBrand2) footB2.textContent = cms.footerBrand2;
+            if (footTag && cms.footerTagline) footTag.textContent = cms.footerTagline;
+            if (footCopy && cms.footerCopyright) footCopy.innerHTML = cms.footerCopyright;
+
+            console.log("✅ Live Portfolio CMS applied dynamically across all 9 blocks!");
+        } catch(err) {
+            console.error("Error applying live Portfolio CMS:", err);
         }
-
-        // 2. site_content அட்டவணையிலிருந்து போர்ட்ஃபோலியோ CMS தரவை எடுத்தல்
-        const { data, error } = await client
-            .from('site_content')
-            .select('value')
-            .eq('key', 'portfolio_cms')
-            .single();
-
-        if (error || !data || !data.value) return;
-
-        const cms = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-
-        // -------------------------------------------------------------------
-        // 1. TOP ANNOUNCEMENT TICKER BINDINGS
-        // -------------------------------------------------------------------
-        const tickerEl1 = document.getElementById('tickerItem1');
-        const tickerEl2 = document.getElementById('tickerItem2');
-        const tickerEl3 = document.getElementById('tickerItem3');
-        if (tickerEl1 && cms.ticker1) tickerEl1.textContent = cms.ticker1;
-        if (tickerEl2 && cms.ticker2) tickerEl2.textContent = cms.ticker2;
-        if (tickerEl3 && cms.ticker3) tickerEl3.textContent = cms.ticker3;
-
-        // -------------------------------------------------------------------
-        // 2. BRAND & NAVBAR BINDINGS
-        // -------------------------------------------------------------------
-        const brandWord1 = document.getElementById('navBrandWord1');
-        const brandWord2 = document.getElementById('navBrandWord2');
-        if (brandWord1 && cms.brandWord1) brandWord1.textContent = cms.brandWord1;
-        if (brandWord2 && cms.brandWord2) brandWord2.textContent = cms.brandWord2;
-
-        const nav1 = document.getElementById('navLink1');
-        const nav2 = document.getElementById('navLink2');
-        const nav3 = document.getElementById('navLink3');
-        const nav4 = document.getElementById('navLink4');
-        const navAction = document.getElementById('navActionBtn');
-        if (nav1 && cms.navLink1) nav1.textContent = cms.navLink1;
-        if (nav2 && cms.navLink2) nav2.textContent = cms.navLink2;
-        if (nav3 && cms.navLink3) nav3.textContent = cms.navLink3;
-        if (nav4 && cms.navLink4) nav4.textContent = cms.navLink4;
-        if (navAction && cms.navActionBtnText) navAction.textContent = cms.navActionBtnText;
-
-        // -------------------------------------------------------------------
-        // 3. HERO SECTION & STAT BADGES
-        // -------------------------------------------------------------------
-        const heroEyebrow = document.getElementById('heroEyebrowTag');
-        const heroTitle = document.getElementById('heroMainTitle');
-        const heroSub = document.getElementById('heroSubtitleText');
-        const heroImg = document.getElementById('heroMediaImg');
-        const heroCta1 = document.getElementById('heroCtaBtn1');
-        const heroCta2 = document.getElementById('heroCtaBtn2');
-
-        if (heroEyebrow && cms.heroEyebrow) heroEyebrow.textContent = cms.heroEyebrow;
-        if (heroTitle && cms.heroTitle) heroTitle.textContent = cms.heroTitle;
-        if (heroSub && cms.heroSubtitle) heroSub.textContent = cms.heroSubtitle;
-        if (heroImg && cms.heroBannerMedia) heroImg.src = cms.heroBannerMedia;
-        if (heroCta1 && cms.heroCta1Text) heroCta1.textContent = cms.heroCta1Text;
-        if (heroCta2 && cms.heroCta2Text) heroCta2.textContent = cms.heroCta2Text;
-
-        const stat1V = document.getElementById('heroStat1Val');
-        const stat1L = document.getElementById('heroStat1Lbl');
-        const stat2V = document.getElementById('heroStat2Val');
-        const stat2L = document.getElementById('heroStat2Lbl');
-        const stat3V = document.getElementById('heroStat3Val');
-        const stat3L = document.getElementById('heroStat3Lbl');
-        if (stat1V && cms.stat1Val) stat1V.textContent = cms.stat1Val;
-        if (stat1L && cms.stat1Lbl) stat1L.textContent = cms.stat1Lbl;
-        if (stat2V && cms.stat2Val) stat2V.textContent = cms.stat2Val;
-        if (stat2L && cms.stat2Lbl) stat2L.textContent = cms.stat2Lbl;
-        if (stat3V && cms.stat3Val) stat3V.textContent = cms.stat3Val;
-        if (stat3L && cms.stat3Lbl) stat3L.textContent = cms.stat3Lbl;
-
-        // -------------------------------------------------------------------
-        // 4. GALLERY SHOWCASE HEADER
-        // -------------------------------------------------------------------
-        const galEye = document.getElementById('galleryEyebrowTag');
-        const galTitle = document.getElementById('gallerySectionTitle');
-        const galSub = document.getElementById('gallerySubtitleText');
-        if (galEye && cms.galleryEyebrow) galEye.textContent = cms.galleryEyebrow;
-        if (galTitle && cms.galleryTitle) galTitle.textContent = cms.galleryTitle;
-        if (galSub && cms.gallerySubtitle) galSub.textContent = cms.gallerySubtitle;
-
-        // -------------------------------------------------------------------
-        // 5. GOOGLE CLIENT REVIEWS (HALL OF PRESTIGE)
-        // -------------------------------------------------------------------
-        const revBadge = document.getElementById('reviewsBadgeTag');
-        const revTitle = document.getElementById('reviewsSectionTitle');
-        const revSub = document.getElementById('reviewsSubtitleText');
-        const revScore = document.getElementById('reviewsScoreVal');
-        if (revBadge && cms.reviewsBadge) revBadge.textContent = cms.reviewsBadge;
-        if (revTitle && cms.reviewsTitle) revTitle.textContent = cms.reviewsTitle;
-        if (revSub && cms.reviewsSubtitle) revSub.textContent = cms.reviewsSubtitle;
-        if (revScore && cms.reviewsScore) revScore.textContent = cms.reviewsScore;
-
-        // Review 1
-        const r1Init = document.getElementById('rev1InitialBadge');
-        const r1Auth = document.getElementById('rev1AuthorName');
-        const r1Loc = document.getElementById('rev1LocationTag');
-        const r1Prod = document.getElementById('rev1ProductName');
-        const r1Feed = document.getElementById('rev1FeedbackText');
-        if (r1Init && cms.rev1Initial) r1Init.textContent = cms.rev1Initial;
-        if (r1Auth && cms.rev1Author) r1Auth.textContent = cms.rev1Author;
-        if (r1Loc && cms.rev1Location) r1Loc.textContent = cms.rev1Location;
-        if (r1Prod && cms.rev1Product) r1Prod.textContent = cms.rev1Product;
-        if (r1Feed && cms.rev1Feedback) r1Feed.textContent = cms.rev1Feedback;
-
-        // Review 2
-        const r2Init = document.getElementById('rev2InitialBadge');
-        const r2Auth = document.getElementById('rev2AuthorName');
-        const r2Loc = document.getElementById('rev2LocationTag');
-        const r2Prod = document.getElementById('rev2ProductName');
-        const r2Feed = document.getElementById('rev2FeedbackText');
-        if (r2Init && cms.rev2Initial) r2Init.textContent = cms.rev2Initial;
-        if (r2Auth && cms.rev2Author) r2Auth.textContent = cms.rev2Author;
-        if (r2Loc && cms.rev2Location) r2Loc.textContent = cms.rev2Location;
-        if (r2Prod && cms.rev2Product) r2Prod.textContent = cms.rev2Product;
-        if (r2Feed && cms.rev2Feedback) r2Feed.textContent = cms.rev2Feedback;
-
-        // Review 3
-        const r3Init = document.getElementById('rev3InitialBadge');
-        const r3Auth = document.getElementById('rev3AuthorName');
-        const r3Loc = document.getElementById('rev3LocationTag');
-        const r3Prod = document.getElementById('rev3ProductName');
-        const r3Feed = document.getElementById('rev3FeedbackText');
-        if (r3Init && cms.rev3Initial) r3Init.textContent = cms.rev3Initial;
-        if (r3Auth && cms.rev3Author) r3Auth.textContent = cms.rev3Author;
-        if (r3Loc && cms.rev3Location) r3Loc.textContent = cms.rev3Location;
-        if (r3Prod && cms.rev3Product) r3Prod.textContent = cms.rev3Product;
-        if (r3Feed && cms.rev3Feedback) r3Feed.textContent = cms.rev3Feedback;
-
-        // -------------------------------------------------------------------
-        // 6. HERITAGE & CRAFTSMANSHIP PILLARS
-        // -------------------------------------------------------------------
-        const herTitle = document.getElementById('heritageTitleText');
-        const herP1 = document.getElementById('heritageParagraph1');
-        const herP2 = document.getElementById('heritageParagraph2');
-        const pil1H = document.getElementById('pillar1HeadingText');
-        const pil1D = document.getElementById('pillar1DescText');
-        const pil2H = document.getElementById('pillar2HeadingText');
-        const pil2D = document.getElementById('pillar2DescText');
-        const herBtn = document.getElementById('heritageBtnAnchor');
-        if (herTitle && cms.heritageTitle) herTitle.textContent = cms.heritageTitle;
-        if (herP1 && cms.heritagePara1) herP1.textContent = cms.heritagePara1;
-        if (herP2 && cms.heritagePara2) herP2.textContent = cms.heritagePara2;
-        if (pil1H && cms.pillar1Heading) pil1H.textContent = cms.pillar1Heading;
-        if (pil1D && cms.pillar1Desc) pil1D.textContent = cms.pillar1Desc;
-        if (pil2H && cms.pillar2Heading) pil2H.textContent = cms.pillar2Heading;
-        if (pil2D && cms.pillar2Desc) pil2D.textContent = cms.pillar2Desc;
-        if (herBtn && cms.heritageBtnText) herBtn.textContent = cms.heritageBtnText;
-
-        // -------------------------------------------------------------------
-        // 7. FLAGSHIP STUDIO & CONTACT HUB
-        // -------------------------------------------------------------------
-        const stuAddr = document.getElementById('studioAddressText');
-        const stuPhone = document.getElementById('studioPhoneText');
-        const stuMail = document.getElementById('studioEmailText');
-        const stuWa = document.getElementById('studioWaBtnAnchor');
-        if (stuAddr && cms.studioAddress) stuAddr.textContent = cms.studioAddress;
-        if (stuPhone && cms.studioPhone) stuPhone.textContent = cms.studioPhone;
-        if (stuMail && cms.studioEmail) stuMail.textContent = cms.studioEmail;
-        if (stuWa && cms.studioWaBtnText) stuWa.textContent = cms.studioWaBtnText;
-
-        // -------------------------------------------------------------------
-        // 8. FOOTER & LEGAL
-        // -------------------------------------------------------------------
-        const footB1 = document.getElementById('footerBrandWord1');
-        const footB2 = document.getElementById('footerBrandWord2');
-        const footTag = document.getElementById('footerTaglineText');
-        const footAddr = document.getElementById('footerAddressText');
-        const footPhone = document.getElementById('footerPhoneText');
-        const footMail = document.getElementById('footerEmailText');
-        const footCopy = document.getElementById('footerCopyrightText');
-        if (footB1 && cms.footerBrand1) footB1.textContent = cms.footerBrand1;
-        if (footB2 && cms.footerBrand2) footB2.textContent = cms.footerBrand2;
-        if (footTag && cms.footerTagline) footTag.textContent = cms.footerTagline;
-        if (footAddr && cms.footerAddress) footAddr.textContent = cms.footerAddress;
-        if (footPhone && cms.footerPhone) footPhone.textContent = cms.footerPhone;
-        if (footMail && cms.footerEmail) footMail.textContent = cms.footerEmail;
-        if (footCopy && cms.footerCopyright) footCopy.textContent = cms.footerCopyright;
-
-        console.log("✅ Live Portfolio CMS applied dynamically from Supabase!");
-    } catch(err) {
-        console.error("Error applying live Portfolio CMS:", err);
     }
-}
 
-// பக்கம் லோட் ஆகும் போதும், Realtime-ல் மாற்றம் ஏற்படும் போதும் உடனே மாற்றுதல்
-document.addEventListener('DOMContentLoaded', () => {
-    applyLivePortfolioCMS();
+    document.addEventListener('DOMContentLoaded', () => {
+        applyLivePortfolioCMS();
 
-    // Supabase Realtime Listener (அட்மினில் பப்ளிஷ் செய்த உடனே ரீஃப்ரெஷ் இல்லாமல் மாறும்)
-    const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
-    if (client) {
-        client
-            .channel('public:site_content_portfolio')
-            .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => {
-                applyLivePortfolioCMS();
-            })
-            .subscribe();
-    }
-});
-</script>
-<!-- ======================================================================= -->     
-   
+        const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+        if (client) {
+            client
+                .channel('public:site_content_portfolio')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => {
+                    applyLivePortfolioCMS();
+                })
+                .subscribe();
+        }
+    });
+    </script>
 </body>
 </html>
