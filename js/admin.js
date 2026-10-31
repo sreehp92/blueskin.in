@@ -52,12 +52,15 @@ function updateOrderBadges() {
 
 
 // ==========================================================================
-// 2. SUPABASE FETCH & LIVE DATA MAPPING (100% Status Matching)
+// 2. SUPABASE FETCH & LIVE DATA MAPPING (100% Status & Date Matching)
 // ==========================================================================
 async function fetchAdminOrdersFromSupabase() {
     try {
         const client = window.dbClient;
-        if (!client) return;
+        if (!client) {
+            console.warn("Supabase dbClient இன்னும் தயாராகவில்லை.");
+            return;
+        }
 
         const { data, error } = await client
             .from('orders')
@@ -67,39 +70,46 @@ async function fetchAdminOrdersFromSupabase() {
         if (error) throw error;
 
         if (data && data.length > 0) {
-            // Supabase தரவை அட்மின் பார்மட்டிற்கு மாற்றுதல்
             liveOrdersData = data.map(o => {
                 const rawDate = new Date(o.created_at);
                 const dateStr = rawDate.toLocaleDateString('en-IN');
                 const timeStr = rawDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
-                // எந்த விதமான பெண்டிங் ஸ்டேட்டஸாக இருந்தாலும் PENDING என ஒழுங்குபடுத்துதல்
-                let cleanStatus = (o.order_status || 'PENDING').toUpperCase();
-                if (cleanStatus.includes('PENDING') || cleanStatus.includes('VERIFICATION')) {
+                // ஸ்டேட்டஸை ஒழுங்குபடுத்துதல்
+                let cleanStatus = (o.order_status || 'PENDING').trim();
+                const upperStatus = cleanStatus.toUpperCase();
+                if (upperStatus === 'PENDING VERIFICATION' || upperStatus === 'UNVERIFIED') {
                     cleanStatus = 'PENDING';
                 }
 
                 return {
                     orderId: o.id,
+                    rawDate: rawDate, // இன்றைய 2 ஆர்டர்களைத் துல்லியமாகப் பிரிக்கும் தேதி ஆப்ஜெக்ட்
                     date: dateStr,
                     time: timeStr,
-                    customer: o.customer_name,
-                    phone: o.customer_phone,
-                    address: o.customer_address,
-                    items: o.items_summary,
+                    customer: o.customer_name || 'Customer',
+                    phone: o.customer_phone || '',
+                    address: o.customer_address || '',
+                    items: o.items_summary || 'Luxury Formulation',
                     qty: 'Merchandise',
-                    amount: Number(o.total_amount),
-                    net: Number(o.total_amount),
+                    amount: Number(o.total_amount || 0),
+                    net: Number(o.total_amount || 0),
                     paymentMode: o.is_paid ? 'Paid / Online' : 'Pending Verification',
-                    status: cleanStatus
+                    status: cleanStatus,
+                    carrier: o.carrier || 'The Professional Couriers (TPC)',
+                    awb: o.awb_number || `PC-CBE-${o.id}084`
                 };
             });
 
-            // டேபிள் மற்றும் அனைத்து புள்ளிவிவரங்களையும் ஒரே நேரத்தில் புதுப்பித்தல்
+            // 1. ஆர்டர் டேபிளை ரெண்டர் செய்தல்
             if (typeof renderOrdersTable === 'function') {
                 renderOrdersTable();
             }
-            updateOrderBadges();
+
+            // 2. ஓவர்வியூ மற்றும் டேபிள் கவுண்டர்களை உடனே மாற்றுதல்
+            if (typeof updateDynamicOrderCounters === 'function') {
+                updateDynamicOrderCounters();
+            }
         }
     } catch (err) {
         console.error("Supabase Admin Orders Fetch Error:", err);
@@ -798,7 +808,7 @@ function updateDynamicOrderCounters() {
     }
 }
 
-// ஸ்டேட்டஸ் மாற்றம் & SUPABASE கிளவுட் சேமிப்பு (NO REVERT ON REFRESH)
+// ஸ்டேட்டஸ் மாற்றம் & SUPABASE கிளவுட் நேரலைச் சேமிப்பு (F5 அடித்தாலும் மாறாது)
 window.handleWorkflowStatusChange = async function(orderId, newStatus) {
     const cleanId = String(orderId).replace('#', '').replace('BS-', '').trim();
     const ord = liveOrdersData.find(o => String(o.orderId) === cleanId || String(o.orderId) === String(orderId));
@@ -809,28 +819,34 @@ window.handleWorkflowStatusChange = async function(orderId, newStatus) {
         return;
     }
 
-    // 1. திரையில் உடனே மாற்றுதல்
+    // 1. திரையில் உடனே மாற்றுதல் (4-லிருந்து 3-ஆக உடனே மாறும்)
     ord.status = newStatus;
     renderOrdersTable();
 
-    // 2. Supabase கிளவுடில் நிரந்தரமாகச் சேமித்தல்
+    // 2. Supabase கிளவுட் டேட்டாபேஸில் நிரந்தரமாக UPDATE செய்தல்
     const client = window.dbClient;
     if (client) {
         const numericId = Number(cleanId);
         const targetId = (!isNaN(numericId) && numericId > 0) ? numericId : cleanId;
+
+        const isPaidStatus = (newStatus === 'PAYMENT_RECEIVED' || newStatus === 'PROCESSING' || newStatus === 'PACKED' || newStatus === 'DISPATCHED');
+
         const { error } = await client
             .from('orders')
-            .update({ order_status: newStatus })
+            .update({ 
+                order_status: newStatus,
+                is_paid: isPaidStatus
+            })
             .eq('id', targetId);
 
         if (error) {
             console.error("Supabase Status Save Error:", error);
         } else {
-            console.log(`✅ Order #${targetId} updated to ${newStatus}`);
+            console.log(`✅ Order #${targetId} கிளவுடில் "${newStatus}" எனச் சேமிக்கப்பட்டது.`);
         }
     }
 
-    // 3. வாட்ஸ்அப் மெசேஜ் தூண்டுதல்
+    // 3. வாட்ஸ்அப் மெசேஜ் அனுப்புதல்
     if (newStatus !== 'PENDING') {
         triggerStatusWhatsAppNotification(ord, newStatus);
     }
