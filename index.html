@@ -751,11 +751,38 @@
             if (tickerEl2Dup && cms.ticker2) tickerEl2Dup.textContent = cms.ticker2;
             if (tickerEl3Dup && cms.ticker3) tickerEl3Dup.textContent = cms.ticker3;
 
-            // 2. BRAND & NAVBAR
+           // 2. BRAND & NAVBAR
             const brandWord1 = document.getElementById('navBrandWord1');
             const brandWord2 = document.getElementById('navBrandWord2');
             if (brandWord1 && cms.brandWord1) brandWord1.textContent = cms.brandWord1;
             if (brandWord2 && cms.brandWord2) brandWord2.textContent = cms.brandWord2;
+
+            // Brand Logo Image & Icon Cloud Binding
+            const navLogoImg = document.getElementById('navBrandLogoImg');
+            const navLogoIcon = document.getElementById('navBrandLogoIcon');
+
+            if (cms.brandLogoImg && cms.brandLogoImg.trim() !== '') {
+                // அட்மினில் இமேஜ் URL கொடுத்திருந்தால் படம் தெரியும், ஐகான் மறையும்
+                if (navLogoImg) {
+                    navLogoImg.src = cms.brandLogoImg.trim();
+                    navLogoImg.style.display = 'inline-block';
+                }
+                if (navLogoIcon) {
+                    navLogoIcon.style.display = 'none';
+                }
+            } else {
+                // இமேஜ் URL காலியாக இருந்தால் ஐகான் தெரியும்
+                if (navLogoImg) {
+                    navLogoImg.style.display = 'none';
+                }
+                if (navLogoIcon) {
+                    navLogoIcon.style.display = 'inline-block';
+                    if (cms.brandLogoIcon) {
+                        const cleanIcon = cms.brandLogoIcon.replace('fa-solid ', '').trim();
+                        navLogoIcon.className = `fa-solid ${cleanIcon}`;
+                    }
+                }
+            }
 
             const nav1 = document.getElementById('navLink1');
             const nav2 = document.getElementById('navLink2');
