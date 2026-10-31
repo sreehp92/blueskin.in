@@ -288,23 +288,32 @@ let animTimer = null;
 /* [SECTION 3] MODULE 1: DETAILED CANVAS ENGINE & DATE RANGE MODAL — START */
 /* ======================================================================= */
 
+// 1D மற்றும் 1W பட்டன்களை மாற்றும்போது Revenue மாறும் செயல்பாடு
+let activeRevenueView = 'day';
+
 window.toggleRevenueMode = function(mode) {
-    activeRevenueMode = mode;
-    const btnDay = document.getElementById('btnRevDay');
-    const btnWeek = document.getElementById('btnRevWeek');
-    const valElem = document.getElementById('metricTurnoverVal');
-    const subElem = document.getElementById('metricTurnoverSub');
+    activeRevenueView = mode;
+    document.getElementById('btnRevDay')?.classList.toggle('active', mode === 'day');
+    document.getElementById('btnRevWeek')?.classList.toggle('active', mode === 'week');
+
+    if (!Array.isArray(liveOrdersData)) return;
+
+    const now = new Date();
+    let targetOrders = liveOrdersData;
 
     if (mode === 'day') {
-        btnDay.classList.add('active');
-        btnWeek.classList.remove('active');
-        valElem.textContent = "₹ 58,450.00";
-        subElem.innerHTML = `<i class="fa-solid fa-bolt"></i> Realtime Verified Invoiced`;
-    } else {
-        btnWeek.classList.add('active');
-        btnDay.classList.remove('active');
-        valElem.textContent = "₹ 3,42,850.00";
-        subElem.innerHTML = `<i class="fa-solid fa-calendar-check"></i> 7-Day Consolidated Total`;
+        const todayStr = now.toLocaleDateString('en-IN');
+        targetOrders = liveOrdersData.filter(o => o.date === todayStr);
+    } else if (mode === 'week') {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(now.getDate() - 7);
+        targetOrders = liveOrdersData.filter(o => new Date(o.date) >= sevenDaysAgo);
+    }
+
+    const totalRev = targetOrders.reduce((sum, ord) => sum + (Number(ord.amount || ord.net || 0)), 0);
+    const metricTurnover = document.getElementById('metricTurnoverVal');
+    if (metricTurnover) {
+        metricTurnover.textContent = `₹ ${totalRev.toLocaleString('en-IN')}`;
     }
 };
 
