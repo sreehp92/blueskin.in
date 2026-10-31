@@ -138,7 +138,7 @@
         <!-- =================================================================== -->
         <main class="console-main-canvas">
             
-            <!-- --------------------------------------------------------------- -->
+           <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 1] PANE 1: OVERVIEW & STATS — START                     -->
             <!-- --------------------------------------------------------------- -->
             <section class="workspace-pane" id="pane-overview">
@@ -163,49 +163,50 @@
                     </div>
                 </div>
 
-                <!-- 5 COMPACT KPI METRIC CARDS -->
+                <!-- 5 COMPACT KPI METRIC CARDS (STRICT LIVE SYNC) -->
                 <div class="stats-metrics-grid">
                     
-                    <!-- 1. TODAY ORDERS -->
+                    <!-- 1. TODAY ORDERS (இன்றைய ஆர்டர்கள் எண்ணிக்கை மட்டும்) -->
                     <div class="metric-card">
                         <div class="metric-top-bar">
                             <span class="metric-lbl">TODAY ORDERS</span>
                             <i class="fa-solid fa-boxes-packing metric-icon-tag text-amber"></i>
                         </div>
-                        <div class="metric-val" id="metricTodayOrders">14 Orders</div>
-                        <small class="metric-sub text-green"><i class="fa-solid fa-arrow-trend-up"></i> +8.5% Today Run</small>
+                        <div class="metric-val" id="metricTodayOrders">0 Orders</div>
+                        <small class="metric-sub text-green"><i class="fa-solid fa-calendar-day"></i> Today's Live Run</small>
                     </div>
 
-                    <!-- 2. TOTAL REVENUE (1D / 1W TOGGLE) -->
+                    <!-- 2. REVENUE TURNOVER (1D / 1W / ALL FILTER TOGGLE) -->
                     <div class="metric-card metric-card-revenue">
                         <div class="metric-top-bar">
-                            <span class="metric-lbl">TOTAL REVENUE</span>
+                            <span class="metric-lbl">REVENUE TURNOVER</span>
                             <div class="mini-toggle-pill">
-                                <button type="button" class="btn-rev-toggle active" id="btnRevDay" onclick="toggleRevenueMode('day')">1D</button>
-                                <button type="button" class="btn-rev-toggle" id="btnRevWeek" onclick="toggleRevenueMode('week')">1W</button>
+                                <button type="button" class="btn-rev-toggle active" id="btnRevDay" onclick="toggleRevenueMode('1d')">1D</button>
+                                <button type="button" class="btn-rev-toggle" id="btnRevWeek" onclick="toggleRevenueMode('1w')">1W</button>
+                                <button type="button" class="btn-rev-toggle" id="btnRevAll" onclick="toggleRevenueMode('all')">ALL</button>
                             </div>
                         </div>
-                        <div class="metric-val text-gold-glow" id="metricTurnoverVal">₹ 58,450.00</div>
-                        <small class="metric-sub text-gold" id="metricTurnoverSub"><i class="fa-solid fa-bolt"></i> Realtime Verified Invoiced</small>
+                        <div class="metric-val text-gold-glow" id="metricTurnoverVal">₹ 0.00</div>
+                        <small class="metric-sub text-gold" id="metricTurnoverSub"><i class="fa-solid fa-bolt"></i> Today's Live Sales</small>
                     </div>
 
-                    <!-- 3. TOTAL CONCESSION -->
+                    <!-- 3. ALL-TIME TOTAL REVENUE (முதல் ஆர்டரிலிருந்து ஒட்டுமொத்த மதிப்பு) -->
                     <div class="metric-card">
                         <div class="metric-top-bar">
-                            <span class="metric-lbl">TOTAL CONCESSION</span>
-                            <i class="fa-solid fa-tags metric-icon-tag text-blue"></i>
+                            <span class="metric-lbl">ALL-TIME REVENUE</span>
+                            <i class="fa-solid fa-vault metric-icon-tag text-blue"></i>
                         </div>
-                        <div class="metric-val" id="metricConcession">₹ 4,820.00</div>
-                        <small class="metric-sub text-dim"><i class="fa-solid fa-shield-check"></i> Promotional & Coupons</small>
+                        <div class="metric-val text-green" id="metricConcession">₹ 0.00</div>
+                        <small class="metric-sub text-dim"><i class="fa-solid fa-chart-line"></i> Cumulative Lifetime Net</small>
                     </div>
 
-                    <!-- 4. PENDING ORDERS -->
+                    <!-- 4. PENDING ORDERS (நிலுவையில் உள்ள ஆர்டர்கள்) -->
                     <div class="metric-card">
                         <div class="metric-top-bar">
                             <span class="metric-lbl">PENDING ORDERS</span>
                             <i class="fa-solid fa-clock-rotate-left metric-icon-tag text-red"></i>
                         </div>
-                        <div class="metric-val text-red" id="metricPendingOrders">2 Orders</div>
+                        <div class="metric-val text-red" id="metricPendingOrders">0 Orders</div>
                         <small class="metric-sub text-amber"><i class="fa-solid fa-circle-exclamation"></i> Immediate Dispatch Queue</small>
                     </div>
 
@@ -250,11 +251,11 @@
                         
                         <!-- Floating Glass Interactive Popup Tooltip -->
                         <div class="canvas-floating-popup" id="canvasPopTooltip" style="display: none;">
-                            <div class="pop-header" id="popDateTitle">Mon, Oct 20</div>
-                            <div class="pop-row"><span class="pop-label">Revenue:</span> <span class="pop-val text-gold" id="popRevVal">₹ 38,400</span></div>
-                            <div class="pop-row"><span class="pop-label">Orders:</span> <span class="pop-val" id="popOrdVal">9</span></div>
-                            <div class="pop-row"><span class="pop-label">Units:</span> <span class="pop-val" id="popUnitsVal">14 Pcs</span></div>
-                            <div class="pop-row"><span class="pop-label">Peak Velocity:</span> <span class="pop-val text-green" id="popPeakVal">03:15 PM</span></div>
+                            <div class="pop-header" id="popDateTitle">Live Stream</div>
+                            <div class="pop-row"><span class="pop-label">Revenue:</span> <span class="pop-val text-gold" id="popRevVal">₹ 0</span></div>
+                            <div class="pop-row"><span class="pop-label">Orders:</span> <span class="pop-val" id="popOrdVal">0</span></div>
+                            <div class="pop-row"><span class="pop-label">Units:</span> <span class="pop-val" id="popUnitsVal">0 Pcs</span></div>
+                            <div class="pop-row"><span class="pop-label">Peak Velocity:</span> <span class="pop-val text-green" id="popPeakVal">—</span></div>
                             <i class="fa-solid fa-caret-down pop-arrow-indicator"></i>
                         </div>
                     </div>
