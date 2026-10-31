@@ -914,18 +914,70 @@ window.closeDispatchModal = function() {
     renderOrdersTable();
 };
 
-window.confirmDispatchWithAwb = function() {
+window.confirmDispatchWithAwb = async function() {
     const orderId = document.getElementById('dispatchActiveOrderId').value;
     const carrier = document.getElementById('dispatchCarrierSelect').value;
     const awb = document.getElementById('dispatchAwbInput').value.trim();
 
-    const ord = liveOrdersData.find(o => o.orderId === orderId);
+    if (!awb) {
+        alert("தயவுசெய்து AWB / Consignment எண்ணை உள்ளிடவும்!");
+        return;
+    }
+
+    const rawId = String(orderId).trim();
+    const cleanId = rawId.replace('#', '').trim();
+
+    // 1. மெமரியில் உள்ள ஆர்டரைக் கண்டுபிடித்தல்
+    const ord = liveOrdersData.find(o => 
+        String(o.orderId) === rawId || 
+        String(o.orderId) === cleanId ||
+        String(o.orderId).replace('BS-', '') === cleanId.replace('BS-', '')
+    );
+
     if (ord) {
         ord.status = 'DISPATCHED';
         ord.carrier = carrier;
         ord.awb = awb;
+
+        // 2. பாப்அப் மாடலை மூடிவிட்டு திரையில் உடனே அப்டேட் செய்தல்
         document.getElementById('dispatchModal').style.display = 'none';
-        renderOrdersTable();
+        if (typeof renderOrdersTable === 'function') {
+            renderOrdersTable();
+        }
+        if (typeof updateDynamicOrderCounters === 'function') {
+            updateDynamicOrderCounters();
+        }
+
+        // 3. 👇 SUPABASE கிளவுட் டேட்டாபேஸில் நிரந்தரமாகச் சேமித்தல் (F5 REVERT FIX) 👇
+        const client = window.dbClient;
+        if (client) {
+            const targetIds = [
+                ord.orderId,
+                cleanId,
+                cleanId.startsWith('BS-') ? cleanId : `BS-${cleanId}`,
+                cleanId.replace(/^BS-?/i, '')
+            ].filter(Boolean);
+
+            const { data, error } = await client
+                .from('orders')
+                .update({ 
+                    order_status: 'DISPATCHED',
+                    carrier: carrier,
+                    awb_number: awb,
+                    is_paid: true
+                })
+                .in('id', targetIds)
+                .select();
+
+            if (error) {
+                console.error("Supabase Dispatch Save Error:", error);
+                alert("❌ கிளவுடில் டிஸ்பேட்ச் சேமிப்பதில் பிழை: " + error.message);
+            } else {
+                console.log(`✅ Order ${targetIds[0]} Dispatched & AWB (${awb}) Supabase-ல் நிரந்தரமாகச் சேமிக்கப்பட்டது!`);
+            }
+        }
+
+        // 4. வாடிக்கையாளருக்கு டிஸ்பேட்ச் & டிராக்கிங் வாட்ஸ்அப் மெசேஜ் அனுப்புதல்
         triggerStatusWhatsAppNotification(ord, 'DISPATCHED');
     }
 };
