@@ -2249,154 +2249,98 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ======================================================================= */
 /* [SECTION 7] MODULE 4: PORTFOLIO & FRONT PAGE CMS ENGINE — END           */
 /* ======================================================================= */
+
+
 /* ======================================================================= */
 /* [SECTION 8] MODULE 5: PRODUCT MANAGER & SHOP ACTIVITY STUDIO — START    */
 /* ======================================================================= */
 
-const PRODUCT_STORAGE_KEY = "BLUESKIN_PRODUCT_MASTER_DATA";
-const CATEGORY_STORAGE_KEY = "BLUESKIN_CATALOG_CATEGORIES_DATA";
-
-// 1. வகைகளின் மாஸ்டர் பட்டியல் (Default Categories with Images)
-let catalogCategoriesList = [
-    { name: "Eye Artistry", img: "https://images.unsplash.com/photo-1583241800698-e8ab01830a07?auto=format&fit=crop&w=400&q=80" },
-    { name: "Face Products", img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80" },
-    { name: "Lip Products", img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=400&q=80" },
-    { name: "Artisan Tools", img: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=400&q=80" }
-];
-
-// 2. தயாரிப்புகளின் மாஸ்டர் பட்டியல் (Default Products including Sapphire Midnight Palette)
-let masterProductsData = [
-    {
-        id: "PROD-101",
-        title: "Sapphire Midnight Palette",
-        subtitle: "12 Couture Pigmented Shades",
-        weight: "Net Weight : 1 Pcs",
-        reviewsText: "2 Verified Reviews",
-        category: "Eye Artistry",
-        visibility: "LIVE",
-        imgUrl: "https://images.unsplash.com/photo-1583241800698-e8ab01830a07?auto=format&fit=crop&w=600&q=80",
-        mrp: 4499,
-        discount: 22,
-        specialPrice: 3509,
-        savings: 990,
-        bagBtnText: "Add to Bag",
-        wishlistBtnText: "Add To Wishlist",
-        trust1: "Free shipping above ₹999",
-        trust2: "Orders ship the next business day",
-        trust3: "Easy shipping and return policy",
-        desc: "High-impact couture pigmented palette featuring 12 velvet-touch multidimensional shades with seamless blendability.",
-        howToUse: "Apply shimmer shades across inner eyelids. Layer deep sapphire tones across the outer crease with a precision buffing brush.",
-        addInfo: "100% Dermatologically Tested • Cruelty-Free Botanical Binder • Net WT 1 Pcs • Batch Origin: Coimbatore Cleanroom Facility."
-    },
-    {
-        id: "PROD-102",
-        title: "Luminous Velvet Foundation",
-        subtitle: "24-Hour Weightless Coverage",
-        weight: "Net Weight : 30ml",
-        reviewsText: "5 Verified Reviews",
-        category: "Face Products",
-        visibility: "LIVE",
-        imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
-        mrp: 3499,
-        discount: 17,
-        specialPrice: 2899,
-        savings: 600,
-        bagBtnText: "Add to Bag",
-        wishlistBtnText: "Add To Wishlist",
-        trust1: "Free shipping above ₹999",
-        trust2: "Orders ship the next business day",
-        trust3: "Easy shipping and return policy",
-        desc: "Ultra-fluid breathable formula enriched with botanical peptides for a naturally radiant matte finish.",
-        howToUse: "Dispense 1-2 pumps onto the back of your hand and buff across the face with a density brush.",
-        addInfo: "Hypoallergenic • Non-comedogenic • SPF 25 PA+++ Protection."
-    },
-    {
-        id: "PROD-103",
-        title: "Golden Aura Highlighter",
-        subtitle: "Artisan Contour Shimmer",
-        weight: "Net Weight : 12g",
-        reviewsText: "3 Verified Reviews",
-        category: "Face Products",
-        visibility: "LIVE",
-        imgUrl: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80",
-        mrp: 2499,
-        discount: 24,
-        specialPrice: 1899,
-        savings: 600,
-        bagBtnText: "Add to Bag",
-        wishlistBtnText: "Add To Wishlist",
-        trust1: "Free shipping above ₹999",
-        trust2: "Orders ship the next business day",
-        trust3: "Easy shipping and return policy",
-        desc: "Micro-milled baked champagne gold illuminating powder for a multidimensional dewy glow.",
-        howToUse: "Sweep over cheekbones, cupid's bow, and brow bones with a tapered fan brush.",
-        addInfo: "Talc-Free • Vegan Mica Formulation • Long-wear 16HR Lock."
-    },
-    {
-        id: "PROD-104",
-        title: "Satin Matte Lipstick (Ruby)",
-        subtitle: "Classic Velvet Casing",
-        weight: "Net Weight : 4.2g",
-        reviewsText: "4 Verified Reviews",
-        category: "Lip Products",
-        visibility: "LIVE",
-        imgUrl: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=600&q=80",
-        mrp: 1699,
-        discount: 0,
-        specialPrice: 1699,
-        savings: 0,
-        bagBtnText: "Add to Bag",
-        wishlistBtnText: "Add To Wishlist",
-        trust1: "Free shipping above ₹999",
-        trust2: "Orders ship the next business day",
-        trust3: "Easy shipping and return policy",
-        desc: "Richly saturated crimson pigment delivering a plush, non-drying velvet satin finish.",
-        howToUse: "Glide straight from bullet starting at center of lips outwards.",
-        addInfo: "Infused with Jojoba and Argan Seed Oils • Transfer-Resistant."
-    },
-    {
-        id: "PROD-105",
-        title: "Precision Liquid Ink Liner",
-        subtitle: "0.5ml Jet Black Waterproof",
-        weight: "Net Weight : 0.5ml",
-        reviewsText: "6 Verified Reviews",
-        category: "Eye Artistry",
-        visibility: "LIVE",
-        imgUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80",
-        mrp: 599,
-        discount: 17,
-        specialPrice: 499,
-        savings: 100,
-        bagBtnText: "Add to Bag",
-        wishlistBtnText: "Add To Wishlist",
-        trust1: "Free shipping above ₹999",
-        trust2: "Orders ship the next business day",
-        trust3: "Easy shipping and return policy",
-        desc: "0.1mm micro-felt Japanese calligraphy brush tip for ultra-precise liquid wing definition.",
-        howToUse: "Shake well and glide along lash line from inner tear duct outward.",
-        addInfo: "Ophthalmologist Tested • 24HR Waterproof Film."
-    }
-];
-
+// 1. உலகளாவிய மாறிகள் (Global State - Zero Dummy Data)
+let masterProductsData = [];
+let catalogCategoriesList = ["Eye Artistry", "Face Products", "Lip Products", "Artisan Tools"];
 let activeProductCategoryFilter = "ALL";
 let editingProductItemRefId = null;
 
-// 3. அட்டவணை ரெண்டரிங் (Table Render)
+// 2. SUPABASE கிளவுடிலிருந்து தயாரிப்புகளை நேரடியாக எடுத்தல் (Direct Cloud Fetch)
+window.fetchAdminProductsFromSupabase = async function() {
+    const tbody = document.getElementById('productMasterTableBody');
+    const client = window.dbClient;
+
+    if (!client) {
+        console.warn("Supabase client not ready for products fetch");
+        return;
+    }
+
+    try {
+        const { data, error } = await client
+            .from('products')
+            .select('*')
+            .order('id', { ascending: false });
+
+        if (error) {
+            console.error("Supabase Products Fetch Error:", error);
+            if (tbody) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:2rem; color:#ef4444;">டேட்டாபேஸ் பிழை: ${error.message}</td></tr>`;
+            return;
+        }
+
+        // Supabase டேபிள் தரவுகளை UI-க்கு ஏற்ப மாற்றுதல்
+        masterProductsData = (data || []).map(p => {
+            const mrp = Number(p.original_price || p.mrp || 0);
+            const discount = Number(p.discount_percent || p.discount || 0);
+            const discountAmount = Math.round((mrp * discount) / 100);
+            const specialPrice = Math.max(0, mrp - discountAmount);
+            
+            // Image URL extraction
+            let img = '';
+            if (Array.isArray(p.images) && p.images.length > 0) {
+                img = p.images[0];
+            } else if (typeof p.images === 'string') {
+                img = p.images;
+            } else if (p.imgUrl) {
+                img = p.imgUrl;
+            }
+
+            return {
+                id: p.id,
+                title: p.name || p.title || 'Untitled Product',
+                subtitle: p.sub_title || p.subtitle || '',
+                weight: p.weight || '1 Pcs',
+                reviewsText: p.reviews_text || '5.0 ★ Verified',
+                category: p.category || 'General',
+                visibility: p.visibility || (p.is_active === false ? 'DRAFT' : 'LIVE'),
+                imgUrl: img,
+                mrp: mrp,
+                discount: discount,
+                specialPrice: specialPrice,
+                savings: discountAmount,
+                stock: p.stock || 0,
+                bagBtnText: p.bag_btn_text || 'Add to Bag',
+                wishlistBtnText: p.wishlist_btn_text || 'Add To Wishlist',
+                trust1: p.trust1 || 'Free shipping above ₹999',
+                trust2: p.trust2 || 'Orders ship next business day',
+                trust3: p.trust3 || 'Easy return policy',
+                desc: p.description || '',
+                howToUse: p.how_to || '',
+                addInfo: p.add_info || ''
+            };
+        });
+
+        // டைனமிக் கேட்டகிரி பட்டியலைப் புதுப்பித்தல்
+        const dynamicCats = [...new Set(masterProductsData.map(p => p.category).filter(Boolean))];
+        if (dynamicCats.length > 0) {
+            catalogCategoriesList = [...new Set([...catalogCategoriesList, ...dynamicCats])];
+        }
+
+        renderProductMasterTable();
+    } catch (err) {
+        console.error("Products Fetch Exception:", err);
+    }
+};
+
+// 3. தயாரிப்பு அட்டவணையை ரெண்டரிங் செய்தல் (Table Render)
 window.renderProductMasterTable = function() {
     const tbody = document.getElementById('productMasterTableBody');
     if (!tbody) return;
-
-    // LocalStorage-லிருந்து மீட்டெடுத்தல்
-    try {
-        const savedProds = JSON.parse(localStorage.getItem(PRODUCT_STORAGE_KEY));
-        if (savedProds && Array.isArray(savedProds) && savedProds.length > 0) {
-            masterProductsData = savedProds;
-        }
-        const savedCats = JSON.parse(localStorage.getItem(CATEGORY_STORAGE_KEY));
-        if (savedCats && Array.isArray(savedCats) && savedCats.length > 0) {
-            catalogCategoriesList = savedCats;
-        }
-    } catch(e) {}
 
     const query = (document.getElementById('prodSearchInput')?.value || '').toLowerCase().trim();
 
@@ -2414,47 +2358,48 @@ window.renderProductMasterTable = function() {
     updateProductMasterKPIMetrics();
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">பொருத்தமான தயாரிப்புகள் எதுவும் கிடைக்கவில்லை!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2.5rem; color: var(--text-dim); font-size: 0.85rem;">பொருத்தமான தயாரிப்புகள் எதுவும் கிடைக்கவில்லை!</td></tr>`;
         return;
     }
+
+    const fallbackImg = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80";
 
     tbody.innerHTML = filtered.map(item => {
         const isLive = item.visibility === "LIVE";
         const visClass = isLive ? "vis-live" : "vis-draft";
         const visText = isLive ? "🟢 Live" : "🟡 Draft";
-        const fallbackImg = "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=200&q=80";
 
         return `
             <tr class="anim-fade-up">
                 <td>
-                    <div class="prod-meta-title-cell">
-                        <div class="prod-thumb-frame">
-                            <img src="${item.imgUrl || fallbackImg}" alt="${item.title}" onerror="this.src='${fallbackImg}'">
+                    <div class="prod-meta-title-cell" style="display:flex; align-items:center; gap:10px;">
+                        <div class="prod-thumb-frame" style="width:42px; height:42px; border-radius:6px; overflow:hidden; background:#071224; flex-shrink:0; border:1px solid rgba(245,196,67,0.2);">
+                            <img src="${item.imgUrl || fallbackImg}" alt="${item.title}" onerror="this.src='${fallbackImg}'" style="width:100%; height:100%; object-fit:cover;">
                         </div>
                         <div class="prod-cell-text">
-                            <strong>${item.title}</strong>
-                            <small>${item.subtitle} • <span style="color: var(--gold);">${item.category}</span></small>
+                            <strong style="color:var(--text-pure); font-size:0.8rem; display:block;">${item.title}</strong>
+                            <small style="color:var(--text-dim); font-size:0.68rem;">${item.subtitle ? item.subtitle + ' • ' : ''}<span style="color: var(--gold);">${item.category}</span></small>
                         </div>
                     </div>
                 </td>
                 <td>
-                    <span class="badge-review-pill"><i class="fa-solid fa-star"></i> ${item.reviewsText}</span>
-                    <span class="prod-net-measure-tag">${item.weight}</span>
+                    <span class="badge-review-pill" style="display:inline-block; font-size:0.68rem; padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.05); color:var(--text-dim);"><i class="fa-solid fa-star" style="color:var(--gold);"></i> ${item.reviewsText}</span>
+                    <span class="prod-net-measure-tag" style="display:block; font-size:0.65rem; color:var(--text-dim); margin-top:2px;">${item.weight}</span>
                 </td>
-                <td class="td-mrp-price">₹ ${item.mrp.toLocaleString('en-IN')}</td>
+                <td class="td-mrp-price" style="font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-dim); text-decoration:line-through;">₹ ${item.mrp.toLocaleString('en-IN')}</td>
                 <td>
-                    <span class="badge-discount-cut">${item.discount}% OFF</span>
+                    <span class="badge-discount-cut" style="font-size:0.68rem; font-weight:700; color:#ef4444; background:rgba(239,68,68,0.1); padding:2px 6px; border-radius:4px;">${item.discount}% OFF</span>
                 </td>
-                <td class="td-special-price">₹ ${item.specialPrice.toLocaleString('en-IN')}</td>
+                <td class="td-special-price" style="font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--gold); font-size:0.8rem;">₹ ${item.specialPrice.toLocaleString('en-IN')}</td>
                 <td>
-                    <span class="td-savings-label">Save ₹ ${item.savings.toLocaleString('en-IN')}</span>
-                    <small style="color: var(--text-dim); font-size: 0.62rem;">Incl. Taxes</small>
+                    <span class="td-savings-label" style="font-size:0.72rem; color:#10b981; font-weight:600; display:block;">Save ₹ ${item.savings.toLocaleString('en-IN')}</span>
+                    <small style="color: var(--text-dim); font-size: 0.62rem;">Stock: ${item.stock}</small>
                 </td>
                 <td>
-                    <span class="badge-vis-pill ${visClass}">${visText}</span>
+                    <button type="button" class="badge-vis-pill ${visClass}" onclick="toggleProductVisibility('${item.id}', '${item.visibility}')" title="Click to Toggle Live / Draft" style="cursor:pointer; border:none; outline:none; background:transparent; font-size:0.72rem;">${visText}</button>
                 </td>
                 <td style="text-align: right;">
-                    <div style="display: flex; gap: 0.3rem; justify-content: flex-end;">
+                    <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
                         <button type="button" class="btn-inv-action" title="Edit Product Studio" onclick="openProductStudioModal('${item.id}')">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
@@ -2468,17 +2413,17 @@ window.renderProductMasterTable = function() {
     }).join('');
 };
 
-// 4. கேட்டகிரி பில்ஸ் (Category Pills)
+// 4. கேட்டகிரி பில்டர் பில்ஸ் (Dynamic Category Pills)
 function renderDynamicProductCategoryPills() {
     const strip = document.getElementById('productCategoryFilterStrip');
     if (!strip) return;
 
-    const categories = ["ALL", ...new Set(catalogCategoriesList.map(c => c.name))];
+    const categories = ["ALL", ...new Set(masterProductsData.map(c => c.category).filter(Boolean))];
 
     strip.innerHTML = categories.map(cat => {
         const count = cat === "ALL" ? masterProductsData.length : masterProductsData.filter(i => i.category === cat).length;
         const activeClass = (activeProductCategoryFilter === cat) ? 'active' : '';
-        const displayLabel = cat === "ALL" ? `All Items (${count})` : `${cat} (${count})`;
+        const displayLabel = cat === "ALL" ? `All Products (${count})` : `${cat} (${count})`;
         return `
             <button type="button" class="btn-filter-pill ${activeClass}" onclick="filterByProductCategory('${cat}')">
                 ${displayLabel}
@@ -2501,33 +2446,30 @@ window.clearProdSearch = function() {
     if (inp) { inp.value = ''; renderProductMasterTable(); }
 };
 
-// 5. மேலுள்ள KPI கார்டுகளைப் புதுப்பித்தல் (வேர்ஹவுஸ் இருப்பு சின்க் உடன்)
+// 5. ஒற்றை வரி 5-KPI அளவீடுகளைப் புதுப்பித்தல்
 function updateProductMasterKPIMetrics() {
     const totalCount = masterProductsData.length;
     const liveCount = masterProductsData.filter(i => i.visibility === "LIVE").length;
     const offerCount = masterProductsData.filter(i => i.discount > 0).length;
 
     let totalWhseUnits = 0;
-    let totalWhseItemsCount = 0;
-    if (typeof warehouseInventoryData !== 'undefined' && Array.isArray(warehouseInventoryData)) {
-        totalWhseUnits = warehouseInventoryData.reduce((acc, curr) => acc + (curr.currentStock || 0), 0);
-        totalWhseItemsCount = warehouseInventoryData.length;
+    if (typeof warehouseInventoryData !== 'undefined' && Array.isArray(warehouseInventoryData) && warehouseInventoryData.length > 0) {
+        totalWhseUnits = warehouseInventoryData.reduce((acc, curr) => acc + (Number(curr.currentStock) || 0), 0);
     } else {
-        totalWhseUnits = 118;
-        totalWhseItemsCount = 5;
+        totalWhseUnits = masterProductsData.reduce((acc, curr) => acc + (Number(curr.stock) || 0), 0);
     }
 
-    const totalVal = masterProductsData.reduce((acc, curr) => acc + (curr.specialPrice * 10), 0);
+    const totalVal = masterProductsData.reduce((acc, curr) => acc + (curr.specialPrice * (curr.stock || 1)), 0);
 
     if (document.getElementById('kpiProdTotalCount')) document.getElementById('kpiProdTotalCount').textContent = `${totalCount} Items`;
     if (document.getElementById('kpiProdLiveCount')) document.getElementById('kpiProdLiveCount').textContent = `${liveCount} Active`;
     if (document.getElementById('kpiProdOfferCount')) document.getElementById('kpiProdOfferCount').textContent = `${offerCount} Offers`;
     if (document.getElementById('kpiProdStockUnits')) document.getElementById('kpiProdStockUnits').textContent = `${totalWhseUnits} Units`;
-    if (document.getElementById('kpiProdWhseItemsDesc')) document.getElementById('kpiProdWhseItemsDesc').textContent = `${totalWhseItemsCount} Warehouse Products Linked`;
-    if (document.getElementById('kpiProdTotalVal')) document.getElementById('kpiProdTotalVal').textContent = `₹ ${totalVal.toLocaleString('en-IN')}.00`;
+    if (document.getElementById('kpiProdWhseItemsDesc')) document.getElementById('kpiProdWhseItemsDesc').textContent = `${totalCount} Products Linked`;
+    if (document.getElementById('kpiProdTotalVal')) document.getElementById('kpiProdTotalVal').textContent = `₹ ${totalVal.toLocaleString('en-IN')}`;
 }
 
-// 6. விலையைத் தானாகக் கணக்கிடுதல் (Auto Price & Discount Calculator)
+// 6. விலையைத் தானாகக் கணக்கிடுதல் (Auto Calculator)
 window.calculateProductOfferPricing = function() {
     const mrp = parseFloat(document.getElementById('prodInputMrp')?.value) || 0;
     const discount = parseFloat(document.getElementById('prodInputDiscount')?.value) || 0;
@@ -2548,52 +2490,47 @@ window.calculateProductOfferPricing = function() {
 function syncCategoriesToProductModal() {
     const select = document.getElementById('prodInputCategory');
     if (!select) return;
-
-    select.innerHTML = catalogCategoriesList.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+    const cats = [...new Set([...catalogCategoriesList, ...masterProductsData.map(p => p.category).filter(Boolean)])];
+    select.innerHTML = cats.map(c => `<option value="${c}">${c}</option>`).join('');
 }
 
-// 8. விரைவு கேட்டகிரி மாடல் செயல்பாடுகள் (Quick Category Modal)
+// 8. விரைவு கேட்டகிரி மாடல் (Quick Category Modal)
 window.openQuickCategoryModal = function() {
-    document.getElementById('quickCatName').value = '';
-    document.getElementById('quickCatImg').value = '';
-    document.getElementById('quickCategoryModal').style.display = 'flex';
+    const nameEl = document.getElementById('quickCatName');
+    const imgEl = document.getElementById('quickCatImg');
+    if (nameEl) nameEl.value = '';
+    if (imgEl) imgEl.value = '';
+    const modal = document.getElementById('quickCategoryModal');
+    if (modal) modal.style.display = 'flex';
 };
 
 window.closeQuickCategoryModal = function() {
-    document.getElementById('quickCategoryModal').style.display = 'none';
+    const modal = document.getElementById('quickCategoryModal');
+    if (modal) modal.style.display = 'none';
 };
 
 window.saveQuickCategoryEntry = function() {
-    const name = document.getElementById('quickCatName').value.trim();
-    const img = document.getElementById('quickCatImg').value.trim();
-
+    const name = document.getElementById('quickCatName')?.value.trim();
     if (!name) {
         alert("தயவுசெய்து கேட்டகிரி பெயரை உள்ளிடவும்!");
         return;
     }
-
-    const exists = catalogCategoriesList.some(c => c.name.toLowerCase() === name.toLowerCase());
-    if (!exists) {
-        catalogCategoriesList.push({ 
-            name, 
-            img: img || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80' 
-        });
-        localStorage.setItem(CATEGORY_STORAGE_KEY, JSON.stringify(catalogCategoriesList));
+    if (!catalogCategoriesList.includes(name)) {
+        catalogCategoriesList.push(name);
     }
-
     syncCategoriesToProductModal();
     renderDynamicProductCategoryPills();
     closeQuickCategoryModal();
-    alert(`✅ '${name}' வகை வெற்றிகரமாகச் சேர்க்கப்பட்டது!`);
+    alert(`✅ '${name}' வகை சேர்க்கப்பட்டது! புதிய தயாரிப்பில் இதைப் பயன்படுத்தலாம்.`);
 };
 
-// 9. தயாரிப்பு மாடலைத் திறத்தல் (Open Product Studio Modal)
+// 9. தயாரிப்பு மாடலைத் திறத்தல் / திருத்துதல் (Open Modal)
 window.openProductStudioModal = function(editId = null) {
     editingProductItemRefId = editId;
     syncCategoriesToProductModal();
 
     if (editId) {
-        const item = masterProductsData.find(i => i.id === editId);
+        const item = masterProductsData.find(i => String(i.id) === String(editId));
         if (!item) return;
 
         document.getElementById('prodModalHeaderTitle').textContent = `Edit Product: ${item.title}`;
@@ -2610,42 +2547,44 @@ window.openProductStudioModal = function(editId = null) {
         document.getElementById('prodInputBagBtn').value = item.bagBtnText || "Add to Bag";
         document.getElementById('prodInputWishlistBtn').value = item.wishlistBtnText || "Add To Wishlist";
         document.getElementById('prodInputTrust1').value = item.trust1 || "Free shipping above ₹999";
-        document.getElementById('prodInputTrust2').value = item.trust2 || "Orders ship the next business day";
-        document.getElementById('prodInputTrust3').value = item.trust3 || "Easy shipping and return policy";
+        document.getElementById('prodInputTrust2').value = item.trust2 || "Orders ship next business day";
+        document.getElementById('prodInputTrust3').value = item.trust3 || "Easy return policy";
         document.getElementById('prodInputDesc').value = item.desc || "";
         document.getElementById('prodInputHowToUse').value = item.howToUse || "";
         document.getElementById('prodInputAddInfo').value = item.addInfo || "";
     } else {
-        document.getElementById('prodModalHeaderTitle').textContent = `Product Master Creator & Shop Activity Studio`;
+        document.getElementById('prodModalHeaderTitle').textContent = `Add New Product (Cloud Studio)`;
         document.getElementById('prodEditId').value = '';
-        document.getElementById('prodInputTitle').value = 'Sapphire Midnight Palette';
-        document.getElementById('prodInputSubtitle').value = '12 Couture Pigmented Shades';
-        document.getElementById('prodInputWeight').value = 'Net Weight : 1 Pcs';
-        document.getElementById('prodInputReviews').value = '2 Verified Reviews';
-        document.getElementById('prodInputCategory').value = 'Eye Artistry';
+        document.getElementById('prodInputTitle').value = '';
+        document.getElementById('prodInputSubtitle').value = '';
+        document.getElementById('prodInputWeight').value = '1 Pcs';
+        document.getElementById('prodInputReviews').value = '5.0 ★ Verified';
+        document.getElementById('prodInputCategory').value = catalogCategoriesList[0] || 'General';
         document.getElementById('prodInputVisibility').value = 'LIVE';
-        document.getElementById('prodInputImg1').value = 'https://images.unsplash.com/photo-1583241800698-e8ab01830a07?auto=format&fit=crop&w=600&q=80';
-        document.getElementById('prodInputMrp').value = 4499;
-        document.getElementById('prodInputDiscount').value = 22;
+        document.getElementById('prodInputImg1').value = '';
+        document.getElementById('prodInputMrp').value = '';
+        document.getElementById('prodInputDiscount').value = '0';
         document.getElementById('prodInputBagBtn').value = 'Add to Bag';
         document.getElementById('prodInputWishlistBtn').value = 'Add To Wishlist';
         document.getElementById('prodInputTrust1').value = 'Free shipping above ₹999';
-        document.getElementById('prodInputTrust2').value = 'Orders ship the next business day';
-        document.getElementById('prodInputTrust3').value = 'Easy shipping and return policy';
-        document.getElementById('prodInputDesc').value = 'High-impact couture pigmented palette featuring 12 velvet-touch multidimensional shades with seamless blendability.';
-        document.getElementById('prodInputHowToUse').value = 'Apply shimmer shades across inner eyelids. Layer deep sapphire tones across the outer crease with a precision buffing brush.';
-        document.getElementById('prodInputAddInfo').value = '100% Dermatologically Tested • Cruelty-Free Botanical Binder • Net WT 1 Pcs • Batch Origin: Coimbatore Cleanroom Facility.';
+        document.getElementById('prodInputTrust2').value = 'Orders ship next business day';
+        document.getElementById('prodInputTrust3').value = 'Easy return policy';
+        document.getElementById('prodInputDesc').value = '';
+        document.getElementById('prodInputHowToUse').value = '';
+        document.getElementById('prodInputAddInfo').value = '';
     }
 
     calculateProductOfferPricing();
-    document.getElementById('productStudioModal').style.display = 'flex';
+    const modal = document.getElementById('productStudioModal');
+    if (modal) modal.style.display = 'flex';
 };
 
 window.closeProductStudioModal = function() {
-    document.getElementById('productStudioModal').style.display = 'none';
+    const modal = document.getElementById('productStudioModal');
+    if (modal) modal.style.display = 'none';
 };
 
-// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — முழுமையான Supabase Cloud Sync
+// 10. நேரடி SUPABASE கிளவுட் சேமிப்பு (Save/Update to Supabase)
 window.saveProductStudioEntry = async function() {
     const title = document.getElementById('prodInputTitle').value.trim();
     const subtitle = document.getElementById('prodInputSubtitle').value.trim();
@@ -2656,11 +2595,6 @@ window.saveProductStudioEntry = async function() {
     const imgUrl = document.getElementById('prodInputImg1').value.trim();
     const mrp = parseFloat(document.getElementById('prodInputMrp').value) || 0;
     const discount = parseFloat(document.getElementById('prodInputDiscount').value) || 0;
-    const bagBtn = document.getElementById('prodInputBagBtn').value.trim();
-    const wishBtn = document.getElementById('prodInputWishlistBtn').value.trim();
-    const trust1 = document.getElementById('prodInputTrust1').value.trim();
-    const trust2 = document.getElementById('prodInputTrust2').value.trim();
-    const trust3 = document.getElementById('prodInputTrust3').value.trim();
     const desc = document.getElementById('prodInputDesc').value.trim();
     const howTo = document.getElementById('prodInputHowToUse').value.trim();
     const addInfo = document.getElementById('prodInputAddInfo').value.trim();
@@ -2670,142 +2604,216 @@ window.saveProductStudioEntry = async function() {
         return;
     }
 
-    const discountAmount = Math.round((mrp * discount) / 100);
-    const specialPrice = Math.max(0, mrp - discountAmount);
+    const client = window.dbClient;
+    if (!client) {
+        alert("❌ Supabase கிளவுட் கிளையண்ட் கிடைக்கவில்லை. தயவுசெய்து ரீஃப்ரெஷ் செய்யவும்!");
+        return;
+    }
 
-    const payload = {
-        title,
-        subtitle,
-        weight,
-        reviewsText: reviews,
-        category,
-        visibility,
-        imgUrl,
-        mrp,
-        discount,
-        specialPrice,
-        savings: discountAmount,
-        bagBtnText: bagBtn,
-        wishlistBtnText: wishBtn,
-        trust1,
-        trust2,
-        trust3,
-        desc,
-        howToUse: howTo,
-        addInfo
+    const supabasePayload = {
+        name: title,
+        category: category,
+        sub_title: subtitle,
+        weight: weight,
+        reviews_text: reviews,
+        original_price: mrp,
+        discount_percent: discount,
+        images: imgUrl ? [imgUrl] : [],
+        visibility: visibility,
+        is_active: (visibility === 'LIVE'),
+        description: desc,
+        how_to: howTo,
+        add_info: addInfo
     };
 
-    // 1. உள்ளூர் பிரவுசரில் அப்டேட் செய்தல்
-    if (editingProductItemRefId) {
-        const item = masterProductsData.find(i => i.id === editingProductItemRefId);
-        if (item) Object.assign(item, payload);
-    } else {
-        const newId = `PROD-${Math.floor(100 + Math.random() * 900)}`;
-        masterProductsData.unshift(Object.assign({ id: newId }, payload));
-    }
-
-    localStorage.setItem(PRODUCT_STORAGE_KEY, JSON.stringify(masterProductsData));
-    closeProductStudioModal();
-    renderProductMasterTable();
-
-    // 2. நேரடியாக Supabase கிளவுடிற்கு அனுப்பி சேமித்தல்
-    const client = window.dbClient;
-    if (client) {
-        try {
-            const supabasePayload = {
-                name: title,
-                category: category,
-                sub_title: subtitle,
-                weight: weight,
-                original_price: mrp,
-                discount_percent: discount,
-                stock: 25,
-                images: imgUrl ? [imgUrl] : [],
-                description: desc,
-                how_to: howTo
-            };
-
-            let saveError = null;
-
-            // ID எண்ணாக இருந்தால் மட்டுமே Update, இல்லையென்றால் புதிய பொருளாக Insert
+    try {
+        let saveError = null;
+        if (editingProductItemRefId) {
             const numericId = Number(editingProductItemRefId);
-            if (editingProductItemRefId && !isNaN(numericId) && numericId > 0) {
-                const { error } = await client
-                    .from('products')
-                    .update(supabasePayload)
-                    .eq('id', numericId);
-                saveError = error;
-            } else {
-                const { error } = await client
-                    .from('products')
-                    .insert([supabasePayload]);
-                saveError = error;
-            }
+            const query = isNaN(numericId) 
+                ? client.from('products').update(supabasePayload).eq('id', editingProductItemRefId)
+                : client.from('products').update(supabasePayload).eq('id', numericId);
 
-            if (saveError) {
-                console.error("Supabase Product Sync Error:", saveError);
-                alert("கிளவுடில் சேமிப்பதில் பிழை: " + saveError.message);
-            } else {
-                alert("✅ தயாரிப்பு வெற்றிகரமாக கிளவுட் டேட்டாபேஸில் நேரலையாகச் சேமிக்கப்பட்டது!");
-                if (typeof fetchAdminProductsFromSupabase === 'function') {
-                    fetchAdminProductsFromSupabase();
-                }
-            }
-        } catch (cloudErr) {
-            console.error("Cloud Error:", cloudErr);
+            const { error } = await query;
+            saveError = error;
+        } else {
+            const { error } = await client.from('products').insert([supabasePayload]);
+            saveError = error;
         }
-    } else {
-        alert("✅ தயாரிப்பு லோக்கலில் சேமிக்கப்பட்டது (Supabase client கிடைக்கவில்லை)!");
+
+        if (saveError) {
+            console.error("Supabase Product Save Error:", saveError);
+            alert("❌ கிளவுடில் சேமிப்பதில் பிழை: " + saveError.message);
+            return;
+        }
+
+        closeProductStudioModal();
+        await window.fetchAdminProductsFromSupabase();
+        alert("🚀 வெற்றி! தயாரிப்பு விவரங்கள் Supabase கிளவுடில் நேரலையாகச் சேமிக்கப்பட்டன!");
+    } catch (err) {
+        console.error("Save Exception:", err);
+        alert("❌ பிழை: " + err.message);
+    }
+};
+
+// 11. தயாரிப்பை நீக்குதல் (Delete from Cloud)
+window.deleteProductStudioItem = async function(id) {
+    if (!confirm("இந்த தயாரிப்பை கிளவுட் டேட்டாபேஸிலிருந்து நிரந்தரமாக நீக்க விரும்புகிறீர்களா?")) return;
+
+    const client = window.dbClient;
+    if (!client) {
+        alert("❌ Supabase கிளையண்ட் கிடைக்கவில்லை!");
+        return;
     }
 
-// ==========================================================================
-// Portfolio CMS வார்த்தைகளை Supabase மற்றும் LocalStorage-ல் சேமிக்கும் முறை
-// ==========================================================================
-window.publishAllPortfolioCmsChanges = async function() {
-    if (typeof gatherPortfolioCmsFormData === 'function') {
-        const cmsPayload = gatherPortfolioCmsFormData();
-        localStorage.setItem('BLUESKIN_PORTFOLIO_CMS_DATA', JSON.stringify(cmsPayload));
+    try {
+        const numericId = Number(id);
+        const query = isNaN(numericId)
+            ? client.from('products').delete().eq('id', id)
+            : client.from('products').delete().eq('id', numericId);
+
+        const { error } = await query;
+        if (error) {
+            alert("❌ நீக்குவதில் பிழை: " + error.message);
+            return;
+        }
+
+        await window.fetchAdminProductsFromSupabase();
+        alert("🗑️ தயாரிப்பு கிளவுடிலிருந்து வெற்றிகரமாக நீக்கப்பட்டது!");
+    } catch (err) {
+        console.error("Delete Exception:", err);
+    }
+};
+
+// 12. தயாரிப்பு நிலையை மாற்றுதல் (Toggle Live / Draft)
+window.toggleProductVisibility = async function(id, currentVis) {
+    const client = window.dbClient;
+    if (!client) return;
+
+    const newVis = currentVis === "LIVE" ? "DRAFT" : "LIVE";
+    try {
+        const numericId = Number(id);
+        const query = isNaN(numericId)
+            ? client.from('products').update({ visibility: newVis, is_active: (newVis === 'LIVE') }).eq('id', id)
+            : client.from('products').update({ visibility: newVis, is_active: (newVis === 'LIVE') }).eq('id', numericId);
+
+        const { error } = await query;
+        if (!error) {
+            await window.fetchAdminProductsFromSupabase();
+        }
+    } catch (err) {
+        console.error("Toggle Visibility Error:", err);
+    }
+};
+
+// 13. பல்க் CSV டெம்ப்ளேட் டவுன்லோடு (Download CSV Template)
+window.downloadProductCsvTemplate = function() {
+    const csvContent = "data:text/csv;charset=utf-8," + 
+        "name,category,sub_title,weight,original_price,discount_percent,stock,imgUrl,description\n" +
+        "Sapphire Palette,Eye Artistry,12 Couture Shades,1 Pcs,4499,20,50,https://images.unsplash.com/photo-1583241800698-e8ab01830a07,High pigment palette\n" +
+        "Velvet Matte Lipstick,Lip Products,Ruby Red,4.2g,1499,10,30,https://images.unsplash.com/photo-1586495777744-4413f21062fa,Long lasting matte";
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "blueskin_products_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+};
+
+// 14. பல்க் CSV அப்லோடு (Bulk Upload via CSV to Supabase)
+window.triggerProductCsvUpload = function() {
+    const fileInput = document.getElementById('prodBulkCsvFileInput');
+    if (fileInput) fileInput.click();
+};
+
+window.handleProductCsvUpload = async function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const text = e.target.result;
+        const rows = text.split('\n').map(r => r.trim()).filter(Boolean);
+        if (rows.length <= 1) {
+            alert("CSV கோப்பில் தரவுகள் இல்லை!");
+            return;
+        }
+
+        const headers = rows[0].split(',').map(h => h.trim().toLowerCase());
+        const productsToInsert = [];
+
+        for (let i = 1; i < rows.length; i++) {
+            const cols = rows[i].split(',').map(c => c.trim());
+            if (cols.length < headers.length) continue;
+
+            const rowData = {};
+            headers.forEach((h, idx) => { rowData[h] = cols[idx]; });
+
+            productsToInsert.push({
+                name: rowData.name || 'CSV Product',
+                category: rowData.category || 'General',
+                sub_title: rowData.sub_title || '',
+                weight: rowData.weight || '1 Pcs',
+                original_price: parseFloat(rowData.original_price) || 0,
+                discount_percent: parseFloat(rowData.discount_percent) || 0,
+                stock: parseInt(rowData.stock) || 10,
+                images: rowData.imgurl ? [rowData.imgurl] : [],
+                visibility: 'LIVE',
+                is_active: true,
+                description: rowData.description || ''
+            });
+        }
+
+        if (productsToInsert.length === 0) {
+            alert("சரியான தயாரிப்பு வரிகள் எதுவும் கிடைக்கவில்லை!");
+            return;
+        }
 
         const client = window.dbClient;
-        if (client) {
-            try {
-                const { error } = await client
-                    .from('site_content')
-                    .upsert({
-                        key: 'portfolio_cms',
-                        value: JSON.stringify(cmsPayload),
-                        updated_at: new Date()
-                    });
-
-                if (error) {
-                    console.error("Supabase CMS Sync Error:", error);
-                } else {
-                    console.log("✅ Landing page CMS successfully published to cloud!");
-                }
-            } catch (err) {
-                console.error("Cloud Error:", err);
-            }
+        if (!client) {
+            alert("❌ Supabase கிளையண்ட் கிடைக்கவில்லை!");
+            return;
         }
 
-        alert("🚀 லேண்டிங் பேஜின் அனைத்து வார்த்தைகளும் வெற்றிகரமாக நேரலையாகப் பப்ளிஷ் செய்யப்பட்டன!");
-    }
+        try {
+            const { error } = await client.from('products').insert(productsToInsert);
+            if (error) {
+                alert("பல்க் பதிவேற்றத்தில் பிழை: " + error.message);
+                return;
+            }
+
+            alert(`🚀 வெற்றி! ${productsToInsert.length} தயாரிப்புகள் கிளவுடில் பதிவேற்றப்பட்டன!`);
+            await window.fetchAdminProductsFromSupabase();
+        } catch (err) {
+            console.error("Bulk Upload Error:", err);
+            alert("பிழை: " + err.message);
+        }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
 };
 
-// 11. தயாரிப்பை நீக்குதல் (Delete Item)
-window.deleteProductStudioItem = function(id) {
-    if (confirm("இந்த தயாரிப்பை கடையிலிருந்து முழுமையாக நீக்க விரும்புகிறீர்களா?")) {
-        masterProductsData = masterProductsData.filter(i => i.id !== id);
-        localStorage.setItem(PRODUCT_STORAGE_KEY, JSON.stringify(masterProductsData));
-        renderProductMasterTable();
-    }
-};
-
+// 15. Realtime Listener & DOMContentLoaded Init
 document.addEventListener('DOMContentLoaded', () => {
-    // Initializer ready
+    window.fetchAdminProductsFromSupabase();
+
+    const client = window.dbClient;
+    if (client) {
+        client
+            .channel('public:products_admin_channel')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+                window.fetchAdminProductsFromSupabase();
+            })
+            .subscribe();
+    }
 });
 /* ======================================================================= */
 /* [SECTION 8] MODULE 5: PRODUCT MANAGER & SHOP ACTIVITY STUDIO — END      */
 /* ======================================================================= */
+
+
 // =======================================================================
 // [PRODUCT EXCEL ENGINE] TEMPLATE DOWNLOADER & BULK IMPORTER
 // =======================================================================
