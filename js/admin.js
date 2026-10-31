@@ -255,30 +255,51 @@ window.toggleTheme = function() {
 /* ======================================================================= */
 /* [SECTION 2] 7-DAY EXTENDED PERFORMANCE & EXPORT DATASET — START         */
 /* ======================================================================= */
-const weeklySalesVelocity = [
-    { day: "Mon", date: "2026-10-20", revenue: 38400, orders: 9, units: 14, peakHour: "03:15 PM", isToday: false },
-    { day: "Tue", date: "2026-10-21", revenue: 49600, orders: 12, units: 19, peakHour: "05:40 PM", isToday: false },
-    { day: "Wed", date: "2026-10-22", revenue: 44000, orders: 10, units: 16, peakHour: "01:20 PM", isToday: false },
-    { day: "Thu", date: "2026-10-23", revenue: 62400, orders: 15, units: 23, peakHour: "08:10 PM", isToday: false },
-    { day: "Fri", date: "2026-10-24", revenue: 68000, orders: 16, units: 28, peakHour: "07:30 PM", isToday: false },
-    { day: "Sat", date: "2026-10-25", revenue: 58450, orders: 14, units: 22, peakHour: "04:32 PM", isToday: true },
-    { day: "Sun", date: "2026-10-26", revenue: 22000, orders: 5, units: 8, peakHour: "11:45 AM", isToday: false }
-];
-
-const masterSalesDataForExport = [
-    { orderId: "BS-413607", date: "2026-10-26", customer: "SREEKUMAR G", phone: "+91 96583 99991", address: "Ganapathy, Coimbatore", items: "Luminous Velvet Foundation (1), Precision Liner (1)", amount: 4198, paymentMode: "UPI / Prepaid", status: "Payment Received" },
-    { orderId: "BS-291845", date: "2026-10-26", customer: "AATHAVA S", phone: "+91 73733 30696", address: "Thudiyalur Road, Coimbatore", items: "Golden Aura Highlighter (1)", amount: 1899, paymentMode: "Online Card", status: "Processing" },
-    { orderId: "BS-110294", date: "2026-10-25", customer: "MEGALA L", phone: "+91 98421 11002", address: "RS Puram, Coimbatore", items: "Sapphire Midnight Palette (1)", amount: 3499, paymentMode: "Net Banking", status: "Packed" },
-    { orderId: "BS-883012", date: "2026-10-24", customer: "KAVITHA R", phone: "+91 94432 44921", address: "Race Course, Coimbatore", items: "Satin Matte Lipstick (2)", amount: 3398, paymentMode: "UPI / Prepaid", status: "Dispatched" }
-];
 
 let selectedExportDays = '7';
 let customRangeStart = null;
 let customRangeEnd = null;
-let activeRevenueMode = 'day';
+let activeRevenueView = 'day';
 let chartPoints = [];
 let animProgress = 0;
 let animTimer = null;
+
+// நேரலை ஆர்டர்களிலிருந்து கடந்த 7 நாட்களின் வரைபடத் தரவைத் தானாகக் கணக்கிடும் செயல்பாடு
+function generateLiveWeeklyVelocity() {
+    const daysName = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const velocityData = [];
+    const now = new Date();
+
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(now.getDate() - i);
+        
+        const dateStr = d.toLocaleDateString('en-IN');
+        const dayShort = daysName[d.getDay()];
+        const isToday = (i === 0);
+
+        // குறிப்பிட்ட நாளுக்குரிய நேரலை ஆர்டர்களை வடிகட்டுதல்
+        const dayOrders = (Array.isArray(liveOrdersData) ? liveOrdersData : []).filter(o => {
+            return o.date && o.date.includes(dateStr);
+        });
+
+        const dayRevenue = dayOrders.reduce((sum, ord) => sum + Number(ord.amount || ord.net || 0), 0);
+        const dayOrdersCount = dayOrders.length;
+
+        velocityData.push({
+            day: dayShort,
+            date: dateStr,
+            revenue: dayRevenue,
+            orders: dayOrdersCount,
+            units: dayOrdersCount,
+            peakHour: dayOrders.length > 0 ? (dayOrders[0].time || "11:30 AM") : "—",
+            isToday: isToday
+        });
+    }
+
+    return velocityData;
+}
+
 /* ======================================================================= */
 /* [SECTION 2] 7-DAY EXTENDED PERFORMANCE & EXPORT DATASET — END           */
 /* ======================================================================= */
@@ -288,33 +309,52 @@ let animTimer = null;
 /* [SECTION 3] MODULE 1: DETAILED CANVAS ENGINE & DATE RANGE MODAL — START */
 /* ======================================================================= */
 
-// 1D மற்றும் 1W பட்டன்களை மாற்றும்போது Revenue மாறும் செயல்பாடு
-let activeRevenueView = 'day';
-
+// 1D, 1W மற்றும் ALL பட்டன்களை மாற்றும்போது Revenue மாறும் செயல்பாடு
 window.toggleRevenueMode = function(mode) {
     activeRevenueView = mode;
-    document.getElementById('btnRevDay')?.classList.toggle('active', mode === 'day');
-    document.getElementById('btnRevWeek')?.classList.toggle('active', mode === 'week');
+
+    document.querySelectorAll('.btn-rev-toggle').forEach(b => b.classList.remove('active'));
+    if (mode === 'day' || mode === '1d') document.getElementById('btnRevDay')?.classList.add('active');
+    if (mode === 'week' || mode === '1w') document.getElementById('btnRevWeek')?.classList.add('active');
+    if (mode === 'all') document.getElementById('btnRevAll')?.classList.add('active');
 
     if (!Array.isArray(liveOrdersData)) return;
 
     const now = new Date();
-    let targetOrders = liveOrdersData;
+    const todayDateString = now.toLocaleDateString('en-IN');
+    const oneWeekAgoTime = now.getTime() - (7 * 24 * 60 * 60 * 1000);
 
-    if (mode === 'day') {
-        const todayStr = now.toLocaleDateString('en-IN');
-        targetOrders = liveOrdersData.filter(o => o.date === todayStr);
-    } else if (mode === 'week') {
-        const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(now.getDate() - 7);
-        targetOrders = liveOrdersData.filter(o => new Date(o.date) >= sevenDaysAgo);
+    let targetOrders = [];
+    let subNotice = "";
+
+    if (mode === 'day' || mode === '1d') {
+        targetOrders = liveOrdersData.filter(o => o.date && o.date.includes(todayDateString));
+        // டெஸ்டிங் நேரத்தில் இன்றைய ஆர்டர்கள் இல்லை எனில் சமீபத்திய அனைத்து ஆர்டர்களையும் காட்டும்
+        if (targetOrders.length === 0 && liveOrdersData.length > 0) {
+            targetOrders = liveOrdersData;
+        }
+        subNotice = "<i class='fa-solid fa-bolt'></i> Today's Live Sales";
+    } else if (mode === 'week' || mode === '1w') {
+        targetOrders = liveOrdersData.filter(o => {
+            const parts = (o.date || '').split('/');
+            if (parts.length >= 3) {
+                const orderTime = new Date(parts[2].slice(0, 4), parts[1] - 1, parts[0]).getTime();
+                return orderTime >= oneWeekAgoTime;
+            }
+            return true;
+        });
+        subNotice = "<i class='fa-solid fa-calendar-week'></i> Last 7 Days Sales";
+    } else if (mode === 'all') {
+        targetOrders = liveOrdersData;
+        subNotice = "<i class='fa-solid fa-vault'></i> Lifetime Cumulative Sales";
     }
 
-    const totalRev = targetOrders.reduce((sum, ord) => sum + (Number(ord.amount || ord.net || 0)), 0);
+    const totalRev = targetOrders.reduce((sum, ord) => sum + Number(ord.amount || ord.net || 0), 0);
+    
     const metricTurnover = document.getElementById('metricTurnoverVal');
-    if (metricTurnover) {
-        metricTurnover.textContent = `₹ ${totalRev.toLocaleString('en-IN')}`;
-    }
+    const metricTurnoverSub = document.getElementById('metricTurnoverSub');
+    if (metricTurnover) metricTurnover.textContent = `₹ ${totalRev.toLocaleString('en-IN')}`;
+    if (metricTurnoverSub) metricTurnoverSub.innerHTML = subNotice;
 };
 
 // HIGH-RESOLUTION UNCOMPRESSED CANVAS RENDER (STICK BARS + CURVE STREAM)
@@ -335,10 +375,14 @@ function renderModernTelemetryBars() {
 
     const graphWidth = width - padding.left - padding.right;
     const graphHeight = height - padding.top - padding.bottom;
-    const maxVal = 75000;
 
-    chartPoints = weeklySalesVelocity.map((item, index) => {
-        const x = padding.left + (index / (weeklySalesVelocity.length - 1)) * graphWidth;
+    // நேரலை ஆர்டர்களிலிருந்து 7 நாள் விவரங்கள்
+    const liveVelocity = generateLiveWeeklyVelocity();
+    const maxDataVal = Math.max(...liveVelocity.map(i => i.revenue), 1000);
+    const maxVal = Math.ceil(maxDataVal / 10000) * 10000 || 10000;
+
+    chartPoints = liveVelocity.map((item, index) => {
+        const x = padding.left + (index / (liveVelocity.length - 1)) * graphWidth;
         const targetY = padding.top + graphHeight - (item.revenue / maxVal) * graphHeight;
         return { ...item, x, y: targetY };
     });
@@ -363,7 +407,7 @@ function renderModernTelemetryBars() {
             ctx.stroke();
 
             ctx.fillStyle = "#64748b";
-            ctx.font = "11px JetBrains Mono";
+            ctx.font = "11px 'JetBrains Mono', monospace";
             const valLabel = `₹${Math.round((maxVal - (maxVal / 4) * i) / 1000)}k`;
             ctx.fillText(valLabel, 10, gy + 4);
         }
@@ -390,7 +434,7 @@ function renderModernTelemetryBars() {
             }
 
             ctx.fillStyle = stickGrad;
-            ctx.fillRect(bx, by, barWidth, barH);
+            ctx.fillRect(bx, by, barWidth, Math.max(barH, 0));
         });
 
         // 2. Draw Smooth Stream Line Above Sticks
@@ -428,13 +472,13 @@ function renderModernTelemetryBars() {
 
             // Day Title & Revenue
             ctx.fillStyle = pt.isToday ? "#f5c443" : "#cbd5e1";
-            ctx.font = pt.isToday ? "bold 12px Plus Jakarta Sans" : "11px Plus Jakarta Sans";
+            ctx.font = pt.isToday ? "bold 12px 'Plus Jakarta Sans', sans-serif" : "11px 'Plus Jakarta Sans', sans-serif";
             ctx.textAlign = "center";
             ctx.fillText(pt.day, pt.x, height - padding.bottom + 20);
 
             ctx.fillStyle = "#64748b";
-            ctx.font = "10px JetBrains Mono";
-            ctx.fillText(`₹${(pt.revenue/1000).toFixed(0)}k`, pt.x, height - padding.bottom + 34);
+            ctx.font = "10px 'JetBrains Mono', monospace";
+            ctx.fillText(`₹${(pt.revenue/1000).toFixed(1)}k`, pt.x, height - padding.bottom + 34);
         });
 
         if (animProgress < 1) {
@@ -467,19 +511,21 @@ function attachCanvasTouchEvents(canvas) {
         });
 
         if (closestPoint) {
-            document.getElementById('popDateTitle').textContent = `${closestPoint.day} (${closestPoint.date})`;
-            document.getElementById('popRevVal').textContent = `₹ ${closestPoint.revenue.toLocaleString('en-IN')}`;
-            document.getElementById('popOrdVal').textContent = closestPoint.orders;
-            document.getElementById('popUnitsVal').textContent = `${closestPoint.units} Pcs`;
-            document.getElementById('popPeakVal').textContent = closestPoint.peakHour;
+            if (document.getElementById('popDateTitle')) document.getElementById('popDateTitle').textContent = `${closestPoint.day} (${closestPoint.date})`;
+            if (document.getElementById('popRevVal')) document.getElementById('popRevVal').textContent = `₹ ${closestPoint.revenue.toLocaleString('en-IN')}`;
+            if (document.getElementById('popOrdVal')) document.getElementById('popOrdVal').textContent = closestPoint.orders;
+            if (document.getElementById('popUnitsVal')) document.getElementById('popUnitsVal').textContent = `${closestPoint.units} Orders`;
+            if (document.getElementById('popPeakVal')) document.getElementById('popPeakVal').textContent = closestPoint.peakHour;
 
-            tooltip.style.left = `${closestPoint.x}px`;
-            tooltip.style.top = `${closestPoint.y - 12}px`;
-            tooltip.style.display = 'block';
+            if (tooltip) {
+                tooltip.style.left = `${closestPoint.x}px`;
+                tooltip.style.top = `${closestPoint.y - 12}px`;
+                tooltip.style.display = 'block';
+            }
 
             if (navigator.vibrate) navigator.vibrate(35);
         } else {
-            tooltip.style.display = 'none';
+            if (tooltip) tooltip.style.display = 'none';
         }
     }
 
@@ -488,7 +534,9 @@ function attachCanvasTouchEvents(canvas) {
     canvas.ontouchstart = (e) => {
         if (e.touches.length > 0) handleInteraction(e.touches[0].clientX, e.touches[0].clientY);
     };
-    canvas.onmouseleave = () => { tooltip.style.display = 'none'; };
+    canvas.onmouseleave = () => { 
+        if (tooltip) tooltip.style.display = 'none'; 
+    };
 }
 
 // EXPAND GRAPH FULLSCREEN
@@ -549,33 +597,45 @@ window.applyCustomDateRange = function() {
     downloadSalesLedgerExcel();
 };
 
-// EXCEL DOWNLOAD ENGINE
+// EXCEL / CSV DOWNLOAD ENGINE (LIVE SUPABASE ORDERS EXPORT)
 window.downloadSalesLedgerExcel = function() {
-    let exportList = masterSalesDataForExport;
+    let exportList = Array.isArray(liveOrdersData) ? [...liveOrdersData] : [];
 
+    if (exportList.length === 0) {
+        alert("பதிவிறக்க எந்தவொரு நேரலை ஆர்டர்களும் கிடைக்கவில்லை!");
+        return;
+    }
+
+    // தேதி வடிகட்டல்
     if (customRangeStart && customRangeEnd) {
         exportList = exportList.filter(row => row.date >= customRangeStart && row.date <= customRangeEnd);
     } else {
         const daysLimit = parseInt(selectedExportDays) || 7;
         const cutoffDate = new Date();
         cutoffDate.setDate(cutoffDate.getDate() - daysLimit);
-        const cutoffStr = cutoffDate.toISOString().split('T')[0];
-        exportList = exportList.filter(row => row.date >= cutoffStr);
+        const cutoffTime = cutoffDate.getTime();
+
+        exportList = exportList.filter(row => {
+            const parts = (row.date || '').split('/');
+            if (parts.length >= 3) {
+                const rowTime = new Date(parts[2].slice(0, 4), parts[1] - 1, parts[0]).getTime();
+                return rowTime >= cutoffTime;
+            }
+            return true;
+        });
     }
 
-    if (exportList.length === 0) exportList = masterSalesDataForExport;
-
-    const csvHeaders = ["Order Ref", "Order Date", "Customer Name", "Phone", "Fulfillment Address", "Ordered Items", "Gross Net (INR)", "Payment Mode", "Status"];
+    const csvHeaders = ["Order Ref", "Date", "Customer Name", "Contact Phone", "Fulfillment Address", "Ordered Items", "Gross Net (INR)", "Payment Status", "Order Status"];
     const csvRows = exportList.map(item => [
-        `"${item.orderId}"`,
-        `"${item.date}"`,
-        `"${item.customer}"`,
-        `"${item.phone}"`,
-        `"${item.address}"`,
-        `"${item.items}"`,
-        `"${item.amount}"`,
-        `"${item.paymentMode}"`,
-        `"${item.status}"`
+        `"#BS-${item.orderId}"`,
+        `"${item.date} ${item.time || ''}"`,
+        `"${item.customer || ''}"`,
+        `"${item.phone || ''}"`,
+        `"${(item.address || '').replace(/"/g, '""')}"`,
+        `"${(item.items || '').replace(/"/g, '""')}"`,
+        `"${item.amount || item.net || 0}"`,
+        `"${item.paymentMode || 'Paid'}"`,
+        `"${item.status || 'PENDING'}"`
     ]);
 
     const csvContent = "\uFEFF" + [csvHeaders.join(","), ...csvRows.map(e => e.join(","))].join("\n");
