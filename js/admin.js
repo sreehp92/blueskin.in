@@ -1401,20 +1401,19 @@ document.addEventListener('DOMContentLoaded', () => {
 /* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY ENGINE — START        */
 /* ======================================================================= */
 
-// 1. SUPABASE நேரலை டேட்டா ஹோல்டர் (LOCALSTORAGE முற்றிலும் நீக்கப்பட்டது)
 let warehouseInventoryData = [];
 let activeInventoryCategory = "ALL";
 let activeStockStateFilter = "ALL";
 let editingInventoryItemId = null;
 
 // ==========================================================================
-// 2. SUPABASE-லிருந்து கிடங்கு இருப்பு முழுவதையும் எடுக்கும் நேரலை என்ஜின்
+// 1. SUPABASE SE WAREHOUSE STOCK FETCH KARNA
 // ==========================================================================
 async function fetchWarehouseStockFromSupabase() {
     try {
         const client = window.dbClient;
         if (!client) {
-            console.warn("Warehouse: Supabase client இன்னும் தயாராகவில்லை.");
+            console.warn("Warehouse: Supabase client abhi ready nahi hai.");
             return;
         }
 
@@ -1443,7 +1442,6 @@ async function fetchWarehouseStockFromSupabase() {
                 };
             });
 
-            // அட்டவணை, KPI கார்டுகள் மற்றும் கிராஃபை உடனடியாகத் திரையில் புதுப்பித்தல்
             renderInventoryTable();
         }
     } catch (err) {
@@ -1452,7 +1450,7 @@ async function fetchWarehouseStockFromSupabase() {
 }
 
 // ==========================================================================
-// 3. ZERO-SCROLL அட்டவணை ரெண்டரிங் (TABLE RENDER LOGIC)
+// 2. INVENTORY TABLE RENDER LOGIC (NO CANVAS - ONLY CLEAN TABLE)
 // ==========================================================================
 function renderInventoryTable() {
     const tbody = document.getElementById('inventoryTableBody');
@@ -1483,15 +1481,21 @@ function renderInventoryTable() {
 
     renderDynamicCategoryPills();
     updateInventoryKPIMetrics();
-    drawInventoryCanvasTelemetry();
+
+    // Live Cloud Synced Timestamp Update
+    const syncEl = document.getElementById('invLastSyncTimestamp');
+    if (syncEl) {
+        const now = new Date();
+        syncEl.innerHTML = `<i class="fa-regular fa-clock"></i> Cloud Synced: ${now.toLocaleTimeString('en-IN')}`;
+    }
 
     if (filtered.length === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-dim);">
                     <i class="fa-solid fa-boxes-stacked" style="font-size: 2rem; margin-bottom: 0.6rem; display: block; opacity: 0.3;"></i>
-                    கிடங்கில் சரக்கு இருப்பு விவரங்கள் எதுவும் கிடைக்கவில்லை!<br>
-                    <small style="opacity: 0.7;">புதிய சரக்குகளைச் சேர்க்க மேலே உள்ள <strong>"+ Inward / Add"</strong> பட்டனைப் பயன்படுத்தவும்.</small>
+                    Warehouse me koi stock data nahi mila!<br>
+                    <small style="opacity: 0.7;">Naya stock add karne ke liye <strong>"+ Inward / Add"</strong> button ka use karein.</small>
                 </td>
             </tr>
         `;
@@ -1542,7 +1546,7 @@ function renderInventoryTable() {
 }
 
 // ==========================================================================
-// 4. KPI மெட்ரிக்ஸ் கார்டுகள் (DYNAMIC CLOUD CALCULATION)
+// 3. KPI METRICS CARDS CALCULATION
 // ==========================================================================
 function updateInventoryKPIMetrics() {
     const totalItems = warehouseInventoryData.length;
@@ -1559,7 +1563,7 @@ function updateInventoryKPIMetrics() {
 }
 
 // ==========================================================================
-// 5. கேட்டகிரி பில்ஸ் & ஸ்டாக் பில்டர்கள்
+// 4. CATEGORY PILLS & FILTERS
 // ==========================================================================
 window.filterByStockState = function(state) {
     activeStockStateFilter = state;
@@ -1601,7 +1605,7 @@ window.clearInvSearch = function() {
 };
 
 // ==========================================================================
-// 6. விரைவு வரவு-செலவு (+ / -) SUPABASE நேரலை அப்டேட்
+// 5. QUICK STOCK ADJUST (+ / -) & SUPABASE UPDATE
 // ==========================================================================
 window.quickStockAdjust = async function(id, delta) {
     const item = warehouseInventoryData.find(i => String(i.id) === String(id));
@@ -1609,15 +1613,13 @@ window.quickStockAdjust = async function(id, delta) {
 
     const newStock = Number(item.currentStock) + delta;
     if (newStock < 0) {
-        alert("இருப்பு 0-க்குக் கீழே செல்ல முடியாது!");
+        alert("Stock 0 se kam nahi ho sakta!");
         return;
     }
 
-    // திரையில் உடனடியாக மாற்றுதல்
     item.currentStock = newStock;
     renderInventoryTable();
 
-    // Supabase கிளவுடில் சேமித்தல்
     const client = window.dbClient;
     if (client) {
         const { error } = await client
@@ -1626,23 +1628,21 @@ window.quickStockAdjust = async function(id, delta) {
             .eq('id', Number(id));
 
         if (error) {
-            console.error("Stock Quick Adjust Supabase Error:", error);
-            alert("கிளவுடில் ஸ்டாக் மாற்ற முடியவில்லை: " + error.message);
+            console.error("Stock Quick Adjust Error:", error);
+            alert("Cloud me stock update nahi ho paya: " + error.message);
         }
     }
 };
 
 // ==========================================================================
-// 7. தயாரிப்பு நீக்குதல் (SUPABASE CLOUD DELETE)
+// 6. DELETE ITEM FROM SUPABASE CLOUD
 // ==========================================================================
 window.deleteInventoryItem = async function(id) {
-    if (!confirm("இந்த தயாரிப்பை கிடங்கு மற்றும் ஸ்டோரிலிருந்து நிரந்தரமாக நீக்க விரும்புகிறீர்களா?")) return;
+    if (!confirm("Kya aap sach me is product ko warehouse se delete karna chahte hain?")) return;
 
-    // திரையிலிருந்து நீக்குதல்
     warehouseInventoryData = warehouseInventoryData.filter(i => String(i.id) !== String(id));
     renderInventoryTable();
 
-    // Supabase கிளவுடிலிருந்து நீக்குதல்
     const client = window.dbClient;
     if (client) {
         const { error } = await client
@@ -1652,27 +1652,23 @@ window.deleteInventoryItem = async function(id) {
 
         if (error) {
             console.error("Supabase Delete Error:", error);
-            alert("கிளவுடிலிருந்து நீக்குவதில் பிழை: " + error.message);
+            alert("Delete karne me error: " + error.message);
         }
     }
 };
 
 // ==========================================================================
-// 8. INWARD MANAGER பாப்அப் மாடல் கண்ட்ரோலர் (MODAL OPEN & CLOSE)
+// 7. INWARD MANAGER MODAL CONTROLS
 // ==========================================================================
 window.openStockInwardModal = function(editId = null) {
     editingInventoryItemId = editId;
     const modal = document.getElementById('stockInwardModal');
-    if (!modal) {
-        console.error("stockInwardModal HTML element கிடைக்கவில்லை!");
-        return;
-    }
+    if (!modal) return;
 
     const select = document.getElementById('inwardCategorySelect');
     if (select) {
         let existingCats = [...new Set(warehouseInventoryData.map(i => i.category).filter(Boolean))];
         if (existingCats.length === 0) existingCats = ['face', 'eye', 'lip', 'tools', 'Skin Botanicals'];
-        
         select.innerHTML = existingCats.map(c => `<option value="${c}">${c}</option>`).join('') + `<option value="__NEW__">+ Create New Category</option>`;
     }
 
@@ -1680,42 +1676,29 @@ window.openStockInwardModal = function(editId = null) {
         const item = warehouseInventoryData.find(i => String(i.id) === String(editId));
         if (!item) return;
 
-        const titleEl = document.getElementById('inwardModalHeaderTitle');
-        if (titleEl) titleEl.textContent = `Edit Stock Item: ${item.name}`;
-
-        if (document.getElementById('inwardItemId')) document.getElementById('inwardItemId').value = item.id;
-        if (document.getElementById('inwardItemName')) document.getElementById('inwardItemName').value = item.name;
-        if (document.getElementById('inwardItemWeight')) document.getElementById('inwardItemWeight').value = item.weight || '';
+        document.getElementById('inwardModalHeaderTitle').textContent = `Edit Stock Item: ${item.name}`;
+        document.getElementById('inwardItemId').value = item.id;
+        document.getElementById('inwardItemName').value = item.name;
+        document.getElementById('inwardItemWeight').value = item.weight || '';
         if (select) select.value = item.category;
-        
-        const unitsLbl = document.getElementById('inwardUnitsLabel');
-        if (unitsLbl) unitsLbl.innerHTML = `<i class="fa-solid fa-boxes-stacked text-gold"></i> Current Stock Units:`;
-        
-        if (document.getElementById('inwardUnitsCount')) document.getElementById('inwardUnitsCount').value = item.currentStock;
-        if (document.getElementById('inwardThresholdCount')) document.getElementById('inwardThresholdCount').value = item.minAlert;
-        if (document.getElementById('inwardUnitCost')) document.getElementById('inwardUnitCost').value = item.unitCost;
-        if (document.getElementById('inwardBatchRef')) document.getElementById('inwardBatchRef').value = item.batchRef;
-        if (document.getElementById('inwardLastUpdatedDateInfo')) document.getElementById('inwardLastUpdatedDateInfo').textContent = `Last Sync: ${item.lastUpdated}`;
+        document.getElementById('inwardUnitsLabel').innerHTML = `<i class="fa-solid fa-boxes-stacked text-gold"></i> Current Stock Units:`;
+        document.getElementById('inwardUnitsCount').value = item.currentStock;
+        document.getElementById('inwardThresholdCount').value = item.minAlert;
+        document.getElementById('inwardUnitCost').value = item.unitCost;
+        document.getElementById('inwardBatchRef').value = item.batchRef;
+        document.getElementById('inwardLastUpdatedDateInfo').textContent = `Last Sync: ${item.lastUpdated}`;
     } else {
-        const titleEl = document.getElementById('inwardModalHeaderTitle');
-        if (titleEl) titleEl.textContent = `Stock Inward & Warehouse Inventory Manager`;
-
-        if (document.getElementById('inwardItemId')) document.getElementById('inwardItemId').value = '';
-        if (document.getElementById('inwardItemName')) document.getElementById('inwardItemName').value = '';
-        if (document.getElementById('inwardItemWeight')) document.getElementById('inwardItemWeight').value = '';
-        
-        const unitsLbl = document.getElementById('inwardUnitsLabel');
-        if (unitsLbl) unitsLbl.innerHTML = `<i class="fa-solid fa-plus text-green"></i> Inward Units To Add (+):`;
-        
-        if (document.getElementById('inwardUnitsCount')) document.getElementById('inwardUnitsCount').value = '';
-        if (document.getElementById('inwardThresholdCount')) document.getElementById('inwardThresholdCount').value = '5';
-        if (document.getElementById('inwardUnitCost')) document.getElementById('inwardUnitCost').value = '';
-        if (document.getElementById('inwardBatchRef')) document.getElementById('inwardBatchRef').value = `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
-        
+        document.getElementById('inwardModalHeaderTitle').textContent = `Stock Inward & Warehouse Inventory Manager`;
+        document.getElementById('inwardItemId').value = '';
+        document.getElementById('inwardItemName').value = '';
+        document.getElementById('inwardItemWeight').value = '';
+        document.getElementById('inwardUnitsLabel').innerHTML = `<i class="fa-solid fa-plus text-green"></i> Inward Units To Add (+):`;
+        document.getElementById('inwardUnitsCount').value = '';
+        document.getElementById('inwardThresholdCount').value = '5';
+        document.getElementById('inwardUnitCost').value = '';
+        document.getElementById('inwardBatchRef').value = `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
         const now = new Date();
-        if (document.getElementById('inwardLastUpdatedDateInfo')) {
-            document.getElementById('inwardLastUpdatedDateInfo').textContent = `Date: Today (${now.toLocaleDateString('en-GB')})`;
-        }
+        document.getElementById('inwardLastUpdatedDateInfo').textContent = `Date: Today (${now.toLocaleDateString('en-GB')})`;
     }
 
     toggleInlineCategoryInput();
@@ -1755,7 +1738,7 @@ window.calculateInwardLiveSummary = function() {
 };
 
 // ==========================================================================
-// 9. புதிய சரக்கு பதிவு & எடிட் (SUPABASE CLOUD INSERT & UPDATE)
+// 8. STOCK SAVE / UPDATE (SUPABASE CLOUD)
 // ==========================================================================
 window.saveStockInwardEntry = async function() {
     const nameInput = document.getElementById('inwardItemName');
@@ -1778,21 +1761,19 @@ window.saveStockInwardEntry = async function() {
     const batch = (batchInput && batchInput.value.trim()) ? batchInput.value.trim() : `Batch-${new Date().toISOString().slice(2,10).replace(/-/g,'')}-STK`;
 
     if (!name) {
-        alert("தயவுசெய்து பொருளின் பெயரை உள்ளிடவும்!");
+        alert("Kripya product ka naam dalein!");
         return;
     }
 
     const client = window.dbClient;
     if (!client) {
-        alert("Supabase கிளவுட் தயாராகவில்லை. தயவுசெய்து பக்கத்தை ரீஃப்ரெஷ் செய்யவும்.");
+        alert("Supabase client ready nahi hai. Page refresh karein.");
         return;
     }
 
-    // Modal-ஐ உடனடியாக மூடுதல்
     closeStockInwardModal();
 
     if (editingInventoryItemId) {
-        // ஏற்கெனவே உள்ள பொருளை UPDATE செய்தல்
         const numId = Number(editingInventoryItemId);
         const { error } = await client
             .from('products')
@@ -1809,13 +1790,11 @@ window.saveStockInwardEntry = async function() {
 
         if (error) {
             console.error("Supabase Stock Update Error:", error);
-            alert("கிளவுடில் புதுப்பிப்பதில் பிழை: " + error.message);
+            alert("Update me error: " + error.message);
         } else {
-            console.log(`✅ Product #${numId} கிளவுடில் புதுப்பிக்கப்பட்டது!`);
             await fetchWarehouseStockFromSupabase();
         }
     } else {
-        // புதிய பொருளை INSERT செய்தல்
         const retailPrice = cost > 0 ? Math.round(cost * 2.2) : 1999;
         const { error } = await client
             .from('products')
@@ -1837,106 +1816,18 @@ window.saveStockInwardEntry = async function() {
 
         if (error) {
             console.error("Supabase Stock Insert Error:", error);
-            alert("கிளவுடில் சேர்க்க முடியவில்லை: " + error.message);
+            alert("Add karne me error: " + error.message);
         } else {
-            console.log("✅ புதிய தயாரிப்பு Supabase-ல் வெற்றிகரமாகப் பதிவானது!");
             await fetchWarehouseStockFromSupabase();
         }
     }
 };
 
 // ==========================================================================
-// 1. DYNAMIC ZERO-CROWD CANVAS TELEMETRY (எத்தனை பொருட்கள் வந்தாலும் இடிக்காது)
-// ==========================================================================
-function drawInventoryCanvasTelemetry() {
-    const canvas = document.getElementById('invCanvasBarChart');
-    if (!canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    const containerWidth = canvas.parentElement.offsetWidth || 800;
-    const height = 85;
-
-    if (warehouseInventoryData.length === 0) {
-        canvas.width = containerWidth;
-        canvas.height = height;
-        ctx.clearRect(0, 0, containerWidth, height);
-        return;
-    }
-
-    // ஒரு பொருளுக்கு 65 பிக்சல் இடம் - 50 பொருட்கள் வந்தாலும் நீளமாக உருட்டிப் பார்க்கலாம்!
-    const itemSlotWidth = 65;
-    const computedWidth = Math.max(containerWidth, warehouseInventoryData.length * itemSlotWidth + 40);
-    
-    canvas.width = computedWidth;
-    canvas.height = height;
-    ctx.clearRect(0, 0, computedWidth, height);
-
-    const maxStock = Math.max(...warehouseInventoryData.map(i => Number(i.currentStock) || 0), 20);
-
-    warehouseInventoryData.forEach((item, idx) => {
-        const stock = Number(item.currentStock) || 0;
-        const minAlert = Number(item.minAlert) || 5;
-        const barHeight = Math.max((stock / maxStock) * (height - 35), 4);
-        const x = 20 + (idx * itemSlotWidth);
-        const y = height - barHeight - 18;
-
-        // நவீன கிரேடியன்ட் வண்ணங்கள்
-        const grad = ctx.createLinearGradient(0, y, 0, height);
-        if (stock === 0) {
-            grad.addColorStop(0, '#ef4444');
-            grad.addColorStop(1, '#450a0a');
-        } else if (stock <= minAlert) {
-            grad.addColorStop(0, '#f59e0b');
-            grad.addColorStop(1, '#451a03');
-        } else {
-            grad.addColorStop(0, '#22c55e');
-            grad.addColorStop(1, '#052e16');
-        }
-
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        if (ctx.roundRect) {
-            ctx.roundRect(x + 10, y, itemSlotWidth - 20, barHeight, [4, 4, 0, 0]);
-        } else {
-            ctx.rect(x + 10, y, itemSlotWidth - 20, barHeight);
-        }
-        ctx.fill();
-
-        // குறைந்தபட்ச அலர்ட் வரம்பு புள்ளி (Alert Threshold Dot)
-        const thresholdY = height - ((minAlert / maxStock) * (height - 35)) - 18;
-        ctx.fillStyle = 'rgba(245, 196, 67, 0.85)';
-        ctx.beginPath();
-        ctx.arc(x + (itemSlotWidth / 2), Math.max(thresholdY, 5), 2.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // ஸ்டாக் எண்ணிக்கை
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 10px monospace';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${stock}`, x + (itemSlotWidth / 2), y - 4);
-
-        // பொருளின் பெயர்
-        ctx.fillStyle = '#94a3b8';
-        ctx.font = '9px sans-serif';
-        const shortName = (item.name || '').split(' ')[0].substring(0, 8);
-        ctx.fillText(shortName, x + (itemSlotWidth / 2), height - 4);
-    });
-
-    const syncEl = document.getElementById('invLastSyncTimestamp');
-    if (syncEl) {
-        const now = new Date();
-        syncEl.innerHTML = `<i class="fa-regular fa-clock"></i> Cloud Synced: ${now.toLocaleTimeString('en-IN')}`;
-    }
-}
-
-
-// ==========================================================================
-// 2. EXCEL / CSV BLANK TEMPLATE DOWNLOAD ENGINE
+// 9. EXCEL TEMPLATE DOWNLOAD & BULK UPLOAD ENGINE
 // ==========================================================================
 window.downloadInventoryExcelTemplate = function() {
     const csvHeaders = ["Product Name", "Category", "Weight / Net", "Current Stock", "Unit Cost (INR)", "Min Alert Level", "Batch Ref"];
-    
-    // மாதிரி வரிசை (Sample row)
     const sampleRows = [
         ["Luminous Velvet Foundation", "face", "30ml Pump Bottle", "40", "1200", "10", "Batch-FND-01"],
         ["Sapphire Eye Palette", "eye", "18g Couture Pan", "25", "1400", "5", "Batch-EYE-02"]
@@ -1955,10 +1846,6 @@ window.downloadInventoryExcelTemplate = function() {
     URL.revokeObjectURL(url);
 };
 
-
-// ==========================================================================
-// 3. BULK UPLOAD CONTROLLER & SUPABASE CLOUD INSERT
-// ==========================================================================
 window.triggerExcelFileInput = function() {
     const fileInput = document.getElementById('invExcelFileInput');
     if (fileInput) fileInput.click();
@@ -1975,15 +1862,13 @@ window.handleInventoryExcelUpload = function(event) {
             const lines = text.split(/\r\n|\n/).filter(line => line.trim() !== '');
 
             if (lines.length <= 1) {
-                alert("தேர்ந்தெடுக்கப்பட்ட ஃபைலில் தயாரிப்பு விவரங்கள் எதுவும் இல்லை!");
+                alert("File me koi data nahi mila!");
                 return;
             }
 
-            // முதல் வரி தலைப்புகள் (Headers)
             const productsToInsert = [];
 
             for (let i = 1; i < lines.length; i++) {
-                // CSV கமாவைப் பிரித்தல் (Quotes-ஐப் பாதுகாப்பாக நீக்குதல்)
                 const cols = lines[i].split(',').map(col => col.replace(/^"|"$/g, '').trim());
                 
                 if (cols.length >= 4 && cols[0]) {
@@ -2013,34 +1898,33 @@ window.handleInventoryExcelUpload = function(event) {
             }
 
             if (productsToInsert.length === 0) {
-                alert("சரியான தயாரிப்பு விவரங்கள் கிடைக்கவில்லை. தயவுசெய்து டெம்ப்ளேட்டின்படி ஃபைலை நிரப்பவும்!");
+                alert("Valid product data nahi mila!");
                 return;
             }
 
             const client = window.dbClient;
             if (!client) {
-                alert("Supabase கிளவுட் கிளையண்ட் தயாராகவில்லை. பக்கத்தை ரீஃப்ரெஷ் செய்யவும்.");
+                alert("Supabase client ready nahi hai.");
                 return;
             }
 
-            // Supabase கிளவுடில் மொத்தமாக INSERT செய்தல்
             const { error } = await client
                 .from('products')
                 .insert(productsToInsert);
 
             if (error) {
                 console.error("Bulk Upload Error:", error);
-                alert("பல்க் அப்லோட் தோல்வியடைந்தது: " + error.message);
+                alert("Bulk upload fail ho gaya: " + error.message);
             } else {
-                alert(`✅ வெற்றிகரமாக ${productsToInsert.length} தயாரிப்புகள் Supabase கிளவுடில் பதிவேற்றப்பட்டன!`);
+                alert(`✅ Successfully ${productsToInsert.length} products Supabase cloud me upload ho gaye!`);
                 await fetchWarehouseStockFromSupabase();
             }
 
         } catch (err) {
             console.error("Excel Read Error:", err);
-            alert("ஃபைலை வாசிப்பதில் பிழை ஏற்பட்டது!");
+            alert("File read karne me error aaya!");
         } finally {
-            event.target.value = ''; // மீண்டும் அதே ஃபைலைத் தேர்ந்தெடுக்க ரீசெட்
+            event.target.value = '';
         }
     };
 
@@ -2048,9 +1932,8 @@ window.handleInventoryExcelUpload = function(event) {
 };
 
 // ==========================================================================
-// 11. வழிசெலுத்தல் மற்றும் தொடக்க அழைப்பு (NAVIGATION ROUTER & AUTO LOADER)
+// 10. NAVIGATION ROUTER & AUTO LOADER
 // ==========================================================================
-// அட்மின் மெனுவில் Warehouse Stock கிளிக் செய்தால் கிளவுட் டேட்டாவை உடனே ஏற்றுதல்
 const originalSwitchNavPane = window.switchNavPane;
 window.switchNavPane = function(paneId, btn) {
     if (typeof originalSwitchNavPane === 'function') {
@@ -2068,11 +1951,9 @@ window.switchNavPane = function(paneId, btn) {
     }
 };
 
-// பக்கம் லோட் ஆனதும் கிளவுடிலிருந்து எடுப்பதுடன், Real-time Subscription-ஐயும் இயக்குதல்
 document.addEventListener('DOMContentLoaded', () => {
     fetchWarehouseStockFromSupabase();
 
-    // Supabase Realtime Listener (வேறு சிஸ்டத்தில் மாற்றினாலும் இங்கேயும் உடனே மாறும்)
     if (window.dbClient) {
         window.dbClient
             .channel('public:products_warehouse')
@@ -2085,6 +1966,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ======================================================================= */
 /* [SECTION 6] MODULE 3: WAREHOUSE STOCK & INVENTORY ENGINE — END          */
 /* ======================================================================= */
+
 
 /* ####################################################################### */
 /* ####################################################################### */
