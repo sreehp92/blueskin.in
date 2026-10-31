@@ -2311,15 +2311,31 @@ window.saveProductStudioEntry = async function() {
                 how_to: howTo
             };
 
-            const { error } = await client
-                .from('products')
-                .upsert({ ...supabasePayload, updated_at: new Date() });
+            let saveError = null;
 
-            if (error) {
-                console.error("Supabase Product Sync Error:", error);
-                alert("கிளவுடில் சேமிப்பதில் பிழை: " + error.message);
+            // ID எண்ணாக இருந்தால் மட்டுமே Update, இல்லையென்றால் புதிய பொருளாக Insert
+            const numericId = Number(editingProductItemRefId);
+            if (editingProductItemRefId && !isNaN(numericId) && numericId > 0) {
+                const { error } = await client
+                    .from('products')
+                    .update(supabasePayload)
+                    .eq('id', numericId);
+                saveError = error;
+            } else {
+                const { error } = await client
+                    .from('products')
+                    .insert([supabasePayload]);
+                saveError = error;
+            }
+
+            if (saveError) {
+                console.error("Supabase Product Sync Error:", saveError);
+                alert("கிளவுடில் சேமிப்பதில் பிழை: " + saveError.message);
             } else {
                 alert("✅ தயாரிப்பு வெற்றிகரமாக கிளவுட் டேட்டாபேஸில் நேரலையாகச் சேமிக்கப்பட்டது!");
+                if (typeof fetchAdminProductsFromSupabase === 'function') {
+                    fetchAdminProductsFromSupabase();
+                }
             }
         } catch (cloudErr) {
             console.error("Cloud Error:", cloudErr);
@@ -2327,7 +2343,6 @@ window.saveProductStudioEntry = async function() {
     } else {
         alert("✅ தயாரிப்பு லோக்கலில் சேமிக்கப்பட்டது (Supabase client கிடைக்கவில்லை)!");
     }
-};
 
 // ==========================================================================
 // Portfolio CMS வார்த்தைகளை Supabase மற்றும் LocalStorage-ல் சேமிக்கும் முறை
