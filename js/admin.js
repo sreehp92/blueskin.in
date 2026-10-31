@@ -2411,6 +2411,7 @@ window.renderProductMasterTable = function() {
             </tr>
         `;
     }).join('');
+    };
 
 // 4. கேட்டகிரி பில்டர் பில்ஸ் (Dynamic Category Pills)
 function renderDynamicProductCategoryPills() {
