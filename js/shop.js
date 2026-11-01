@@ -835,7 +835,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==========================================================================
 
 window.submitWhatsAppOrder = async function() {
-    // 1. உள்ளீட்டுப் புலங்களை எடுத்தல்
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
     const addressInput = document.getElementById('custAddress');
@@ -851,7 +850,6 @@ window.submitWhatsAppOrder = async function() {
 
     [nameInput, phoneInput, addressInput].forEach(el => el.style.borderColor = 'rgba(245, 196, 67, 0.3)');
 
-    // 2. உள்ளீட்டு விவரங்களைச் சரிபார்த்தல் (Validation)
     if (!name) {
         nameInput.style.borderColor = '#ef4444';
         nameInput.focus();
@@ -873,7 +871,6 @@ window.submitWhatsAppOrder = async function() {
         return;
     }
 
-    // 3. கார்ட்டில் பொருட்கள் உள்ளதா எனப் பார்த்தல்
     let activeCart = [];
     try {
         activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
@@ -888,7 +885,6 @@ window.submitWhatsAppOrder = async function() {
         return;
     }
 
-    // 4. வாட்ஸ்அப் இன்வாய்ஸ் மெசேஜ் தயாரித்தல்
     let orderItemsText = "";
     let grandTotal = 0;
 
@@ -900,7 +896,6 @@ window.submitWhatsAppOrder = async function() {
         orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
     });
 
-    // கூப்பன் தள்ளுபடி கணக்கீடு
     const subTotal = grandTotal;
     let promoLine = "";
     let finalPayable = subTotal;
@@ -947,7 +942,7 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-   // 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Zero SyntaxError)
+    // கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Zero SyntaxError)
     if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
         try {
             let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
@@ -962,21 +957,29 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
                         key: 'marketing_coupons',
                         value: JSON.stringify(coupons),
                         updated_at: new Date()
-                    }).then(() => {
-                        console.log("Coupon quota updated successfully");
-                    }).catch(err => {
-                        console.error("Quota sync error:", err);
-                    });
+                    }).then(() => {}).catch(() => {});
                 }
             }
-        } catch (err) {
-            console.error("Coupon Quota Sync Error:", err);
-        }
+        } catch (err) {}
     }
 
-    // வாட்ஸ்அப் திறத்தல்
     window.open(whatsappURL, '_blank');
 };
+
+// ==========================================================================
+// === தயாரிப்புகளை உடனடியாகத் திரையில் ஏற்றும் உத்தரவாதம் (FAILSAFE RENDER) ===
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. உள்ளூர் அல்லது டீஃபால்ட் தயாரிப்புகளை உடனடியாக ரெண்டர் செய்தல் (0ms Delay)
+    if (typeof renderProducts === 'function' && typeof products !== 'undefined' && products.length > 0) {
+        renderProducts('all');
+    }
+
+    // 2. சுபாபேஸ் கிளவுட் தயாரிப்புகளை எடுத்து மீண்டும் ரெண்டர் செய்தல்
+    if (typeof fetchSupabaseProducts === 'function') {
+        fetchSupabaseProducts();
+    }
+});
 
     // ----------------------------------------------------------------------
     // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (AWAIT உடனான நேரடி பதிவு)
