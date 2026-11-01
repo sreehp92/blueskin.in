@@ -1012,5 +1012,96 @@
 
 </div>
 
+    <!-- ===================================================== -->
+<!-- 3-2-1 FLASH POP-UP TRIGGER SCRIPT (FOR INDEX.HTML)    -->
+<!-- ===================================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    let config = null;
+
+    // 1. உள்ளூர் சேமிப்பகம் அல்லது Supabase-லிருந்து அமைப்புகளை எடுத்தல்
+    try {
+        const localCfg = localStorage.getItem("BLUESKIN_FLASH_MODAL_CONFIG");
+        if (localCfg) config = JSON.parse(localCfg);
+    } catch(e) {}
+
+    if (window.dbClient) {
+        try {
+            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'flash_modal_config').single();
+            if (data && data.value) {
+                config = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            }
+        } catch(err) {}
+    }
+
+    // பாப்-அப் Active-ல் இல்லை என்றால் வெளியேறுதல்
+    if (!config || config.state !== 'ACTIVE') return;
+
+    const delayTime = parseInt(config.delay) || 2000;
+
+    setTimeout(() => {
+        // ஏற்கெனவே மூடப்பட்டிருந்தால் மீண்டும் காட்டாதிருக்க
+        if (sessionStorage.getItem('blueskin_flash_seen')) return;
+
+        const modal = document.getElementById('frontFlashModal');
+        const ring = document.getElementById('frontCountdownRing');
+        const card = document.getElementById('frontFlashCard');
+        const num = document.getElementById('frontCountdownNum');
+
+        if (!modal) return;
+
+        // அமைப்புகளை நிரப்புதல்
+        const elEyebrow = document.getElementById('frontFlashEyebrow');
+        const elHeadline = document.getElementById('frontFlashHeadline');
+        const elDesc = document.getElementById('frontFlashDesc');
+        const elCode = document.getElementById('frontFlashCode');
+        const elBtn = document.getElementById('frontFlashBtnLink');
+
+        if (elEyebrow) elEyebrow.textContent = config.eyebrow || 'ROYAL PRIVILEGE ACCESS EXCLUSIVE';
+        if (elHeadline) elHeadline.textContent = config.headline || 'FESTIVE LUXURY OFFER';
+        if (elDesc) elDesc.textContent = config.desc || 'Handcrafted luxury formulations.';
+        if (elCode) elCode.textContent = config.code || 'BLUESKIN10';
+        if (elBtn) {
+            elBtn.textContent = config.btnText || 'Claim Royal Privilege Now';
+            elBtn.href = config.targetUrl || 'shop.html';
+        }
+
+        modal.style.display = 'flex';
+        if (ring) ring.style.display = 'flex';
+        if (card) card.style.display = 'none';
+
+        let count = 3;
+        if (num) num.textContent = count;
+
+        const timer = setInterval(() => {
+            count--;
+            if (count > 0) {
+                if (num) num.textContent = count;
+            } else {
+                clearInterval(timer);
+                if (ring) ring.style.display = 'none';
+                if (card) card.style.display = 'block';
+            }
+        }, 850);
+
+    }, delayTime);
+});
+
+window.closeFrontFlashModal = function() {
+    const modal = document.getElementById('frontFlashModal');
+    if (modal) modal.style.display = 'none';
+    sessionStorage.setItem('blueskin_flash_seen', 'true');
+};
+
+window.copyFrontFlashCode = function() {
+    const code = document.getElementById('frontFlashCode')?.textContent || '';
+    if (code) {
+        navigator.clipboard.writeText(code).then(() => {
+            alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது!`);
+        });
+    }
+};
+</script>
+
 </body>
 </html>
