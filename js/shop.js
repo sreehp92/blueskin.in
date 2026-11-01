@@ -947,11 +947,7 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // வாட்ஸ்அப் திறத்தல்
-    window.open(whatsappURL, '_blank');
-};
-
-// 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Quota Increment Sync)
+    // 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல்
     if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
         try {
             let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
@@ -973,6 +969,10 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
             console.error("Coupon Quota Sync Error:", err);
         }
     }
+
+    // வாட்ஸ்அப் திறத்தல்
+    window.open(whatsappURL, '_blank');
+};
 
     // ----------------------------------------------------------------------
     // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (AWAIT உடனான நேரடி பதிவு)
