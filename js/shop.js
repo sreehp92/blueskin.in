@@ -947,7 +947,7 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல்
+   // 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Zero SyntaxError)
     if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
         try {
             let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
@@ -958,10 +958,14 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
                 localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
 
                 if (window.dbClient) {
-                    await window.dbClient.from('site_content').upsert({
+                    window.dbClient.from('site_content').upsert({
                         key: 'marketing_coupons',
                         value: JSON.stringify(coupons),
                         updated_at: new Date()
+                    }).then(() => {
+                        console.log("Coupon quota updated successfully");
+                    }).catch(err => {
+                        console.error("Quota sync error:", err);
                     });
                 }
             }
