@@ -1080,3 +1080,144 @@ window.copyFrontFlashCode = function() {
         });
     }
 };
+
+// ==========================================================================
+// === BLUE SKIN: CHECKOUT PROMO CODE ENGINE & REALTIME DISCOUNT CALC     ===
+// ==========================================================================
+
+let appliedPromoCode = "";
+let appliedPromoDiscount = 0;
+
+// 1. கூப்பன் சரிபார்ப்பு & தள்ளுபடி கணக்கீட்டு செயல்முறை
+window.applyCheckoutPromoCode = async function() {
+    const input = document.getElementById('checkoutCouponInput');
+    const notice = document.getElementById('couponAppliedNotice');
+    const discRow = document.getElementById('couponDiscountRow');
+    const discValEl = document.getElementById('couponDiscountVal');
+    const totalEl = document.getElementById('cartTotalPrice');
+
+    if (!input || !notice) return;
+
+    const code = input.value.trim().toUpperCase();
+    if (!code) {
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "தயவுசெய்து கூப்பன் குறியீட்டை உள்ளிடவும்!";
+        return;
+    }
+
+    // A. கூப்பன் தரவுகளை எடுத்தல் (Local Cache & Supabase Cloud)
+    let coupons = [];
+    try {
+        const local = localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA");
+        if (local) coupons = JSON.parse(local);
+    } catch(e) {}
+
+    if (window.dbClient) {
+        try {
+            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'marketing_coupons').single();
+            if (data && data.value) {
+                coupons = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            }
+        } catch(err) {}
+    }
+
+    // B. கூப்பன் உள்ளதா மற்றும் ACTIVE நிலையில் உள்ளதா எனப் பார்த்தல்
+    const found = coupons.find(c => (c.code || '').toUpperCase() === code && c.status === "ACTIVE");
+
+    if (!found) {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+        if (discRow) discRow.style.display = "none";
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "❌ தவறான அல்லது காலாவதியான கூப்பன் குறியீடு!";
+        recalculateCartTotalWithDiscount();
+        return;
+    }
+
+    // C. கார்ட்டின் தற்போதைய Bag Value கணக்கீடு
+    let currentCart = [];
+    try {
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
+            ? cart 
+            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) { currentCart = []; }
+
+    const bagSubTotal = currentCart.reduce((sum, item) => {
+        const p = Number(item.price || item.finalPrice || 0);
+        const q = Number(item.qty || 1);
+        return sum + (p * q);
+    }, 0);
+
+    if (bagSubTotal === 0) {
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "⚠️ கூப்பனைப் பயன்படுத்த முதலில் கார்ட்டில் பொருட்களைச் சேர்க்கவும்!";
+        return;
+    }
+
+    // D. குறைந்தபட்ச செலவு (Min Spend) சரிபார்த்தல்
+    if (found.minSpend && bagSubTotal < Number(found.minSpend)) {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+        if (discRow) discRow.style.display = "none";
+        notice.style.display = "block";
+        notice.style.color = "#f59e0b";
+        notice.textContent = `⚠️ குறைந்தபட்சம் ₹${Number(found.minSpend).toLocaleString('en-IN')} மதிப்புள்ள ஆர்டர்களுக்கு மட்டுமே இக்கூப்பன் பொருந்தும்!`;
+        recalculateCartTotalWithDiscount();
+        return;
+    }
+
+    // E. தள்ளுபடி கணக்கீடு (Percentage / Flat / Free Shipping)
+    let discount = 0;
+    if (found.type === "PERCENTAGE") {
+        discount = Math.round((bagSubTotal * Number(found.value || 0)) / 100);
+        if (found.maxCap && Number(found.maxCap) > 0 && discount > Number(found.maxCap)) {
+            discount = Number(found.maxCap);
+        }
+    } else if (found.type === "FLAT") {
+        discount = Number(found.value || 0);
+    } else if (found.type === "FREE_SHIPPING") {
+        discount = 0; // தளம் ஏற்கெனவே Free Shipping என்பதால்
+    }
+
+    appliedPromoCode = code;
+    appliedPromoDiscount = discount;
+
+    // F. திரையில் தள்ளுபடி தொகையைக் காட்டுதல்
+    if (discRow && discValEl) {
+        discRow.style.display = "flex";
+        discValEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+    }
+
+    notice.style.display = "block";
+    notice.style.color = "#22c55e";
+    notice.textContent = `🎉 கூப்பன் '${code}' வெற்றிகரமாக இணைக்கப்பட்டது! தள்ளுபடி: ₹${discount.toLocaleString('en-IN')}`;
+
+    // G. Total Payable தொகையைக் கழித்துப் புதுப்பித்தல்
+    recalculateCartTotalWithDiscount();
+};
+
+// 2. கூப்பன் தள்ளுபடியைக் கழித்து Total Payable தொகையை உடனுக்குடன் மாற்றும் செயல்முறை
+function recalculateCartTotalWithDiscount() {
+    let currentCart = [];
+    try {
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
+            ? cart 
+            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) { currentCart = []; }
+
+    const bagSubTotal = currentCart.reduce((sum, item) => {
+        const p = Number(item.price || item.finalPrice || 0);
+        const q = Number(item.qty || 1);
+        return sum + (p * q);
+    }, 0);
+
+    const payable = Math.max(0, bagSubTotal - (appliedPromoDiscount || 0));
+
+    const totalEl = document.getElementById('cartTotalPrice');
+    if (totalEl) {
+        totalEl.textContent = `₹${payable.toLocaleString('en-IN')}`;
+    }
+}
