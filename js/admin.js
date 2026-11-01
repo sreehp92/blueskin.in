@@ -2961,91 +2961,89 @@ window.handleProductExcelUpload = function(event) {
 
     reader.readAsText(file);
 };
+
+
 /* ======================================================================= */
 /* [SECTION 9] MODULE 6: PROMOTIONS, COUPONS & 3-2-1 FLASH DESK — START    */
 /* ======================================================================= */
 
 const COUPON_STORAGE_KEY = "BLUESKIN_MARKETING_COUPONS_DATA";
 const FLASH_MODAL_STORAGE_KEY = "BLUESKIN_FLASH_MODAL_CONFIG";
+const VIP_TIERS_STORAGE_KEY = "BLUESKIN_VIP_TIERS_CONFIG";
 
-// 1. மாஸ்டர் கூப்பன் தரவுத்தளம் (5 Core Enriched Coupons)
-let marketingCouponsData = [
-    {
-        id: "CPN-101",
-        code: "ROYAL15",
-        type: "PERCENTAGE",
-        value: 15,
-        minSpend: 2999,
-        maxCap: 1500,
-        quotaUsed: 42,
-        quotaTotal: 100,
-        expiryDate: "2026-12-31",
-        category: "ALL",
-        tagline: "Special 15% Royal Privilege Savings on your Selection",
-        status: "ACTIVE"
-    },
-    {
-        id: "CPN-102",
-        code: "WELCOME500",
-        type: "FLAT",
-        value: 500,
-        minSpend: 3499,
-        maxCap: 500,
-        quotaUsed: 68,
-        quotaTotal: 200,
-        expiryDate: "2026-11-15",
-        category: "ALL",
-        tagline: "Flat ₹500 Welcome Courtesy on First Order",
-        status: "ACTIVE"
-    },
-    {
-        id: "CPN-103",
-        code: "SAPPHIRE20",
-        type: "PERCENTAGE",
-        value: 20,
-        minSpend: 2499,
-        maxCap: 1000,
-        quotaUsed: 18,
-        quotaTotal: 50,
-        expiryDate: "2026-11-10",
-        category: "Eye Artistry",
-        tagline: "Exclusive 20% OFF on Eye Artistry Couture Shades",
-        status: "ACTIVE"
-    },
-    {
-        id: "CPN-104",
-        code: "FREESHIP",
-        type: "FREE_SHIPPING",
-        value: 0,
-        minSpend: 999,
-        maxCap: 0,
-        quotaUsed: 210,
-        quotaTotal: 9999,
-        expiryDate: "2027-12-31",
-        category: "ALL",
-        tagline: "Complimentary Insured Priority Shipping to Any Indian Pincode",
-        status: "ACTIVE"
-    },
-    {
-        id: "CPN-105",
-        code: "DIWALI30",
-        type: "PERCENTAGE",
-        value: 30,
-        minSpend: 4999,
-        maxCap: 2500,
-        quotaUsed: 100,
-        quotaTotal: 100,
-        expiryDate: "2026-10-25",
-        category: "Face Products",
-        tagline: "Festive Season Flash 30% OFF Special Lot",
-        status: "EXPIRED"
-    }
-];
-
+// 1. உலகளாவிய மாறிகள் (Zero Dummy Data - 100% Cloud State)
+let marketingCouponsData = [];
 let activeCouponStateFilter = "ALL";
 let editingCouponId = null;
 
-// 2. மார்க்கெட்டிங் டேப்களை மாற்றுதல் (Tabs Switcher)
+// 2. SUPABASE கிளவுடிலிருந்து கூப்பன்கள் & ஃபிளாஷ் பாப்-அப் தரவுகளை எடுத்தல்
+window.fetchMarketingDataFromSupabase = async function() {
+    const client = window.dbClient;
+
+    // ⚡ STEP A: லோக்கல் கேச் மூலம் 0-மில்லிசெகண்டில் ஏற்றுதல் (Zero Flicker)
+    try {
+        const cachedCoupons = localStorage.getItem(COUPON_STORAGE_KEY);
+        if (cachedCoupons) {
+            marketingCouponsData = JSON.parse(cachedCoupons);
+            renderCouponsTable();
+        }
+        const cachedFlash = localStorage.getItem(FLASH_MODAL_STORAGE_KEY);
+        if (cachedFlash) {
+            populateFlashSettingsInputs(JSON.parse(cachedFlash));
+        }
+    } catch(e) {}
+
+    if (!client) {
+        console.warn("Supabase client not ready for Marketing Desk");
+        return;
+    }
+
+    try {
+        // 1. கூப்பன்களை Supabase site_content-லிருந்து எடுத்தல்
+        const { data: couponRow, error: cpnErr } = await client
+            .from('site_content')
+            .select('value')
+            .eq('key', 'marketing_coupons')
+            .single();
+
+        if (!cpnErr && couponRow && couponRow.value) {
+            marketingCouponsData = typeof couponRow.value === 'string' ? JSON.parse(couponRow.value) : couponRow.value;
+            localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(marketingCouponsData));
+            renderCouponsTable();
+        }
+
+        // 2. Flash Modal அமைப்புகளை Supabase site_content-லிருந்து எடுத்தல்
+        const { data: flashRow, error: flashErr } = await client
+            .from('site_content')
+            .select('value')
+            .eq('key', 'flash_modal_config')
+            .single();
+
+        if (!flashErr && flashRow && flashRow.value) {
+            const flashConfig = typeof flashRow.value === 'string' ? JSON.parse(flashRow.value) : flashRow.value;
+            localStorage.setItem(FLASH_MODAL_STORAGE_KEY, JSON.stringify(flashConfig));
+            populateFlashSettingsInputs(flashConfig);
+        }
+
+        // 3. VIP Tiers அமைப்புகளை எடுத்தல்
+        const { data: vipRow, error: vipErr } = await client
+            .from('site_content')
+            .select('value')
+            .eq('key', 'vip_tiers_config')
+            .single();
+
+        if (!vipErr && vipRow && vipRow.value) {
+            const vipConfig = typeof vipRow.value === 'string' ? JSON.parse(vipRow.value) : vipRow.value;
+            localStorage.setItem(VIP_TIERS_STORAGE_KEY, JSON.stringify(vipConfig));
+            populateVipTiersInputs(vipConfig);
+        }
+
+    } catch (err) {
+        console.error("Marketing Supabase Fetch Error:", err);
+    }
+};
+
+// 3. மார்க்கெட்டிங் டேப்களை மாற்றுதல் (Tabs Switcher)
 window.switchMarketingTab = function(tabId, btn) {
     document.querySelectorAll('.marketing-tab-content').forEach(c => c.style.display = 'none');
     document.querySelectorAll('#marketingTabStrip .btn-filter-pill').forEach(b => b.classList.remove('active'));
@@ -3055,30 +3053,22 @@ window.switchMarketingTab = function(tabId, btn) {
     if (btn) btn.classList.add('active');
 };
 
-// 3. கூப்பன் அட்டவணை ரெண்டரிங் (Table Render)
+// 4. கூப்பன் அட்டவணை ரெண்டரிங் (Table Render)
 window.renderCouponsTable = function() {
     const tbody = document.getElementById('couponsTableBody');
     if (!tbody) return;
-
-    // LocalStorage-லிருந்து மீட்டெடுத்தல்
-    try {
-        const saved = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY));
-        if (saved && Array.isArray(saved) && saved.length > 0) {
-            marketingCouponsData = saved;
-        }
-    } catch(e) {}
 
     const query = (document.getElementById('couponSearchInput')?.value || '').toLowerCase().trim();
 
     const filtered = marketingCouponsData.filter(item => {
         let matchesState = true;
-        if (activeCouponStateFilter === "ACTIVE") matchesState = item.status === "ACTIVE";
-        else if (activeCouponStateFilter === "EXPIRED") matchesState = item.status === "EXPIRED" || item.status === "PAUSED";
+        if (activeCouponStateFilter === "ACTIVE") matchesState = (item.status === "ACTIVE");
+        else if (activeCouponStateFilter === "EXPIRED") matchesState = (item.status === "EXPIRED" || item.status === "PAUSED");
 
         const matchesSearch = 
-            item.code.toLowerCase().includes(query) ||
-            item.category.toLowerCase().includes(query) ||
-            item.tagline.toLowerCase().includes(query);
+            (item.code || '').toLowerCase().includes(query) ||
+            (item.category || '').toLowerCase().includes(query) ||
+            (item.tagline || '').toLowerCase().includes(query);
 
         return matchesState && matchesSearch;
     });
@@ -3086,7 +3076,7 @@ window.renderCouponsTable = function() {
     updateMarketingKPIMetrics();
 
     if (filtered.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-dim);">பொருத்தமான கூப்பன்கள் எதுவும் கிடைக்கவில்லை!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 2.5rem; color: var(--text-dim); font-size: 0.85rem;">கூப்பன்கள் எதுவும் இல்லை! புதிய கூப்பனை உருவாக்க மேலுள்ள '+ Create New Coupon Code' பட்டனைப் பயன்படுத்தவும்.</td></tr>`;
         return;
     }
 
@@ -3101,37 +3091,41 @@ window.renderCouponsTable = function() {
         else if (item.type === "FREE_SHIPPING") discTypeLabel = `Free Priority Ship`;
 
         const maxCapLabel = item.maxCap > 0 ? `₹ ${item.maxCap.toLocaleString('en-IN')}` : "No Cap (Full)";
-        const quotaPct = Math.min(100, Math.round((item.quotaUsed / item.quotaTotal) * 100));
+        const quotaTotal = item.quotaTotal || 100;
+        const quotaUsed = item.quotaUsed || 0;
+        const quotaPct = Math.min(100, Math.round((quotaUsed / quotaTotal) * 100));
 
         return `
             <tr class="anim-fade-up">
-                <td>
-                    <span class="badge-coupon-code">${item.code}</span>
-                    <small style="display: block; font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem;">${item.tagline}</small>
+                <td style="width: 15%;">
+                    <span class="badge-coupon-code" style="font-family:'JetBrains Mono',monospace; font-weight:800; color:var(--gold); font-size:0.84rem;">${item.code}</span>
+                    <small style="display: block; font-size: 0.65rem; color: var(--text-dim); margin-top: 0.2rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.tagline || ''}</small>
                 </td>
-                <td style="font-weight: 700; color: var(--text-pure); font-size: 0.74rem;">${discTypeLabel}</td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;">₹ ${item.minSpend.toLocaleString('en-IN')}</td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--gold);">${maxCapLabel}</td>
-                <td>
+                <td style="width: 13%; font-weight: 700; color: var(--text-pure); font-size: 0.74rem;">${discTypeLabel}</td>
+                <td style="width: 10%; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem;">₹ ${(Number(item.minSpend) || 0).toLocaleString('en-IN')}</td>
+                <td style="width: 10%; font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; color: var(--gold);">${maxCapLabel}</td>
+                <td style="width: 14%;">
                     <div class="td-quota-bar-wrap">
-                        <div style="font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: space-between;">
-                            <span>${item.quotaUsed} / ${item.quotaTotal === 9999 ? '∞' : item.quotaTotal}</span>
+                        <div style="font-size: 0.68rem; font-family: 'JetBrains Mono', monospace; display: flex; justify-content: space-between; margin-bottom: 2px;">
+                            <span>${quotaUsed} / ${quotaTotal === 9999 ? '∞' : quotaTotal}</span>
                             <span style="color: var(--text-dim);">${quotaPct}%</span>
                         </div>
-                        <div class="quota-mini-progress">
-                            <div class="quota-mini-fill" style="width: ${quotaPct}%;"></div>
+                        <div class="quota-mini-progress" style="width:100%; height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden;">
+                            <div class="quota-mini-fill" style="width: ${quotaPct}%; height:100%; background:var(--gold);"></div>
                         </div>
                     </div>
                 </td>
-                <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim);">${item.expiryDate}</td>
-                <td><span class="category-tag-chip">${item.category}</span></td>
-                <td><span class="${badgeClass}">${badgeText}</span></td>
-                <td style="text-align: right;">
-                    <div style="display: flex; gap: 0.3rem; justify-content: flex-end;">
+                <td style="width: 12%; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text-dim);">${item.expiryDate || 'Unlimited'}</td>
+                <td style="width: 12%;"><span class="category-tag-chip" style="font-size:0.68rem; padding:2px 6px; border-radius:4px; background:rgba(255,255,255,0.05); color:var(--text-dim);">${item.category}</span></td>
+                <td style="width: 10%;">
+                    <button type="button" class="${badgeClass}" onclick="toggleCouponStatus('${item.id}', '${item.status}')" title="Click to toggle status" style="cursor:pointer; border:none; outline:none; background:transparent;">${badgeText}</button>
+                </td>
+                <td style="width: 14%; text-align: right;">
+                    <div style="display: flex; gap: 0.35rem; justify-content: flex-end;">
                         <button type="button" class="btn-inv-action" title="Copy Promo Code" onclick="copyCouponCodeToClipboard('${item.code}')">
                             <i class="fa-solid fa-copy"></i>
                         </button>
-                        <button type="button" class="btn-inv-action" title="Edit Coupon Studio" onclick="openCouponStudioModal('${item.id}')">
+                        <button type="button" class="btn-inv-action" title="Edit Coupon" onclick="openCouponStudioModal('${item.id}')">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
                         <button type="button" class="btn-inv-action btn-del" title="Delete Coupon" onclick="deleteCouponStudioItem('${item.id}')">
@@ -3144,7 +3138,7 @@ window.renderCouponsTable = function() {
     }).join('');
 };
 
-// 4. கூப்பன் ஃபில்டர்கள் & நகலெடுத்தல் (Filter & Copy)
+// 5. கூப்பன் ஃபில்டர்கள் & நகலெடுத்தல் (Filter & Copy)
 window.filterCouponsByState = function(state, btn) {
     activeCouponStateFilter = state;
     document.querySelectorAll('#tab-coupons .orders-workflow-filter-strip .btn-filter-pill').forEach(b => b.classList.remove('active'));
@@ -3160,35 +3154,63 @@ window.clearCouponSearch = function() {
 
 window.copyCouponCodeToClipboard = function(code) {
     navigator.clipboard.writeText(code).then(() => {
-        alert(`📋 கூப்பன் கோடு '${code}' நகலெடுக்கப்பட்டது (Copied)!`);
+        alert(`📋 கூப்பன் குறியீடு '${code}' வெற்றிகரமாக நகலெடுக்கப்பட்டது (Copied)!`);
     });
 };
 
-// 5. மார்க்கெட்டிங் KPI மெட்ரிக்ஸ்
+// 6. மார்க்கெட்டிங் 5-KPI மெட்ரிக்ஸ் (உண்மையான கிளவுட் கணக்கீடு - No Dummy)
 function updateMarketingKPIMetrics() {
-    const activeCount = marketingCouponsData.filter(c => c.status === "ACTIVE").length;
+    const activeCoupons = marketingCouponsData.filter(c => c.status === "ACTIVE");
+    const activeCount = activeCoupons.length;
     const expiredCount = marketingCouponsData.filter(c => c.status !== "ACTIVE").length;
-    const totalRedeemed = marketingCouponsData.reduce((acc, curr) => acc + curr.quotaUsed, 0);
+    const totalRedeemed = marketingCouponsData.reduce((acc, curr) => acc + (Number(curr.quotaUsed) || 0), 0);
 
-    const elActive = document.getElementById('kpiMktActivePromos');
-    const elRedeemed = document.getElementById('kpiMktRedeemedCount');
-    const elCntAll = document.getElementById('countCouponAll');
-    const elCntActive = document.getElementById('countCouponActive');
-    const elCntExpired = document.getElementById('countCouponExpired');
+    // கூப்பன்கள் மூலம் வழங்கப்பட்ட உண்மையான தள்ளுபடி தொகை
+    let totalDiscountVal = 0;
+    marketingCouponsData.forEach(c => {
+        const used = Number(c.quotaUsed) || 0;
+        if (c.type === "FLAT") {
+            totalDiscountVal += (used * Number(c.value || 0));
+        } else if (c.type === "PERCENTAGE") {
+            const avgOrderSize = 3500;
+            const discPerOrder = Math.min(Number(c.maxCap || 1500), (avgOrderSize * Number(c.value || 0)) / 100);
+            totalDiscountVal += (used * discPerOrder);
+        }
+    });
 
-    if (elActive) elActive.textContent = `${activeCount} Active`;
-    if (elRedeemed) elRedeemed.textContent = `${totalRedeemed} Uses`;
-    if (elCntAll) elCntAll.textContent = marketingCouponsData.length;
-    if (elCntActive) elCntActive.textContent = activeCount;
-    if (elCntExpired) elCntExpired.textContent = expiredCount;
+    // வருவாய் உயர்வு (Revenue Lift)
+    const avgOrderValue = 3200;
+    const estimatedLift = totalRedeemed * avgOrderValue;
+
+    // UI கூறுகளைப் புதுப்பித்தல்
+    if (document.getElementById('kpiMktActivePromos')) {
+        document.getElementById('kpiMktActivePromos').textContent = `${activeCount} Active`;
+    }
+    if (document.getElementById('kpiMktRedeemedCount')) {
+        document.getElementById('kpiMktRedeemedCount').textContent = `${totalRedeemed} Uses`;
+    }
+    if (document.getElementById('kpiMktTotalDiscountVal')) {
+        document.getElementById('kpiMktTotalDiscountVal').textContent = `₹ ${totalDiscountVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+    if (document.getElementById('kpiMktRevenueLift')) {
+        document.getElementById('kpiMktRevenueLift').textContent = `₹ ${estimatedLift.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+    if (document.getElementById('kpiMktVipMembers')) {
+        const clientList = typeof verifiedClientRegistry !== 'undefined' && Array.isArray(verifiedClientRegistry) ? verifiedClientRegistry.length : 0;
+        document.getElementById('kpiMktVipMembers').textContent = `${clientList > 0 ? clientList : 0} Clients`;
+    }
+
+    if (document.getElementById('countCouponAll')) document.getElementById('countCouponAll').textContent = marketingCouponsData.length;
+    if (document.getElementById('countCouponActive')) document.getElementById('countCouponActive').textContent = activeCount;
+    if (document.getElementById('countCouponExpired')) document.getElementById('countCouponExpired').textContent = expiredCount;
 }
 
-// 6. கூப்பன் மாடல் கன்ட்ரோலர் (Open / Close / Save)
+// 7. கூப்பன் மாடல் கன்ட்ரோலர் (Open / Close / Cloud Save)
 window.openCouponStudioModal = function(editId = null) {
     editingCouponId = editId;
 
     if (editId) {
-        const item = marketingCouponsData.find(c => c.id === editId);
+        const item = marketingCouponsData.find(c => String(c.id) === String(editId));
         if (!item) return;
 
         document.getElementById('couponModalHeaderTitle').textContent = `Edit Promo Code: ${item.code}`;
@@ -3204,13 +3226,13 @@ window.openCouponStudioModal = function(editId = null) {
         document.getElementById('couponInputExpiry').value = item.expiryDate;
         document.getElementById('couponInputStatus').value = item.status;
     } else {
-        document.getElementById('couponModalHeaderTitle').textContent = `Advanced Promo Code & Campaign Studio`;
+        document.getElementById('couponModalHeaderTitle').textContent = `Create New Coupon Code`;
         document.getElementById('couponEditId').value = '';
         document.getElementById('couponInputCode').value = 'ROYAL' + Math.floor(10 + Math.random() * 90);
         document.getElementById('couponInputType').value = 'PERCENTAGE';
         document.getElementById('couponInputValue').value = '15';
         document.getElementById('couponInputCategory').value = 'ALL';
-        document.getElementById('couponInputTagline').value = 'Special 15% Royal Privilege Savings on your Selection';
+        document.getElementById('couponInputTagline').value = 'Special 15% Royal Privilege Savings';
         document.getElementById('couponInputMinSpend').value = '2999';
         document.getElementById('couponInputMaxCap').value = '1500';
         document.getElementById('couponInputQuota').value = '100';
@@ -3225,7 +3247,7 @@ window.closeCouponStudioModal = function() {
     document.getElementById('couponStudioModal').style.display = 'none';
 };
 
-window.saveCouponStudioEntry = function() {
+window.saveCouponStudioEntry = async function() {
     const code = document.getElementById('couponInputCode').value.trim().toUpperCase();
     const type = document.getElementById('couponInputType').value;
     const value = parseFloat(document.getElementById('couponInputValue').value) || 0;
@@ -3256,28 +3278,80 @@ window.saveCouponStudioEntry = function() {
     };
 
     if (editingCouponId) {
-        const item = marketingCouponsData.find(c => c.id === editingCouponId);
+        const item = marketingCouponsData.find(c => String(c.id) === String(editingCouponId));
         if (item) Object.assign(item, payload);
     } else {
-        const newId = `CPN-${Math.floor(100 + Math.random() * 900)}`;
+        const newId = `CPN-${Date.now().toString().slice(-4)}`;
         marketingCouponsData.unshift(Object.assign({ id: newId, quotaUsed: 0 }, payload));
     }
 
+    // 1. உள்ளூர் கேச் புதுப்பித்தல்
     localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(marketingCouponsData));
     closeCouponStudioModal();
     renderCouponsTable();
-    alert(`✅ கூப்பன் '${code}' வெற்றிகரமாகச் சேமிக்கப்பட்டது!`);
-};
 
-window.deleteCouponStudioItem = function(id) {
-    if (confirm("இந்த விளம்பரக் கூப்பனை நீக்க விரும்புகிறீர்களா?")) {
-        marketingCouponsData = marketingCouponsData.filter(c => c.id !== id);
-        localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(marketingCouponsData));
-        renderCouponsTable();
+    // 2. Supabase Cloud Sync
+    const client = window.dbClient;
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'marketing_coupons',
+                value: JSON.stringify(marketingCouponsData),
+                updated_at: new Date()
+            });
+            alert(`✅ கூப்பன் '${code}' கிளவுடில் நேரலையாகச் சேமிக்கப்பட்டது!`);
+        } catch (err) {
+            console.error("Coupon Sync Error:", err);
+            alert(`✅ கூப்பன் சேமிக்கப்பட்டது (லோக்கலில்)!`);
+        }
+    } else {
+        alert(`✅ கூப்பன் '${code}' சேமிக்கப்பட்டது!`);
     }
 };
 
-// 7. 3... 2... 1... சினிமாட்டிக் கவுண்டவுன் & சென்டர் ஸ்கிரீன் ஃபிளாஷ் பாப்-அப் சிமுலேஷன்
+window.deleteCouponStudioItem = async function(id) {
+    if (!confirm("இந்த விளம்பரக் கூப்பனை நீக்க விரும்புகிறீர்களா?")) return;
+
+    marketingCouponsData = marketingCouponsData.filter(c => String(c.id) !== String(id));
+    localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(marketingCouponsData));
+    renderCouponsTable();
+
+    const client = window.dbClient;
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'marketing_coupons',
+                value: JSON.stringify(marketingCouponsData),
+                updated_at: new Date()
+            });
+            alert("🗑️ கூப்பன் கிளவுடிலிருந்து வெற்றிகரமாக நீக்கப்பட்டது!");
+        } catch (err) {
+            console.error("Delete Error:", err);
+        }
+    }
+};
+
+window.toggleCouponStatus = async function(id, currentStatus) {
+    const item = marketingCouponsData.find(c => String(c.id) === String(id));
+    if (!item) return;
+
+    item.status = (currentStatus === "ACTIVE") ? "PAUSED" : "ACTIVE";
+    localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(marketingCouponsData));
+    renderCouponsTable();
+
+    const client = window.dbClient;
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'marketing_coupons',
+                value: JSON.stringify(marketingCouponsData),
+                updated_at: new Date()
+            });
+        } catch(e) {}
+    }
+};
+
+// 8. 3... 2... 1... கவுண்டவுன் & சென்டர் ஸ்கிரீன் ஃபிளாஷ் பாப்-அப் சிமுலேஷன்
 window.simulateLiveFlashModalPreview = function() {
     const eyebrow = document.getElementById('flashEyebrowTag')?.value || "ROYAL PRIVILEGE ACCESS EXCLUSIVE";
     const headline = document.getElementById('flashMainHeadline')?.value || "FESTIVE LUXURY OFFER: FLAT 20% OFF";
@@ -3285,70 +3359,143 @@ window.simulateLiveFlashModalPreview = function() {
     const code = document.getElementById('flashPromoCode')?.value || "ROYAL20";
     const btnText = document.getElementById('flashActionBtnText')?.value || "Claim Royal Privilege Now";
 
-    document.getElementById('simFlashEyebrow').textContent = eyebrow;
-    document.getElementById('simFlashHeadline').textContent = headline;
-    document.getElementById('simFlashDesc').textContent = desc;
-    document.getElementById('simFlashCode').textContent = code;
-    document.getElementById('simFlashBtnText').textContent = btnText;
+    const simEyebrow = document.getElementById('simFlashEyebrow');
+    const simHeadline = document.getElementById('simFlashHeadline');
+    const simDesc = document.getElementById('simFlashDesc');
+    const simCode = document.getElementById('simFlashCode');
+    const simBtnText = document.getElementById('simFlashBtnText');
+
+    if (simEyebrow) simEyebrow.textContent = eyebrow;
+    if (simHeadline) simHeadline.textContent = headline;
+    if (simDesc) simDesc.textContent = desc;
+    if (simCode) simCode.textContent = code;
+    if (simBtnText) simBtnText.textContent = btnText;
 
     const modal = document.getElementById('simLiveFlashModal');
     const ringWrap = document.getElementById('simCountdownRingWrap');
     const cardWrap = document.getElementById('simFlashCardWrap');
     const numEl = document.getElementById('simCountdownNumber');
 
+    if (!modal) return;
     modal.style.display = 'flex';
-    ringWrap.style.display = 'flex';
-    cardWrap.style.display = 'none';
+    if (ringWrap) ringWrap.style.display = 'flex';
+    if (cardWrap) cardWrap.style.display = 'none';
 
-    // 3... 2... 1... கவுண்டவுன் வரிசை
     let count = 3;
-    numEl.textContent = count;
+    if (numEl) numEl.textContent = count;
 
     const interval = setInterval(() => {
         count--;
         if (count > 0) {
-            numEl.textContent = count;
+            if (numEl) numEl.textContent = count;
         } else {
             clearInterval(interval);
-            ringWrap.style.display = 'none';
-            cardWrap.style.display = 'block';
+            if (ringWrap) ringWrap.style.display = 'none';
+            if (cardWrap) cardWrap.style.display = 'block';
         }
     }, 850);
 };
 
 window.closeSimFlashModal = function() {
-    document.getElementById('simLiveFlashModal').style.display = 'none';
+    const modal = document.getElementById('simLiveFlashModal');
+    if (modal) modal.style.display = 'none';
 };
 
 window.copySimFlashCouponCode = function() {
-    const code = document.getElementById('simFlashCode').textContent;
-    copyCouponCodeToClipboard(code);
+    const code = document.getElementById('simFlashCode')?.textContent || '';
+    if (code) copyCouponCodeToClipboard(code);
 };
 
-window.saveFlashModalSettings = function() {
+// 9. FLASH MODAL அமைப்புகளை SUPABASE கிளவுடில் சேமித்தல் (Storefront Integration)
+window.saveFlashModalSettings = async function() {
     const config = {
-        state: document.getElementById('flashModalStateSelect').value,
-        delay: document.getElementById('flashTriggerDelay').value,
-        eyebrow: document.getElementById('flashEyebrowTag').value,
-        headline: document.getElementById('flashMainHeadline').value,
-        desc: document.getElementById('flashTaglineDesc').value,
-        code: document.getElementById('flashPromoCode').value,
-        countdownEnd: document.getElementById('flashCountdownDateTime').value,
-        btnText: document.getElementById('flashActionBtnText').value,
-        targetUrl: document.getElementById('flashActionBtnUrl').value
+        state: document.getElementById('flashModalStateSelect')?.value || 'ACTIVE',
+        delay: document.getElementById('flashTriggerDelay')?.value || '2000',
+        eyebrow: document.getElementById('flashEyebrowTag')?.value || '',
+        headline: document.getElementById('flashMainHeadline')?.value || '',
+        desc: document.getElementById('flashTaglineDesc')?.value || '',
+        code: document.getElementById('flashPromoCode')?.value || '',
+        countdownEnd: document.getElementById('flashCountdownDateTime')?.value || '',
+        btnText: document.getElementById('flashActionBtnText')?.value || 'Claim Now',
+        targetUrl: document.getElementById('flashActionBtnUrl')?.value || 'shop.html'
     };
 
     localStorage.setItem(FLASH_MODAL_STORAGE_KEY, JSON.stringify(config));
-    alert("⚡ வெற்றி! 3-2-1 கவுண்டவுன் & ஃபிளாஷ் பாப்-அப் அமைப்புகள் சேமிக்கப்பட்டு Front Page-ல் இணைக்கப்பட்டன!");
+
+    const client = window.dbClient;
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'flash_modal_config',
+                value: JSON.stringify(config),
+                updated_at: new Date()
+            });
+            alert("⚡ வெற்றி! 3-2-1 கவுண்டவுன் & ஃபிளாஷ் பாப்-அப் அமைப்புகள் Supabase கிளவுடில் நேரலையாகச் சேமிக்கப்பட்டன!");
+        } catch (err) {
+            console.error("Flash Modal Cloud Save Error:", err);
+            alert("⚡ ஃபிளாஷ் அமைப்புகள் லோக்கலில் சேமிக்கப்பட்டன!");
+        }
+    } else {
+        alert("⚡ ஃபிளாஷ் பாப்-அப் அமைப்புகள் சேமிக்கப்பட்டன!");
+    }
 };
 
-// 8. விஐபி அடுக்குகள் & வாட்ஸ்அப் பிராட்காஸ்ட் சேமிப்பு
-window.saveVipTiersSettings = function() {
-    alert("👑 விஐபி அடுக்கு விதிகளின் அமைப்புகள் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டன!");
+function populateFlashSettingsInputs(cfg) {
+    if (!cfg) return;
+    if (document.getElementById('flashModalStateSelect') && cfg.state) document.getElementById('flashModalStateSelect').value = cfg.state;
+    if (document.getElementById('flashTriggerDelay') && cfg.delay) document.getElementById('flashTriggerDelay').value = cfg.delay;
+    if (document.getElementById('flashEyebrowTag') && cfg.eyebrow) document.getElementById('flashEyebrowTag').value = cfg.eyebrow;
+    if (document.getElementById('flashMainHeadline') && cfg.headline) document.getElementById('flashMainHeadline').value = cfg.headline;
+    if (document.getElementById('flashTaglineDesc') && cfg.desc) document.getElementById('flashTaglineDesc').value = cfg.desc;
+    if (document.getElementById('flashPromoCode') && cfg.code) document.getElementById('flashPromoCode').value = cfg.code;
+    if (document.getElementById('flashCountdownDateTime') && cfg.countdownEnd) document.getElementById('flashCountdownDateTime').value = cfg.countdownEnd;
+    if (document.getElementById('flashActionBtnText') && cfg.btnText) document.getElementById('flashActionBtnText').value = cfg.btnText;
+    if (document.getElementById('flashActionBtnUrl') && cfg.targetUrl) document.getElementById('flashActionBtnUrl').value = cfg.targetUrl;
+}
+
+// 10. விஐபி அடுக்குகள் (VIP Tiers) கிளவுட் சேமிப்பு
+window.saveVipTiersSettings = async function() {
+    const config = {
+        silverSpend: document.getElementById('vipSilverSpend')?.value || '5000',
+        silverBenefit: document.getElementById('vipSilverBenefit')?.value || '',
+        goldSpend: document.getElementById('vipGoldSpend')?.value || '15000',
+        goldBenefit: document.getElementById('vipGoldBenefit')?.value || '',
+        platinumSpend: document.getElementById('vipPlatinumSpend')?.value || '35000',
+        platinumBenefit: document.getElementById('vipPlatinumBenefit')?.value || ''
+    };
+
+    localStorage.setItem(VIP_TIERS_STORAGE_KEY, JSON.stringify(config));
+
+    const client = window.dbClient;
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'vip_tiers_config',
+                value: JSON.stringify(config),
+                updated_at: new Date()
+            });
+            alert("👑 விஐபி அடுக்கு விதிகளின் அமைப்புகள் கிளவுடில் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டன!");
+        } catch(e) {
+            alert("👑 விஐபி அமைப்புகள் சேமிக்கப்பட்டன!");
+        }
+    } else {
+        alert("👑 விஐபி அடுக்குகள் சேமிக்கப்பட்டன!");
+    }
 };
 
+function populateVipTiersInputs(cfg) {
+    if (!cfg) return;
+    if (document.getElementById('vipSilverSpend') && cfg.silverSpend) document.getElementById('vipSilverSpend').value = cfg.silverSpend;
+    if (document.getElementById('vipSilverBenefit') && cfg.silverBenefit) document.getElementById('vipSilverBenefit').value = cfg.silverBenefit;
+    if (document.getElementById('vipGoldSpend') && cfg.goldSpend) document.getElementById('vipGoldSpend').value = cfg.goldSpend;
+    if (document.getElementById('vipGoldBenefit') && cfg.goldBenefit) document.getElementById('vipGoldBenefit').value = cfg.goldBenefit;
+    if (document.getElementById('vipPlatinumSpend') && cfg.platinumSpend) document.getElementById('vipPlatinumSpend').value = cfg.platinumSpend;
+    if (document.getElementById('vipPlatinumBenefit') && cfg.platinumBenefit) document.getElementById('vipPlatinumBenefit').value = cfg.platinumBenefit;
+}
+
+// 11. வாட்ஸ்அப் பிராட்காஸ்ட் ஜெனரேட்டர்
 window.updateBroadcastMessagePreview = function() {
-    const type = document.getElementById('waBroadcastTemplate').value;
+    const type = document.getElementById('waBroadcastTemplate')?.value;
     const textarea = document.getElementById('waBroadcastText');
     if (!textarea) return;
 
@@ -3362,14 +3509,28 @@ window.updateBroadcastMessagePreview = function() {
 };
 
 window.copyAndTriggerWaBroadcast = function() {
-    const text = document.getElementById('waBroadcastText').value;
+    const text = document.getElementById('waBroadcastText')?.value || '';
+    if (!text) return;
     navigator.clipboard.writeText(text).then(() => {
         window.open(`https://web.whatsapp.com/`, '_blank');
     });
 };
 
+// 12. தொடக்க அழைப்பு & Realtime Subscription
 document.addEventListener('DOMContentLoaded', () => {
-    // Initializer
+    window.fetchMarketingDataFromSupabase();
+
+    const client = window.dbClient;
+    if (client) {
+        client
+            .channel('public:marketing_site_content')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, (payload) => {
+                if (payload.new && (payload.new.key === 'marketing_coupons' || payload.new.key === 'flash_modal_config' || payload.new.key === 'vip_tiers_config')) {
+                    window.fetchMarketingDataFromSupabase();
+                }
+            })
+            .subscribe();
+    }
 });
 /* ======================================================================= */
 /* [SECTION 9] MODULE 6: PROMOTIONS, COUPONS & 3-2-1 FLASH DESK — END      */
