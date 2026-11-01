@@ -828,8 +828,10 @@ document.addEventListener('DOMContentLoaded', function() {
         window.showMobileCheckout(true, true);
     }
 });
+
+
 // ==========================================================================
-// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE CLOUD SYNC    ===
+// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE CLOUD SYNC     ===
 // ==========================================================================
 
 window.submitWhatsAppOrder = async function() {
@@ -898,6 +900,16 @@ window.submitWhatsAppOrder = async function() {
         orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
     });
 
+    // கூப்பன் தள்ளுபடி கணக்கீடு
+    const subTotal = grandTotal;
+    let promoLine = "";
+    let finalPayable = subTotal;
+
+    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && appliedPromoCode) {
+        finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
+        promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
+    }
+
     const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN');
@@ -907,14 +919,14 @@ window.submitWhatsAppOrder = async function() {
 `👑 *BLUE SKIN LUXURY BOUTIQUE*
 *Official Order Invoice*
 ────────────────────────
-🧾 *Order Ref  :* #${orderId}
+🧾 *Order Ref   :* #${orderId}
 📅 *Date & Time :* ${dateStr}, ${timeStr}
 ────────────────────────
 
 👤 *CLIENT INFORMATION*
-- *Name    :* ${name}
-- *Phone   :* +91 ${phone}
-- *Address :* ${address}
+- *Name     :* ${name}
+- *Phone    :* +91 ${phone}
+- *Address  :* ${address}
 
 🛍️ *ORDERED CREATIONS*
 ────────────────────────
@@ -922,9 +934,9 @@ ${orderItemsText.trim()}
 ────────────────────────
 
 💳 *PAYMENT SUMMARY*
-- *Total Value :* ₹ ${grandTotal.toLocaleString('en-IN')}
-- *Shipping    :* Complimentary Insured Delivery (FREE)
-- *Net Payable :* *₹ ${grandTotal.toLocaleString('en-IN')}*
+- *Bag Value   :* ₹ ${subTotal.toLocaleString('en-IN')}
+${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
+- *Net Payable :* *₹ ${finalPayable.toLocaleString('en-IN')}*
 ────────────────────────
 
 ✨ *Assurance:* 100% Authentic Handcrafted Formulation
@@ -934,6 +946,33 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
 
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
+
+    // வாட்ஸ்அப் திறத்தல்
+    window.open(whatsappURL, '_blank');
+};
+
+// 5. கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Quota Increment Sync)
+    if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+        try {
+            let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
+            const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
+            
+            if (targetCoupon) {
+                targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
+                localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
+
+                if (window.dbClient) {
+                    await window.dbClient.from('site_content').upsert({
+                        key: 'marketing_coupons',
+                        value: JSON.stringify(coupons),
+                        updated_at: new Date()
+                    });
+                }
+            }
+        } catch (err) {
+            console.error("Coupon Quota Sync Error:", err);
+        }
+    }
 
     // ----------------------------------------------------------------------
     // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (AWAIT உடனான நேரடி பதிவு)
