@@ -859,10 +859,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ==========================================================================
-// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE CLOUD SYNC     ===
+// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & CLEAN CLOUD SYNC       ===
 // ==========================================================================
 
-window.submitWhatsAppOrder = async function() {
+window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
     const addressInput = document.getElementById('custAddress');
@@ -970,7 +970,7 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல் (Zero SyntaxError)
+    // கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல்
     if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
         try {
             let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
