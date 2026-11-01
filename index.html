@@ -1012,96 +1012,118 @@
 
 </div>
 
+    
     <!-- ===================================================== -->
-<!-- 3-2-1 FLASH POP-UP TRIGGER SCRIPT (FOR INDEX.HTML)    -->
+<!-- 3-2-1 FLASH POP-UP: SCROLL TRIGGER & AUTO-PREVIEW     -->
 <!-- ===================================================== -->
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-    let config = null;
+let hasFlashTriggered = false;
 
-    // 1. உள்ளூர் சேமிப்பகம் அல்லது Supabase-லிருந்து அமைப்புகளை எடுத்தல்
+async function getFlashModalConfig() {
+    let config = {
+        state: 'ACTIVE',
+        eyebrow: 'ROYAL PRIVILEGE ACCESS EXCLUSIVE',
+        headline: 'FESTIVE LUXURY OFFER: FLAT 10% OFF',
+        desc: 'Handcrafted luxury formulations. Claim exclusive code below.',
+        code: 'BLUESKIN10',
+        btnText: 'Claim Royal Privilege Now',
+        targetUrl: 'shop.html'
+    };
+
     try {
-        const localCfg = localStorage.getItem("BLUESKIN_FLASH_MODAL_CONFIG");
-        if (localCfg) config = JSON.parse(localCfg);
+        const local = localStorage.getItem("BLUESKIN_FLASH_MODAL_CONFIG");
+        if (local) Object.assign(config, JSON.parse(local));
     } catch(e) {}
 
     if (window.dbClient) {
         try {
             const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'flash_modal_config').single();
             if (data && data.value) {
-                config = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                const cloud = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                Object.assign(config, cloud);
             }
         } catch(err) {}
     }
 
-    // பாப்-அப் Active-ல் இல்லை என்றால் வெளியேறுதல்
-    if (!config || config.state !== 'ACTIVE') return;
+    return config;
+}
 
-    const delayTime = parseInt(config.delay) || 2000;
+async function trigger321FlashPopup() {
+    if (hasFlashTriggered) return;
+    hasFlashTriggered = true;
 
-    setTimeout(() => {
-        // ஏற்கெனவே மூடப்பட்டிருந்தால் மீண்டும் காட்டாதிருக்க
-        if (sessionStorage.getItem('blueskin_flash_seen')) return;
+    const config = await getFlashModalConfig();
+    if (config.state !== 'ACTIVE') return;
 
-        const modal = document.getElementById('frontFlashModal');
-        const ring = document.getElementById('frontCountdownRing');
-        const card = document.getElementById('frontFlashCard');
-        const num = document.getElementById('frontCountdownNum');
+    const modal = document.getElementById('frontFlashModal');
+    const ring = document.getElementById('frontCountdownRing');
+    const card = document.getElementById('frontFlashCard');
+    const num = document.getElementById('frontCountdownNum');
 
-        if (!modal) return;
+    if (!modal) return;
 
-        // அமைப்புகளை நிரப்புதல்
-        const elEyebrow = document.getElementById('frontFlashEyebrow');
-        const elHeadline = document.getElementById('frontFlashHeadline');
-        const elDesc = document.getElementById('frontFlashDesc');
-        const elCode = document.getElementById('frontFlashCode');
-        const elBtn = document.getElementById('frontFlashBtnLink');
+    // தகவல்களை நிரப்புதல்
+    if (document.getElementById('frontFlashEyebrow')) document.getElementById('frontFlashEyebrow').textContent = config.eyebrow;
+    if (document.getElementById('frontFlashHeadline')) document.getElementById('frontFlashHeadline').textContent = config.headline;
+    if (document.getElementById('frontFlashDesc')) document.getElementById('frontFlashDesc').textContent = config.desc;
+    if (document.getElementById('frontFlashCode')) document.getElementById('frontFlashCode').textContent = config.code;
+    
+    const btn = document.getElementById('frontFlashBtnLink');
+    if (btn) {
+        btn.textContent = config.btnText;
+        btn.href = config.targetUrl || 'shop.html';
+    }
 
-        if (elEyebrow) elEyebrow.textContent = config.eyebrow || 'ROYAL PRIVILEGE ACCESS EXCLUSIVE';
-        if (elHeadline) elHeadline.textContent = config.headline || 'FESTIVE LUXURY OFFER';
-        if (elDesc) elDesc.textContent = config.desc || 'Handcrafted luxury formulations.';
-        if (elCode) elCode.textContent = config.code || 'BLUESKIN10';
-        if (elBtn) {
-            elBtn.textContent = config.btnText || 'Claim Royal Privilege Now';
-            elBtn.href = config.targetUrl || 'shop.html';
+    // 3... 2... 1... கவுண்டவுன் திரையிடல்
+    modal.style.display = 'flex';
+    if (ring) ring.style.display = 'flex';
+    if (card) card.style.display = 'none';
+
+    let count = 3;
+    if (num) num.textContent = count;
+
+    const timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+            if (num) num.textContent = count;
+        } else {
+            clearInterval(timer);
+            if (ring) ring.style.display = 'none';
+            if (card) card.style.display = 'block';
         }
+    }, 850);
+}
 
-        modal.style.display = 'flex';
-        if (ring) ring.style.display = 'flex';
-        if (card) card.style.display = 'none';
+// பயனர் Reviews / Rating பகுதிக்கு அல்லது 50% கீழே ஸ்க்ரோல் செய்யும்போது இயங்கும் ட்ரிக்கர்
+window.addEventListener('scroll', () => {
+    if (hasFlashTriggered) return;
 
-        let count = 3;
-        if (num) num.textContent = count;
+    const scrollPos = window.scrollY + window.innerHeight;
+    const pageHeight = document.documentElement.scrollHeight;
 
-        const timer = setInterval(() => {
-            count--;
-            if (count > 0) {
-                if (num) num.textContent = count;
-            } else {
-                clearInterval(timer);
-                if (ring) ring.style.display = 'none';
-                if (card) card.style.display = 'block';
-            }
-        }, 850);
+    // பக்கத்தின் 50% தாண்டினாலோ அல்லது Reviews செக்ஷன் கண்ணில் பட்டாலோ ட்ரிக்கர் ஆகும்
+    const reviewSection = document.querySelector('.reviews-section, .testimonials-section, #reviews, #testimonials');
+    const isAtReviews = reviewSection && reviewSection.getBoundingClientRect().top < window.innerHeight;
 
-    }, delayTime);
+    if (isAtReviews || scrollPos > pageHeight * 0.5) {
+        trigger321FlashPopup();
+    }
 });
 
+// பாப்-அப் மூடுதல்
 window.closeFrontFlashModal = function() {
     const modal = document.getElementById('frontFlashModal');
     if (modal) modal.style.display = 'none';
-    sessionStorage.setItem('blueskin_flash_seen', 'true');
 };
 
+// கூப்பனை காப்பி செய்தல் (எந்தப் பக்க மாற்றமும் இன்றி அதே பக்கத்தில் இருக்கும்)
 window.copyFrontFlashCode = function() {
-    const code = document.getElementById('frontFlashCode')?.textContent || '';
-    if (code) {
-        navigator.clipboard.writeText(code).then(() => {
-            alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது!`);
-        });
-    }
+    const code = document.getElementById('frontFlashCode')?.textContent || 'BLUESKIN10';
+    navigator.clipboard.writeText(code).then(() => {
+        alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது! நீங்கள் ஷாப்பிங் செய்யும்போது இதைப் பயன்படுத்தலாம்.`);
+    });
 };
 </script>
-
+    
 </body>
 </html>
