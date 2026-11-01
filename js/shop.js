@@ -1010,32 +1010,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     // ----------------------------------------------------------------------
-    // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (AWAIT உடனான நேரடி பதிவு)
+    // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (Zero SyntaxError)
     // ----------------------------------------------------------------------
     const client = window.dbClient;
     if (client) {
-        try {
-            const { data, error } = await client.from('orders').insert([
-                {
-                    id: orderId,
-                    customer_name: name,
-                    customer_phone: phone,
-                    customer_address: address,
-                    items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
-                    total_amount: grandTotal,
-                    is_paid: false,
-                    order_status: 'Pending Verification'
-                }
-            ]);
-
-            if (error) {
-                console.error("Supabase Order DB Error:", error);
-            } else {
-                console.log("✅ ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
+        client.from('orders').insert([
+            {
+                id: orderId,
+                customer_name: name,
+                customer_phone: phone,
+                customer_address: address,
+                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
+                total_amount: typeof finalPayable !== 'undefined' ? finalPayable : grandTotal,
+                is_paid: false,
+                order_status: 'Pending Verification'
             }
-        } catch (dbErr) {
-            console.error("Supabase Connection Error:", dbErr);
-        }
+        ]).then(() => {
+            console.log("✅ ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
+        }).catch(err => {
+            console.error("Supabase Order DB Error:", err);
+        });
     }
 
     // ----------------------------------------------------------------------
@@ -1156,19 +1150,16 @@ window.copyFrontFlashCode = function() {
 };
 
 // ==========================================================================
-// === BLUE SKIN: CHECKOUT PROMO CODE ENGINE & REALTIME DISCOUNT CALC     ===
+// === 1. கூப்பன் சரிபார்ப்பு என்ஜின் (PROMO CODE ENGINE)                   ===
 // ==========================================================================
-
 let appliedPromoCode = "";
 let appliedPromoDiscount = 0;
 
-// 1. கூப்பன் சரிபார்ப்பு & தள்ளுபடி கணக்கீட்டு செயல்முறை
 window.applyCheckoutPromoCode = async function() {
     const input = document.getElementById('checkoutCouponInput');
     const notice = document.getElementById('couponAppliedNotice');
     const discRow = document.getElementById('couponDiscountRow');
     const discValEl = document.getElementById('couponDiscountVal');
-    const totalEl = document.getElementById('cartTotalPrice');
 
     if (!input || !notice) return;
 
@@ -1180,7 +1171,6 @@ window.applyCheckoutPromoCode = async function() {
         return;
     }
 
-    // A. கூப்பன் தரவுகளை எடுத்தல் (Local Cache & Supabase Cloud)
     let coupons = [];
     try {
         const local = localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA");
@@ -1196,7 +1186,6 @@ window.applyCheckoutPromoCode = async function() {
         } catch(err) {}
     }
 
-    // B. கூப்பன் உள்ளதா மற்றும் ACTIVE நிலையில் உள்ளதா எனப் பார்த்தல்
     const found = coupons.find(c => (c.code || '').toUpperCase() === code && c.status === "ACTIVE");
 
     if (!found) {
@@ -1210,16 +1199,13 @@ window.applyCheckoutPromoCode = async function() {
         return;
     }
 
-    // C. கார்ட்டின் தற்போதைய Bag Value கணக்கீடு
     let currentCart = [];
     try {
-        currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
-            ? cart 
-            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
     } catch(e) { currentCart = []; }
 
     const bagSubTotal = currentCart.reduce((sum, item) => {
-        const p = Number(item.price || item.finalPrice || 0);
+        const p = Number(item.price || item.finalPrice || item.originalPrice || 0);
         const q = Number(item.qty || 1);
         return sum + (p * q);
     }, 0);
@@ -1227,11 +1213,10 @@ window.applyCheckoutPromoCode = async function() {
     if (bagSubTotal === 0) {
         notice.style.display = "block";
         notice.style.color = "#ef4444";
-        notice.textContent = "⚠️ கூப்பனைப் பயன்படுத்த முதலில் கார்ட்டில் பொருட்களைச் சேர்க்கவும்!";
+        notice.textContent = "⚠️ கார்ட்டில் பொருட்களைச் சேர்த்த பின் கூப்பனைப் பயன்படுத்தவும்!";
         return;
     }
 
-    // D. குறைந்தபட்ச செலவு (Min Spend) சரிபார்த்தல்
     if (found.minSpend && bagSubTotal < Number(found.minSpend)) {
         appliedPromoCode = "";
         appliedPromoDiscount = 0;
@@ -1243,7 +1228,6 @@ window.applyCheckoutPromoCode = async function() {
         return;
     }
 
-    // E. தள்ளுபடி கணக்கீடு (Percentage / Flat / Free Shipping)
     let discount = 0;
     if (found.type === "PERCENTAGE") {
         discount = Math.round((bagSubTotal * Number(found.value || 0)) / 100);
@@ -1252,14 +1236,11 @@ window.applyCheckoutPromoCode = async function() {
         }
     } else if (found.type === "FLAT") {
         discount = Number(found.value || 0);
-    } else if (found.type === "FREE_SHIPPING") {
-        discount = 0; // தளம் ஏற்கெனவே Free Shipping என்பதால்
     }
 
     appliedPromoCode = code;
     appliedPromoDiscount = discount;
 
-    // F. திரையில் தள்ளுபடி தொகையைக் காட்டுதல்
     if (discRow && discValEl) {
         discRow.style.display = "flex";
         discValEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
@@ -1267,31 +1248,149 @@ window.applyCheckoutPromoCode = async function() {
 
     notice.style.display = "block";
     notice.style.color = "#22c55e";
-    notice.textContent = `🎉 கூப்பன் '${code}' வெற்றிகரமாக இணைக்கப்பட்டது! தள்ளுபடி: ₹${discount.toLocaleString('en-IN')}`;
+    notice.textContent = `🎉 கூப்பன் '${code}' அப்ளை செய்யப்பட்டது! தள்ளுபடி: ₹${discount.toLocaleString('en-IN')}`;
 
-    // G. Total Payable தொகையைக் கழித்துப் புதுப்பித்தல்
     recalculateCartTotalWithDiscount();
 };
 
-// 2. கூப்பன் தள்ளுபடியைக் கழித்து Total Payable தொகையை உடனுக்குடன் மாற்றும் செயல்முறை
 function recalculateCartTotalWithDiscount() {
     let currentCart = [];
     try {
-        currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
-            ? cart 
-            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
     } catch(e) { currentCart = []; }
 
     const bagSubTotal = currentCart.reduce((sum, item) => {
-        const p = Number(item.price || item.finalPrice || 0);
+        const p = Number(item.price || item.finalPrice || item.originalPrice || 0);
         const q = Number(item.qty || 1);
         return sum + (p * q);
     }, 0);
 
     const payable = Math.max(0, bagSubTotal - (appliedPromoDiscount || 0));
-
     const totalEl = document.getElementById('cartTotalPrice');
-    if (totalEl) {
-        totalEl.textContent = `₹${payable.toLocaleString('en-IN')}`;
-    }
+    if (totalEl) totalEl.textContent = `₹${payable.toLocaleString('en-IN')}`;
 }
+
+// ==========================================================================
+// === 2. வாட்ஸ்அப் ஆர்டர் & கிளவுட் பதிவு (ZERO SYNTAX ERROR)              ===
+// ==========================================================================
+window.submitWhatsAppOrder = function() {
+    const nameInput = document.getElementById('custName');
+    const phoneInput = document.getElementById('custPhone');
+    const addressInput = document.getElementById('custAddress');
+
+    if (!nameInput || !phoneInput || !addressInput) {
+        alert("படிவப் புலங்கள் கிடைக்கவில்லை. பக்கத்தை ரீலோட் செய்யவும்!");
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const address = addressInput.value.trim();
+
+    if (!name || !phone || phone.length < 10 || !address) {
+        alert("தயவுசெய்து உங்கள் பெயர், 10 இலக்க போன் எண், முகவரியைச் சரியாக உள்ளிடவும்!");
+        return;
+    }
+
+    let activeCart = [];
+    try {
+        activeCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) { activeCart = []; }
+
+    if (activeCart.length === 0) {
+        alert("உங்கள் கார்ட் காலியாக உள்ளது!");
+        return;
+    }
+
+    let orderItemsText = "";
+    let grandTotal = 0;
+
+    activeCart.forEach((item, index) => {
+        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
+        const itemQty = Number(item.qty || 1);
+        const itemTotal = itemPrice * itemQty;
+        grandTotal += itemTotal;
+        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
+    });
+
+    const subTotal = grandTotal;
+    let promoLine = "";
+    let finalPayable = subTotal;
+
+    if (appliedPromoDiscount > 0 && appliedPromoCode) {
+        finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
+        promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
+    }
+
+    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-IN');
+    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    const message = 
+`👑 *BLUE SKIN LUXURY BOUTIQUE*
+*Official Order Invoice*
+────────────────────────
+🧾 *Order Ref   :* #${orderId}
+📅 *Date & Time :* ${dateStr}, ${timeStr}
+────────────────────────
+
+👤 *CLIENT INFORMATION*
+- *Name     :* ${name}
+- *Phone    :* +91 ${phone}
+- *Address  :* ${address}
+
+🛍️ *ORDERED CREATIONS*
+────────────────────────
+${orderItemsText.trim()}
+────────────────────────
+
+💳 *PAYMENT SUMMARY*
+- *Bag Value   :* ₹ ${subTotal.toLocaleString('en-IN')}
+${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
+- *Net Payable :* *₹ ${finalPayable.toLocaleString('en-IN')}*
+────────────────────────
+
+✨ *Assurance:* 100% Authentic Handcrafted Formulation
+🚚 *Dispatch:* Priority Velvet Dispatch
+
+_தயவுசெய்து இந்த ஆர்டரை உறுதிசெய்து கட்டண விவரங்களை அனுப்பவும். நன்றி!_`;
+
+    // 1. ஆர்டரை Supabase-ல் பதிவு செய்தல் (.then() முறை - எரர் வராது)
+    if (window.dbClient) {
+        window.dbClient.from('orders').insert([{
+            id: orderId,
+            customer_name: name,
+            customer_phone: phone,
+            customer_address: address,
+            items_summary: orderItemsText.trim(),
+            total_amount: finalPayable,
+            is_paid: false,
+            order_status: 'Pending Verification'
+        }]).then(() => {
+            console.log("Order cloud sync success");
+        }).catch(err => {
+            console.error("Order sync error:", err);
+        });
+
+        // கூப்பன் கவுன்ட்டரை +1 கூட்டுதல்
+        if (appliedPromoCode) {
+            let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
+            const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
+            if (targetCoupon) {
+                targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
+                localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
+                window.dbClient.from('site_content').upsert({
+                    key: 'marketing_coupons',
+                    value: JSON.stringify(coupons),
+                    updated_at: new Date()
+                }).then(() => {}).catch(() => {});
+            }
+        }
+    }
+
+    // 2. வாட்ஸ்அப் திறத்தல்
+    const targetNumber = "919658399991";
+    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappURL, '_blank');
+};
