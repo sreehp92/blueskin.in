@@ -1,60 +1,71 @@
-/* =====================================================
-   BLUE SKIN COSMETICS - COMPLETE ENGINE WITH WISHLIST
-   ===================================================== */
+// ==========================================================================
+// === BLUE SKIN: 100% REALTIME CATALOG (ZERO DUMMY DATA)                 ===
+// ==========================================================================
 
-const CLIENT_WHATSAPP_NUMBER = "919658399991";
-
-// 1. ஆரம்ப நிலை / Backup தயாரிப்புகள் (const-க்கு பதிலா let)
+// 1. அசல் தயாரிப்புகள் மட்டுமே இருக்கும் பட்டியல் (No Dummy Data)
 let products = [];
 
-// =====================================================
-// 2. SUPABASE-லிருந்து லைவ் டேட்டா எடுக்கும் என்ஜின்
-// =====================================================
-async function fetchSupabaseProducts() {
+// 2. அட்மின் லோக்கல் மெமரியிலிருந்து உங்கள் 5 அசல் தயாரிப்புகளை உடனே எடுத்தல் (0ms Instant Load)
+function loadAdminMasterProducts() {
     try {
-        const client = window.dbClient;
-        if (!client) {
-            console.warn("Supabase client இன்னும் தயாராகவில்லை.");
-            return;
+        const localMaster = localStorage.getItem("BLUESKIN_PRODUCT_MASTER_DATA");
+        if (localMaster) {
+            const parsed = JSON.parse(localMaster);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+                products = parsed.map(p => ({
+                    id: p.id,
+                    name: p.title || p.name,
+                    category: p.category || '',
+                    subTitle: p.subtitle || p.subTitle || '',
+                    weight: p.weight || '',
+                    originalPrice: Number(p.mrp || p.original_price || p.originalPrice || 0),
+                    discountPercent: Number(p.discount || p.discount_percent || 0),
+                    image: p.imgUrl || (p.images && p.images[0]) || p.image || '',
+                    desc: p.desc || p.description || ''
+                }));
+                renderProducts(getActiveCategory());
+            }
         }
+    } catch(e) {
+        console.warn("Local storage product read error:", e);
+    }
+}
 
+// 3. சுபாபேஸ் கிளவுடிலிருந்து நேரலைத் தயாரிப்புகளை எடுத்தல்
+async function fetchSupabaseProducts() {
+    const client = window.dbClient;
+    if (!client) {
+        setTimeout(fetchSupabaseProducts, 400);
+        return;
+    }
+
+    try {
         const { data, error } = await client
             .from('products')
             .select('*')
             .order('id', { ascending: true });
 
-        if (error) {
-            console.warn("Supabase fetch error, fallback to initial items:", error);
-            return;
-        }
-
-        if (data && data.length > 0) {
+        if (!error && data && data.length > 0) {
             products = data.map(p => ({
                 id: p.id,
                 name: p.name,
-                category: p.category,
+                category: p.category || '',
                 subTitle: p.sub_title || p.subtitle || '',
                 weight: p.weight || '',
-                originalPrice: Number(p.original_price || p.originalPrice || 0),
-                discountPercent: Number(p.discount_percent || p.discountPercent || 0),
-                stock: p.stock || 10,
-                images: p.images && p.images.length > 0 ? p.images : [p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'],
-                image: (p.images && p.images[0]) ? p.images[0] : (p.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop'),
-                desc: p.description || p.desc || '',
-                howTo: p.how_to || p.howTo || ''
+                originalPrice: Number(p.original_price || p.mrp || 0),
+                discountPercent: Number(p.discount_percent || 0),
+                image: (p.images && p.images[0]) ? p.images[0] : (p.image || ''),
+                desc: p.description || ''
             }));
 
-            // 👇 மிக முக்கியம்: தயாரிப்புகளைத் திரையில் உடனே ஏற்றுதல்
-            if (typeof renderProducts === 'function') {
-                renderProducts('all');
-            }
+            renderProducts(getActiveCategory());
         }
-    } catch (err) {
+    } catch(err) {
         console.error("Fetch Supabase Error:", err);
     }
 }
 
-// Realtime Listener: அட்மினில் எடிட் செய்தால் ஷாப்பில் உடனே மாறும்
+// அட்மினில் தயாரிப்பு மாறினால் தானாக அப்டேட் ஆகும் Realtime Listener
 if (window.dbClient) {
     window.dbClient
         .channel('public:products')
@@ -64,21 +75,21 @@ if (window.dbClient) {
         .subscribe();
 }
 
-// பேஜ் திறந்ததும் அழைத்தல்
-window.addEventListener('load', () => {
-    fetchSupabaseProducts();
-});
+// பேஜ் திறந்ததும் அட்மின் தயாரிப்புகளை ஏற்றுதல்
+loadAdminMasterProducts();
+window.addEventListener('load', fetchSupabaseProducts);
 document.addEventListener('DOMContentLoaded', () => {
+    loadAdminMasterProducts();
     fetchSupabaseProducts();
 });
-// 4. பேஜ் லோட் ஆனதும் டேட்டாபேஸை அழைக்க
-document.addEventListener('DOMContentLoaded', () => {
-    fetchSupabaseProducts();
-});
+
 function getDiscountedPrice(item) {
-    if (!item.discountPercent || item.discountPercent <= 0) return item.originalPrice;
-    const discountAmount = Math.round((item.originalPrice * item.discountPercent) / 100);
-    return item.originalPrice - discountAmount;
+    if (!item) return 0;
+    const orig = Number(item.originalPrice || item.mrp || item.price || 0);
+    const disc = Number(item.discountPercent || item.discount || 0);
+    if (!disc || disc <= 0) return orig;
+    const discountAmount = Math.round((orig * disc) / 100);
+    return orig - discountAmount;
 }
 
 const sampleGalleryImages = [
@@ -135,10 +146,15 @@ if (catScrollRight && catTrack) {
     catScrollRight.onclick = function() { catTrack.scrollBy({ left: 250, behavior: 'smooth' }); };
 }
 
-// 2. Category Selection
+// 2. Category Selection (கேட்டகிரி பில் கிளிக்)
 window.selectCategory = function(catName, clickedElement) {
     document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
-    if (clickedElement) clickedElement.classList.add('active');
+    if (clickedElement) {
+        clickedElement.classList.add('active');
+    } else {
+        const match = document.querySelector(`.cat-item[data-category="${catName}"]`);
+        if (match) match.classList.add('active');
+    }
     renderProducts(catName);
 };
 
@@ -157,21 +173,22 @@ function getActiveCategory() {
 
 // 3. Product Card Template with Wishlist Heart
 function createProductCardElement(prod) {
-    const cartItem = cart.find(i => i.id === prod.id);
+    const cartItem = cart.find(i => String(i.id) === String(prod.id));
     const isWishlisted = wishlist.includes(prod.id);
     const card = document.createElement('div');
     card.className = 'shop-prod-card';
 
     const finalPrice = getDiscountedPrice(prod);
+    const hasDiscount = Number(prod.discountPercent) > 0;
 
     const actionHtml = (cartItem && cartItem.qty > 0) ? `
         <div class="card-inline-counter">
-            <button class="inline-btn" onclick="updateInCardQty(${prod.id}, -1)">-</button>
+            <button class="inline-btn" type="button" onclick="updateInCardQty('${prod.id}', -1)">-</button>
             <span class="inline-val">${cartItem.qty}</span>
-            <button class="inline-btn" onclick="updateInCardQty(${prod.id}, 1)">+</button>
+            <button class="inline-btn" type="button" onclick="updateInCardQty('${prod.id}', 1)">+</button>
         </div>
     ` : `
-        <button class="btn-card-add" onclick="updateInCardQty(${prod.id}, 1)">
+        <button class="btn-card-add" type="button" onclick="updateInCardQty('${prod.id}', 1)">
             <i class="fa-solid fa-bag-shopping"></i> Add to Cart
         </button>
     `;
@@ -181,25 +198,25 @@ function createProductCardElement(prod) {
             <div class="shop-prod-img-box">
                 <!-- Floating Wishlist Heart -->
                 <button class="card-wishlist-toggle ${isWishlisted ? 'active' : ''}" 
-                        onclick="toggleWishlist(${prod.id}, event)" 
+                        onclick="toggleWishlist('${prod.id}', event)" 
                         title="${isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}">
                     <i class="${isWishlisted ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
                 </button>
 
-                <img src="${prod.image}" alt="${prod.name}" onclick="openFullProductPage(${prod.id})">
+                <img src="${prod.image}" alt="${prod.name}" onclick="openFullProductPage('${prod.id}')">
                 <span class="shop-prod-tag">${prod.category}</span>
-                <span class="discount-badge-pill">-${prod.discountPercent}% OFF</span>
+                ${hasDiscount ? `<span class="discount-badge-pill">-${prod.discountPercent}% OFF</span>` : ''}
             </div>
             <div class="shop-prod-info">
-                <h3 class="shop-prod-title" onclick="openFullProductPage(${prod.id})">${prod.name}</h3>
+                <h3 class="shop-prod-title" onclick="openFullProductPage('${prod.id}')">${prod.name}</h3>
                 <div class="shop-price-block">
-                    <span class="mrp-strikethrough">₹ ${prod.originalPrice.toLocaleString('en-IN')}</span>
+                    ${hasDiscount ? `<span class="mrp-strikethrough">₹ ${Number(prod.originalPrice).toLocaleString('en-IN')}</span>` : ''}
                     <span class="discounted-final-price">₹ ${finalPrice.toLocaleString('en-IN')}</span>
                 </div>
             </div>
         </div>
         <div class="shop-card-actions">
-            <button class="btn-card-view" onclick="openFullProductPage(${prod.id})">Details</button>
+            <button class="btn-card-view" type="button" onclick="openFullProductPage('${prod.id}')">Details</button>
             <div class="card-action-slot">
                 ${actionHtml}
             </div>
@@ -208,30 +225,41 @@ function createProductCardElement(prod) {
     return card;
 }
 
-// 4. Render Catalog Grid
+// 4. Render Catalog Grid (கேட்டகிரி பொருந்தக்கூடிய தன்மையுடன்)
 window.renderProducts = function(filterCategory = 'all') {
-    if (!productsCatalog) return;
-    productsCatalog.innerHTML = '';
+    const catalog = document.getElementById('productsCatalog');
+    if (!catalog) return;
+    catalog.innerHTML = '';
 
-    const filtered = (filterCategory === 'all')
+    const targetCat = (filterCategory || 'all').toLowerCase().trim();
+
+    // 'face' என்று கிளிக் செய்தால் 'Face Products'-ம், 'all' என்றால் அனைத்தும் வரும்
+    const filtered = (targetCat === 'all')
         ? products
-        : products.filter(p => p.category.toLowerCase() === filterCategory.toLowerCase());
+        : products.filter(p => {
+            const pCat = (p.category || '').toLowerCase().trim();
+            return pCat.includes(targetCat) || targetCat.includes(pCat);
+        });
 
     if (currentCategoryHeading) {
-        currentCategoryHeading.textContent = (filterCategory === 'all')
+        currentCategoryHeading.textContent = (targetCat === 'all')
             ? 'All Luxury Collections'
-            : `${filterCategory.toUpperCase()} Collection`;
+            : `${targetCat.toUpperCase()} Collection`;
     }
 
     if (productCounterText) {
         productCounterText.textContent = `Showing ${filtered.length} pieces`;
     }
 
+    if (filtered.length === 0) {
+        catalog.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #94a3b8; font-size: 0.9rem;">இந்தத் தொகுப்பில் தயாரிப்புகள் எதுவும் இல்லை.</div>`;
+        return;
+    }
+
     filtered.forEach(prod => {
-        productsCatalog.appendChild(createProductCardElement(prod));
+        catalog.appendChild(createProductCardElement(prod));
     });
 };
-
 // 5. In-Card Quantity Operations
 window.updateInCardQty = function(productId, delta) {
     const prod = products.find(p => p.id === productId);
