@@ -998,3 +998,85 @@ _தயவுசெய்து இந்த ஆர்டரை உறுதி�
     // 7. ஆர்டர் பதிவான பிறகு வாட்ஸ்அப்பைத் திறத்தல்
     window.location.href = whatsappURL;
 };
+
+// =====================================================
+// FRONT PAGE AUTO 3-2-1 FLASH POP-UP TRIGGER
+// =====================================================
+document.addEventListener('DOMContentLoaded', async () => {
+    let config = null;
+
+    // 1. உள்ளூர் சேமிப்பகம் அல்லது Supabase-லிருந்து அமைப்புகளை எடுத்தல்
+    try {
+        const localCfg = localStorage.getItem("BLUESKIN_FLASH_MODAL_CONFIG");
+        if (localCfg) config = JSON.parse(localCfg);
+    } catch(e) {}
+
+    // கிளவுட் கிளையண்ட் இருந்தால் நேரடியாக எடுத்தல்
+    if (window.dbClient) {
+        try {
+            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'flash_modal_config').single();
+            if (data && data.value) {
+                config = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            }
+        } catch(err) {}
+    }
+
+    if (!config || config.state !== 'ACTIVE') return;
+
+    // 2. குறிப்பிட்ட விநாடிகளுக்குப் பின் பாப்-அப் திறத்தல்
+    const delayTime = parseInt(config.delay) || 2000;
+
+    setTimeout(() => {
+        // ஏற்கெனவே மூடப்பட்டிருந்தால் மீண்டும் காட்டாதிருக்க (Session Check)
+        if (sessionStorage.getItem('blueskin_flash_seen')) return;
+
+        const modal = document.getElementById('frontFlashModal');
+        const ring = document.getElementById('frontCountdownRing');
+        const card = document.getElementById('frontFlashCard');
+        const num = document.getElementById('frontCountdownNum');
+
+        if (!modal) return;
+
+        // தகவல்களை நிரப்புதல்
+        document.getElementById('frontFlashEyebrow').textContent = config.eyebrow || 'EXCLUSIVE PRIVILEGE';
+        document.getElementById('frontFlashHeadline').textContent = config.headline || 'LUXURY STORE OFFER';
+        document.getElementById('frontFlashDesc').textContent = config.desc || '';
+        document.getElementById('frontFlashCode').textContent = config.code || 'BLUESKIN10';
+        document.getElementById('frontFlashBtnLink').textContent = config.btnText || 'Shop Collection';
+        document.getElementById('frontFlashBtnLink').href = config.targetUrl || 'shop.html';
+
+        modal.style.display = 'flex';
+        ring.style.display = 'flex';
+        card.style.display = 'none';
+
+        let count = 3;
+        num.textContent = count;
+
+        const timer = setInterval(() => {
+            count--;
+            if (count > 0) {
+                num.textContent = count;
+            } else {
+                clearInterval(timer);
+                ring.style.display = 'none';
+                card.style.display = 'block';
+            }
+        }, 850);
+
+    }, delayTime);
+});
+
+window.closeFrontFlashModal = function() {
+    const modal = document.getElementById('frontFlashModal');
+    if (modal) modal.style.display = 'none';
+    sessionStorage.setItem('blueskin_flash_seen', 'true');
+};
+
+window.copyFrontFlashCode = function() {
+    const code = document.getElementById('frontFlashCode')?.textContent || '';
+    if (code) {
+        navigator.clipboard.writeText(code).then(() => {
+            alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது! செக்-அவுட்டில் பயன்படுத்தலாம்.`);
+        });
+    }
+};
