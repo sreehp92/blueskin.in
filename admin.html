@@ -266,10 +266,10 @@
             <!-- [MODULE 1] PANE 1: OVERVIEW & STATS — END                       -->
             <!-- --------------------------------------------------------------- -->
 
-            <!-- --------------------------------------------------------------- -->
+           <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 2] PANE 2: ORDERS & VERIFY DESK — START                 -->
             <!-- --------------------------------------------------------------- -->
-            <section class="workspace-pane" id="pane-orders" style="display: none;">
+            <section class="workspace-pane" id="pane-orders" style="display: none; width: 100%; box-sizing: border-box;">
                 
                 <!-- INTEGRATED TITLE & CONTROL BAR -->
                 <div class="deck-integrated-header">
@@ -290,60 +290,76 @@
                     </div>
                 </div>
 
-                <!-- 1. ORDERS TOP MINI KPI METRICS STRIP -->
-                <div class="orders-mini-kpi-grid">
-                    <div class="orders-kpi-card anim-pop">
-                        <span class="orders-kpi-lbl">TOTAL ACTIVE ORDERS</span>
-                        <div class="orders-kpi-val" id="kpiTotalOrders">4</div>
+                <!-- 1. ORDERS TOP MINI KPI METRICS STRIP (ஒரே நேர்கோட்டில் 5 பாக்ஸ்கள்) -->
+                <div class="orders-mini-kpi-grid" style="display: grid !important; grid-template-columns: repeat(5, minmax(0, 1fr)) !important; gap: 0.65rem !important; margin-bottom: 0.95rem !important; width: 100% !important; box-sizing: border-box !important;">
+                    
+                    <!-- 1. Total Orders -->
+                    <div class="orders-kpi-card anim-pop" style="margin: 0 !important; padding: 0.75rem 0.9rem !important;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.63rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">TOTAL ACTIVE ORDERS</span>
+                        <div class="orders-kpi-val" id="kpiTotalOrders" style="font-size: 1.2rem !important; margin: 3px 0 !important;">0</div>
+                        <small class="kpi-click-hint" style="font-size: 0.63rem !important; color: var(--text-dim) !important;">Live Pipeline</small>
                     </div>
-                    <div class="orders-kpi-card border-amber anim-pop pending-glow-card">
-                        <span class="orders-kpi-lbl">WAITING PAYMENT VERIFY</span>
-                        <div class="orders-kpi-val text-amber" id="kpiNeedVerify">2</div>
+
+                    <!-- 2. Waiting Payment -->
+                    <div class="orders-kpi-card border-amber anim-pop pending-glow-card" style="margin: 0 !important; padding: 0.75rem 0.9rem !important;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.63rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">WAITING PAYMENT VERIFY</span>
+                        <div class="orders-kpi-val text-amber" id="kpiNeedVerify" style="font-size: 1.2rem !important; margin: 3px 0 !important;">0</div>
+                        <small class="kpi-click-hint" style="font-size: 0.63rem !important; color: #f59e0b !important;">Action Required</small>
                     </div>
-                    <div class="orders-kpi-card border-blue anim-pop">
-                        <span class="orders-kpi-lbl">IN PROCESS & PACKING</span>
-                        <div class="orders-kpi-val text-blue" id="kpiPackedReady">1</div>
+
+                    <!-- 3. In Process & Packing -->
+                    <div class="orders-kpi-card border-blue anim-pop" style="margin: 0 !important; padding: 0.75rem 0.9rem !important;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.63rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">IN PROCESS & PACKING</span>
+                        <div class="orders-kpi-val text-blue" id="kpiPackedReady" style="font-size: 1.2rem !important; margin: 3px 0 !important;">0</div>
+                        <small class="kpi-click-hint" style="font-size: 0.63rem !important; color: #38bdf8 !important;">Ready for Dispatch</small>
                     </div>
-                    <div class="orders-kpi-card border-purple anim-pop">
-                        <span class="orders-kpi-lbl">OUT FOR DELIVERY</span>
-                        <div class="orders-kpi-val text-purple" id="kpiDispatchedToday">1</div>
+
+                    <!-- 4. Out for Delivery -->
+                    <div class="orders-kpi-card border-purple anim-pop" style="margin: 0 !important; padding: 0.75rem 0.9rem !important;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.63rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">OUT FOR DELIVERY</span>
+                        <div class="orders-kpi-val text-purple" id="kpiDispatchedToday" style="font-size: 1.2rem !important; margin: 3px 0 !important;">0</div>
+                        <small class="kpi-click-hint" style="font-size: 0.63rem !important; color: #c084fc !important;">In Transit</small>
                     </div>
-                    <div class="orders-kpi-card border-green anim-pop">
-                        <span class="orders-kpi-lbl">DELIVERED SUCCESS</span>
-                        <div class="orders-kpi-val text-green" id="kpiDeliveredTotal">0</div>
+
+                    <!-- 5. Delivered Success -->
+                    <div class="orders-kpi-card border-green anim-pop" style="margin: 0 !important; padding: 0.75rem 0.9rem !important;">
+                        <span class="orders-kpi-lbl" style="font-size: 0.63rem !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;">DELIVERED SUCCESS</span>
+                        <div class="orders-kpi-val text-green" id="kpiDeliveredTotal" style="font-size: 1.2rem !important; margin: 3px 0 !important;">0</div>
+                        <small class="kpi-click-hint" style="font-size: 0.63rem !important; color: #22c55e !important;">Completed Orders</small>
                     </div>
+
                 </div>
 
                 <!-- 2. SEARCH & WORKFLOW FILTER STRIP -->
-                <div class="orders-cockpit-banner anim-slide-down">
-                    <div class="orders-workflow-filter-strip">
-                        <button type="button" class="btn-filter-pill active" onclick="filterByStatus('ALL', this)">All (<span id="countAll">4</span>)</button>
-                        <button type="button" class="btn-filter-pill pill-alert-pending" onclick="filterByStatus('PENDING', this)">Pending (<span id="countPending">2</span>)</button>
+                <div class="orders-cockpit-banner anim-slide-down" style="display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; flex-wrap: wrap; margin-bottom: 0.95rem;">
+                    <div class="orders-workflow-filter-strip" style="display: flex; gap: 0.45rem; flex-wrap: wrap; margin: 0;">
+                        <button type="button" class="btn-filter-pill active" onclick="filterByStatus('ALL', this)">All (<span id="countAll">0</span>)</button>
+                        <button type="button" class="btn-filter-pill pill-alert-pending" onclick="filterByStatus('PENDING', this)">Pending (<span id="countPending">0</span>)</button>
                         <button type="button" class="btn-filter-pill" onclick="filterByStatus('PAYMENT_RECEIVED', this)">Payment Received (<span id="countPayment">0</span>)</button>
-                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('PROCESSING', this)">Processing (<span id="countProcessing">1</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('PROCESSING', this)">Processing (<span id="countProcessing">0</span>)</button>
                         <button type="button" class="btn-filter-pill" onclick="filterByStatus('PACKED', this)">Packed (<span id="countPacked">0</span>)</button>
-                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('DISPATCHED', this)">Dispatched (<span id="countDispatched">1</span>)</button>
+                        <button type="button" class="btn-filter-pill" onclick="filterByStatus('DISPATCHED', this)">Dispatched (<span id="countDispatched">0</span>)</button>
                         <button type="button" class="btn-filter-pill" onclick="filterByStatus('DELIVERED', this)">Delivered (<span id="countDelivered">0</span>)</button>
                     </div>
 
-                    <div class="cockpit-search-input-box">
+                    <div class="cockpit-search-input-box" style="position: relative; width: 260px;">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="orderSearchInput" placeholder="Search Order ID, Client Name..." oninput="filterOrdersTable()">
                         <button type="button" class="btn-clear-search" onclick="clearOrderSearch()">&times;</button>
                     </div>
                 </div>
 
-                <!-- 3. ZERO-SCROLL ORDERS TABLE -->
-                <div class="orders-table-card anim-fade-up">
-                    <table class="enterprise-orders-table">
+                <!-- 3. ZERO-SCROLL 100% FULL-WIDTH ORDERS TABLE -->
+                <div class="orders-table-card anim-fade-up" style="width: 100%; box-sizing: border-box; overflow-x: auto;">
+                    <table class="enterprise-orders-table" style="width: 100% !important; min-width: 1000px !important; table-layout: fixed !important; border-collapse: collapse !important;">
                         <thead>
-                            <tr>
-                                <th style="width: 14%;">DATE / TIME</th>
-                                <th style="width: 15%;">ORDER ID</th>
-                                <th style="width: 25%;">CLIENT NAME</th>
-                                <th style="width: 14%;">NET (₹)</th>
-                                <th style="width: 18%;">STATUS</th>
-                                <th style="width: 14%; text-align: right;">ACTIONS</th>
+                            <tr style="border-bottom: 1.5px solid var(--card-border); background: rgba(255, 255, 255, 0.02);">
+                                <th style="width: 16%; padding: 0.95rem 1rem;">DATE / TIME</th>
+                                <th style="width: 16%; padding: 0.95rem 1rem;">ORDER ID</th>
+                                <th style="width: 26%; padding: 0.95rem 1rem;">CLIENT NAME</th>
+                                <th style="width: 14%; padding: 0.95rem 1rem;">NET (₹)</th>
+                                <th style="width: 16%; padding: 0.95rem 1rem;">STATUS</th>
+                                <th style="width: 12%; padding: 0.95rem 1rem; text-align: right;">ACTIONS</th>
                             </tr>
                         </thead>
                         <tbody id="ordersTableBody">
@@ -357,7 +373,7 @@
             <!-- [MODULE 2] PANE 2: ORDERS & VERIFY DESK — END                   -->
             <!-- --------------------------------------------------------------- -->
 
-
+            
            <!-- --------------------------------------------------------------- -->
             <!-- [MODULE 3] PANE 3: WAREHOUSE & STOCK INVENTORY DESK — START     -->
             <!-- --------------------------------------------------------------- -->
