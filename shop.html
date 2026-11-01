@@ -408,6 +408,34 @@
                         <span class="text-gold-free" style="color: #f5c443; font-weight: 700;">FREE</span>
                     </div>
 
+                    <!-- 👇 1. இங்கே தான் கூப்பன் பாக்ஸை வைக்க வேண்டும்: -->
+                    <div class="checkout-coupon-container" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(245, 196, 67, 0.25); border-radius: 8px; padding: 0.85rem; margin: 0.8rem 0;">
+                        <label style="font-size: 0.72rem; color: #94a3b8; display: block; margin-bottom: 0.4rem; font-weight: 700; letter-spacing: 0.5px;">HAVE A PROMO CODE?</label>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input 
+                                type="text" 
+                                id="checkoutCouponInput" 
+                                placeholder="e.g. BLUESKIN10" 
+                                autocomplete="off"
+                                style="flex: 1; height: 38px; background: #071224; border: 1px solid rgba(245, 196, 67, 0.3); border-radius: 6px; padding: 0 0.8rem; color: #f5c443; font-weight: 800; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; outline: none;"
+                            >
+                            <button 
+                                type="button" 
+                                onclick="applyCheckoutPromoCode()" 
+                                style="height: 38px; padding: 0 1.2rem; background: #f5c443; color: #040913; border: none; border-radius: 6px; font-weight: 800; font-size: 0.75rem; cursor: pointer;"
+                            >
+                                APPLY
+                            </button>
+                        </div>
+                        <div id="couponAppliedNotice" style="display: none; margin-top: 0.5rem; font-size: 0.72rem; font-weight: 700;"></div>
+                    </div>
+
+                    <!-- 👇 2. கூப்பன் அப்ளை ஆனதும் தள்ளுபடி தொகையைக் காட்டும் வரி: -->
+                    <div class="invoice-row" id="couponDiscountRow" style="display: none; justify-content: space-between; color: #22c55e; font-weight: 700;">
+                        <span>Coupon Discount</span>
+                        <span id="couponDiscountVal">-₹0</span>
+                    </div>
+
                     <div class="invoice-divider" style="height: 1px; background: rgba(245, 196, 67, 0.25); margin: 0.6rem 0;"></div>
 
                     <div class="invoice-row total-highlight-row" style="display: flex; justify-content: space-between; align-items: center;">
