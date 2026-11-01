@@ -2143,3 +2143,22 @@ body {
 #pane-products .enterprise-orders-table th:first-child {
     width: 30% !important;
 }
+/* ======================================================================= */
+/* GLOBAL 5-KPI SINGLE HORIZONTAL LINE BELT FOR ALL PANES                  */
+/* ======================================================================= */
+.orders-mini-kpi-grid {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin-bottom: 0.95rem !important;
+}
+
+.orders-mini-kpi-grid .orders-kpi-card {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
