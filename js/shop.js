@@ -260,19 +260,34 @@ window.renderProducts = function(filterCategory = 'all') {
         catalog.appendChild(createProductCardElement(prod));
     });
 };
-// 5. In-Card Quantity Operations
+
+
+// 5. In-Card Quantity Operations (ID Type-Mismatch Fix)
 window.updateInCardQty = function(productId, delta) {
-    const prod = products.find(p => p.id === productId);
+    if (!products || products.length === 0) return;
+
+    // String & Number இரண்டையும் ஏற்கும் வகையிலான தேடல்
+    const prod = products.find(p => String(p.id) === String(productId));
     if (!prod) return;
 
     const finalPrice = getDiscountedPrice(prod);
-    let existing = cart.find(i => i.id === productId);
+    let existing = cart.find(i => String(i.id) === String(productId));
 
     if (existing) {
         existing.qty += delta;
-        if (existing.qty <= 0) cart = cart.filter(i => i.id !== productId);
+        if (existing.qty <= 0) {
+            cart = cart.filter(i => String(i.id) !== String(productId));
+        }
     } else if (delta > 0) {
-        cart.push({ ...prod, price: finalPrice, qty: 1 });
+        cart.push({
+            id: prod.id,
+            name: prod.name,
+            category: prod.category,
+            price: finalPrice,
+            originalPrice: prod.originalPrice,
+            image: prod.image,
+            qty: 1
+        });
     }
 
     saveCart();
@@ -293,8 +308,9 @@ function saveCart() {
 window.toggleWishlist = function(productId, event) {
     if (event) event.stopPropagation();
 
-    if (wishlist.includes(productId)) {
-        wishlist = wishlist.filter(id => id !== productId);
+    const strId = String(productId);
+    if (wishlist.some(id => String(id) === strId)) {
+        wishlist = wishlist.filter(id => String(id) !== strId);
     } else {
         wishlist.push(productId);
     }
@@ -303,7 +319,7 @@ window.toggleWishlist = function(productId, event) {
     updateWishlistUI();
     renderProducts(getActiveCategory());
 
-    if (activeViewingProductId === productId) {
+    if (activeViewingProductId && String(activeViewingProductId) === strId) {
         syncFullPageWishlistButton(productId);
     }
 };
@@ -335,7 +351,7 @@ function updateWishlistUI() {
     } else {
         wishlistItemsList.innerHTML = '';
         wishlist.forEach(id => {
-            const prod = products.find(p => p.id === id);
+            const prod = products.find(p => String(p.id) === String(id));
             if (!prod) return;
 
             const finalPrice = getDiscountedPrice(prod);
@@ -348,11 +364,11 @@ function updateWishlistUI() {
                 <div class="wishlist-item-details">
                     <h4 class="wishlist-item-title">${prod.name}</h4>
                     <div class="wishlist-item-price">₹ ${finalPrice.toLocaleString('en-IN')}</div>
-                    <button class="btn-move-to-bag" onclick="moveWishlistToCart(${prod.id})">
+                    <button class="btn-move-to-bag" onclick="moveWishlistToCart('${prod.id}')">
                         <i class="fa-solid fa-bag-shopping"></i> Move to Bag
                     </button>
                 </div>
-                <button class="btn-remove-wishlist" onclick="toggleWishlist(${prod.id})" title="Remove">
+                <button class="btn-remove-wishlist" onclick="toggleWishlist('${prod.id}')" title="Remove">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
             `;
@@ -382,9 +398,11 @@ if (openWishlistBtn) openWishlistBtn.onclick = function() { toggleWishlistDrawer
 if (closeWishlistBtn) closeWishlistBtn.onclick = function() { toggleWishlistDrawer(false); };
 if (wishlistOverlay) wishlistOverlay.onclick = function() { toggleWishlistDrawer(false); };
 
-// 7. Full Page View Logic
+// 7. Full Page View Logic (Safe Rendering & Clean Mobile Support)
 window.openFullProductPage = function(productId) {
-    const prod = products.find(p => p.id === productId) || products[0];
+    const prod = products.find(p => String(p.id) === String(productId)) || products[0];
+    if (!prod) return;
+
     activeViewingProductId = prod.id;
 
     if (shopMainCatalogView) shopMainCatalogView.style.display = 'none';
@@ -392,18 +410,25 @@ window.openFullProductPage = function(productId) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     const finalPrice = getDiscountedPrice(prod);
-    const savings = prod.originalPrice - finalPrice;
+    const origPrice = Number(prod.originalPrice || 0);
+    const savings = Math.max(0, origPrice - finalPrice);
+    const catName = (prod.category || 'Luxury').toUpperCase();
 
-    document.getElementById('fullBreadCategory').textContent = prod.category.toUpperCase();
-    document.getElementById('fullBreadTitle').textContent = prod.name;
-    document.getElementById('detailCategoryBadge').textContent = `${prod.category.toUpperCase()} COLLECTION`;
-    document.getElementById('detailTitle').textContent = prod.name;
-    document.getElementById('detailSubTitle').textContent = prod.subTitle;
-    document.getElementById('detailOriginalPrice').textContent = `₹ ${prod.originalPrice.toLocaleString('en-IN')}`;
-    document.getElementById('detailDiscountPercent').textContent = `${prod.discountPercent}% OFF`;
-    document.getElementById('detailPrice').textContent = `₹ ${finalPrice.toLocaleString('en-IN')}`;
-    document.getElementById('detailYouSave').textContent = `You Save: ₹ ${savings.toLocaleString('en-IN')}`;
-    document.getElementById('detailDescText').textContent = prod.desc;
+    const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val;
+    };
+
+    setTxt('fullBreadCategory', catName);
+    setTxt('fullBreadTitle', prod.name);
+    setTxt('detailCategoryBadge', `${catName} COLLECTION`);
+    setTxt('detailTitle', prod.name);
+    setTxt('detailSubTitle', prod.subTitle || '');
+    setTxt('detailOriginalPrice', `₹ ${origPrice.toLocaleString('en-IN')}`);
+    setTxt('detailDiscountPercent', `${prod.discountPercent || 0}% OFF`);
+    setTxt('detailPrice', `₹ ${finalPrice.toLocaleString('en-IN')}`);
+    setTxt('detailYouSave', `You Save: ₹ ${savings.toLocaleString('en-IN')}`);
+    setTxt('detailDescText', prod.desc || 'Handcrafted luxury formulation.');
 
     const mainImg = document.getElementById('detailMainImg');
     if (mainImg) mainImg.src = prod.image;
@@ -411,7 +436,7 @@ window.openFullProductPage = function(productId) {
     const thumbRow = document.getElementById('thumbGalleryRow');
     if (thumbRow) {
         thumbRow.innerHTML = '';
-        const gallery = [prod.image, ...sampleGalleryImages.slice(1, 4)];
+        const gallery = [prod.image, ...(Array.isArray(prod.images) && prod.images.length > 1 ? prod.images.slice(1, 4) : sampleGalleryImages.slice(1, 4))];
         gallery.forEach((imgUrl, idx) => {
             const thumb = document.createElement('div');
             thumb.className = `thumb-item ${idx === 0 ? 'active' : ''}`;
@@ -427,14 +452,16 @@ window.openFullProductPage = function(productId) {
 
     updateFullPageActionSlot(prod.id);
     syncFullPageWishlistButton(prod.id);
-    toggleAccordion('accItemDesc');
+    if (typeof toggleAccordion === 'function') {
+        toggleAccordion('accItemDesc');
+    }
     renderFullPageRecommended(prod.id);
 };
 
 function syncFullPageWishlistButton(productId) {
     const btn = document.getElementById('fullWishlistActionBtn');
     if (!btn) return;
-    const isWishlisted = wishlist.includes(productId);
+    const isWishlisted = wishlist.some(id => String(id) === String(productId));
 
     if (isWishlisted) {
         btn.classList.add('active');
@@ -450,7 +477,7 @@ function renderFullPageRecommended(currentProdId) {
     const recShelf = document.getElementById('fullPageRecommendedRow');
     if (recShelf) {
         recShelf.innerHTML = '';
-        const recs = products.filter(p => p.id !== currentProdId).slice(0, 4);
+        const recs = products.filter(p => String(p.id) !== String(currentProdId)).slice(0, 4);
         recs.forEach(r => {
             recShelf.appendChild(createProductCardElement(r));
         });
@@ -468,19 +495,19 @@ window.closeFullProductPage = function() {
 function updateFullPageActionSlot(productId) {
     const slot = document.getElementById('fullPageActionSlot');
     if (!slot) return;
-    const cartItem = cart.find(i => i.id === productId);
+    const cartItem = cart.find(i => String(i.id) === String(productId));
 
     if (cartItem && cartItem.qty > 0) {
         slot.innerHTML = `
             <div class="card-inline-counter" style="min-width: 140px; padding: 0.5rem 1rem;">
-                <button class="inline-btn" style="font-size: 1.2rem;" onclick="updateInCardQty(${productId}, -1)">-</button>
+                <button class="inline-btn" style="font-size: 1.2rem;" onclick="updateInCardQty('${productId}', -1)">-</button>
                 <span class="inline-val" style="font-size: 1rem;">${cartItem.qty} in Bag</span>
-                <button class="inline-btn" style="font-size: 1.2rem;" onclick="updateInCardQty(${productId}, 1)">+</button>
+                <button class="inline-btn" style="font-size: 1.2rem;" onclick="updateInCardQty('${productId}', 1)">+</button>
             </div>
         `;
     } else {
         slot.innerHTML = `
-            <button class="btn-card-add" style="padding: 0.75rem 2rem; font-size: 0.85rem;" onclick="updateInCardQty(${productId}, 1)">
+            <button class="btn-card-add" style="padding: 0.75rem 2rem; font-size: 0.85rem;" onclick="updateInCardQty('${productId}', 1)">
                 <i class="fa-solid fa-bag-shopping"></i> Add to Bag
             </button>
         `;
