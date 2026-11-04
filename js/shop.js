@@ -886,16 +886,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ==========================================================================
-// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE SYNC (CLEAN) ===
+// === 2. WHATSAPP ORDER, INSTANT CART CLEAR & REDIRECT TO HOME           ===
 // ==========================================================================
-
 window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
     const addressInput = document.getElementById('custAddress');
 
     if (!nameInput || !phoneInput || !addressInput) {
-        alert("Form fields kidaikkavillai. Page-ai reload seiyyavum!");
+        alert("Form inputs not found. Please refresh the page.");
         return;
     }
 
@@ -903,26 +902,21 @@ window.submitWhatsAppOrder = function() {
     const phone = phoneInput.value.trim();
     const address = addressInput.value.trim();
 
-    [nameInput, phoneInput, addressInput].forEach(el => el.style.borderColor = 'rgba(245, 196, 67, 0.3)');
-
     if (!name) {
-        nameInput.style.borderColor = '#ef4444';
+        alert("Please enter your name.");
         nameInput.focus();
-        alert("Dayavuseithu ungal peyarai ullidavum!");
         return;
     }
 
     if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
-        phoneInput.style.borderColor = '#ef4444';
+        alert("Please enter a valid 10-digit phone number.");
         phoneInput.focus();
-        alert("Dayavuseithu sariyana 10-digit mobile number-ai ullidavum!");
         return;
     }
 
     if (!address) {
-        addressInput.style.borderColor = '#ef4444';
+        alert("Please enter your complete delivery address.");
         addressInput.focus();
-        alert("Dayavuseithu ungal delivery address-ai ullidavum!");
         return;
     }
 
@@ -936,7 +930,7 @@ window.submitWhatsAppOrder = function() {
     }
 
     if (activeCart.length === 0) {
-        alert("Ungal cart empty-aga irukkiradhu!");
+        alert("Your shopping bag is currently empty.");
         return;
     }
 
@@ -948,7 +942,7 @@ window.submitWhatsAppOrder = function() {
         const itemQty = Number(item.qty || 1);
         const itemTotal = itemPrice * itemQty;
         grandTotal += itemTotal;
-        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
+        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • Qty   : ${itemQty}\n   • Price : ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
     });
 
     const subTotal = grandTotal;
@@ -992,12 +986,12 @@ ${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
 ✨ *Assurance:* 100% Authentic Handcrafted Formulation
 🚚 *Dispatch:* Priority Velvet Dispatch
 
-_Dayavuseithu intha order-ai confirm seithu payment details anuppavum. Nandri!_`;
+_Please confirm my order and share payment instructions. Thank you!_`;
 
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // Supabase order sync
+    // 1. Supabase Cloud Sync
     const client = window.dbClient;
     if (client) {
         client.from('orders').insert([
@@ -1012,13 +1006,45 @@ _Dayavuseithu intha order-ai confirm seithu payment details anuppavum. Nandri!_`
                 order_status: 'Pending Verification'
             }
         ]).then(() => {
-            console.log("Order cloud sync success");
+            console.log("Order cloud sync complete");
         }).catch(err => {
             console.error("Order sync error:", err);
         });
+
+        // Update coupon usage count if promo applied
+        if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+            try {
+                let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
+                const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
+                if (targetCoupon) {
+                    targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
+                    localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
+                    client.from('site_content').upsert({
+                        key: 'marketing_coupons',
+                        value: JSON.stringify(coupons),
+                        updated_at: new Date()
+                    }).then(() => {}).catch(() => {});
+                }
+            } catch(e) {}
+        }
     }
 
+    // 2. COMPLETE CART RESET (கார்ட் முழுமையாக 0 ஆகிறது)
+    cart = [];
+    localStorage.removeItem('blueskin_cart');
+    localStorage.removeItem('blueskin_checkout_draft');
+    localStorage.setItem('blueskin_cart_screen', 'closed');
+    appliedPromoCode = "";
+    appliedPromoDiscount = 0;
+
+    const cartCountEl = document.getElementById('cartCount');
+    if (cartCountEl) cartCountEl.textContent = '0';
+    const drawerItemCountEl = document.getElementById('drawerItemCount');
+    if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
+
+    // 3. Open WhatsApp in new tab and redirect current store window to Homepage
     window.open(whatsappURL, '_blank');
+    window.location.href = 'index.html';
 };
 
 // ==========================================================================
@@ -1268,7 +1294,7 @@ window.copyFrontFlashCode = function() {
 };
 
 // ==========================================================================
-// === 1. கூப்பன் சரிபார்ப்பு என்ஜின் (PROMO CODE ENGINE)                   ===
+// === 1. PROMO CODE ENGINE (100% ENGLISH LUXURY NOTICES)                 ===
 // ==========================================================================
 let appliedPromoCode = "";
 let appliedPromoDiscount = 0;
@@ -1285,7 +1311,7 @@ window.applyCheckoutPromoCode = async function() {
     if (!code) {
         notice.style.display = "block";
         notice.style.color = "#ef4444";
-        notice.textContent = "தயவுசெய்து கூப்பன் குறியீட்டை உள்ளிடவும்!";
+        notice.textContent = "Please enter a promo code.";
         return;
     }
 
@@ -1312,7 +1338,7 @@ window.applyCheckoutPromoCode = async function() {
         if (discRow) discRow.style.display = "none";
         notice.style.display = "block";
         notice.style.color = "#ef4444";
-        notice.textContent = "❌ தவறான அல்லது காலாவதியான கூப்பன் குறியீடு!";
+        notice.textContent = "Invalid or expired promo code.";
         recalculateCartTotalWithDiscount();
         return;
     }
@@ -1331,7 +1357,7 @@ window.applyCheckoutPromoCode = async function() {
     if (bagSubTotal === 0) {
         notice.style.display = "block";
         notice.style.color = "#ef4444";
-        notice.textContent = "⚠️ கார்ட்டில் பொருட்களைச் சேர்த்த பின் கூப்பனைப் பயன்படுத்தவும்!";
+        notice.textContent = "Please add items to your bag before applying promo code.";
         return;
     }
 
@@ -1341,7 +1367,7 @@ window.applyCheckoutPromoCode = async function() {
         if (discRow) discRow.style.display = "none";
         notice.style.display = "block";
         notice.style.color = "#f59e0b";
-        notice.textContent = `⚠️ குறைந்தபட்சம் ₹${Number(found.minSpend).toLocaleString('en-IN')} மதிப்புள்ள ஆர்டர்களுக்கு மட்டுமே இக்கூப்பன் பொருந்தும்!`;
+        notice.textContent = `Minimum order spend of ₹${Number(found.minSpend).toLocaleString('en-IN')} required for this code.`;
         recalculateCartTotalWithDiscount();
         return;
     }
@@ -1366,7 +1392,7 @@ window.applyCheckoutPromoCode = async function() {
 
     notice.style.display = "block";
     notice.style.color = "#22c55e";
-    notice.textContent = `🎉 கூப்பன் '${code}' அப்ளை செய்யப்பட்டது! தள்ளுபடி: ₹${discount.toLocaleString('en-IN')}`;
+    notice.textContent = `Promo code '${code}' applied successfully! Savings: ₹${discount.toLocaleString('en-IN')}`;
 
     recalculateCartTotalWithDiscount();
 };
