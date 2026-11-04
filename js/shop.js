@@ -1049,6 +1049,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// ==========================================================================
+// === 7. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் பதிவு ஃபங்ஷன்                       ===
+// ==========================================================================
+window.submitWhatsAppOrder = function() {
+    const nameInput = document.getElementById('custName');
+    const phoneInput = document.getElementById('custPhone');
+    const addressInput = document.getElementById('custAddress');
+
+    if (!nameInput || !phoneInput || !addressInput) {
+        alert("படிவப் புலங்கள் கிடைக்கவில்லை. பக்கத்தை ரீலோட் செய்யவும்!");
+        return;
+    }
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const address = addressInput.value.trim();
+
+    if (!name || !phone || phone.length < 10 || !address) {
+        alert("தயவுசெய்து உங்கள் பெயர், 10 இலக்க போன் எண், முகவரியைச் சரியாக உள்ளிடவும்!");
+        return;
+    }
+
+    let activeCart = [];
+    try {
+        activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
+            ? cart 
+            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) {
+        activeCart = [];
+    }
+
+    if (activeCart.length === 0) {
+        alert("உங்கள் கார்ட் காலியாக உள்ளது!");
+        return;
+    }
+
+    let grandTotal = 0;
+    activeCart.forEach(item => {
+        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
+        const itemQty = Number(item.qty || 1);
+        grandTotal += (itemPrice * itemQty);
+    });
+
+    const finalPayable = (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0) 
+        ? Math.max(0, grandTotal - appliedPromoDiscount) 
+        : grandTotal;
+
+    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
+
     // ----------------------------------------------------------------------
     // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (Zero SyntaxError)
     // ----------------------------------------------------------------------
@@ -1061,7 +1110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 customer_phone: phone,
                 customer_address: address,
                 items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
-                total_amount: typeof finalPayable !== 'undefined' ? finalPayable : grandTotal,
+                total_amount: finalPayable,
                 is_paid: false,
                 order_status: 'Pending Verification'
             }
@@ -1104,9 +1153,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
 
     // 7. ஆர்டர் பதிவான பிறகு வாட்ஸ்அப்பைத் திறத்தல்
+    const targetNumber = "919658399991";
+    const whatsappMsg = `👑 *BLUE SKIN LUXURY BOUTIQUE*\n🧾 Order Ref: #${orderId}\nName: ${name}\nTotal: ₹${finalPayable.toLocaleString('en-IN')}`;
+    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(whatsappMsg)}`;
     window.location.href = whatsappURL;
 };
-
 // =====================================================
 // FRONT PAGE AUTO 3-2-1 FLASH POP-UP TRIGGER
 // =====================================================
