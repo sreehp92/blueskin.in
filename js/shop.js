@@ -534,78 +534,123 @@ window.toggleAccordion = function(targetId) {
     });
 };
 
-// 9. Cart UI Management
+// ==========================================================================
+// === 9. CART UI & "RECOMMENDED FOR YOU" ENGINE (DESKTOP + MOBILE)       ===
+// ==========================================================================
 function updateCartUI() {
-    if (!cartCount) return;
-    const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-    cartCount.textContent = totalItems;
-    if (drawerItemCount) drawerItemCount.textContent = `(${totalItems} items)`;
+    let currentCart = [];
+    try {
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
+            ? cart 
+            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) { 
+        currentCart = []; 
+    }
 
-    let totalAmount = 0;
-    if (!cartItemsList) return;
+    const totalItems = currentCart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
+    
+    // Header & Drawer Badges
+    const badge1 = document.getElementById('cartCount');
+    const badge2 = document.getElementById('drawerItemCount');
+    if (badge1) badge1.textContent = totalItems;
+    if (badge2) badge2.textContent = `(${totalItems} items)`;
 
-    if (cart.length === 0) {
-        cartItemsList.innerHTML = `
-            <div style="text-align: center; padding: 3rem 1rem; color: #94a3b8;">
-                <i class="fa-solid fa-bag-shopping" style="font-size: 2.5rem; color: rgba(245,196,67,0.3); margin-bottom: 0.8rem;"></i>
-                <p style="color: #ffffff; font-weight: 600;">Your luxury bag is empty</p>
-                <span style="font-size: 0.8rem;">Add signature formulations to review.</span>
+    // Cart Items List Render
+    const list = document.getElementById('cartItemsList');
+    let subTotal = 0;
+
+    if (list) {
+        if (currentCart.length === 0) {
+            list.innerHTML = `
+                <div style="text-align: center; padding: 3rem 1rem; color: #94a3b8;">
+                    <i class="fa-solid fa-bag-shopping" style="font-size: 2.5rem; color: rgba(245,196,67,0.3); margin-bottom: 0.8rem;"></i>
+                    <p style="color: #ffffff; font-weight: 600;">Your luxury bag is empty</p>
+                    <span style="font-size: 0.8rem;">Add signature formulations to review.</span>
+                </div>
+            `;
+        } else {
+            list.innerHTML = '';
+            currentCart.forEach(item => {
+                const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
+                const itemQty = Number(item.qty || 1);
+                const itemTotal = itemPrice * itemQty;
+                subTotal += itemTotal;
+
+                const itemRow = document.createElement('div');
+                itemRow.className = 'cart-item-card';
+                itemRow.innerHTML = `
+                    <div class="cart-item-thumb">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-details" style="flex:1;">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <div class="cart-item-price">₹ ${itemTotal.toLocaleString('en-IN')}</div>
+                        <div class="cart-qty-counter">
+                            <button type="button" class="cart-qty-btn" onclick="updateInCardQty('${item.id}', -1)">-</button>
+                            <span class="cart-qty-val">${itemQty}</span>
+                            <button type="button" class="cart-qty-btn" onclick="updateInCardQty('${item.id}', 1)">+</button>
+                        </div>
+                    </div>
+                    <button type="button" class="cart-item-remove" onclick="updateInCardQty('${item.id}', -${itemQty})" title="Remove">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                `;
+                list.appendChild(itemRow);
+            });
+        }
+    }
+
+    // Totals with Promo Discount support
+    const finalPayable = (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0) 
+        ? Math.max(0, subTotal - appliedPromoDiscount) 
+        : subTotal;
+
+    const subEl = document.getElementById('cartSubTotal');
+    const totEl = document.getElementById('cartTotalPrice');
+    if (subEl) subEl.textContent = `₹ ${subTotal.toLocaleString('en-IN')}`;
+    if (totEl) totEl.textContent = `₹ ${finalPayable.toLocaleString('en-IN')}`;
+
+    // Render "Recommended for you" in Drawer
+    renderCartSuggestions();
+}
+
+// "Recommended for you" Shelf Render
+function renderCartSuggestions() {
+    const sugRow = document.getElementById('cartSuggestionsRow');
+    if (!sugRow || !products || products.length === 0) return;
+
+    let currentCart = [];
+    try {
+        currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) { currentCart = []; }
+
+    const cartIds = currentCart.map(c => String(c.id));
+    const suggestions = products.filter(p => !cartIds.includes(String(p.id))).slice(0, 4);
+
+    if (suggestions.length === 0) {
+        sugRow.innerHTML = '';
+        return;
+    }
+
+    sugRow.innerHTML = '';
+    suggestions.forEach(s => {
+        const finalP = getDiscountedPrice(s);
+        const box = document.createElement('div');
+        box.className = 'cart-rec-box';
+        box.innerHTML = `
+            <div>
+                <div class="cart-rec-img">
+                    <img src="${s.image}" alt="${s.name}">
+                </div>
+                <h5 class="cart-rec-title">${s.name}</h5>
+                <div class="cart-rec-price">₹ ${finalP.toLocaleString('en-IN')}</div>
             </div>
+            <button type="button" class="btn-rec-box-add" id="btn-cart-sugg-${s.id}" onclick="addSuggestionToCart('${s.id}')">
+                <i class="fa-solid fa-plus"></i> Add
+            </button>
         `;
-    } else {
-        cartItemsList.innerHTML = '';
-        cart.forEach(item => {
-            const itemTotal = item.price * item.qty;
-            totalAmount += itemTotal;
-            const itemRow = document.createElement('div');
-            itemRow.className = 'cart-item-card';
-            itemRow.innerHTML = `
-                <div class="cart-item-thumb">
-                    <img src="${item.image}" alt="${item.name}">
-                </div>
-                <div class="cart-item-details">
-                    <h4 class="cart-item-title">${item.name}</h4>
-                    <div class="cart-item-price">₹ ${itemTotal.toLocaleString('en-IN')}</div>
-                    <div class="cart-qty-counter">
-                        <button class="cart-qty-btn" onclick="updateInCardQty(${item.id}, -1)">-</button>
-                        <span class="cart-qty-val">${item.qty}</span>
-                        <button class="cart-qty-btn" onclick="updateInCardQty(${item.id}, 1)">+</button>
-                    </div>
-                </div>
-                <button class="cart-item-remove" onclick="updateInCardQty(${item.id}, -${item.qty})" title="Remove">
-                    <i class="fa-solid fa-trash-can"></i>
-                </button>
-            `;
-            cartItemsList.appendChild(itemRow);
-        });
-    }
-
-    if (cartSubTotal) cartSubTotal.textContent = `₹ ${totalAmount.toLocaleString('en-IN')}`;
-    if (cartTotalPrice) cartTotalPrice.textContent = `₹ ${totalAmount.toLocaleString('en-IN')}`;
-
-    if (cartSuggestionsRow) {
-        cartSuggestionsRow.innerHTML = '';
-        const suggestions = products.filter(p => !cart.some(c => c.id === p.id)).slice(0, 4);
-
-        suggestions.forEach(s => {
-            const finalP = getDiscountedPrice(s);
-            const box = document.createElement('div');
-            box.className = 'cart-rec-box';
-            box.innerHTML = `
-                <div>
-                    <div class="cart-rec-img">
-                        <img src="${s.image}" alt="${s.name}">
-                    </div>
-                    <h5 class="cart-rec-title">${s.name}</h5>
-                    <div class="cart-rec-price">₹ ${finalP.toLocaleString('en-IN')}</div>
-                </div>
-                <button class="btn-rec-box-add" id="btn-cart-sugg-${s.id}" onclick="addSuggestionToCart(${s.id})">
-                    <i class="fa-solid fa-plus"></i> Add
-                </button>
-            `;
-            cartSuggestionsRow.appendChild(box);
-        });
-    }
+        sugRow.appendChild(box);
+    });
 }
 
 window.addSuggestionToCart = function(productId) {
@@ -632,100 +677,178 @@ if (openCartBtn) openCartBtn.onclick = function() { toggleCart(true); };
 if (closeCartBtn) closeCartBtn.onclick = function() { toggleCart(false); };
 if (cartOverlay) cartOverlay.onclick = function() { toggleCart(false); };
 
-// 10. WhatsApp Checkout Logic
+// ==========================================================================
+// === 10. WHATSAPP CHECKOUT & AUTO-RESET TO HOMEPAGE                     ===
+// ==========================================================================
 window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
-    const emailInput = document.getElementById('custEmail');
     const addressInput = document.getElementById('custAddress');
+
+    if (!nameInput || !phoneInput || !addressInput) {
+        alert("Form inputs not found. Please refresh the page.");
+        return;
+    }
 
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
-    const email = emailInput.value.trim();
     const address = addressInput.value.trim();
 
-    if (!/^[A-Za-z\s]+$/.test(name)) {
-        alert("Name must contain alphabets only!");
+    if (!name) {
+        alert("Please enter your name.");
         nameInput.focus();
         return;
     }
 
-    if (!/^[0-9]{10}$/.test(phone)) {
-        alert("Phone must contain exactly 10 digits!");
+    if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
+        alert("Please enter a valid 10-digit mobile number.");
         phoneInput.focus();
         return;
     }
 
-    if (!email || !address) {
-        alert("Please fill all details!");
+    if (!address) {
+        alert("Please enter your complete delivery address.");
+        addressInput.focus();
         return;
     }
 
-    if (cart.length === 0) {
-        alert("Your bag is empty!");
+    let activeCart = [];
+    try {
+        activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
+            ? cart 
+            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    } catch(e) {
+        activeCart = [];
+    }
+
+    if (activeCart.length === 0) {
+        alert("Your shopping bag is currently empty.");
         return;
     }
 
-    let itemsText = "";
+    let orderItemsText = "";
     let grandTotal = 0;
 
-    cart.forEach((item, index) => {
-        const itemTotal = item.price * item.qty;
+    activeCart.forEach((item, index) => {
+        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
+        const itemQty = Number(item.qty || 1);
+        const itemTotal = itemPrice * itemQty;
         grandTotal += itemTotal;
-        itemsText += `${index + 1}️⃣ *${item.name}*\n   • *Qty   :* ${item.qty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
+        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • Qty   : ${itemQty}\n   • Price : ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
     });
 
-    const now = new Date();
+    const subTotal = grandTotal;
+    let promoLine = "";
+    let finalPayable = subTotal;
+
+    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+        finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
+        promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
+    }
+
     const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
-    const formattedDate = now.toLocaleDateString('en-IN');
-    const formattedTime = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-IN');
+    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
 
     const message = 
 `👑 *BLUE SKIN LUXURY BOUTIQUE*
 *Official Order Invoice*
 ────────────────────────
 🧾 *Invoice ID :* #${orderId}
-📅 *Date & Time :* ${formattedDate}, ${formattedTime}
+📅 *Date & Time :* ${dateStr}, ${timeStr}
 ────────────────────────
 
 👤 *CLIENT INFORMATION*
-• *Name     :* ${name}
-• *Phone    :* +91 ${phone}
-• *Email    :* ${email}
-• *Address  :* ${address}
+- *Name     :* ${name}
+- *Phone    :* +91 ${phone}
+- *Address  :* ${address}
 
 🛍️ *ORDERED CREATIONS*
 ────────────────────────
-${itemsText.trim()}
+${orderItemsText.trim()}
 ────────────────────────
 
 💳 *PAYMENT SUMMARY*
-• *Subtotal    :* ₹ ${grandTotal.toLocaleString('en-IN')}
-• *Shipping    :* FREE (Insured Express)
-• *Grand Total :* *₹ ${grandTotal.toLocaleString('en-IN')}*
+- *Bag Value   :* ₹ ${subTotal.toLocaleString('en-IN')}
+${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
+- *Net Payable :* *₹ ${finalPayable.toLocaleString('en-IN')}*
 ────────────────────────
 
 ✨ *Assurance:* 100% Authentic Handcrafted Formulation
-🚚 *Dispatch:* Next Business Day via Priority Courier
+🚚 *Dispatch:* Priority Velvet Dispatch
 
 _Please reply with payment details to confirm this order. Thank you for choosing Blue Skin._`;
 
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/${CLIENT_WHATSAPP_NUMBER}?text=${encoded}`, '_blank');
+    const targetNumber = "919658399991";
+    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
+
+    // 1. Supabase Cloud Sync
+    const client = window.dbClient;
+    if (client) {
+        client.from('orders').insert([
+            {
+                id: orderId,
+                customer_name: name,
+                customer_phone: phone,
+                customer_address: address,
+                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
+                total_amount: finalPayable,
+                is_paid: false,
+                order_status: 'Pending Verification'
+            }
+        ]).then(() => {
+            console.log("Order cloud sync complete");
+        }).catch(err => {
+            console.error("Order sync error:", err);
+        });
+
+        // Update coupon usage count if promo applied
+        if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+            try {
+                let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
+                const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
+                if (targetCoupon) {
+                    targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
+                    localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
+                    client.from('site_content').upsert({
+                        key: 'marketing_coupons',
+                        value: JSON.stringify(coupons),
+                        updated_at: new Date()
+                    }).then(() => {}).catch(() => {});
+                }
+            } catch(e) {}
+        }
+    }
+
+    // 2. COMPLETE CART RESET (கார்ட் உடனடியாக 0 ஆகுதல்)
+    cart = [];
+    localStorage.removeItem('blueskin_cart');
+    localStorage.removeItem('blueskin_checkout_draft');
+    localStorage.setItem('blueskin_cart_screen', 'closed');
+    appliedPromoCode = "";
+    appliedPromoDiscount = 0;
+
+    const cartCountEl = document.getElementById('cartCount');
+    if (cartCountEl) cartCountEl.textContent = '0';
+    const drawerItemCountEl = document.getElementById('drawerItemCount');
+    if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
+
+    updateCartUI();
+
+    // 3. Open WhatsApp in new tab and redirect store window to Homepage
+    window.open(whatsappURL, '_blank');
+    window.location.replace('index.html');
 };
 
-// Initial Load
-renderProducts('all');
-updateCartUI();
-updateWishlistUI();
-// மொபைல் கார்ட்டில் Step 1 மற்றும் Step 2-ஐ மாற்றும் செயல்முறை
+// 11. Mobile Checkout Navigation (Step 1 & Step 2)
 window.showMobileCheckout = function(isCheckout) {
     const drawer = document.getElementById('cartDrawer');
     const scrollBody = document.querySelector('.cart-split-body');
     if (drawer) {
         if (isCheckout) {
             if (typeof cart !== 'undefined' && cart.length === 0) {
-                alert("உங்கள் கார்ட் காலியாக உள்ளது. தயவுசெய்து ஏதேனும் ஒரு பொருளைச் சேர்க்கவும்!");
+                alert("Your shopping bag is empty. Please add an item to proceed!");
                 return;
             }
             drawer.classList.add('show-checkout');
@@ -733,10 +856,17 @@ window.showMobileCheckout = function(isCheckout) {
             drawer.classList.remove('show-checkout');
         }
         if (scrollBody) {
-            scrollBody.scrollTop = 0; // பக்கத்தின் தொடக்கத்திற்கு நகர்த்த
+            scrollBody.scrollTop = 0;
         }
     }
 };
+
+// Initial Execution
+if (typeof renderProducts === 'function') renderProducts('all');
+updateCartUI();
+if (typeof updateWishlistUI === 'function') updateWishlistUI();
+
+
 // ==========================================================================
 // === BLUE SKIN: BULLET-PROOF REFRESH & BACK-BUTTON LOCK CONTROLLER      ===
 // ==========================================================================
