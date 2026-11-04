@@ -5249,3 +5249,34 @@ body {
 .mobile-only-back-btn {
     display: none !important;
 }
+/* ==========================================================================
+   DESKTOP & MOBILE COUPON INPUT ROW FIX (ZERO OVERFLOW)
+   ========================================================================== */
+.checkout-coupon-container {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+}
+
+.checkout-coupon-container > div {
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+#checkoutCouponInput {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    height: 40px !important;
+}
+
+.checkout-coupon-container button,
+.btn-apply-coupon {
+    flex: 0 0 auto !important;
+    height: 40px !important;
+    padding: 0 16px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+}
