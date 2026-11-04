@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ==========================================================================
-// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & CLEAN CLOUD SYNC       ===
+// === BLUE SKIN: BULLET-PROOF WHATSAPP CHECKOUT & SUPABASE SYNC (CLEAN) ===
 // ==========================================================================
 
 window.submitWhatsAppOrder = function() {
@@ -868,7 +868,7 @@ window.submitWhatsAppOrder = function() {
     const addressInput = document.getElementById('custAddress');
 
     if (!nameInput || !phoneInput || !addressInput) {
-        alert("படிவப் புலங்கள் கிடைக்கவில்லை. பக்கத்தை ரீலோட் செய்யவும்!");
+        alert("Form fields kidaikkavillai. Page-ai reload seiyyavum!");
         return;
     }
 
@@ -881,21 +881,21 @@ window.submitWhatsAppOrder = function() {
     if (!name) {
         nameInput.style.borderColor = '#ef4444';
         nameInput.focus();
-        alert("தயவுசெய்து உங்கள் பெயரை உள்ளிடவும்!");
+        alert("Dayavuseithu ungal peyarai ullidavum!");
         return;
     }
 
     if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
         phoneInput.style.borderColor = '#ef4444';
         phoneInput.focus();
-        alert("தயவுசெய்து சரியான 10 இலக்க மொபைல் எண்ணை உள்ளிடவும்!");
+        alert("Dayavuseithu sariyana 10-digit mobile number-ai ullidavum!");
         return;
     }
 
     if (!address) {
         addressInput.style.borderColor = '#ef4444';
         addressInput.focus();
-        alert("தயவுசெய்து முழுமையான டெலிவரி முகவரியை உள்ளிடவும்!");
+        alert("Dayavuseithu ungal delivery address-ai ullidavum!");
         return;
     }
 
@@ -909,7 +909,7 @@ window.submitWhatsAppOrder = function() {
     }
 
     if (activeCart.length === 0) {
-        alert("உங்கள் கார்ட் காலியாக உள்ளது. தயவுசெய்து பொருட்களைச் சேர்க்கவும்!");
+        alert("Ungal cart empty-aga irukkiradhu!");
         return;
     }
 
@@ -917,7 +917,7 @@ window.submitWhatsAppOrder = function() {
     let grandTotal = 0;
 
     activeCart.forEach((item, index) => {
-        const itemPrice = Number(item.price || item.finalPrice || item.specialPrice || 0);
+        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
         const itemQty = Number(item.qty || 1);
         const itemTotal = itemPrice * itemQty;
         grandTotal += itemTotal;
@@ -928,7 +928,7 @@ window.submitWhatsAppOrder = function() {
     let promoLine = "";
     let finalPayable = subTotal;
 
-    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && appliedPromoCode) {
+    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
         finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
         promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
     }
@@ -965,34 +965,74 @@ ${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
 ✨ *Assurance:* 100% Authentic Handcrafted Formulation
 🚚 *Dispatch:* Priority Velvet Dispatch
 
-_தயவுசெய்து இந்த ஆர்டரை உறுதிசெய்து கட்டண விவரங்களை அனுப்பவும். நன்றி!_`;
+_Dayavuseithu intha order-ai confirm seithu payment details anuppavum. Nandri!_`;
 
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // கூப்பன் பயன்பாட்டை கிளவுடில் +1 கூட்டுதல்
-    if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
-        try {
-            let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
-            const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
-            
-            if (targetCoupon) {
-                targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
-                localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
-
-                if (window.dbClient) {
-                    window.dbClient.from('site_content').upsert({
-                        key: 'marketing_coupons',
-                        value: JSON.stringify(coupons),
-                        updated_at: new Date()
-                    }).then(() => {}).catch(() => {});
-                }
+    // Supabase order sync
+    const client = window.dbClient;
+    if (client) {
+        client.from('orders').insert([
+            {
+                id: orderId,
+                customer_name: name,
+                customer_phone: phone,
+                customer_address: address,
+                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
+                total_amount: finalPayable,
+                is_paid: false,
+                order_status: 'Pending Verification'
             }
-        } catch (err) {}
+        ]).then(() => {
+            console.log("Order cloud sync success");
+        }).catch(err => {
+            console.error("Order sync error:", err);
+        });
     }
 
     window.open(whatsappURL, '_blank');
 };
+
+// ==========================================================================
+// === CATEGORY CLICK & CATALOG INITIALIZATION (DESKTOP + MOBILE)         ===
+// ==========================================================================
+function bindCategoryAndCatalogEvents() {
+    const track = document.getElementById('catTrack');
+    if (track) {
+        track.addEventListener('click', function(e) {
+            const item = e.target.closest('.cat-item');
+            if (!item) return;
+            const category = item.getAttribute('data-category') || 'all';
+            if (typeof selectCategory === 'function') {
+                selectCategory(category, item);
+            }
+        });
+    }
+
+    // Direct event listener for all category pills
+    document.querySelectorAll('.cat-item').forEach(el => {
+        el.onclick = function() {
+            const category = this.getAttribute('data-category') || 'all';
+            if (typeof selectCategory === 'function') {
+                selectCategory(category, this);
+            }
+        };
+    });
+
+    // Initial render
+    if (typeof loadAdminMasterProducts === 'function') {
+        loadAdminMasterProducts();
+    }
+    if (typeof fetchSupabaseProducts === 'function') {
+        fetchSupabaseProducts();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', bindCategoryAndCatalogEvents);
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    bindCategoryAndCatalogEvents();
+}
 
 // ==========================================================================
 // === தயாரிப்புகளை உடனடியாகத் திரையில் ஏற்றும் உத்தரவாதம் (FAILSAFE RENDER) ===
