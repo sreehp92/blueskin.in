@@ -535,32 +535,63 @@ window.toggleAccordion = function(targetId) {
 };
 
 // ==========================================================================
-// === 9. CART UI & "RECOMMENDED FOR YOU" ENGINE (DESKTOP + MOBILE)       ===
+// === 1. SELF-HEALING PRICE CALCULATOR & CART UI ENGINE                  ===
 // ==========================================================================
+
+// தயாரிப்பின் அசல் விலையை எந்தப் பெயரில் இருந்தாலும் (mrp / original_price / price) கண்டறியும் ஃபங்ஷன்
+function getItemValidPrice(item) {
+    if (!item) return 0;
+    
+    // 1. ஏற்கனவே சரியான விலை இருந்தால்
+    let p = Number(item.price || item.finalPrice || item.specialPrice || 0);
+    if (p > 0) return p;
+
+    // 2. மாஸ்டர் தயாரிப்புகள் பட்டியலில் இருந்து தேடுதல்
+    if (typeof products !== 'undefined' && Array.isArray(products)) {
+        const master = products.find(prod => String(prod.id) === String(item.id));
+        if (master) {
+            const masterOrig = Number(master.originalPrice || master.original_price || master.mrp || master.price || 0);
+            const masterDisc = Number(master.discountPercent || master.discount_percent || master.discount || 0);
+            if (masterOrig > 0) {
+                if (masterDisc > 0) {
+                    return masterOrig - Math.round((masterOrig * masterDisc) / 100);
+                }
+                return masterOrig;
+            }
+        }
+    }
+
+    // 3. ஐட்டத்திற்குள்ளேயே உள்ள பிற விலை ஃபீல்டுகள்
+    let orig = Number(item.originalPrice || item.original_price || item.mrp || 0);
+    let disc = Number(item.discountPercent || item.discount_percent || item.discount || 0);
+    if (orig > 0) {
+        if (disc > 0) {
+            return orig - Math.round((orig * disc) / 100);
+        }
+        return orig;
+    }
+    return 0;
+}
+
 function updateCartUI() {
     let currentCart = [];
     try {
         currentCart = (typeof cart !== 'undefined' && cart.length > 0) 
             ? cart 
             : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+        cart = currentCart;
     } catch(e) { 
         currentCart = []; 
     }
 
-    const totalItems = currentCart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
-    
-    // Header & Drawer Badges
-    const badge1 = document.getElementById('cartCount');
-    const badge2 = document.getElementById('drawerItemCount');
-    if (badge1) badge1.textContent = totalItems;
-    if (badge2) badge2.textContent = `(${totalItems} items)`;
-
-    // Cart Items List Render
-    const list = document.getElementById('cartItemsList');
     let subTotal = 0;
+    let totalItems = 0;
 
-    if (list) {
-        if (currentCart.length === 0) {
+    // கார்ட் லிஸ்ட் ரெண்டரிங் & விலையைத் தானாகச் சரிசெய்தல்
+    const list = document.getElementById('cartItemsList');
+
+    if (currentCart.length === 0) {
+        if (list) {
             list.innerHTML = `
                 <div style="text-align: center; padding: 3rem 1rem; color: #94a3b8;">
                     <i class="fa-solid fa-bag-shopping" style="font-size: 2.5rem; color: rgba(245,196,67,0.3); margin-bottom: 0.8rem;"></i>
@@ -568,22 +599,28 @@ function updateCartUI() {
                     <span style="font-size: 0.8rem;">Add signature formulations to review.</span>
                 </div>
             `;
-        } else {
-            list.innerHTML = '';
-            currentCart.forEach(item => {
-                const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
-                const itemQty = Number(item.qty || 1);
-                const itemTotal = itemPrice * itemQty;
-                subTotal += itemTotal;
+        }
+    } else {
+        if (list) list.innerHTML = '';
+        currentCart.forEach(item => {
+            // ஜீரோவாக இருக்கும் விலையை மாஸ்டர் டேட்டாவிலிருந்து தானாக மீட்டெடுத்தல்
+            const validPrice = getItemValidPrice(item);
+            item.price = validPrice; // நிரந்தரப் பழுது நீக்கம்
 
+            const itemQty = Number(item.qty || 1);
+            const itemTotal = validPrice * itemQty;
+            subTotal += itemTotal;
+            totalItems += itemQty;
+
+            if (list) {
                 const itemRow = document.createElement('div');
                 itemRow.className = 'cart-item-card';
                 itemRow.innerHTML = `
                     <div class="cart-item-thumb">
-                        <img src="${item.image}" alt="${item.name}">
+                        <img src="${item.image || ''}" alt="${item.name || ''}">
                     </div>
                     <div class="cart-item-details" style="flex:1;">
-                        <h4 class="cart-item-title">${item.name}</h4>
+                        <h4 class="cart-item-title">${item.name || item.title || 'Artisanal Product'}</h4>
                         <div class="cart-item-price">₹ ${itemTotal.toLocaleString('en-IN')}</div>
                         <div class="cart-qty-counter">
                             <button type="button" class="cart-qty-btn" onclick="updateInCardQty('${item.id}', -1)">-</button>
@@ -596,25 +633,40 @@ function updateCartUI() {
                     </button>
                 `;
                 list.appendChild(itemRow);
-            });
-        }
+            }
+        });
     }
 
-    // Totals with Promo Discount support
+    // சரிசெய்யப்பட்ட விலையை மீண்டும் ஸ்டோரேஜில் சேமித்தல்
+    localStorage.setItem('blueskin_cart', JSON.stringify(currentCart));
+
+    // பேட்ஜ் எண்ணிக்கைகள்
+    const badge1 = document.getElementById('cartCount');
+    const badge2 = document.getElementById('drawerItemCount');
+    if (badge1) badge1.textContent = totalItems;
+    if (badge2) badge2.textContent = `(${totalItems} items)`;
+
+    // பேக் வேல்யூ (Bag Value) மற்றும் மொபைல் டோட்டல் அப்டேட்
+    const subEl = document.getElementById('cartSubTotal');
+    const totEl = document.getElementById('cartTotalPrice');
+    const step1TotEl = document.getElementById('step1TotalDisplay');
+
+    const formattedSub = `₹ ${subTotal.toLocaleString('en-IN')}`;
+    if (subEl) subEl.textContent = formattedSub;
+    if (step1TotEl) step1TotEl.textContent = formattedSub;
+
+    // கூப்பன் கழிவு கணக்கீடு
     const finalPayable = (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0) 
         ? Math.max(0, subTotal - appliedPromoDiscount) 
         : subTotal;
 
-    const subEl = document.getElementById('cartSubTotal');
-    const totEl = document.getElementById('cartTotalPrice');
-    if (subEl) subEl.textContent = `₹ ${subTotal.toLocaleString('en-IN')}`;
     if (totEl) totEl.textContent = `₹ ${finalPayable.toLocaleString('en-IN')}`;
 
-    // Render "Recommended for you" in Drawer
+    // ரெக்கமெண்டட் தயாரிப்புகள்
     renderCartSuggestions();
 }
 
-// "Recommended for you" Shelf Render
+// 2. RECOMMENDED FOR YOU SHELF
 function renderCartSuggestions() {
     const sugRow = document.getElementById('cartSuggestionsRow');
     if (!sugRow || !products || products.length === 0) return;
@@ -634,7 +686,7 @@ function renderCartSuggestions() {
 
     sugRow.innerHTML = '';
     suggestions.forEach(s => {
-        const finalP = getDiscountedPrice(s);
+        const finalP = getItemValidPrice(s);
         const box = document.createElement('div');
         box.className = 'cart-rec-box';
         box.innerHTML = `
@@ -667,6 +719,7 @@ function toggleCart(show = true) {
     if (show) {
         if (cartDrawer) cartDrawer.classList.add('active');
         if (cartOverlay) cartOverlay.classList.add('active');
+        updateCartUI();
     } else {
         if (cartDrawer) cartDrawer.classList.remove('active');
         if (cartOverlay) cartOverlay.classList.remove('active');
@@ -678,7 +731,105 @@ if (closeCartBtn) closeCartBtn.onclick = function() { toggleCart(false); };
 if (cartOverlay) cartOverlay.onclick = function() { toggleCart(false); };
 
 // ==========================================================================
-// === 10. WHATSAPP CHECKOUT & AUTO-RESET TO HOMEPAGE                     ===
+// === 3. PROMO CODE ENGINE (BAG VALUE SYNCED)                             ===
+// ==========================================================================
+let appliedPromoCode = "";
+let appliedPromoDiscount = 0;
+
+window.applyCheckoutPromoCode = async function() {
+    const input = document.getElementById('checkoutCouponInput');
+    const notice = document.getElementById('couponAppliedNotice');
+    const discRow = document.getElementById('couponDiscountRow');
+    const discValEl = document.getElementById('couponDiscountVal');
+
+    if (!input || !notice) return;
+
+    const code = input.value.trim().toUpperCase();
+    if (!code) {
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "Please enter a promo code.";
+        return;
+    }
+
+    let coupons = [];
+    try {
+        const local = localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA");
+        if (local) coupons = JSON.parse(local);
+    } catch(e) {}
+
+    if (window.dbClient) {
+        try {
+            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'marketing_coupons').single();
+            if (data && data.value) {
+                coupons = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+            }
+        } catch(err) {}
+    }
+
+    const found = coupons.find(c => (c.code || '').toUpperCase() === code && c.status === "ACTIVE");
+
+    if (!found) {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+        if (discRow) discRow.style.display = "none";
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "Invalid or expired promo code.";
+        updateCartUI();
+        return;
+    }
+
+    let currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
+    
+    // துல்லியமான பேக் வேல்யூ கணக்கீடு
+    const bagSubTotal = currentCart.reduce((sum, item) => sum + (getItemValidPrice(item) * Number(item.qty || 1)), 0);
+
+    if (bagSubTotal === 0) {
+        notice.style.display = "block";
+        notice.style.color = "#ef4444";
+        notice.textContent = "Please add items to your bag before applying promo code.";
+        return;
+    }
+
+    if (found.minSpend && bagSubTotal < Number(found.minSpend)) {
+        appliedPromoCode = "";
+        appliedPromoDiscount = 0;
+        if (discRow) discRow.style.display = "none";
+        notice.style.display = "block";
+        notice.style.color = "#f59e0b";
+        notice.textContent = `Minimum order spend of ₹${Number(found.minSpend).toLocaleString('en-IN')} required for this code.`;
+        updateCartUI();
+        return;
+    }
+
+    let discount = 0;
+    if (found.type === "PERCENTAGE") {
+        discount = Math.round((bagSubTotal * Number(found.value || 0)) / 100);
+        if (found.maxCap && Number(found.maxCap) > 0 && discount > Number(found.maxCap)) {
+            discount = Number(found.maxCap);
+        }
+    } else if (found.type === "FLAT") {
+        discount = Number(found.value || 0);
+    }
+
+    appliedPromoCode = code;
+    appliedPromoDiscount = discount;
+
+    if (discRow && discValEl) {
+        discRow.style.display = "flex";
+        discValEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
+    }
+
+    notice.style.display = "block";
+    notice.style.color = "#22c55e";
+    notice.textContent = `Promo code '${code}' applied successfully! Savings: ₹${discount.toLocaleString('en-IN')}`;
+
+    updateCartUI();
+};
+
+// ==========================================================================
+// === 4. WHATSAPP CHECKOUT (FULL VALUE INVOICE + INSTANT RESET)          ===
 // ==========================================================================
 window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
@@ -712,14 +863,9 @@ window.submitWhatsAppOrder = function() {
         return;
     }
 
-    let activeCart = [];
-    try {
-        activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
-            ? cart 
-            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) {
-        activeCart = [];
-    }
+    let activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
+        ? cart 
+        : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
 
     if (activeCart.length === 0) {
         alert("Your shopping bag is currently empty.");
@@ -730,7 +876,7 @@ window.submitWhatsAppOrder = function() {
     let grandTotal = 0;
 
     activeCart.forEach((item, index) => {
-        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
+        const itemPrice = getItemValidPrice(item);
         const itemQty = Number(item.qty || 1);
         const itemTotal = itemPrice * itemQty;
         grandTotal += itemTotal;
@@ -741,7 +887,7 @@ window.submitWhatsAppOrder = function() {
     let promoLine = "";
     let finalPayable = subTotal;
 
-    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+    if (appliedPromoDiscount > 0 && appliedPromoCode) {
         finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
         promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
     }
@@ -783,7 +929,7 @@ _Please reply with payment details to confirm this order. Thank you for choosing
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // 1. Supabase Cloud Sync
+    // 1. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
     const client = window.dbClient;
     if (client) {
         client.from('orders').insert([
@@ -798,13 +944,12 @@ _Please reply with payment details to confirm this order. Thank you for choosing
                 order_status: 'Pending Verification'
             }
         ]).then(() => {
-            console.log("Order cloud sync complete");
+            console.log("Order synced to cloud");
         }).catch(err => {
-            console.error("Order sync error:", err);
+            console.error("Cloud order sync error:", err);
         });
 
-        // Update coupon usage count if promo applied
-        if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+        if (appliedPromoCode) {
             try {
                 let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
                 const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
@@ -821,7 +966,7 @@ _Please reply with payment details to confirm this order. Thank you for choosing
         }
     }
 
-    // 2. COMPLETE CART RESET (கார்ட் உடனடியாக 0 ஆகுதல்)
+    // 2. கார்ட் ரீசெட் & ஹோம் பேஜ் திரும்புதல்
     cart = [];
     localStorage.removeItem('blueskin_cart');
     localStorage.removeItem('blueskin_checkout_draft');
@@ -836,12 +981,11 @@ _Please reply with payment details to confirm this order. Thank you for choosing
 
     updateCartUI();
 
-    // 3. Open WhatsApp in new tab and redirect store window to Homepage
     window.open(whatsappURL, '_blank');
     window.location.replace('index.html');
 };
 
-// 11. Mobile Checkout Navigation (Step 1 & Step 2)
+// 5. MOBILE CHECKOUT TOGGLE
 window.showMobileCheckout = function(isCheckout) {
     const drawer = document.getElementById('cartDrawer');
     const scrollBody = document.querySelector('.cart-split-body');
@@ -861,7 +1005,7 @@ window.showMobileCheckout = function(isCheckout) {
     }
 };
 
-// Initial Execution
+// Initial Load
 if (typeof renderProducts === 'function') renderProducts('all');
 updateCartUI();
 if (typeof updateWishlistUI === 'function') updateWishlistUI();
