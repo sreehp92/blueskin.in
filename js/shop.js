@@ -991,7 +991,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // 1. Supabase Cloud Sync
+    // 1. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
     const client = window.dbClient;
     if (client) {
         client.from('orders').insert([
@@ -1011,7 +1011,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
             console.error("Order sync error:", err);
         });
 
-        // Update coupon usage count if promo applied
+        // கூப்பன் கவுன்ட்டரை கிளவுடில் கூட்டுதல்
         if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
             try {
                 let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
@@ -1029,7 +1029,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
         }
     }
 
-    // 2. COMPLETE CART RESET (கார்ட் முழுமையாக 0 ஆகிறது)
+    // 2. கார்ட் முழுமையாக காலி செய்யப்படுகிறது (Clear Cart)
     cart = [];
     localStorage.removeItem('blueskin_cart');
     localStorage.removeItem('blueskin_checkout_draft');
@@ -1042,7 +1042,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
     const drawerItemCountEl = document.getElementById('drawerItemCount');
     if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
 
-    // 3. Open WhatsApp in new tab and redirect current store window to Homepage
+    // 3. புதிய டேபில் வாட்ஸ்அப் திறந்து, தற்போதைய பக்கம் நேரடியாக ஹோம் பேஜிற்குத் திரும்புகிறது
     window.open(whatsappURL, '_blank');
     window.location.href = 'index.html';
 };
