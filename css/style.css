@@ -5280,3 +5280,94 @@ body {
     white-space: nowrap !important;
     box-sizing: border-box !important;
 }
+
+/* ========================================================================== */
+/* INDEX.HTML - MOBILE HEADER & LOGO COMPACT LUXURY ENGINE                   */
+/* ========================================================================== */
+@media screen and (max-width: 768px) {
+
+    /* 1. ஹெடர் கண்டெய்னர் உயரத்தையும் இடைவெளியையும் குறைத்தல் */
+    .header {
+        padding: 0 !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+    }
+
+    .header .nav-container,
+    .nav-container {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.6rem 14px !important;     /* அதிகப்படியான தடிமனைக் குறைத்து 10px-12px ஆக்குகிறது */
+        min-height: auto !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. பிராண்ட் லோகோ மற்றும் பெயரை கச்சிதமான அளவிற்கு மாற்றுதல் */
+    .header .logo,
+    .nav-container .logo,
+    .logo {
+        font-family: 'Cinzel', serif !important;
+        font-size: 1.15rem !important;        /* ராட்சத அளவிலிருந்து நேர்த்தியான 1.15rem-க்கு சுருங்குதல் */
+        font-weight: 700 !important;
+        letter-spacing: 1px !important;
+        line-height: 1 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+
+    /* லோகோ கிரீடம் / ஐகான் அளவு */
+    .logo .brand-emblem,
+    .logo i,
+    .brand-logo-img {
+        font-size: 0.95rem !important;
+        max-height: 24px !important;
+        width: auto !important;
+    }
+
+    /* 3. "Shop Creations" பட்டனின் அதிகப்படியான அகலம் மற்றும் உயரத்தைக் குறைத்தல் */
+    .header .nav-actions,
+    .nav-actions {
+        display: flex !important;
+        align-items: center !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* பட்டன் ஸ்டைலிங்: மெலிதான, கச்சிதமான ஆடம்பர வடிவம் */
+    .header a[href*="shop.html"],
+    .header .btn-primary-gold,
+    .nav-actions .btn-primary-gold,
+    .btn-shop-creations {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 7px 14px !important;          /* 16px பெரிய பேடிங்கிற்குப் பதிலாக 7px கச்சிதமான பேடிங் */
+        font-size: 0.72rem !important;         /* எழுத்துக்களை மெலிதாக்குதல் */
+        font-weight: 700 !important;
+        letter-spacing: 0.6px !important;
+        text-transform: uppercase !important;
+        border-radius: 20px !important;        /* அழகான பில் வடிவம் */
+        white-space: nowrap !important;
+        height: auto !important;
+        min-height: auto !important;
+        box-shadow: 0 2px 10px rgba(245, 196, 67, 0.3) !important;
+    }
+
+    .header a[href*="shop.html"] i,
+    .header .btn-primary-gold i {
+        font-size: 0.70rem !important;
+    }
+
+    /* மொபைல் திரையில் தேவையற்ற மெனு வரிகளை மறைத்து நேர்த்தியாக்குதல் */
+    .header .nav-links {
+        display: none !important;
+    }
+}
