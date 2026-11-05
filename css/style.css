@@ -5282,65 +5282,100 @@ body {
 }
 
 /* ========================================================================== */
-/* INDEX.HTML - MOBILE HEADER & LOGO COMPACT LUXURY ENGINE                   */
+/* INDEX.HTML - MOBILE HEADER & LOGO COMPACT LUXURY ENGINE (ULTRA COMPACT)   */
 /* ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. ஹெடர் கண்டெய்னர் உயரத்தையும் இடைவெளியையும் குறைத்தல் */
+    /* 1. ஹெடரின் மொத்த ஃப்ரேம் உயரத்தையும் குறைத்தல் */
+    header,
     .header {
+        height: 52px !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
         padding: 0 !important;
         position: sticky !important;
         top: 0 !important;
         z-index: 1000 !important;
+        display: flex !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
     }
 
     .header .nav-container,
     .nav-container {
+        height: 100% !important;
+        min-height: 52px !important;
+        max-height: 52px !important;
         display: flex !important;
         flex-direction: row !important;
         justify-content: space-between !important;
         align-items: center !important;
-        padding: 0.6rem 14px !important;     /* அதிகப்படியான தடிமனைக் குறைத்து 10px-12px ஆக்குகிறது */
-        min-height: auto !important;
+        padding: 0 12px !important;
+        margin: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    /* 2. பிராண்ட் லோகோ மற்றும் பெயரை கச்சிதமான அளவிற்கு மாற்றுதல் */
+    /* 2. லோகோ மற்றும் அதன் ரேப்பர் (Wrapper) அளவைக் கட்டுப்படுத்துதல் */
+    .header .nav-left-brand,
+    .header .brand-wrap,
+    .nav-left-brand {
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        max-height: 40px !important;
+    }
+
+    /* பிராண்ட் லிங்க் / டேக் */
     .header .logo,
     .nav-container .logo,
     .logo {
         font-family: 'Cinzel', serif !important;
-        font-size: 1.15rem !important;        /* ராட்சத அளவிலிருந்து நேர்த்தியான 1.15rem-க்கு சுருங்குதல் */
+        font-size: 1.05rem !important;
         font-weight: 700 !important;
-        letter-spacing: 1px !important;
+        letter-spacing: 0.8px !important;
         line-height: 1 !important;
         display: inline-flex !important;
         align-items: center !important;
         gap: 6px !important;
         white-space: nowrap !important;
         margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
     }
 
-    /* லோகோ கிரீடம் / ஐகான் அளவு */
-    .logo .brand-emblem,
-    .logo i,
-    .brand-logo-img {
-        font-size: 0.95rem !important;
-        max-height: 24px !important;
+    /* லோகோ இமேஜ் மற்றும் SVG கிரீடத்தை கச்சிதமாக்குதல் (18px - 22px Limit) */
+    .header .logo img,
+    .logo img,
+    .brand-logo-img,
+    .header .logo svg,
+    .logo svg {
         width: auto !important;
-    }
-
-    /* 3. "Shop Creations" பட்டனின் அதிகப்படியான அகலம் மற்றும் உயரத்தைக் குறைத்தல் */
-    .header .nav-actions,
-    .nav-actions {
-        display: flex !important;
-        align-items: center !important;
+        height: 22px !important;
+        max-height: 22px !important;
+        max-width: 28px !important;
+        object-fit: contain !important;
         margin: 0 !important;
         padding: 0 !important;
     }
 
-    /* பட்டன் ஸ்டைலிங்: மெலிதான, கச்சிதமான ஆடம்பர வடிவம் */
+    /* லோகோ ஐகான் (FontAwesome ஆக இருந்தால்) */
+    .logo .brand-emblem,
+    .logo i {
+        font-size: 0.85rem !important;
+        line-height: 1 !important;
+    }
+
+    /* 3. வலதுபுற கண்டெய்னர் & Shop Creations பட்டன் */
+    .header .nav-actions,
+    .nav-actions {
+        display: flex !important;
+        align-items: center !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
     .header a[href*="shop.html"],
     .header .btn-primary-gold,
     .nav-actions .btn-primary-gold,
@@ -5348,25 +5383,27 @@ body {
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 6px !important;
-        padding: 7px 14px !important;          /* 16px பெரிய பேடிங்கிற்குப் பதிலாக 7px கச்சிதமான பேடிங் */
-        font-size: 0.72rem !important;         /* எழுத்துக்களை மெலிதாக்குதல் */
+        gap: 5px !important;
+        padding: 6px 12px !important;
+        font-size: 0.68rem !important;
         font-weight: 700 !important;
-        letter-spacing: 0.6px !important;
+        letter-spacing: 0.5px !important;
         text-transform: uppercase !important;
-        border-radius: 20px !important;        /* அழகான பில் வடிவம் */
+        border-radius: 16px !important;
+        height: 32px !important;
+        min-height: 32px !important;
+        max-height: 32px !important;
+        box-sizing: border-box !important;
         white-space: nowrap !important;
-        height: auto !important;
-        min-height: auto !important;
-        box-shadow: 0 2px 10px rgba(245, 196, 67, 0.3) !important;
+        box-shadow: 0 2px 8px rgba(245, 196, 67, 0.25) !important;
     }
 
     .header a[href*="shop.html"] i,
     .header .btn-primary-gold i {
-        font-size: 0.70rem !important;
+        font-size: 0.65rem !important;
     }
 
-    /* மொபைல் திரையில் தேவையற்ற மெனு வரிகளை மறைத்து நேர்த்தியாக்குதல் */
+    /* டெஸ்க்டாப் மெனு ஐட்டம்கள் மொபைலில் இடத்தை அடைக்காமல் இருக்க மறைத்தல் */
     .header .nav-links {
         display: none !important;
     }
