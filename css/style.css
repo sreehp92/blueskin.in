@@ -5483,3 +5483,66 @@ body {
         display: none !important;
     }
 }
+
+/* ========================================================================== */
+/* CLEAN TICKER & LOGO-ONLY HEADER (NO UNWANTED CROWNS / ICONS)               */
+/* ========================================================================== */
+
+/* 1. டாப் டிக்கர் பார்: ஐகான்கள் இன்றி சுத்தமான டெக்ஸ்ட் & டாட் */
+.top-ticker-bar .ticker-content i {
+    display: none !important; /* ஏதேனும் ஐகான்கள் இருந்தால் முழுமையாக மறைத்தல் */
+}
+
+.top-ticker-bar .ticker-content span {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.top-ticker-bar .ticker-dot {
+    margin: 0 12px !important;
+    color: #f5c443 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
+}
+
+/* 2. கிரீடம் ஐகானை டெஸ்க்டாப் & மொபைல் இரண்டிலும் அடியோடு நீக்குதல் */
+.brand-emblem,
+.nav-left-brand .brand-emblem,
+.logo .brand-emblem,
+.nav-left-brand i.fa-crown,
+.logo i.fa-crown {
+    display: none !important; /* கிரவுன் ஐகான் எங்கும் தெரியாது */
+}
+
+/* 3. டெஸ்க்டாப்பில் லோகோ இமேஜ் + பிராண்ட் பெயர் சரியான அளவு */
+.nav-left-brand .logo,
+.header .logo {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+}
+
+#shopBrandLogoImg,
+.brand-logo-img {
+    height: 32px !important;
+    max-height: 32px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+/* 4. மொபைல் வியூவிலும் லோகோ இமேஜ் + பெயர் கச்சிதமாக இருக்க */
+@media screen and (max-width: 768px) {
+    #shopBrandLogoImg,
+    .brand-logo-img {
+        height: 28px !important;
+        max-height: 28px !important;
+        max-width: 36px !important;
+    }
+    
+    .top-ticker-bar .ticker-dot {
+        margin: 0 8px !important;
+    }
+}
