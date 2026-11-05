@@ -1056,6 +1056,7 @@ function initializeAllCatalogInteractions() {
     // அட்மின் & கிளவுட் தயாரிப்புகள் மற்றும் லோகோவை ஒரே ஒரு முறை சின்க் செய்தல்
     syncAdminProducts();
     syncShopBrandLogo();
+    syncShopTicker();
     updateCartUI();
     updateWishlistUI();
 
@@ -1075,3 +1076,61 @@ if (document.readyState === 'loading') {
 } else {
     initializeAllCatalogInteractions();
 }
+// ==========================================================================
+// === TOP ANNOUNCEMENT TICKER REALTIME SYNC (ADMIN CMS / SUPABASE CLOUD) ===
+// ==========================================================================
+function renderShopTicker(cms) {
+    if (!cms) return;
+
+    const t1 = document.getElementById('shopTicker1');
+    const t2 = document.getElementById('shopTicker2');
+    const t3 = document.getElementById('shopTicker3');
+    const t1Dup = document.getElementById('shopTicker1Dup');
+    const t2Dup = document.getElementById('shopTicker2Dup');
+    const t3Dup = document.getElementById('shopTicker3Dup');
+
+    if (t1 && cms.ticker1 !== undefined && cms.ticker1.trim() !== '') t1.textContent = cms.ticker1;
+    if (t2 && cms.ticker2 !== undefined && cms.ticker2.trim() !== '') t2.textContent = cms.ticker2;
+    if (t3 && cms.ticker3 !== undefined && cms.ticker3.trim() !== '') t3.textContent = cms.ticker3;
+
+    if (t1Dup && cms.ticker1 !== undefined && cms.ticker1.trim() !== '') t1Dup.textContent = cms.ticker1;
+    if (t2Dup && cms.ticker2 !== undefined && cms.ticker2.trim() !== '') t2Dup.textContent = cms.ticker2;
+    if (t3Dup && cms.ticker3 !== undefined && cms.ticker3.trim() !== '') t3Dup.textContent = cms.ticker3;
+}
+
+function syncShopTicker() {
+    // 1. அட்மின் லோக்கல் ஸ்டோரேஜில் இருந்து 0ms-ல் உடனே ஏற்றுதல்
+    try {
+        const localCMS = localStorage.getItem('BLUESKIN_PORTFOLIO_CMS_DATA');
+        if (localCMS) {
+            renderShopTicker(JSON.parse(localCMS));
+        }
+    } catch(e) {}
+
+    // 2. சுபாபேஸ் கிளவுடிலிருந்து நேரலையாக எடுத்துப் புதுப்பித்தல்
+    if (window.dbClient) {
+        window.dbClient
+            .from('site_content')
+            .select('value')
+            .eq('key', 'portfolio_cms')
+            .single()
+            .then(({ data, error }) => {
+                if (!error && data && data.value) {
+                    const cms = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                    renderShopTicker(cms);
+                }
+            })
+            .catch(() => {});
+    }
+}
+
+// அட்மின் CMS அல்லது அனௌன்ஸ்மென்ட் பார் மாறினால் உடனடியாக சிங்க் ஆகும் லிசனர்
+    if (window.dbClient) {
+        window.dbClient
+            .channel('public:site_content_shop_sync')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => {
+                syncShopBrandLogo();
+                syncShopTicker();
+            })
+            .subscribe();
+    }
