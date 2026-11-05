@@ -1124,6 +1124,12 @@ window.copyFrontFlashCode = function() {
     });
 };
 </script>
+
+    // அட்மினில் மாற்றும் Hero Banner Media மொபைல் பின்னணியிலும் தானாக மாற:
+const heroSec = document.querySelector('.hero-section');
+if (heroSec && cms.heroBannerMedia) {
+    heroSec.style.backgroundImage = `radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.85) 0%, rgba(5, 12, 24, 0.95) 100%), url('${cms.heroBannerMedia}')`;
+}
     
 </body>
 </html>
