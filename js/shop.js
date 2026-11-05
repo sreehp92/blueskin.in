@@ -75,14 +75,6 @@ if (window.dbClient) {
         .subscribe();
 }
 
-// பேஜ் திறந்ததும் அட்மின் தயாரிப்புகளை ஏற்றுதல்
-loadAdminMasterProducts();
-window.addEventListener('load', fetchSupabaseProducts);
-document.addEventListener('DOMContentLoaded', () => {
-    loadAdminMasterProducts();
-    fetchSupabaseProducts();
-});
-
 function getDiscountedPrice(item) {
     if (!item) return 0;
     const orig = Number(item.originalPrice || item.mrp || item.price || 0);
@@ -225,6 +217,77 @@ function createProductCardElement(prod) {
     return card;
 }
 
+// ==========================================================================
+// === 4. REALTIME CATALOG RENDER & CATEGORY FILTER ENGINE                ===
+// ==========================================================================
+window.renderProducts = function(filterCategory = 'all') {
+    const catalog = document.getElementById('productsCatalog');
+    if (!catalog) return;
+
+    catalog.innerHTML = '';
+    const targetCat = (filterCategory || 'all').toLowerCase().trim();
+
+    // அட்மின் தயாரிப்புகளைக் கேட்டகிரி வாரியாகப் பிரிக்கும் ஸ்மார்ட் ஃபில்டர்
+    const filtered = (targetCat === 'all')
+        ? products
+        : products.filter(p => {
+            const pCat = (p.category || '').toLowerCase().trim();
+            if (targetCat === 'face') return pCat.includes('face');
+            if (targetCat === 'eye') return pCat.includes('eye');
+            if (targetCat === 'lip') return pCat.includes('lip');
+            if (targetCat === 'skin') return pCat.includes('skin');
+            if (targetCat === 'tools') return pCat.includes('tool');
+            return pCat.includes(targetCat) || targetCat.includes(pCat);
+        });
+
+    const headEl = document.getElementById('currentCategoryHeading');
+    const countEl = document.getElementById('productCounterText');
+
+    if (headEl) {
+        headEl.textContent = (targetCat === 'all') 
+            ? 'All Luxury Collections' 
+            : `${targetCat.toUpperCase()} Collection`;
+    }
+    if (countEl) {
+        countEl.textContent = `Showing ${filtered.length} bespoke creations`;
+    }
+
+    if (filtered.length === 0) {
+        catalog.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1rem; color: #94a3b8;">
+                <i class="fa-solid fa-box-open" style="font-size: 2.2rem; color: rgba(245,196,67,0.4); margin-bottom: 0.8rem; display: block;"></i>
+                <p style="color: #ffffff; font-weight: 600; margin-bottom: 0.3rem;">No products available in this category</p>
+                <span style="font-size: 0.8rem;">Products added from the Admin Panel will appear here.</span>
+            </div>
+        `;
+        return;
+    }
+
+    filtered.forEach(prod => {
+        catalog.appendChild(createProductCardElement(prod));
+    });
+};
+
+// கேட்டகிரி கிளிக் இணைப்புகள் & ஆரம்ப நிலை லோடிங்
+function initCatalogInteractions() {
+    document.querySelectorAll('.cat-item').forEach(item => {
+        item.onclick = function(e) {
+            e.preventDefault();
+            const cat = this.getAttribute('data-category') || 'all';
+            selectCategory(cat, this);
+        };
+    });
+
+    // முதலில் அட்மின் தயாரிப்புகளையும், பின் கிளவுட் தயாரிப்புகளையும் ஏற்றுதல்
+    loadAdminMasterProducts();
+    fetchSupabaseProducts();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCatalogInteractions);
+} else {
+    initCatalogInteractions();
+}
 // ==========================================================================
 // === 4. FAIL-SAFE CATALOG RENDER & PRICE ENGINE                         ===
 // ==========================================================================
