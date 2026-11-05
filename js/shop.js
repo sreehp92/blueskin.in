@@ -883,7 +883,22 @@ window.submitWhatsAppOrder = function() {
         promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
     }
 
-    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
+    // 1. அட்மின் பேனல் செட்டிங்ஸில் உள்ள பில் பிரீஃபிக்ஸை எடுத்தல் (#BS- போன்றவை)
+    let invoicePrefix = "BS-";
+    try {
+        const sysSettings = JSON.parse(localStorage.getItem("BLUESKIN_SYSTEM_SETTINGS_CONFIG"));
+        if (sysSettings && sysSettings.invoicePrefix) {
+            invoicePrefix = sysSettings.invoicePrefix.replace('#', '').trim();
+        }
+    } catch(e) {}
+
+    // 2. தொடர் வரிசை எண் தானாக 1, 2, 3 என கூடுதல் (Sequential Increment)
+    let currentSeq = parseInt(localStorage.getItem('BLUESKIN_LAST_ORDER_SEQ') || '0', 10) + 1;
+    localStorage.setItem('BLUESKIN_LAST_ORDER_SEQ', currentSeq.toString());
+
+    // 3. நான்கு இலக்க வரிசை எண் (எ.கா: BS-0001, BS-0002)
+    const formattedSeq = String(currentSeq).padStart(4, '0');
+    const orderId = `${invoicePrefix}${formattedSeq}`;
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN');
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
