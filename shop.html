@@ -128,11 +128,13 @@
     <!-- Header (Brand Left | Actions Right) -->
     <header class="header">
         <nav class="nav-container shop-nav-flex">
-           <!-- Left: Brand Logo -->
+            
+           <!-- Left: Brand Logo (Image Logo Enabled) -->
             <div class="nav-left-brand">
-                <a href="index.html" class="logo">
-                    <span class="brand-emblem"><i class="fa-solid fa-crown"></i></span>
-                    BLUE <span class="gold-text">SKIN</span>
+                <a href="index.html" class="logo" style="display: inline-flex; align-items: center; gap: 8px;">
+                    <img id="shopBrandLogoImg" class="brand-logo-img" src="" alt="Blue Skin Logo" style="display: none; height: 32px; width: auto; object-fit: contain;">
+                    <span id="shopBrandLogoFallback" class="brand-emblem"><i class="fa-solid fa-crown"></i></span>
+                    <span class="brand-name-wrap">BLUE <span class="gold-text">SKIN</span></span>
                 </a>
             </div>
 
