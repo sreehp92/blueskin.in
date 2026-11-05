@@ -1,13 +1,22 @@
 // ==========================================================================
-// === BLUE SKIN: 100% ADMIN & SUPABASE CLOUD LIVE SYNC (NO DUMMY DATA)   ===
+// === BLUE SKIN: 100% ADMIN & SUPABASE CLOUD LIVE SYNC (MASTER ENGINE)   ===
 // ==========================================================================
 
 let products = [];
 let cart = JSON.parse(localStorage.getItem('blueskin_cart')) || [];
 let wishlist = JSON.parse(localStorage.getItem('blueskin_wishlist')) || [];
 let activeViewingProductId = null;
+let appliedPromoCode = "";
+let appliedPromoDiscount = 0;
 
-// அட்மின் மற்றும் சுபாபேஸ் ஃபீல்டுகளைச் சமன் செய்யும் செயல்முறை
+const sampleGalleryImages = [
+    "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=600&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=600&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=600&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1583241800698-e8ab01830a07?q=80&w=600&auto=format&fit=crop"
+];
+
+// 1. அட்மின் & சுபாபேஸ் ஃபீல்டுகளைச் சமன் செய்யும் செயல்முறை (Data Normalizer)
 function normalizeProduct(raw) {
     const origPrice = Number(raw.original_price || raw.originalPrice || raw.mrp || raw.price || 0);
     const discPercent = Number(raw.discount_percent || raw.discountPercent || raw.discount || 0);
@@ -26,6 +35,7 @@ function normalizeProduct(raw) {
         name: raw.name || raw.title || 'Artisanal Creation',
         category: raw.category || 'Luxury',
         subTitle: raw.sub_title || raw.subTitle || raw.subtitle || '',
+        weight: raw.weight || '',
         originalPrice: origPrice,
         discountPercent: discPercent,
         image: img,
@@ -34,14 +44,38 @@ function normalizeProduct(raw) {
     };
 }
 
+// 2. தள்ளுபடி விலை கணக்கீடு (Discount Price)
 function getDiscountedPrice(item) {
     if (!item) return 0;
-    const orig = Number(item.originalPrice || 0);
-    const disc = Number(item.discountPercent || 0);
+    const orig = Number(item.originalPrice || item.mrp || item.price || 0);
+    const disc = Number(item.discountPercent || item.discount || 0);
     if (disc <= 0) return orig;
     return Math.round(orig - ((orig * disc) / 100));
 }
 
+// 3. கார்ட்டில் உள்ள பொருளின் சரியான விலையைத் தானாகச் சரிசெய்தல் (Self-Healing)
+function getItemValidPrice(item) {
+    if (!item) return 0;
+    let p = Number(item.price || item.finalPrice || item.specialPrice || 0);
+    if (p > 0) return p;
+
+    if (Array.isArray(products) && products.length > 0) {
+        const master = products.find(prod => String(prod.id) === String(item.id));
+        if (master) {
+            const masterOrig = Number(master.originalPrice || 0);
+            const masterDisc = Number(master.discountPercent || 0);
+            if (masterOrig > 0) {
+                return (masterDisc > 0) ? Math.round(masterOrig - ((masterOrig * masterDisc) / 100)) : masterOrig;
+            }
+        }
+    }
+
+    let orig = Number(item.originalPrice || item.mrp || 0);
+    let disc = Number(item.discountPercent || item.discount || 0);
+    return (orig > 0 && disc > 0) ? Math.round(orig - ((orig * disc) / 100)) : orig;
+}
+
+// 4. தயாரிப்பு அட்டை டெம்ப்ளேட் (Product Card)
 function createProductCardElement(prod) {
     let currentCart = [];
     try {
@@ -58,7 +92,7 @@ function createProductCardElement(prod) {
     card.className = 'shop-prod-card';
 
     const finalPrice = getDiscountedPrice(prod);
-    const hasDiscount = prod.discountPercent > 0;
+    const hasDiscount = Number(prod.discountPercent) > 0;
 
     const actionHtml = (cartItem && cartItem.qty > 0) ? `
         <div class="card-inline-counter">
@@ -85,7 +119,7 @@ function createProductCardElement(prod) {
             <div class="shop-prod-info">
                 <h3 class="shop-prod-title" onclick="openFullProductPage('${prod.id}')">${prod.name}</h3>
                 <div class="shop-price-block">
-                    ${hasDiscount ? `<span class="mrp-strikethrough">₹ ${prod.originalPrice.toLocaleString('en-IN')}</span>` : ''}
+                    ${hasDiscount ? `<span class="mrp-strikethrough">₹ ${Number(prod.originalPrice).toLocaleString('en-IN')}</span>` : ''}
                     <span class="discounted-final-price">₹ ${finalPrice.toLocaleString('en-IN')}</span>
                 </div>
             </div>
@@ -100,6 +134,7 @@ function createProductCardElement(prod) {
     return card;
 }
 
+// 5. கேட்டகிரி வாரியாகத் தயாரிப்புகளைத் திரையிடல் (Catalog Render Engine)
 window.renderProducts = function(filterCategory = 'all') {
     const catalog = document.getElementById('productsCatalog');
     if (!catalog) return;
@@ -119,21 +154,22 @@ window.renderProducts = function(filterCategory = 'all') {
             return pCat.includes(targetCat) || targetCat.includes(pCat);
         });
 
-    const headEl = document.getElementById('currentCategoryHeading');
-    const countEl = document.getElementById('productCounterText');
+    const headingEl = document.getElementById('currentCategoryHeading');
+    const counterEl = document.getElementById('productCounterText');
 
-    if (headEl) {
-        headEl.textContent = (targetCat === 'all') ? 'All Luxury Collections' : `${targetCat.toUpperCase()} Collection`;
+    if (headingEl) {
+        headingEl.textContent = (targetCat === 'all') ? 'All Luxury Collections' : `${targetCat.toUpperCase()} Collection`;
     }
-    if (countEl) {
-        countEl.textContent = `Showing ${filtered.length} bespoke creations`;
+    if (counterEl) {
+        counterEl.textContent = `Showing ${filtered.length} bespoke creations`;
     }
 
     if (filtered.length === 0) {
         catalog.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: #94a3b8;">
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3.5rem 1rem; color: #94a3b8;">
                 <i class="fa-solid fa-box-open" style="font-size: 2.2rem; color: rgba(245,196,67,0.4); margin-bottom: 0.8rem; display: block;"></i>
-                <p style="color: #ffffff; font-weight: 600;">No products available in this category</p>
+                <p style="color: #ffffff; font-weight: 600; margin-bottom: 0.3rem;">No products available in this category</p>
+                <span style="font-size: 0.8rem;">Products added from the Admin Panel will appear here.</span>
             </div>
         `;
         return;
@@ -144,6 +180,7 @@ window.renderProducts = function(filterCategory = 'all') {
     });
 };
 
+// 6. கேட்டகிரி தேர்வு செயல்முறை (Select Category Pill)
 window.selectCategory = function(catName, clickedElement) {
     document.querySelectorAll('.cat-item').forEach(el => el.classList.remove('active'));
 
@@ -162,9 +199,9 @@ function getActiveCategory() {
     return active ? (active.getAttribute('data-category') || 'all') : 'all';
 }
 
-// அட்மினில் உள்ள தயாரிப்புகளை எடுத்து திரையிடும் முதன்மை சின்க் செயல்முறை
+// 7. அட்மின் லோக்கல் ஸ்டோரேஜ் & சுபாபேஸ் கிளவுட் தயாரிப்புகளை சின்க் செய்தல்
 async function syncAdminProducts() {
-    // 1. அட்மினின் LocalStorage-லிருந்து முதலில் உடனடியாக எடுத்தல்
+    // A. அட்மின் லோக்கல் ஸ்டோரேஜில் உள்ள தயாரிப்புகளை உடனடியாக எடுத்தல் (0ms Load)
     try {
         const local = localStorage.getItem("BLUESKIN_PRODUCT_MASTER_DATA");
         if (local) {
@@ -176,7 +213,7 @@ async function syncAdminProducts() {
         }
     } catch(e) {}
 
-    // 2. சுபாபேஸ் கிளவுடிலிருந்து நேரலைத் தயாரிப்புகளை எடுத்தல்
+    // B. சுபாபேஸ் கிளவுடிலிருந்து நேரலைத் தயாரிப்புகளை எடுத்தல்
     let attempts = 0;
     const timer = setInterval(async () => {
         attempts++;
@@ -196,7 +233,7 @@ async function syncAdminProducts() {
                     if (typeof updateCartUI === 'function') updateCartUI();
                 }
 
-                // அட்மினில் ஏதேனும் மாற்றினால் தானாகவே மாற Realtime Listener
+                // அட்மினில் எடிட் செய்தால் உடனே தானாக மாறும் Realtime Listener
                 client
                     .channel('public:products_live_sync')
                     .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
@@ -213,29 +250,10 @@ async function syncAdminProducts() {
     }, 200);
 }
 
-function initializeCatalogEvents() {
-    document.querySelectorAll('.cat-item').forEach(item => {
-        item.onclick = function(e) {
-            e.preventDefault();
-            const cat = this.getAttribute('data-category') || 'all';
-            selectCategory(cat, this);
-        };
-    });
-
-    syncAdminProducts();
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeCatalogEvents);
-} else {
-    initializeCatalogEvents();
-}
-
-// 5. In-Card Quantity Operations (ID Type-Mismatch Fix)
+// 8. கார்ட்டில் தயாரிப்பு எண்ணிக்கை மாற்றம் (In-Card Quantity Operations)
 window.updateInCardQty = function(productId, delta) {
     if (!products || products.length === 0) return;
 
-    // String & Number இரண்டையும் ஏற்கும் வகையிலான தேடல்
     const prod = products.find(p => String(p.id) === String(productId));
     if (!prod) return;
 
@@ -273,7 +291,7 @@ function saveCart() {
     updateCartUI();
 }
 
-// 6. WISHLIST ENGINE (Add, Remove, Sync & Drawer)
+// 9. விருப்பப் பட்டியல் மேலாண்மை (Wishlist Engine)
 window.toggleWishlist = function(productId, event) {
     if (event) event.stopPropagation();
 
@@ -294,17 +312,23 @@ window.toggleWishlist = function(productId, event) {
 };
 
 function updateWishlistUI() {
+    const wishlistCount = document.getElementById('wishlistCount');
+    const drawerWishlistCount = document.getElementById('drawerWishlistCount');
+    const openWishlistBtn = document.getElementById('openWishlistBtn');
+    const headerWishlistIcon = document.getElementById('headerWishlistIcon');
+    const wishlistItemsList = document.getElementById('wishlistItemsList');
+
     if (!wishlistCount) return;
     const count = wishlist.length;
     wishlistCount.textContent = count;
     if (drawerWishlistCount) drawerWishlistCount.textContent = `(${count} items)`;
 
     if (count > 0) {
-        openWishlistBtn.classList.add('has-items');
-        headerWishlistIcon.className = "fa-solid fa-heart";
+        if (openWishlistBtn) openWishlistBtn.classList.add('has-items');
+        if (headerWishlistIcon) headerWishlistIcon.className = "fa-solid fa-heart";
     } else {
-        openWishlistBtn.classList.remove('has-items');
-        headerWishlistIcon.className = "fa-regular fa-heart";
+        if (openWishlistBtn) openWishlistBtn.classList.remove('has-items');
+        if (headerWishlistIcon) headerWishlistIcon.className = "fa-regular fa-heart";
     }
 
     if (!wishlistItemsList) return;
@@ -354,6 +378,8 @@ window.moveWishlistToCart = function(productId) {
 };
 
 function toggleWishlistDrawer(show = true) {
+    const wishlistDrawer = document.getElementById('wishlistDrawer');
+    const wishlistOverlay = document.getElementById('wishlistOverlay');
     if (show) {
         if (wishlistDrawer) wishlistDrawer.classList.add('active');
         if (wishlistOverlay) wishlistOverlay.classList.add('active');
@@ -363,16 +389,22 @@ function toggleWishlistDrawer(show = true) {
     }
 }
 
+const openWishlistBtn = document.getElementById('openWishlistBtn');
+const closeWishlistBtn = document.getElementById('closeWishlistBtn');
+const wishlistOverlay = document.getElementById('wishlistOverlay');
+
 if (openWishlistBtn) openWishlistBtn.onclick = function() { toggleWishlistDrawer(true); };
 if (closeWishlistBtn) closeWishlistBtn.onclick = function() { toggleWishlistDrawer(false); };
 if (wishlistOverlay) wishlistOverlay.onclick = function() { toggleWishlistDrawer(false); };
 
-// 7. Full Page View Logic (Safe Rendering & Clean Mobile Support)
+// 10. முழு தயாரிப்புப் பக்கப் பார்வை (Full Product Page View)
 window.openFullProductPage = function(productId) {
     const prod = products.find(p => String(p.id) === String(productId)) || products[0];
     if (!prod) return;
 
     activeViewingProductId = prod.id;
+    const shopMainCatalogView = document.getElementById('shopMainCatalogView');
+    const productFullPageView = document.getElementById('productFullPageView');
 
     if (shopMainCatalogView) shopMainCatalogView.style.display = 'none';
     if (productFullPageView) productFullPageView.style.display = 'block';
@@ -405,7 +437,7 @@ window.openFullProductPage = function(productId) {
     const thumbRow = document.getElementById('thumbGalleryRow');
     if (thumbRow) {
         thumbRow.innerHTML = '';
-        const gallery = [prod.image, ...(Array.isArray(prod.images) && prod.images.length > 1 ? prod.images.slice(1, 4) : sampleGalleryImages.slice(1, 4))];
+        const gallery = [prod.image, sampleGalleryImages[1], sampleGalleryImages[2]];
         gallery.forEach((imgUrl, idx) => {
             const thumb = document.createElement('div');
             thumb.className = `thumb-item ${idx === 0 ? 'active' : ''}`;
@@ -421,9 +453,6 @@ window.openFullProductPage = function(productId) {
 
     updateFullPageActionSlot(prod.id);
     syncFullPageWishlistButton(prod.id);
-    if (typeof toggleAccordion === 'function') {
-        toggleAccordion('accItemDesc');
-    }
     renderFullPageRecommended(prod.id);
 };
 
@@ -455,6 +484,9 @@ function renderFullPageRecommended(currentProdId) {
 
 window.closeFullProductPage = function() {
     activeViewingProductId = null;
+    const shopMainCatalogView = document.getElementById('shopMainCatalogView');
+    const productFullPageView = document.getElementById('productFullPageView');
+
     if (productFullPageView) productFullPageView.style.display = 'none';
     if (shopMainCatalogView) shopMainCatalogView.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -483,7 +515,7 @@ function updateFullPageActionSlot(productId) {
     }
 }
 
-// 8. Accordion Toggle
+// 11. Accordion Toggle
 window.toggleAccordion = function(targetId) {
     const allItems = document.querySelectorAll('.accordion-item');
     allItems.forEach(item => {
@@ -503,45 +535,7 @@ window.toggleAccordion = function(targetId) {
     });
 };
 
-// ==========================================================================
-// === 1. SELF-HEALING PRICE CALCULATOR & CART UI ENGINE                  ===
-// ==========================================================================
-
-// தயாரிப்பின் அசல் விலையை எந்தப் பெயரில் இருந்தாலும் (mrp / original_price / price) கண்டறியும் ஃபங்ஷன்
-function getItemValidPrice(item) {
-    if (!item) return 0;
-    
-    // 1. ஏற்கனவே சரியான விலை இருந்தால்
-    let p = Number(item.price || item.finalPrice || item.specialPrice || 0);
-    if (p > 0) return p;
-
-    // 2. மாஸ்டர் தயாரிப்புகள் பட்டியலில் இருந்து தேடுதல்
-    if (typeof products !== 'undefined' && Array.isArray(products)) {
-        const master = products.find(prod => String(prod.id) === String(item.id));
-        if (master) {
-            const masterOrig = Number(master.originalPrice || master.original_price || master.mrp || master.price || 0);
-            const masterDisc = Number(master.discountPercent || master.discount_percent || master.discount || 0);
-            if (masterOrig > 0) {
-                if (masterDisc > 0) {
-                    return masterOrig - Math.round((masterOrig * masterDisc) / 100);
-                }
-                return masterOrig;
-            }
-        }
-    }
-
-    // 3. ஐட்டத்திற்குள்ளேயே உள்ள பிற விலை ஃபீல்டுகள்
-    let orig = Number(item.originalPrice || item.original_price || item.mrp || 0);
-    let disc = Number(item.discountPercent || item.discount_percent || item.discount || 0);
-    if (orig > 0) {
-        if (disc > 0) {
-            return orig - Math.round((orig * disc) / 100);
-        }
-        return orig;
-    }
-    return 0;
-}
-
+// 12. கார்ட் UI மற்றும் Recommended For You தயாரிப்புகள் (Cart UI Engine)
 function updateCartUI() {
     let currentCart = [];
     try {
@@ -549,14 +543,11 @@ function updateCartUI() {
             ? cart 
             : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
         cart = currentCart;
-    } catch(e) { 
-        currentCart = []; 
-    }
+    } catch(e) { currentCart = []; }
 
     let subTotal = 0;
     let totalItems = 0;
 
-    // கார்ட் லிஸ்ட் ரெண்டரிங் & விலையைத் தானாகச் சரிசெய்தல்
     const list = document.getElementById('cartItemsList');
 
     if (currentCart.length === 0) {
@@ -572,9 +563,8 @@ function updateCartUI() {
     } else {
         if (list) list.innerHTML = '';
         currentCart.forEach(item => {
-            // ஜீரோவாக இருக்கும் விலையை மாஸ்டர் டேட்டாவிலிருந்து தானாக மீட்டெடுத்தல்
             const validPrice = getItemValidPrice(item);
-            item.price = validPrice; // நிரந்தரப் பழுது நீக்கம்
+            item.price = validPrice;
 
             const itemQty = Number(item.qty || 1);
             const itemTotal = validPrice * itemQty;
@@ -606,16 +596,13 @@ function updateCartUI() {
         });
     }
 
-    // சரிசெய்யப்பட்ட விலையை மீண்டும் ஸ்டோரேஜில் சேமித்தல்
     localStorage.setItem('blueskin_cart', JSON.stringify(currentCart));
 
-    // பேட்ஜ் எண்ணிக்கைகள்
     const badge1 = document.getElementById('cartCount');
     const badge2 = document.getElementById('drawerItemCount');
     if (badge1) badge1.textContent = totalItems;
     if (badge2) badge2.textContent = `(${totalItems} items)`;
 
-    // பேக் வேல்யூ (Bag Value) மற்றும் மொபைல் டோட்டல் அப்டேட்
     const subEl = document.getElementById('cartSubTotal');
     const totEl = document.getElementById('cartTotalPrice');
     const step1TotEl = document.getElementById('step1TotalDisplay');
@@ -624,18 +611,15 @@ function updateCartUI() {
     if (subEl) subEl.textContent = formattedSub;
     if (step1TotEl) step1TotEl.textContent = formattedSub;
 
-    // கூப்பன் கழிவு கணக்கீடு
     const finalPayable = (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0) 
         ? Math.max(0, subTotal - appliedPromoDiscount) 
         : subTotal;
 
     if (totEl) totEl.textContent = `₹ ${finalPayable.toLocaleString('en-IN')}`;
 
-    // ரெக்கமெண்டட் தயாரிப்புகள்
     renderCartSuggestions();
 }
 
-// 2. RECOMMENDED FOR YOU SHELF
 function renderCartSuggestions() {
     const sugRow = document.getElementById('cartSuggestionsRow');
     if (!sugRow || !products || products.length === 0) return;
@@ -685,6 +669,8 @@ window.addSuggestionToCart = function(productId) {
 };
 
 function toggleCart(show = true) {
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartOverlay = document.getElementById('cartOverlay');
     if (show) {
         if (cartDrawer) cartDrawer.classList.add('active');
         if (cartOverlay) cartOverlay.classList.add('active');
@@ -695,16 +681,15 @@ function toggleCart(show = true) {
     }
 }
 
+const openCartBtn = document.getElementById('openCartBtn');
+const closeCartBtn = document.getElementById('closeCartBtn');
+const cartOverlay = document.getElementById('cartOverlay');
+
 if (openCartBtn) openCartBtn.onclick = function() { toggleCart(true); };
 if (closeCartBtn) closeCartBtn.onclick = function() { toggleCart(false); };
 if (cartOverlay) cartOverlay.onclick = function() { toggleCart(false); };
 
-// ==========================================================================
-// === 3. PROMO CODE ENGINE (BAG VALUE SYNCED)                             ===
-// ==========================================================================
-let appliedPromoCode = "";
-let appliedPromoDiscount = 0;
-
+// 13. கூப்பன் குறியீடு சரிபார்த்தல் (Promo Code Engine)
 window.applyCheckoutPromoCode = async function() {
     const input = document.getElementById('checkoutCouponInput');
     const notice = document.getElementById('couponAppliedNotice');
@@ -750,8 +735,6 @@ window.applyCheckoutPromoCode = async function() {
     }
 
     let currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    
-    // துல்லியமான பேக் வேல்யூ கணக்கீடு
     const bagSubTotal = currentCart.reduce((sum, item) => sum + (getItemValidPrice(item) * Number(item.qty || 1)), 0);
 
     if (bagSubTotal === 0) {
@@ -797,9 +780,7 @@ window.applyCheckoutPromoCode = async function() {
     updateCartUI();
 };
 
-// ==========================================================================
-// === 4. WHATSAPP CHECKOUT (FULL VALUE INVOICE + INSTANT RESET)          ===
-// ==========================================================================
+// 14. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் & கார்ட் 0 ஆகி ஹோம் பேஜ் திரும்புதல் (WhatsApp Checkout Engine)
 window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
@@ -898,343 +879,7 @@ _Please reply with payment details to confirm this order. Thank you for choosing
     const targetNumber = "919658399991";
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // 1. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
-    const client = window.dbClient;
-    if (client) {
-        client.from('orders').insert([
-            {
-                id: orderId,
-                customer_name: name,
-                customer_phone: phone,
-                customer_address: address,
-                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
-                total_amount: finalPayable,
-                is_paid: false,
-                order_status: 'Pending Verification'
-            }
-        ]).then(() => {
-            console.log("Order synced to cloud");
-        }).catch(err => {
-            console.error("Cloud order sync error:", err);
-        });
-
-        if (appliedPromoCode) {
-            try {
-                let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
-                const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
-                if (targetCoupon) {
-                    targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
-                    localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
-                    client.from('site_content').upsert({
-                        key: 'marketing_coupons',
-                        value: JSON.stringify(coupons),
-                        updated_at: new Date()
-                    }).then(() => {}).catch(() => {});
-                }
-            } catch(e) {}
-        }
-    }
-
-    // 2. கார்ட் ரீசெட் & ஹோம் பேஜ் திரும்புதல்
-    cart = [];
-    localStorage.removeItem('blueskin_cart');
-    localStorage.removeItem('blueskin_checkout_draft');
-    localStorage.setItem('blueskin_cart_screen', 'closed');
-    appliedPromoCode = "";
-    appliedPromoDiscount = 0;
-
-    const cartCountEl = document.getElementById('cartCount');
-    if (cartCountEl) cartCountEl.textContent = '0';
-    const drawerItemCountEl = document.getElementById('drawerItemCount');
-    if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
-
-    updateCartUI();
-
-    window.open(whatsappURL, '_blank');
-    window.location.replace('index.html');
-};
-
-// 5. MOBILE CHECKOUT TOGGLE
-window.showMobileCheckout = function(isCheckout) {
-    const drawer = document.getElementById('cartDrawer');
-    const scrollBody = document.querySelector('.cart-split-body');
-    if (drawer) {
-        if (isCheckout) {
-            if (typeof cart !== 'undefined' && cart.length === 0) {
-                alert("Your shopping bag is empty. Please add an item to proceed!");
-                return;
-            }
-            drawer.classList.add('show-checkout');
-        } else {
-            drawer.classList.remove('show-checkout');
-        }
-        if (scrollBody) {
-            scrollBody.scrollTop = 0;
-        }
-    }
-};
-
-// Initial Load
-if (typeof renderProducts === 'function') renderProducts('all');
-updateCartUI();
-if (typeof updateWishlistUI === 'function') updateWishlistUI();
-
-
-// ==========================================================================
-// === BLUE SKIN: BULLET-PROOF REFRESH & BACK-BUTTON LOCK CONTROLLER      ===
-// ==========================================================================
-
-// 1. கார்ட்டின் திறந்த நிலை & ஸ்கிரீனை பிரவுசரில் லாக் செய்தல்
-function saveCartState(stateName) {
-    localStorage.setItem('blueskin_cart_screen', stateName); // 'closed', 'step1', 'step2'
-}
-
-// 2. படிவத்தில் டைப் செய்யும் விவரங்களை (Draft) உடனுக்குடன் சேமித்தல்
-function saveFormDraft() {
-    const draft = {
-        name: document.getElementById('custName') ? document.getElementById('custName').value : '',
-        phone: document.getElementById('custPhone') ? document.getElementById('custPhone').value : '',
-        address: document.getElementById('custAddress') ? document.getElementById('custAddress').value : ''
-    };
-    localStorage.setItem('blueskin_checkout_draft', JSON.stringify(draft));
-}
-
-// படிவ விவரங்களை மீண்டும் மீட்டெடுத்தல் (Restore)
-function restoreFormDraft() {
-    const draft = JSON.parse(localStorage.getItem('blueskin_checkout_draft'));
-    if (draft) {
-        if (document.getElementById('custName') && draft.name) document.getElementById('custName').value = draft.name;
-        if (document.getElementById('custPhone') && draft.phone) document.getElementById('custPhone').value = draft.phone;
-        if (document.getElementById('custAddress') && draft.address) document.getElementById('custAddress').value = draft.address;
-    }
-}
-
-// 3. கார்ட் திறக்கும் முதன்மை செயல்முறை
-window.openCart = function(isRestoring = false) {
-    const drawer = document.getElementById('cartDrawer');
-    const overlay = document.getElementById('cartOverlay');
-    if (!drawer) return;
-
-    drawer.classList.add('active');
-    if (overlay) overlay.classList.add('active');
-    document.body.style.overflow = 'hidden'; // பின்னால் இருக்கும் தளம் ஸ்க்ரோல் ஆகாமல் லாக் செய்தல்
-
-    if (!isRestoring) {
-        saveCartState('step1');
-        history.pushState({ screen: 'cart_step1' }, '');
-    }
-};
-
-// 4. கார்ட் மூடும் செயல்முறை
-window.closeCart = function(isBackNav = false) {
-    const drawer = document.getElementById('cartDrawer');
-    const overlay = document.getElementById('cartOverlay');
-    if (!drawer) return;
-
-    drawer.classList.remove('active');
-    drawer.classList.remove('show-checkout');
-    if (overlay) overlay.classList.remove('active');
-    document.body.style.overflow = ''; // ஸ்க்ரோலை இயல்பாக்குதல்
-
-    saveCartState('closed');
-
-    // யூசர் க்ளோஸ் பட்டன் அழுத்தினால் ஹிஸ்டரியை சமன் செய்தல்
-    if (!isBackNav && window.history.state && window.history.state.screen) {
-        window.history.back();
-    }
-};
-
-// 5. STEP 1 மற்றும் STEP 2-ஐ மாற்றும் கண்ட்ரோலர்
-window.showMobileCheckout = function(isCheckout, isRestoring = false) {
-    const drawer = document.getElementById('cartDrawer');
-    const scrollBody = document.querySelector('.cart-split-body');
-    if (!drawer) return;
-
-    if (isCheckout) {
-        if (typeof cart !== 'undefined' && cart.length === 0) {
-            alert("உங்கள் கார்ட் காலியாக உள்ளது. தயவுசெய்து பொருட்களைச் சேர்க்கவும்!");
-            return;
-        }
-        drawer.classList.add('show-checkout');
-        saveCartState('step2');
-
-        if (!isRestoring) {
-            history.pushState({ screen: 'cart_step2' }, '');
-        }
-    } else {
-        drawer.classList.remove('show-checkout');
-        saveCartState('step1');
-    }
-
-    if (scrollBody) {
-        scrollBody.scrollTop = 0;
-    }
-};
-
-// 6. மொபைல் BACK BUTTON / BROWSER BACK அழுத்தும் போது நடக்கும் செயல்முறை
-window.addEventListener('popstate', function(event) {
-    const drawer = document.getElementById('cartDrawer');
-    if (!drawer || !drawer.classList.contains('active')) return;
-
-    const currentScreen = localStorage.getItem('blueskin_cart_screen');
-
-    if (currentScreen === 'step2') {
-        // Step 2-ல் இருந்தால் Back அழுத்தும்போது Step 1-க்கு மட்டுமே போகும்
-        window.showMobileCheckout(false, true);
-    } else if (currentScreen === 'step1') {
-        // Step 1-ல் இருந்தால் கார்ட் மட்டும் மூடும்
-        window.closeCart(true);
-    }
-});
-
-// 7. தளம் RELOAD (REFRESH) ஆகும் போது பழைய நிலையை அப்படியே மீட்டெடுத்தல்
-document.addEventListener('DOMContentLoaded', function() {
-    // படிவ உள்ளீடுகளுக்கு ஆட்டோ-சேவ் லாக் போடுதல்
-    ['custName', 'custPhone', 'custAddress'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', saveFormDraft);
-        }
-    });
-
-    // பழைய படிவ விவரங்களை மீட்டெடுத்தல்
-    restoreFormDraft();
-
-    // டாப் கார்ட் பட்டன் மற்றும் க்ளோஸ் பட்டன்களை இணைத்தல்
-    const openBtn = document.getElementById('openCartBtn');
-    if (openBtn) {
-        openBtn.onclick = function() { window.openCart(false); };
-    }
-
-    const closeBtn = document.getElementById('closeCartBtn');
-    if (closeBtn) {
-        closeBtn.onclick = function() { window.closeCart(false); };
-    }
-
-    const overlay = document.getElementById('cartOverlay');
-    if (overlay) {
-        overlay.onclick = function() { window.closeCart(false); };
-    }
-
-    // REFRESH ஆவதற்கு முன் இருந்த ஸ்கிரீனை அப்படியே திறத்தல்
-    const savedScreen = localStorage.getItem('blueskin_cart_screen');
-
-    if (savedScreen === 'step1') {
-        window.openCart(true);
-    } else if (savedScreen === 'step2') {
-        window.openCart(true);
-        window.showMobileCheckout(true, true);
-    }
-});
-
-
-// ==========================================================================
-// === 2. WHATSAPP ORDER, INSTANT CART CLEAR & REDIRECT TO HOME           ===
-// ==========================================================================
-window.submitWhatsAppOrder = function() {
-    const nameInput = document.getElementById('custName');
-    const phoneInput = document.getElementById('custPhone');
-    const addressInput = document.getElementById('custAddress');
-
-    if (!nameInput || !phoneInput || !addressInput) {
-        alert("Form inputs not found. Please refresh the page.");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const address = addressInput.value.trim();
-
-    if (!name) {
-        alert("Please enter your name.");
-        nameInput.focus();
-        return;
-    }
-
-    if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
-        alert("Please enter a valid 10-digit phone number.");
-        phoneInput.focus();
-        return;
-    }
-
-    if (!address) {
-        alert("Please enter your complete delivery address.");
-        addressInput.focus();
-        return;
-    }
-
-    let activeCart = [];
-    try {
-        activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
-            ? cart 
-            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) {
-        activeCart = [];
-    }
-
-    if (activeCart.length === 0) {
-        alert("Your shopping bag is currently empty.");
-        return;
-    }
-
-    let orderItemsText = "";
-    let grandTotal = 0;
-
-    activeCart.forEach((item, index) => {
-        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
-        const itemQty = Number(item.qty || 1);
-        const itemTotal = itemPrice * itemQty;
-        grandTotal += itemTotal;
-        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • Qty   : ${itemQty}\n   • Price : ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
-    });
-
-    const subTotal = grandTotal;
-    let promoLine = "";
-    let finalPayable = subTotal;
-
-    if (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0 && typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
-        finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
-        promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
-    }
-
-    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-IN');
-    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-    const message = 
-`👑 *BLUE SKIN LUXURY BOUTIQUE*
-*Official Order Invoice*
-────────────────────────
-🧾 *Order Ref   :* #${orderId}
-📅 *Date & Time :* ${dateStr}, ${timeStr}
-────────────────────────
-
-👤 *CLIENT INFORMATION*
-- *Name     :* ${name}
-- *Phone    :* +91 ${phone}
-- *Address  :* ${address}
-
-🛍️ *ORDERED CREATIONS*
-────────────────────────
-${orderItemsText.trim()}
-────────────────────────
-
-💳 *PAYMENT SUMMARY*
-- *Bag Value   :* ₹ ${subTotal.toLocaleString('en-IN')}
-${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
-- *Net Payable :* *₹ ${finalPayable.toLocaleString('en-IN')}*
-────────────────────────
-
-✨ *Assurance:* 100% Authentic Handcrafted Formulation
-🚚 *Dispatch:* Priority Velvet Dispatch
-
-_Please confirm my order and share payment instructions. Thank you!_`;
-
-    const targetNumber = "919658399991";
-    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
-
-    // 1. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
+    // A. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
     const client = window.dbClient;
     if (client) {
         client.from('orders').insert([
@@ -1254,8 +899,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
             console.error("Order sync error:", err);
         });
 
-        // கூப்பன் கவுன்ட்டரை கிளவுடில் கூட்டுதல்
-        if (typeof appliedPromoCode !== 'undefined' && appliedPromoCode) {
+        if (appliedPromoCode) {
             try {
                 let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
                 const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
@@ -1272,7 +916,7 @@ _Please confirm my order and share payment instructions. Thank you!_`;
         }
     }
 
-    // 2. கார்ட் முழுமையாக காலி செய்யப்படுகிறது (Clear Cart)
+    // B. கார்ட் மெமரி முழுமையாக 0 ஆகுதல்
     cart = [];
     localStorage.removeItem('blueskin_cart');
     localStorage.removeItem('blueskin_checkout_draft');
@@ -1285,501 +929,97 @@ _Please confirm my order and share payment instructions. Thank you!_`;
     const drawerItemCountEl = document.getElementById('drawerItemCount');
     if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
 
-    // 3. புதிய டேபில் வாட்ஸ்அப் திறந்து, தற்போதைய பக்கம் நேரடியாக ஹோம் பேஜிற்குத் திரும்புகிறது
+    updateCartUI();
+
+    // C. வாட்ஸ்அப் திறந்து, உடனடியாக முகப்புப் பக்கத்திற்குத் திரும்புதல்
     window.open(whatsappURL, '_blank');
-    window.location.href = 'index.html';
+    window.location.replace('index.html');
 };
 
-// ==========================================================================
-// === CATEGORY CLICK & CATALOG INITIALIZATION (DESKTOP + MOBILE)         ===
-// ==========================================================================
-function bindCategoryAndCatalogEvents() {
-    const track = document.getElementById('catTrack');
-    if (track) {
-        track.addEventListener('click', function(e) {
-            const item = e.target.closest('.cat-item');
-            if (!item) return;
-            const category = item.getAttribute('data-category') || 'all';
-            if (typeof selectCategory === 'function') {
-                selectCategory(category, item);
+// 15. மொபைல் செக்-அவுட் வழிசெலுத்தல் & ஹிஸ்டரி லாக் (Step 1 & Step 2 Controller)
+window.showMobileCheckout = function(isCheckout) {
+    const drawer = document.getElementById('cartDrawer');
+    const scrollBody = document.querySelector('.cart-split-body');
+    if (drawer) {
+        if (isCheckout) {
+            if (typeof cart !== 'undefined' && cart.length === 0) {
+                alert("Your shopping bag is empty. Please add an item to proceed!");
+                return;
             }
-        });
+            drawer.classList.add('show-checkout');
+            localStorage.setItem('blueskin_cart_screen', 'step2');
+        } else {
+            drawer.classList.remove('show-checkout');
+            localStorage.setItem('blueskin_cart_screen', 'step1');
+        }
+        if (scrollBody) {
+            scrollBody.scrollTop = 0;
+        }
     }
+};
 
-    // Direct event listener for all category pills
-    document.querySelectorAll('.cat-item').forEach(el => {
-        el.onclick = function() {
-            const category = this.getAttribute('data-category') || 'all';
-            if (typeof selectCategory === 'function') {
-                selectCategory(category, this);
-            }
+// 16. தொடக்க நிகழ்வு இணைப்புகள் (Page Initialization)
+function initializeAllCatalogInteractions() {
+    document.querySelectorAll('.cat-item').forEach(item => {
+        item.onclick = function(e) {
+            e.preventDefault();
+            const cat = this.getAttribute('data-category') || 'all';
+            selectCategory(cat, this);
         };
     });
 
-    // Initial render
-    if (typeof loadAdminMasterProducts === 'function') {
-        loadAdminMasterProducts();
-    }
-    if (typeof fetchSupabaseProducts === 'function') {
-        fetchSupabaseProducts();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', bindCategoryAndCatalogEvents);
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    bindCategoryAndCatalogEvents();
-}
-
-// DOM முழுமையாக லோட் ஆனவுடன் தயாரிப்புகளை உடனே ரெண்டர் செய்யும் உத்தரவாதம்
-document.addEventListener('DOMContentLoaded', () => {
-    if (typeof loadAdminMasterProducts === 'function') {
-        loadAdminMasterProducts();
-    }
-    if (typeof fetchSupabaseProducts === 'function') {
-        fetchSupabaseProducts();
-    } else {
-        renderProducts('all');
-    }
-});
-
-// பக்கத்தை ஏற்கனவே திறந்து வைத்திருந்தால் 0ms-ல் உடனே ஏற்றுதல்
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    if (typeof renderProducts === 'function') renderProducts('all');
-}
-
-// ==========================================================================
-// === 7. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் பதிவு ஃபங்ஷன்                       ===
-// ==========================================================================
-window.submitWhatsAppOrder = function() {
-    const nameInput = document.getElementById('custName');
-    const phoneInput = document.getElementById('custPhone');
-    const addressInput = document.getElementById('custAddress');
-
-    if (!nameInput || !phoneInput || !addressInput) {
-        alert("படிவப் புலங்கள் கிடைக்கவில்லை. பக்கத்தை ரீலோட் செய்யவும்!");
-        return;
+    const catTrack = document.getElementById('catTrack');
+    if (catTrack) {
+        catTrack.onclick = function(e) {
+            const item = e.target.closest('.cat-item');
+            if (!item) return;
+            const cat = item.getAttribute('data-category') || 'all';
+            selectCategory(cat, item);
+        };
     }
 
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const address = addressInput.value.trim();
-
-    if (!name || !phone || phone.length < 10 || !address) {
-        alert("தயவுசெய்து உங்கள் பெயர், 10 இலக்க போன் எண், முகவரியைச் சரியாக உள்ளிடவும்!");
-        return;
+    const catScrollLeft = document.getElementById('catScrollLeft');
+    const catScrollRight = document.getElementById('catScrollRight');
+    if (catScrollLeft && catTrack) {
+        catScrollLeft.onclick = function() { catTrack.scrollBy({ left: -250, behavior: 'smooth' }); };
+    }
+    if (catScrollRight && catTrack) {
+        catScrollRight.onclick = function() { catTrack.scrollBy({ left: 250, behavior: 'smooth' }); };
     }
 
-    let activeCart = [];
-    try {
-        activeCart = (typeof cart !== 'undefined' && cart.length > 0) 
-            ? cart 
-            : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) {
-        activeCart = [];
-    }
-
-    if (activeCart.length === 0) {
-        alert("உங்கள் கார்ட் காலியாக உள்ளது!");
-        return;
-    }
-
-    let grandTotal = 0;
-    activeCart.forEach(item => {
-        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
-        const itemQty = Number(item.qty || 1);
-        grandTotal += (itemPrice * itemQty);
+    // படிவ உள்ளீடுகளை ஆட்டோ-சேவ் செய்தல்
+    ['custName', 'custPhone', 'custAddress'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                const draft = {
+                    name: document.getElementById('custName')?.value || '',
+                    phone: document.getElementById('custPhone')?.value || '',
+                    address: document.getElementById('custAddress')?.value || ''
+                };
+                localStorage.setItem('blueskin_checkout_draft', JSON.stringify(draft));
+            });
+        }
     });
 
-    const finalPayable = (typeof appliedPromoDiscount !== 'undefined' && appliedPromoDiscount > 0) 
-        ? Math.max(0, grandTotal - appliedPromoDiscount) 
-        : grandTotal;
-
-    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
-
-    // ----------------------------------------------------------------------
-    // 5. SUPABASE CLOUD DATABASE-ல் ஆர்டரைப் பதிவு செய்தல் (Zero SyntaxError)
-    // ----------------------------------------------------------------------
-    const client = window.dbClient;
-    if (client) {
-        client.from('orders').insert([
-            {
-                id: orderId,
-                customer_name: name,
-                customer_phone: phone,
-                customer_address: address,
-                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
-                total_amount: finalPayable,
-                is_paid: false,
-                order_status: 'Pending Verification'
-            }
-        ]).then(() => {
-            console.log("✅ ஆர்டர் Supabase-ல் வெற்றிகரமாக பதிவானது! ID:", orderId);
-        }).catch(err => {
-            console.error("Supabase Order DB Error:", err);
-        });
-    }
-
-    // ----------------------------------------------------------------------
-    // 6. ஆட்டோ-ரீசெட் & கார்ட் டிராயரை மூடுதல்
-    // ----------------------------------------------------------------------
-    cart = [];
-    localStorage.removeItem('blueskin_cart');
-    localStorage.removeItem('blueskin_checkout_draft');
-    localStorage.setItem('blueskin_cart_screen', 'closed');
-
-    nameInput.value = '';
-    phoneInput.value = '';
-    addressInput.value = '';
-
-    if (typeof updateCartUI === 'function') {
-        updateCartUI();
-    }
-    const cartCountEl = document.getElementById('cartCount');
-    if (cartCountEl) cartCountEl.textContent = '0';
-    const drawerItemCountEl = document.getElementById('drawerItemCount');
-    if (drawerItemCountEl) drawerItemCountEl.textContent = '(0 items)';
-
-    const drawer = document.getElementById('cartDrawer');
-    const overlay = document.getElementById('cartOverlay');
-    if (drawer) {
-        drawer.classList.remove('active');
-        drawer.classList.remove('show-checkout');
-    }
-    if (overlay) {
-        overlay.classList.remove('active');
-    }
-    document.body.style.overflow = '';
-
-    // 7. ஆர்டர் பதிவான பிறகு வாட்ஸ்அப்பைத் திறத்தல்
-    const targetNumber = "919658399991";
-    const whatsappMsg = `👑 *BLUE SKIN LUXURY BOUTIQUE*\n🧾 Order Ref: #${orderId}\nName: ${name}\nTotal: ₹${finalPayable.toLocaleString('en-IN')}`;
-    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(whatsappMsg)}`;
-    window.location.href = whatsappURL;
-};
-// =====================================================
-// FRONT PAGE AUTO 3-2-1 FLASH POP-UP TRIGGER
-// =====================================================
-document.addEventListener('DOMContentLoaded', async () => {
-    let config = null;
-
-    // 1. உள்ளூர் சேமிப்பகம் அல்லது Supabase-லிருந்து அமைப்புகளை எடுத்தல்
+    // பழைய படிவ விவரங்களை மீட்டெடுத்தல்
     try {
-        const localCfg = localStorage.getItem("BLUESKIN_FLASH_MODAL_CONFIG");
-        if (localCfg) config = JSON.parse(localCfg);
-    } catch(e) {}
-
-    // கிளவுட் கிளையண்ட் இருந்தால் நேரடியாக எடுத்தல்
-    if (window.dbClient) {
-        try {
-            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'flash_modal_config').single();
-            if (data && data.value) {
-                config = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-            }
-        } catch(err) {}
-    }
-
-    if (!config || config.state !== 'ACTIVE') return;
-
-    // 2. குறிப்பிட்ட விநாடிகளுக்குப் பின் பாப்-அப் திறத்தல்
-    const delayTime = parseInt(config.delay) || 2000;
-
-    setTimeout(() => {
-        // ஏற்கெனவே மூடப்பட்டிருந்தால் மீண்டும் காட்டாதிருக்க (Session Check)
-        if (sessionStorage.getItem('blueskin_flash_seen')) return;
-
-        const modal = document.getElementById('frontFlashModal');
-        const ring = document.getElementById('frontCountdownRing');
-        const card = document.getElementById('frontFlashCard');
-        const num = document.getElementById('frontCountdownNum');
-
-        if (!modal) return;
-
-        // தகவல்களை நிரப்புதல்
-        document.getElementById('frontFlashEyebrow').textContent = config.eyebrow || 'EXCLUSIVE PRIVILEGE';
-        document.getElementById('frontFlashHeadline').textContent = config.headline || 'LUXURY STORE OFFER';
-        document.getElementById('frontFlashDesc').textContent = config.desc || '';
-        document.getElementById('frontFlashCode').textContent = config.code || 'BLUESKIN10';
-        document.getElementById('frontFlashBtnLink').textContent = config.btnText || 'Shop Collection';
-        document.getElementById('frontFlashBtnLink').href = config.targetUrl || 'shop.html';
-
-        modal.style.display = 'flex';
-        ring.style.display = 'flex';
-        card.style.display = 'none';
-
-        let count = 3;
-        num.textContent = count;
-
-        const timer = setInterval(() => {
-            count--;
-            if (count > 0) {
-                num.textContent = count;
-            } else {
-                clearInterval(timer);
-                ring.style.display = 'none';
-                card.style.display = 'block';
-            }
-        }, 850);
-
-    }, delayTime);
-});
-
-window.closeFrontFlashModal = function() {
-    const modal = document.getElementById('frontFlashModal');
-    if (modal) modal.style.display = 'none';
-    sessionStorage.setItem('blueskin_flash_seen', 'true');
-};
-
-window.copyFrontFlashCode = function() {
-    const code = document.getElementById('frontFlashCode')?.textContent || '';
-    if (code) {
-        navigator.clipboard.writeText(code).then(() => {
-            alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது! செக்-அவுட்டில் பயன்படுத்தலாம்.`);
-        });
-    }
-};
-
-// ==========================================================================
-// === 1. PROMO CODE ENGINE (100% ENGLISH LUXURY NOTICES)                 ===
-// ==========================================================================
-let appliedPromoCode = "";
-let appliedPromoDiscount = 0;
-
-window.applyCheckoutPromoCode = async function() {
-    const input = document.getElementById('checkoutCouponInput');
-    const notice = document.getElementById('couponAppliedNotice');
-    const discRow = document.getElementById('couponDiscountRow');
-    const discValEl = document.getElementById('couponDiscountVal');
-
-    if (!input || !notice) return;
-
-    const code = input.value.trim().toUpperCase();
-    if (!code) {
-        notice.style.display = "block";
-        notice.style.color = "#ef4444";
-        notice.textContent = "Please enter a promo code.";
-        return;
-    }
-
-    let coupons = [];
-    try {
-        const local = localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA");
-        if (local) coupons = JSON.parse(local);
-    } catch(e) {}
-
-    if (window.dbClient) {
-        try {
-            const { data } = await window.dbClient.from('site_content').select('value').eq('key', 'marketing_coupons').single();
-            if (data && data.value) {
-                coupons = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
-            }
-        } catch(err) {}
-    }
-
-    const found = coupons.find(c => (c.code || '').toUpperCase() === code && c.status === "ACTIVE");
-
-    if (!found) {
-        appliedPromoCode = "";
-        appliedPromoDiscount = 0;
-        if (discRow) discRow.style.display = "none";
-        notice.style.display = "block";
-        notice.style.color = "#ef4444";
-        notice.textContent = "Invalid or expired promo code.";
-        recalculateCartTotalWithDiscount();
-        return;
-    }
-
-    let currentCart = [];
-    try {
-        currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) { currentCart = []; }
-
-    const bagSubTotal = currentCart.reduce((sum, item) => {
-        const p = Number(item.price || item.finalPrice || item.originalPrice || 0);
-        const q = Number(item.qty || 1);
-        return sum + (p * q);
-    }, 0);
-
-    if (bagSubTotal === 0) {
-        notice.style.display = "block";
-        notice.style.color = "#ef4444";
-        notice.textContent = "Please add items to your bag before applying promo code.";
-        return;
-    }
-
-    if (found.minSpend && bagSubTotal < Number(found.minSpend)) {
-        appliedPromoCode = "";
-        appliedPromoDiscount = 0;
-        if (discRow) discRow.style.display = "none";
-        notice.style.display = "block";
-        notice.style.color = "#f59e0b";
-        notice.textContent = `Minimum order spend of ₹${Number(found.minSpend).toLocaleString('en-IN')} required for this code.`;
-        recalculateCartTotalWithDiscount();
-        return;
-    }
-
-    let discount = 0;
-    if (found.type === "PERCENTAGE") {
-        discount = Math.round((bagSubTotal * Number(found.value || 0)) / 100);
-        if (found.maxCap && Number(found.maxCap) > 0 && discount > Number(found.maxCap)) {
-            discount = Number(found.maxCap);
+        const draft = JSON.parse(localStorage.getItem('blueskin_checkout_draft'));
+        if (draft) {
+            if (document.getElementById('custName') && draft.name) document.getElementById('custName').value = draft.name;
+            if (document.getElementById('custPhone') && draft.phone) document.getElementById('custPhone').value = draft.phone;
+            if (document.getElementById('custAddress') && draft.address) document.getElementById('custAddress').value = draft.address;
         }
-    } else if (found.type === "FLAT") {
-        discount = Number(found.value || 0);
-    }
+    } catch(e) {}
 
-    appliedPromoCode = code;
-    appliedPromoDiscount = discount;
-
-    if (discRow && discValEl) {
-        discRow.style.display = "flex";
-        discValEl.textContent = `-₹${discount.toLocaleString('en-IN')}`;
-    }
-
-    notice.style.display = "block";
-    notice.style.color = "#22c55e";
-    notice.textContent = `Promo code '${code}' applied successfully! Savings: ₹${discount.toLocaleString('en-IN')}`;
-
-    recalculateCartTotalWithDiscount();
-};
-
-function recalculateCartTotalWithDiscount() {
-    let currentCart = [];
-    try {
-        currentCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) { currentCart = []; }
-
-    const bagSubTotal = currentCart.reduce((sum, item) => {
-        const p = Number(item.price || item.finalPrice || item.originalPrice || 0);
-        const q = Number(item.qty || 1);
-        return sum + (p * q);
-    }, 0);
-
-    const payable = Math.max(0, bagSubTotal - (appliedPromoDiscount || 0));
-    const totalEl = document.getElementById('cartTotalPrice');
-    if (totalEl) totalEl.textContent = `₹${payable.toLocaleString('en-IN')}`;
+    // அட்மின் & கிளவுட் தயாரிப்புகளை ஏற்றுதல்
+    syncAdminProducts();
+    updateCartUI();
+    updateWishlistUI();
 }
 
-// ==========================================================================
-// === 2. வாட்ஸ்அப் ஆர்டர் & கிளவுட் பதிவு (ZERO SYNTAX ERROR)              ===
-// ==========================================================================
-window.submitWhatsAppOrder = function() {
-    const nameInput = document.getElementById('custName');
-    const phoneInput = document.getElementById('custPhone');
-    const addressInput = document.getElementById('custAddress');
-
-    if (!nameInput || !phoneInput || !addressInput) {
-        alert("படிவப் புலங்கள் கிடைக்கவில்லை. பக்கத்தை ரீலோட் செய்யவும்!");
-        return;
-    }
-
-    const name = nameInput.value.trim();
-    const phone = phoneInput.value.trim();
-    const address = addressInput.value.trim();
-
-    if (!name || !phone || phone.length < 10 || !address) {
-        alert("தயவுசெய்து உங்கள் பெயர், 10 இலக்க போன் எண், முகவரியைச் சரியாக உள்ளிடவும்!");
-        return;
-    }
-
-    let activeCart = [];
-    try {
-        activeCart = (typeof cart !== 'undefined' && cart.length > 0) ? cart : JSON.parse(localStorage.getItem('blueskin_cart')) || [];
-    } catch(e) { activeCart = []; }
-
-    if (activeCart.length === 0) {
-        alert("உங்கள் கார்ட் காலியாக உள்ளது!");
-        return;
-    }
-
-    let orderItemsText = "";
-    let grandTotal = 0;
-
-    activeCart.forEach((item, index) => {
-        const itemPrice = Number(item.price || item.finalPrice || item.originalPrice || 0);
-        const itemQty = Number(item.qty || 1);
-        const itemTotal = itemPrice * itemQty;
-        grandTotal += itemTotal;
-        orderItemsText += `${index + 1}️⃣ *${item.name || item.title}*\n   • *Qty   :* ${itemQty}\n   • *Price :* ₹ ${itemTotal.toLocaleString('en-IN')}\n\n`;
-    });
-
-    const subTotal = grandTotal;
-    let promoLine = "";
-    let finalPayable = subTotal;
-
-    if (appliedPromoDiscount > 0 && appliedPromoCode) {
-        finalPayable = Math.max(0, subTotal - appliedPromoDiscount);
-        promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
-    }
-
-    const orderId = `BS-${Math.floor(100000 + Math.random() * 900000)}`;
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-IN');
-    const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-
-    const message = 
-`👑 *BLUE SKIN LUXURY BOUTIQUE*
-*Official Order Invoice*
-────────────────────────
-🧾 *Order Ref   :* #${orderId}
-📅 *Date & Time :* ${dateStr}, ${timeStr}
-────────────────────────
-
-👤 *CLIENT INFORMATION*
-- *Name     :* ${name}
-- *Phone    :* +91 ${phone}
-- *Address  :* ${address}
-
-🛍️ *ORDERED CREATIONS*
-────────────────────────
-${orderItemsText.trim()}
-────────────────────────
-
-💳 *PAYMENT SUMMARY*
-- *Bag Value   :* ₹ ${subTotal.toLocaleString('en-IN')}
-${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
-- *Net Payable :* *₹ ${finalPayable.toLocaleString('en-IN')}*
-────────────────────────
-
-✨ *Assurance:* 100% Authentic Handcrafted Formulation
-🚚 *Dispatch:* Priority Velvet Dispatch
-
-_தயவுசெய்து இந்த ஆர்டரை உறுதிசெய்து கட்டண விவரங்களை அனுப்பவும். நன்றி!_`;
-
-    // 1. ஆர்டரை Supabase-ல் பதிவு செய்தல் (.then() முறை - எரர் வராது)
-    if (window.dbClient) {
-        window.dbClient.from('orders').insert([{
-            id: orderId,
-            customer_name: name,
-            customer_phone: phone,
-            customer_address: address,
-            items_summary: orderItemsText.trim(),
-            total_amount: finalPayable,
-            is_paid: false,
-            order_status: 'Pending Verification'
-        }]).then(() => {
-            console.log("Order cloud sync success");
-        }).catch(err => {
-            console.error("Order sync error:", err);
-        });
-
-        // கூப்பன் கவுன்ட்டரை +1 கூட்டுதல்
-        if (appliedPromoCode) {
-            let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
-            const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
-            if (targetCoupon) {
-                targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
-                localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
-                window.dbClient.from('site_content').upsert({
-                    key: 'marketing_coupons',
-                    value: JSON.stringify(coupons),
-                    updated_at: new Date()
-                }).then(() => {}).catch(() => {});
-            }
-        }
-    }
-
-    // 2. வாட்ஸ்அப் திறத்தல்
-    const targetNumber = "919658399991";
-    const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-};
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeAllCatalogInteractions);
+} else {
+    initializeAllCatalogInteractions();
+}
