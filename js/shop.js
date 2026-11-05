@@ -8,6 +8,7 @@ let wishlist = JSON.parse(localStorage.getItem('blueskin_wishlist')) || [];
 let activeViewingProductId = null;
 let appliedPromoCode = "";
 let appliedPromoDiscount = 0;
+let isSyncingProducts = false;
 
 const sampleGalleryImages = [
     "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=600&auto=format&fit=crop",
@@ -199,8 +200,11 @@ function getActiveCategory() {
     return active ? (active.getAttribute('data-category') || 'all') : 'all';
 }
 
-// 7. அட்மின் லோக்கல் ஸ்டோரேஜ் & சுபாபேஸ் கிளவுட் தயாரிப்புகளை சின்க் செய்தல்
+// 7. SINGLE MASTER SYNC: அட்மின் லோக்கல் ஸ்டோரேஜ் & சுபாபேஸ் கிளவுட் தயாரிப்புகள் சின்க்
 async function syncAdminProducts() {
+    if (isSyncingProducts) return;
+    isSyncingProducts = true;
+
     // A. அட்மின் லோக்கல் ஸ்டோரேஜில் உள்ள தயாரிப்புகளை உடனடியாக எடுத்தல் (0ms Load)
     try {
         const local = localStorage.getItem("BLUESKIN_PRODUCT_MASTER_DATA");
@@ -211,46 +215,83 @@ async function syncAdminProducts() {
                 renderProducts(getActiveCategory());
             }
         }
-    } catch(e) {}
+    } catch(e) {
+        console.warn("Local storage product read error:", e);
+    }
 
     // B. சுபாபேஸ் கிளவுடிலிருந்து நேரலைத் தயாரிப்புகளை எடுத்தல்
-    let attempts = 0;
-    const timer = setInterval(async () => {
-        attempts++;
+    try {
         const client = window.dbClient;
-
         if (client) {
-            clearInterval(timer);
-            try {
-                const { data, error } = await client
-                    .from('products')
-                    .select('*')
-                    .order('id', { ascending: true });
+            const { data, error } = await client
+                .from('products')
+                .select('*')
+                .order('id', { ascending: true });
 
-                if (!error && data && data.length > 0) {
-                    products = data.map(normalizeProduct);
-                    renderProducts(getActiveCategory());
-                    if (typeof updateCartUI === 'function') updateCartUI();
-                }
-
-                // அட்மினில் எடிட் செய்தால் உடனே தானாக மாறும் Realtime Listener
-                client
-                    .channel('public:products_live_sync')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
-                        syncAdminProducts();
-                    })
-                    .subscribe();
-
-            } catch(err) {
-                console.error("Supabase Sync Error:", err);
+            if (!error && data && data.length > 0) {
+                products = data.map(normalizeProduct);
+                renderProducts(getActiveCategory());
+                if (typeof updateCartUI === 'function') updateCartUI();
             }
-        } else if (attempts > 25) {
-            clearInterval(timer);
         }
-    }, 200);
+    } catch (err) {
+        console.error("Supabase Sync Error:", err);
+    } finally {
+        isSyncingProducts = false;
+    }
 }
 
-// 8. கார்ட்டில் தயாரிப்பு எண்ணிக்கை மாற்றம் (In-Card Quantity Operations)
+// 8. பிராண்ட் லோகோ படம் சின்க் (Admin CMS Logo Image -> Shop Header)
+function syncShopBrandLogo() {
+    const logoImg = document.getElementById('shopBrandLogoImg') || document.querySelector('.nav-left-brand img') || document.querySelector('.brand-logo-img');
+    const fallbackEmblem = document.getElementById('shopBrandLogoFallback') || document.querySelector('.nav-left-brand .brand-emblem');
+    const brandContainer = document.querySelector('.nav-left-brand .logo');
+
+    let logoUrl = "";
+
+    try {
+        const localCMS = localStorage.getItem('BLUESKIN_PORTFOLIO_CMS_DATA');
+        if (localCMS) {
+            const parsed = JSON.parse(localCMS);
+            if (parsed && parsed.brandLogoImg) {
+                logoUrl = parsed.brandLogoImg.trim();
+            }
+        }
+    } catch(e) {}
+
+    if (logoUrl) {
+        if (logoImg) {
+            logoImg.src = logoUrl;
+            logoImg.style.display = 'inline-block';
+        }
+        if (fallbackEmblem) fallbackEmblem.style.display = 'none';
+        if (brandContainer) brandContainer.classList.add('has-logo-img');
+    }
+
+    if (window.dbClient) {
+        window.dbClient
+            .from('site_content')
+            .select('value')
+            .eq('key', 'portfolio_cms')
+            .single()
+            .then(({ data, error }) => {
+                if (!error && data && data.value) {
+                    const cms = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                    if (cms && cms.brandLogoImg && cms.brandLogoImg.trim() !== '') {
+                        if (logoImg) {
+                            logoImg.src = cms.brandLogoImg.trim();
+                            logoImg.style.display = 'inline-block';
+                        }
+                        if (fallbackEmblem) fallbackEmblem.style.display = 'none';
+                        if (brandContainer) brandContainer.classList.add('has-logo-img');
+                    }
+                }
+            })
+            .catch(() => {});
+    }
+}
+
+// 9. கார்ட்டில் தயாரிப்பு எண்ணிக்கை மாற்றம் (In-Card Quantity Operations)
 window.updateInCardQty = function(productId, delta) {
     if (!products || products.length === 0) return;
 
@@ -291,7 +332,7 @@ function saveCart() {
     updateCartUI();
 }
 
-// 9. விருப்பப் பட்டியல் மேலாண்மை (Wishlist Engine)
+// 10. விருப்பப் பட்டியல் மேலாண்மை (Wishlist Engine)
 window.toggleWishlist = function(productId, event) {
     if (event) event.stopPropagation();
 
@@ -397,7 +438,7 @@ if (openWishlistBtn) openWishlistBtn.onclick = function() { toggleWishlistDrawer
 if (closeWishlistBtn) closeWishlistBtn.onclick = function() { toggleWishlistDrawer(false); };
 if (wishlistOverlay) wishlistOverlay.onclick = function() { toggleWishlistDrawer(false); };
 
-// 10. முழு தயாரிப்புப் பக்கப் பார்வை (Full Product Page View)
+// 11. முழு தயாரிப்புப் பக்கப் பார்வை (Full Product Page View)
 window.openFullProductPage = function(productId) {
     const prod = products.find(p => String(p.id) === String(productId)) || products[0];
     if (!prod) return;
@@ -515,7 +556,7 @@ function updateFullPageActionSlot(productId) {
     }
 }
 
-// 11. Accordion Toggle
+// 12. Accordion Toggle
 window.toggleAccordion = function(targetId) {
     const allItems = document.querySelectorAll('.accordion-item');
     allItems.forEach(item => {
@@ -535,7 +576,7 @@ window.toggleAccordion = function(targetId) {
     });
 };
 
-// 12. கார்ட் UI மற்றும் Recommended For You தயாரிப்புகள் (Cart UI Engine)
+// 13. கார்ட் UI மற்றும் Recommended For You தயாரிப்புகள் (Cart UI Engine)
 function updateCartUI() {
     let currentCart = [];
     try {
@@ -689,7 +730,7 @@ if (openCartBtn) openCartBtn.onclick = function() { toggleCart(true); };
 if (closeCartBtn) closeCartBtn.onclick = function() { toggleCart(false); };
 if (cartOverlay) cartOverlay.onclick = function() { toggleCart(false); };
 
-// 13. கூப்பன் குறியீடு சரிபார்த்தல் (Promo Code Engine)
+// 14. கூப்பன் குறியீடு சரிபார்த்தல் (Promo Code Engine)
 window.applyCheckoutPromoCode = async function() {
     const input = document.getElementById('checkoutCouponInput');
     const notice = document.getElementById('couponAppliedNotice');
@@ -780,7 +821,7 @@ window.applyCheckoutPromoCode = async function() {
     updateCartUI();
 };
 
-// 14. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் & கார்ட் 0 ஆகி ஹோம் பேஜ் திரும்புதல் (WhatsApp Checkout Engine)
+// 15. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் & கார்ட் 0 ஆகி ஹோம் பேஜ் திரும்புதல் (WhatsApp Checkout Engine)
 window.submitWhatsAppOrder = function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
@@ -936,7 +977,7 @@ _Please reply with payment details to confirm this order. Thank you for choosing
     window.location.replace('index.html');
 };
 
-// 15. மொபைல் செக்-அவுட் வழிசெலுத்தல் & ஹிஸ்டரி லாக் (Step 1 & Step 2 Controller)
+// 16. மொபைல் செக்-அவுட் வழிசெலுத்தல் & ஹிஸ்டரி லாக் (Step 1 & Step 2 Controller)
 window.showMobileCheckout = function(isCheckout) {
     const drawer = document.getElementById('cartDrawer');
     const scrollBody = document.querySelector('.cart-split-body');
@@ -958,7 +999,7 @@ window.showMobileCheckout = function(isCheckout) {
     }
 };
 
-// 16. தொடக்க நிகழ்வு இணைப்புகள் (Page Initialization)
+// 17. தொடக்க நிகழ்வு இணைப்புகள் & ஒற்றை சின்க் கால் (Unified Page Initialization)
 function initializeAllCatalogInteractions() {
     document.querySelectorAll('.cat-item').forEach(item => {
         item.onclick = function(e) {
@@ -1012,10 +1053,21 @@ function initializeAllCatalogInteractions() {
         }
     } catch(e) {}
 
-    // அட்மின் & கிளவுட் தயாரிப்புகளை ஏற்றுதல்
+    // அட்மின் & கிளவுட் தயாரிப்புகள் மற்றும் லோகோவை ஒரே ஒரு முறை சின்க் செய்தல்
     syncAdminProducts();
+    syncShopBrandLogo();
     updateCartUI();
     updateWishlistUI();
+
+    // சுபாபேஸ் ரியல்டைம் லிசனர்: அட்மினில் தயாரிப்பு மாறினால் மட்டும் புதுப்பிக்கும்
+    if (window.dbClient) {
+        window.dbClient
+            .channel('public:products_live_sync')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, () => {
+                syncAdminProducts();
+            })
+            .subscribe();
+    }
 }
 
 if (document.readyState === 'loading') {
