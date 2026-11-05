@@ -273,9 +273,17 @@
             .hero-metrics .metric-divider {
                 display: none !important;
             }
-        }
-    </style>
 
+    .hero-section {
+                padding: 1.6rem 12px 1rem !important;
+                text-align: center !important;
+                background-position: center center !important;
+                background-size: cover !important;
+                background-repeat: no-repeat !important;
+            }
+        }
+</style>
+        
     <!-- 4. PORTFOLIO SHOWCASE SECTION (SEPARATE) -->
     <section class="portfolio-showcase-section" id="portfolio">
         <div class="section-container">
@@ -802,6 +810,12 @@
         if (heroTitle && cms.heroTitle !== undefined) heroTitle.innerHTML = cms.heroTitle;
         if (heroSub && cms.heroSubtitle !== undefined) heroSub.textContent = cms.heroSubtitle;
         if (heroImg && cms.heroBannerMedia) heroImg.src = cms.heroBannerMedia;
+        // மொபைல் திரையில் அட்மின் பின்னணிப் படத்தை லோட் செய்தல்
+        const heroSec = document.querySelector('.hero-section');
+        if (heroSec && cms.heroBannerMedia && cms.heroBannerMedia.trim() !== '') {
+            const bgGrad = `radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.85) 0%, rgba(5, 12, 24, 0.95) 100%), url('${cms.heroBannerMedia.trim()}')`;
+            heroSec.style.setProperty('background-image', bgGrad, 'important');
+        }
         if (heroCta1 && cms.heroCta1Text !== undefined) {
             const span1 = heroCta1.querySelector('span');
             if (span1) span1.textContent = cms.heroCta1Text;
@@ -1123,13 +1137,8 @@ window.copyFrontFlashCode = function() {
         alert(`Privilege code '${code}' copied to clipboard! Apply at checkout for your exclusive savings.`);
     });
 };
-</script>
-
-    // அட்மினில் மாற்றும் Hero Banner Media மொபைல் பின்னணியிலும் தானாக மாற:
-const heroSec = document.querySelector('.hero-section');
-if (heroSec && cms.heroBannerMedia) {
-    heroSec.style.backgroundImage = `radial-gradient(circle at 50% 30%, rgba(13, 34, 68, 0.85) 0%, rgba(5, 12, 24, 0.95) 100%), url('${cms.heroBannerMedia}')`;
-}
+    
+</script> 
     
 </body>
 </html>
