@@ -917,7 +917,15 @@ ${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
 
 _Please reply with payment details to confirm this order. Thank you for choosing Blue Skin._`;
 
-    const targetNumber = "919658399991";
+    // அட்மின் பேனலில் நீங்கள் சேமித்த எண்ணை எடுத்தல்
+    let targetNumber = "919658399991";
+    try {
+        const sysSettings = JSON.parse(localStorage.getItem("BLUESKIN_SYSTEM_SETTINGS_CONFIG"));
+        if (sysSettings && sysSettings.waPhone) {
+            targetNumber = sysSettings.waPhone.replace(/[^0-9]/g, '');
+        }
+    } catch(e) {}
+
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
     // A. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
