@@ -3691,49 +3691,124 @@ window.openClientDossierModal = function() {
 /* ======================================================================= */
 /* [SECTION 10] MODULE 7: VIP CLIENT CRM ENGINE — END                      */
 /* ======================================================================= */
+
+
 /* ======================================================================= */
 /* [SECTION 11] MODULE 8: SYSTEM SETTINGS & GATEWAY ENGINE — START         */
 /* ======================================================================= */
 
 const SETTINGS_STORAGE_KEY = "BLUESKIN_SYSTEM_SETTINGS_CONFIG";
 
-// 1. செட்டிங்ஸ் தகவல்களை லோட் செய்தல் (Load Global Settings)
-window.loadGlobalSystemSettings = function() {
+// 1. செட்டிங்ஸ் தகவல்களை லோட் செய்தல் (Auto-Load on Page Open & Refresh)
+window.loadGlobalSystemSettings = async function() {
+    let config = null;
+
+    // A. முதலில் லோக்கல் ஸ்டோரேஜில் இருந்து உடனடியாக எடுத்தல் (0ms Load)
     try {
-        const saved = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY));
-        if (saved) {
-            if (document.getElementById('setBrandName')) document.getElementById('setBrandName').value = saved.brandName || "Blue Skin Luxury Cosmetics LLP";
-            if (document.getElementById('setBrandTagline')) document.getElementById('setBrandTagline').value = saved.brandTagline || "Artisan Aesthetics & Bespoke Luxury Collections";
-            if (document.getElementById('setGstinNumber')) document.getElementById('setGstinNumber').value = saved.gstin || "33AAECB9821L1Z4";
-            if (document.getElementById('setHsnCode')) document.getElementById('setHsnCode').value = saved.hsnCode || "330499";
-            if (document.getElementById('setStudioAddress')) document.getElementById('setStudioAddress').value = saved.address || "23/43 FCI Road, BPC Colony, Ganapathy, Coimbatore - 641006.";
-            if (document.getElementById('setMerchantUpi')) document.getElementById('setMerchantUpi').value = saved.merchantUpi || "blueskin@icici";
-            if (document.getElementById('setInvoicePrefix')) document.getElementById('setInvoicePrefix').value = saved.invoicePrefix || "#BS-";
-            if (document.getElementById('setFreeShippingLimit')) document.getElementById('setFreeShippingLimit').value = saved.freeShipping ?? 999;
-            if (document.getElementById('setDefaultShippingFee')) document.getElementById('setDefaultShippingFee').value = saved.defaultShippingFee ?? 150;
-            if (document.getElementById('setReturnPolicy')) document.getElementById('setReturnPolicy').value = saved.returnPolicy || "Unopened intact security seals only within 7 days.";
-            if (document.getElementById('setWaPhone')) document.getElementById('setWaPhone').value = saved.waPhone || "+91 96583 99991";
-            if (document.getElementById('setConciergeEmail')) document.getElementById('setConciergeEmail').value = saved.email || "contact@blueskin.luxury";
-            if (document.getElementById('setWaGreeting')) document.getElementById('setWaGreeting').value = saved.waGreeting || "Namaste! Welcome to Blue Skin Private Concierge.";
-            if (document.getElementById('setLockPin')) document.getElementById('setLockPin').value = saved.lockPin || "1234";
-            if (document.getElementById('setAutoTimeout')) document.getElementById('setAutoTimeout').value = saved.autoTimeout || "30";
+        const local = localStorage.getItem(SETTINGS_STORAGE_KEY);
+        if (local) config = JSON.parse(local);
+    } catch(e) {
+        console.warn("Local settings read error:", e);
+    }
 
-            // Stages
-            if (document.getElementById('chkStage1')) document.getElementById('chkStage1').checked = saved.chkStage1 !== false;
-            if (document.getElementById('chkStage2')) document.getElementById('chkStage2').checked = saved.chkStage2 !== false;
-            if (document.getElementById('chkStage3')) document.getElementById('chkStage3').checked = saved.chkStage3 !== false;
-            if (document.getElementById('chkStage4')) document.getElementById('chkStage4').checked = saved.chkStage4 !== false;
-            if (document.getElementById('chkStage5')) document.getElementById('chkStage5').checked = saved.chkStage5 !== false;
-
-            // KPI கார்டுகள்
-            if (document.getElementById('kpiSettingsWaPhone')) document.getElementById('kpiSettingsWaPhone').textContent = saved.waPhone || "+91 96583 99991";
-            if (document.getElementById('kpiSettingsGstDisplay')) document.getElementById('kpiSettingsGstDisplay').textContent = saved.gstin || "33AAECB9821L1Z4";
+    // B. சுபாபேஸ் கிளவுடில் புதிய டேட்டா இருந்தால் எடுத்து சிங்க் செய்தல்
+    const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+    if (client) {
+        try {
+            const { data, error } = await client
+                .from('site_content')
+                .select('value')
+                .eq('key', 'system_settings_config')
+                .single();
+            if (!error && data && data.value) {
+                const cloud = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
+                config = Object.assign({}, config || {}, cloud);
+                localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(config));
+            }
+        } catch(err) {
+            console.warn("Cloud settings fetch error:", err);
         }
-    } catch(e) {}
+    }
+
+    // C. இன்புட் ஃபீல்டுகளில் புதிய மதிப்புகளைப் நிரப்புதல்
+    if (config) {
+        if (document.getElementById('setBrandName') && config.brandName !== undefined) {
+            document.getElementById('setBrandName').value = config.brandName;
+        }
+        if (document.getElementById('setBrandTagline') && config.brandTagline !== undefined) {
+            document.getElementById('setBrandTagline').value = config.brandTagline;
+        }
+        if (document.getElementById('setGstinNumber') && config.gstin !== undefined) {
+            document.getElementById('setGstinNumber').value = config.gstin;
+        }
+        if (document.getElementById('setHsnCode') && config.hsnCode !== undefined) {
+            document.getElementById('setHsnCode').value = config.hsnCode;
+        }
+        if (document.getElementById('setStudioAddress') && config.address !== undefined) {
+            document.getElementById('setStudioAddress').value = config.address;
+        }
+        if (document.getElementById('setMerchantUpi') && config.merchantUpi !== undefined) {
+            document.getElementById('setMerchantUpi').value = config.merchantUpi;
+        }
+        if (document.getElementById('setInvoicePrefix') && config.invoicePrefix !== undefined) {
+            document.getElementById('setInvoicePrefix').value = config.invoicePrefix;
+        }
+        if (document.getElementById('setFreeShippingLimit') && config.freeShipping !== undefined) {
+            document.getElementById('setFreeShippingLimit').value = config.freeShipping;
+        }
+        if (document.getElementById('setDefaultShippingFee') && config.defaultShippingFee !== undefined) {
+            document.getElementById('setDefaultShippingFee').value = config.defaultShippingFee;
+        }
+        if (document.getElementById('setReturnPolicy') && config.returnPolicy !== undefined) {
+            document.getElementById('setReturnPolicy').value = config.returnPolicy;
+        }
+        
+        // வாட்ஸ்அப் மற்றும் தகவல் தொடர்பு புலங்கள்
+        if (document.getElementById('setWaPhone') && config.waPhone !== undefined) {
+            document.getElementById('setWaPhone').value = config.waPhone;
+        }
+        if (document.getElementById('setConciergeEmail') && config.email !== undefined) {
+            document.getElementById('setConciergeEmail').value = config.email;
+        }
+        if (document.getElementById('setWaGreeting') && config.waGreeting !== undefined) {
+            document.getElementById('setWaGreeting').value = config.waGreeting;
+        }
+        if (document.getElementById('setLockPin') && config.lockPin !== undefined) {
+            document.getElementById('setLockPin').value = config.lockPin;
+        }
+        if (document.getElementById('setAutoTimeout') && config.autoTimeout !== undefined) {
+            document.getElementById('setAutoTimeout').value = config.autoTimeout;
+        }
+
+        // 5-நிலை வாட்ஸ்அப் செக்பாக்ஸ்கள்
+        if (document.getElementById('chkStage1') && config.chkStage1 !== undefined) {
+            document.getElementById('chkStage1').checked = config.chkStage1;
+        }
+        if (document.getElementById('chkStage2') && config.chkStage2 !== undefined) {
+            document.getElementById('chkStage2').checked = config.chkStage2;
+        }
+        if (document.getElementById('chkStage3') && config.chkStage3 !== undefined) {
+            document.getElementById('chkStage3').checked = config.chkStage3;
+        }
+        if (document.getElementById('chkStage4') && config.chkStage4 !== undefined) {
+            document.getElementById('chkStage4').checked = config.chkStage4;
+        }
+        if (document.getElementById('chkStage5') && config.chkStage5 !== undefined) {
+            document.getElementById('chkStage5').checked = config.chkStage5;
+        }
+
+        // KPI கார்டுகளின் நேரலை காட்சி
+        if (document.getElementById('kpiSettingsWaPhone') && config.waPhone) {
+            document.getElementById('kpiSettingsWaPhone').textContent = config.waPhone;
+        }
+        if (document.getElementById('kpiSettingsGstDisplay') && config.gstin) {
+            document.getElementById('kpiSettingsGstDisplay').textContent = config.gstin;
+        }
+    }
 };
 
-// 2. செட்டிங்ஸ் தகவல்களைச் சேமித்தல் (Save Global Settings)
-window.saveGlobalSystemSettings = function() {
+// 2. செட்டிங்ஸ் தகவல்களை லோக்கல் மற்றும் கிளவுட் இரண்டிலும் நிரந்தரமாகச் சேமித்தல்
+window.saveGlobalSystemSettings = async function() {
     const config = {
         brandName: document.getElementById('setBrandName')?.value.trim() || "Blue Skin Luxury Cosmetics LLP",
         brandTagline: document.getElementById('setBrandTagline')?.value.trim() || "Artisan Aesthetics & Bespoke Luxury Collections",
@@ -3757,13 +3832,32 @@ window.saveGlobalSystemSettings = function() {
         chkStage5: document.getElementById('chkStage5')?.checked ?? true
     };
 
+    // A. LocalStorage-ல் சேமித்தல்
     localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(config));
 
-    // நேரலை காட்சிப் புதுப்பிப்பு
-    if (document.getElementById('kpiSettingsWaPhone')) document.getElementById('kpiSettingsWaPhone').textContent = config.waPhone;
-    if (document.getElementById('kpiSettingsGstDisplay')) document.getElementById('kpiSettingsGstDisplay').textContent = config.gstin;
+    // B. Supabase Cloud Database-ல் நிரந்தரமாகப் பதிவு செய்தல்
+    const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+    if (client) {
+        try {
+            await client.from('site_content').upsert({
+                key: 'system_settings_config',
+                value: JSON.stringify(config),
+                updated_at: new Date().toISOString()
+            });
+        } catch(err) {
+            console.error("Cloud settings save error:", err);
+        }
+    }
 
-    alert("⚙️ உலகளாவிய எண்டர்பிரைஸ் அமைப்புகள் (Global Settings, GST, Logistics & WhatsApp) வெற்றிகரமாகச் சேமிக்கப்பட்டன!");
+    // C. KPI கார்டுகளை நேரலையாக மாற்றுதல்
+    if (document.getElementById('kpiSettingsWaPhone')) {
+        document.getElementById('kpiSettingsWaPhone').textContent = config.waPhone;
+    }
+    if (document.getElementById('kpiSettingsGstDisplay')) {
+        document.getElementById('kpiSettingsGstDisplay').textContent = config.gstin;
+    }
+
+    alert("⚙️ உலகளாவிய அமைப்புகள் (வாட்ஸ்அப் எண் & பில் பிரீஃபிக்ஸ்) வெற்றிகரமாகச் சேமிக்கப்பட்டன!");
 };
 
 // 3. முழு டேட்டாபேஸ் பேக்கப் டவுன்லோட் (JSON Export)
@@ -3813,7 +3907,7 @@ window.handleRestoreVaultJson = function(event) {
                 if (data.categories && Array.isArray(data.categories)) localStorage.setItem(typeof CATEGORY_STORAGE_KEY !== 'undefined' ? CATEGORY_STORAGE_KEY : 'BLUESKIN_CATALOG_CATEGORIES_DATA', JSON.stringify(data.categories));
                 if (data.clients && Array.isArray(data.clients)) clientsDirectoryData = data.clients;
 
-                loadGlobalSystemSettings();
+                window.loadGlobalSystemSettings();
                 alert("📤 Blue Skin டேட்டாபேஸ் வெற்றிகரமாகப் பழைய காப்புப் பிரதியிலிருந்து மீட்டெடுக்கப்பட்டது (Database Restored Successfully)!");
             } else {
                 alert("தவறான JSON கோப்பு! சரியான Blue Skin காப்புப் பிரதியைத் தேர்ந்தெடுக்கவும்.");
@@ -3824,9 +3918,19 @@ window.handleRestoreVaultJson = function(event) {
     };
     reader.readAsText(file);
 };
+
+// 5. பக்கம் லோட் ஆனவுடனேயே தானாக செட்டிங்ஸை மீட்டெடுத்தல் (Auto-Boot Engine)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { window.loadGlobalSystemSettings(); });
+} else {
+    window.loadGlobalSystemSettings();
+}
+
 /* ======================================================================= */
 /* [SECTION 11] MODULE 8: SYSTEM SETTINGS & GATEWAY ENGINE — END           */
 /* ======================================================================= */
+
+
 
 /* ======================================================================= */
 /* [SECTION 12] MODULE 9: SUPABASE & SUPER CONNECTIONS ENGINE — START      */
