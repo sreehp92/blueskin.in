@@ -5435,3 +5435,51 @@ body {
         margin-right: 5px !important;
     }
 }
+/* ========================================================================== */
+/* UNIFIED BRAND LOGO FOR BOTH INDEX & SHOP PAGES (DESKTOP & MOBILE)          */
+/* ========================================================================== */
+
+/* டெஸ்க்டாப் வியூ லோகோ */
+.nav-left-brand .logo,
+.header .logo {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+}
+
+#shopBrandLogoImg,
+#navBrandLogoImg,
+.brand-logo-img {
+    height: 32px !important;
+    max-height: 32px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+}
+
+/* மொபைல் வியூ லோகோ & பிராண்ட் பெயர் சமநிலை (Screen <= 768px) */
+@media screen and (max-width: 768px) {
+    #shopBrandLogoImg,
+    #navBrandLogoImg,
+    .brand-logo-img {
+        height: 28px !important;
+        max-height: 28px !important;
+        max-width: 36px !important;
+        display: inline-block !important;
+        vertical-align: middle !important;
+    }
+
+    .nav-left-brand .logo,
+    .header .logo {
+        font-size: 1.22rem !important;
+        gap: 6px !important;
+    }
+
+    /* அட்மினில் இமேஜ் லோகோ இருக்கும்போது மட்டும் ஐகானை மறைக்க */
+    .has-logo-img #shopBrandLogoFallback,
+    .has-logo-img .brand-emblem {
+        display: none !important;
+    }
+}
