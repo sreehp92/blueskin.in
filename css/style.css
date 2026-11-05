@@ -5406,3 +5406,32 @@ body {
         display: none !important;
     }
 }
+
+/* ========================================================================== */
+/* SHOP.HTML - BRAND LOGO RESTORATION & UNIFORMITY                           */
+/* ========================================================================== */
+.nav-left-brand .brand-emblem,
+.logo .brand-emblem {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #f5c443 !important;
+    margin-right: 6px !important;
+    font-size: 1.05rem !important;
+    line-height: 1 !important;
+}
+
+.brand-emblem i,
+.logo i {
+    color: #f5c443 !important;
+    font-size: 1.05rem !important;
+}
+
+/* மொபைல் திரையில் லோகோவின் அளவு */
+@media screen and (max-width: 768px) {
+    .nav-left-brand .brand-emblem,
+    .logo .brand-emblem {
+        font-size: 0.95rem !important;
+        margin-right: 5px !important;
+    }
+}
