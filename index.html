@@ -1116,11 +1116,11 @@ window.closeFrontFlashModal = function() {
     if (modal) modal.style.display = 'none';
 };
 
-// கூப்பனை காப்பி செய்தல் (எந்தப் பக்க மாற்றமும் இன்றி அதே பக்கத்தில் இருக்கும்)
+// Copy Promo Code (100% Luxury English Notification)
 window.copyFrontFlashCode = function() {
     const code = document.getElementById('frontFlashCode')?.textContent || 'BLUESKIN10';
     navigator.clipboard.writeText(code).then(() => {
-        alert(`🎉 கூப்பன் கோடு '${code}' காப்பி செய்யப்பட்டது! நீங்கள் ஷாப்பிங் செய்யும்போது இதைப் பயன்படுத்தலாம்.`);
+        alert(`Privilege code '${code}' copied to clipboard! Apply at checkout for your exclusive savings.`);
     });
 };
 </script>
