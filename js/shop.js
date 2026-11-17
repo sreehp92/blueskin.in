@@ -821,11 +821,12 @@ window.applyCheckoutPromoCode = async function() {
     updateCartUI();
 };
 
-// 15. வாட்ஸ்அப் ஆர்டர் & இன்வாய்ஸ் & கார்ட் 0 ஆகி ஹோம் பேஜ் திரும்புதல் (WhatsApp Checkout Engine)
-window.submitWhatsAppOrder = function() {
+// 15. வாட்ஸ்அப் ஆர்டர் & 100% ஆன்லைன் டேட்டாபேஸ் சீக்வன்ஸ் இன்ஜின் (Zero LocalStorage)
+window.submitWhatsAppOrder = async function() {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
     const addressInput = document.getElementById('custAddress');
+    const checkoutBtn = document.getElementById('whatsappCheckoutBtn');
 
     if (!nameInput || !phoneInput || !addressInput) {
         alert("Form inputs not found. Please refresh the page.");
@@ -863,6 +864,71 @@ window.submitWhatsAppOrder = function() {
         return;
     }
 
+    // பட்டனை தற்காலிகமாக லாக் செய்தல் (Double click தடுக்க)
+    if (checkoutBtn) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Generating Official Invoice...</span>`;
+    }
+
+    const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+    let invoicePrefix = "BS-";
+    let targetNumber = "919658399991";
+    let nextSeqNumber = 1;
+
+    // A. ஆன்லைன் டேட்டாபேஸிலிருந்து (Supabase) அட்மின் செட்டிங்ஸ் & கடைசி பில் நம்பரை எடுத்தல்
+    if (client) {
+        try {
+            // 1. அட்மின் செட்டிங்ஸில் உள்ள Prefix மற்றும் WhatsApp நம்பரை எடுத்தல்
+            const { data: settingsData } = await client
+                .from('site_content')
+                .select('value')
+                .eq('key', 'system_settings_config')
+                .single();
+
+            if (settingsData && settingsData.value) {
+                const sysConfig = typeof settingsData.value === 'string' 
+                    ? JSON.parse(settingsData.value) 
+                    : settingsData.value;
+                
+                if (sysConfig.invoicePrefix && sysConfig.invoicePrefix.trim() !== '') {
+                    invoicePrefix = sysConfig.invoicePrefix.replace('#', '').trim();
+                }
+                if (sysConfig.waPhone && sysConfig.waPhone.trim() !== '') {
+                    targetNumber = sysConfig.waPhone.replace(/[^0-9]/g, '');
+                }
+            }
+
+            // 2. Supabase 'orders' டேபிளில் உள்ள அனைத்து ஆர்டர் ID-களையும் பார்த்து அடுத்த வரிசை எண்ணைக் கணக்கிடுதல்
+            const { data: existingOrders, error: ordErr } = await client
+                .from('orders')
+                .select('id');
+
+            if (!ordErr && Array.isArray(existingOrders) && existingOrders.length > 0) {
+                let maxNum = 0;
+                existingOrders.forEach(row => {
+                    if (row.id) {
+                        // ID-ல் உள்ள எண்களை மட்டும் பிரித்தெடுத்தல் (எ.கா: BS-0005 -> 5)
+                        const numPart = parseInt(String(row.id).replace(/[^0-9]/g, ''), 10);
+                        if (!isNaN(numPart) && numPart > maxNum) {
+                            maxNum = numPart;
+                        }
+                    }
+                });
+                nextSeqNumber = maxNum + 1;
+            } else {
+                // டேபிள் காலியாக இருந்தால் 1-லிருந்து தொடங்கும் (BS-0001)
+                nextSeqNumber = 1;
+            }
+        } catch (err) {
+            console.error("Cloud sequence fetch error:", err);
+        }
+    }
+
+    // 4 இலக்க சீக்வன்ஸ் பில் நம்பர் உருவாக்கம் (எ.கா: BS-0001, BS-0002...)
+    const formattedSeq = String(nextSeqNumber).padStart(4, '0');
+    const orderId = `${invoicePrefix}${formattedSeq}`;
+
+    // B. ஆர்டர் பொருட்கள் மற்றும் விலை கணக்கீடு
     let orderItemsText = "";
     let grandTotal = 0;
 
@@ -883,22 +949,6 @@ window.submitWhatsAppOrder = function() {
         promoLine = `- *Promo Code   :* ${appliedPromoCode} (-₹ ${appliedPromoDiscount.toLocaleString('en-IN')})\n`;
     }
 
-    // 1. அட்மின் பேனல் செட்டிங்ஸில் உள்ள பில் பிரீஃபிக்ஸை எடுத்தல் (#BS- போன்றவை)
-    let invoicePrefix = "BS-";
-    try {
-        const sysSettings = JSON.parse(localStorage.getItem("BLUESKIN_SYSTEM_SETTINGS_CONFIG"));
-        if (sysSettings && sysSettings.invoicePrefix) {
-            invoicePrefix = sysSettings.invoicePrefix.replace('#', '').trim();
-        }
-    } catch(e) {}
-
-    // 2. தொடர் வரிசை எண் தானாக 1, 2, 3 என கூடுதல் (Sequential Increment)
-    let currentSeq = parseInt(localStorage.getItem('BLUESKIN_LAST_ORDER_SEQ') || '0', 10) + 1;
-    localStorage.setItem('BLUESKIN_LAST_ORDER_SEQ', currentSeq.toString());
-
-    // 3. நான்கு இலக்க வரிசை எண் (எ.கா: BS-0001, BS-0002)
-    const formattedSeq = String(currentSeq).padStart(4, '0');
-    const orderId = `${invoicePrefix}${formattedSeq}`;
     const now = new Date();
     const dateStr = now.toLocaleDateString('en-IN');
     const timeStr = now.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
@@ -932,55 +982,49 @@ ${promoLine}- *Shipping    :* Complimentary Insured Delivery (FREE)
 
 _Please reply with payment details to confirm this order. Thank you for choosing Blue Skin._`;
 
-    // அட்மின் பேனலில் நீங்கள் சேமித்த எண்ணை எடுத்தல்
-    let targetNumber = "919658399991";
-    try {
-        const sysSettings = JSON.parse(localStorage.getItem("BLUESKIN_SYSTEM_SETTINGS_CONFIG"));
-        if (sysSettings && sysSettings.waPhone) {
-            targetNumber = sysSettings.waPhone.replace(/[^0-9]/g, '');
-        }
-    } catch(e) {}
-
     const whatsappURL = `https://wa.me/${targetNumber}?text=${encodeURIComponent(message)}`;
 
-    // A. சுபாபேஸ் கிளவுடில் ஆர்டரைச் சேமித்தல்
-    const client = window.dbClient;
+    // C. Supabase கிளவுட் டேட்டாபேஸில் ஆர்டரை நிரந்தரமாகச் சேமித்தல் (await)
     if (client) {
-        client.from('orders').insert([
-            {
-                id: orderId,
-                customer_name: name,
-                customer_phone: phone,
-                customer_address: address,
-                items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
-                total_amount: finalPayable,
-                is_paid: false,
-                order_status: 'Pending Verification'
-            }
-        ]).then(() => {
-            console.log("Order cloud sync complete");
-        }).catch(err => {
-            console.error("Order sync error:", err);
-        });
-
-        if (appliedPromoCode) {
-            try {
-                let coupons = JSON.parse(localStorage.getItem("BLUESKIN_MARKETING_COUPONS_DATA")) || [];
-                const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
-                if (targetCoupon) {
-                    targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
-                    localStorage.setItem("BLUESKIN_MARKETING_COUPONS_DATA", JSON.stringify(coupons));
-                    client.from('site_content').upsert({
-                        key: 'marketing_coupons',
-                        value: JSON.stringify(coupons),
-                        updated_at: new Date()
-                    }).then(() => {}).catch(() => {});
+        try {
+            await client.from('orders').insert([
+                {
+                    id: orderId,
+                    customer_name: name,
+                    customer_phone: phone,
+                    customer_address: address,
+                    items_summary: activeCart.map(i => `${i.name || i.title} (x${i.qty || 1})`).join(", "),
+                    total_amount: finalPayable,
+                    is_paid: false,
+                    order_status: 'Pending Verification'
                 }
-            } catch(e) {}
+            ]);
+
+            if (appliedPromoCode) {
+                const { data: cData } = await client
+                    .from('site_content')
+                    .select('value')
+                    .eq('key', 'marketing_coupons')
+                    .single();
+                if (cData && cData.value) {
+                    let coupons = typeof cData.value === 'string' ? JSON.parse(cData.value) : cData.value;
+                    const targetCoupon = coupons.find(c => (c.code || '').toUpperCase() === appliedPromoCode.toUpperCase());
+                    if (targetCoupon) {
+                        targetCoupon.quotaUsed = (Number(targetCoupon.quotaUsed) || 0) + 1;
+                        await client.from('site_content').upsert({
+                            key: 'marketing_coupons',
+                            value: JSON.stringify(coupons),
+                            updated_at: new Date().toISOString()
+                        });
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Order cloud sync error:", err);
         }
     }
 
-    // B. கார்ட் மெமரி முழுமையாக 0 ஆகுதல்
+    // D. கார்ட் மெமரி முழுமையாக 0 ஆகுதல்
     cart = [];
     localStorage.removeItem('blueskin_cart');
     localStorage.removeItem('blueskin_checkout_draft');
@@ -995,7 +1039,7 @@ _Please reply with payment details to confirm this order. Thank you for choosing
 
     updateCartUI();
 
-    // C. வாட்ஸ்அப் திறந்து, உடனடியாக முகப்புப் பக்கத்திற்குத் திரும்புதல்
+    // E. வாட்ஸ்அப் திறந்து, உடனடியாக முகப்புப் பக்கத்திற்குத் திரும்புதல்
     window.open(whatsappURL, '_blank');
     window.location.replace('index.html');
 };
