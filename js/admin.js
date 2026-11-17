@@ -3694,7 +3694,7 @@ window.loadGlobalSystemSettings = async function() {
                 .from('site_content')
                 .select('value')
                 .eq('key', 'system_settings_config')
-                .single();
+                .maybeSingle();
             if (!error && data && data.value) {
                 const cloud = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
                 config = Object.assign({}, config || {}, cloud);
