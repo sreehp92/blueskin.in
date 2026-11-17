@@ -2592,108 +2592,83 @@ window.closeProductStudioModal = function() {
     if (modal) modal.style.display = 'none';
 };
 
-// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — 100% பிழையற்ற Supabase Cloud Sync
+// 10. தயாரிப்பைச் சேமித்தல் (Save Product) — 100% Supabase Cloud Only (Zero LocalStorage)
 window.saveProductStudioEntry = async function() {
-    const title = document.getElementById('prodInputTitle').value.trim();
-    const subtitle = document.getElementById('prodInputSubtitle').value.trim();
-    const weight = document.getElementById('prodInputWeight').value.trim();
-    const reviews = document.getElementById('prodInputReviews').value.trim();
-    const category = document.getElementById('prodInputCategory').value;
-    const visibility = document.getElementById('prodInputVisibility').value;
-    const imgUrl = document.getElementById('prodInputImg1').value.trim();
-    const mrp = parseFloat(document.getElementById('prodInputMrp').value) || 0;
-    const discount = parseFloat(document.getElementById('prodInputDiscount').value) || 0;
-    const bagBtn = document.getElementById('prodInputBagBtn').value.trim();
-    const wishBtn = document.getElementById('prodInputWishlistBtn').value.trim();
-    const trust1 = document.getElementById('prodInputTrust1').value.trim();
-    const trust2 = document.getElementById('prodInputTrust2').value.trim();
-    const trust3 = document.getElementById('prodInputTrust3').value.trim();
-    const desc = document.getElementById('prodInputDesc').value.trim();
-    const howTo = document.getElementById('prodInputHowToUse').value.trim();
-    const addInfo = document.getElementById('prodInputAddInfo').value.trim();
+    const title = document.getElementById('prodInputTitle')?.value.trim() || '';
+    const subtitle = document.getElementById('prodInputSubtitle')?.value.trim() || '';
+    const weight = document.getElementById('prodInputWeight')?.value.trim() || '';
+    const reviews = document.getElementById('prodInputReviews')?.value.trim() || 'Verified';
+    const category = document.getElementById('prodInputCategory')?.value || 'Face Products';
+    const visibility = document.getElementById('prodInputVisibility')?.value || 'LIVE';
+    const imgUrl = document.getElementById('prodInputImg1')?.value.trim() || '';
+    const mrp = parseFloat(document.getElementById('prodInputMrp')?.value) || 0;
+    const discount = parseFloat(document.getElementById('prodInputDiscount')?.value) || 0;
+    const desc = document.getElementById('prodInputDesc')?.value.trim() || '';
+    const howTo = document.getElementById('prodInputHowToUse')?.value.trim() || '';
+    const addInfo = document.getElementById('prodInputAddInfo')?.value.trim() || '';
 
     if (!title) {
         alert("தயவுசெய்து பொருளின் பெயரை உள்ளிடவும்!");
         return;
     }
 
-    const discountAmount = Math.round((mrp * discount) / 100);
-    const specialPrice = Math.max(0, mrp - discountAmount);
-
-    const payload = {
-        title,
-        subtitle,
-        weight,
-        reviewsText: reviews,
-        category,
-        visibility,
-        imgUrl,
-        mrp,
-        discount,
-        specialPrice,
-        savings: discountAmount,
-        bagBtnText: bagBtn,
-        wishlistBtnText: wishBtn,
-        trust1,
-        trust2,
-        trust3,
-        desc,
-        howToUse: howTo,
-        addInfo
-    };
-
-    // 1. உள்ளூர் பிரவுசரில் உடனே சேமித்தல்
-    if (editingProductItemRefId) {
-        const item = masterProductsData.find(i => String(i.id) === String(editingProductItemRefId));
-        if (item) Object.assign(item, payload);
-    } else {
-        const newId = `PROD-${Math.floor(100 + Math.random() * 900)}`;
-        masterProductsData.unshift(Object.assign({ id: newId }, payload));
+    const client = window.dbClient || (typeof supabase !== 'undefined' ? supabase : null);
+    if (!client) {
+        alert("Supabase இணைப்பு இன்னும் தயாராகவில்லை. பக்கத்தை ரீஃப்ரெஷ் செய்து மீண்டும் முயற்சிக்கவும்.");
+        return;
     }
 
-    localStorage.setItem(PRODUCT_STORAGE_KEY, JSON.stringify(masterProductsData));
-    closeProductStudioModal();
-    renderProductMasterTable();
+    const supabasePayload = {
+        name: title,
+        category: category,
+        sub_title: subtitle,
+        weight: weight,
+        original_price: mrp,
+        discount_percent: discount,
+        stock: 25,
+        images: imgUrl ? [imgUrl] : [],
+        description: desc,
+        how_to: howTo,
+        reviews_text: reviews,
+        visibility: visibility,
+        add_info: addInfo
+    };
 
-    // 2. நேரடியாக Supabase கிளவுடிற்கு அனுப்பி சேமித்தல்
-    const client = window.dbClient;
-    if (client) {
-        try {
-            const supabasePayload = {
-                name: title,
-                category: category,
-                sub_title: subtitle,
-                weight: weight,
-                original_price: mrp,
-                discount_percent: discount,
-                stock: 25,
-                images: imgUrl ? [imgUrl] : [],
-                description: desc,
-                how_to: howTo,
-                reviews_text: reviews,
-                visibility: visibility,
-                add_info: addInfo
-            };
+    try {
+        let dbError = null;
 
-            if (editingProductItemRefId && !String(editingProductItemRefId).startsWith('PROD-')) {
-                supabasePayload.id = editingProductItemRefId;
-            }
-
+        // ஏற்கெனவே உள்ள தயாரிப்பை எடிட் செய்தால் Update, புதிதாகச் சேர்த்தால் Insert
+        if (typeof editingProductItemRefId !== 'undefined' && editingProductItemRefId && !String(editingProductItemRefId).startsWith('PROD-')) {
             const { error } = await client
                 .from('products')
-                .upsert(supabasePayload);
-
-            if (error) {
-                console.error("Supabase Product Sync Error:", error);
-                alert("கிளவுடில் சேமிப்பதில் பிழை: " + error.message);
-            } else {
-                alert("✅ தயாரிப்பு வெற்றிகரமாக கிளவுட் டேட்டாபேஸில் நேரலையாகச் சேமிக்கப்பட்டது!");
-            }
-        } catch (cloudErr) {
-            console.error("Cloud Error:", cloudErr);
+                .update(supabasePayload)
+                .eq('id', editingProductItemRefId);
+            dbError = error;
+        } else {
+            const { error } = await client
+                .from('products')
+                .insert([supabasePayload]);
+            dbError = error;
         }
-    } else {
-        alert("✅ தயாரிப்பு லோக்கலில் சேமிக்கப்பட்டது!");
+
+        if (dbError) {
+            console.error("Supabase Product Save Error:", dbError);
+            alert("கிளவுடில் சேமிப்பதில் பிழை: " + dbError.message);
+            return;
+        }
+
+        // மாடலை மூடிவிட்டு, கிளவுடிலிருந்து புதிய தயாரிப்புப் பட்டியலை உடனடியாக அப்டேட் செய்தல்
+        if (typeof closeProductStudioModal === 'function') closeProductStudioModal();
+        if (typeof fetchAdminProductsFromSupabase === 'function') {
+            await fetchAdminProductsFromSupabase();
+        } else if (typeof renderProductMasterTable === 'function') {
+            renderProductMasterTable();
+        }
+
+        alert("✅ புதிய தயாரிப்பு வெற்றிகரமாக Supabase கிளவுட் டேட்டாபேஸில் சேமிக்கப்பட்டது!");
+    } catch (err) {
+        console.error("Unexpected Save Error:", err);
+        alert("பிழை ஏற்பட்டுள்ளது: " + err.message);
     }
 };
 
